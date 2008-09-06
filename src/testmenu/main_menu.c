@@ -1,12 +1,44 @@
 #include <stdlib.h>
+#include <math.h>
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "SDL/SDL_opengl.h"
+#include "SDL/SDL_ttf.h"
 
 #define SELECTBLENDSRC  0.30
 #define SELECTBLENDDEST 0.60
 
 /* This is by NO MEANS final code! This is test code to generate the main menu of Freeband. */
+
+char fontpath[] = "crillee.ttf";
+void SDL_GL_RenderText(char *text, TTF_Font *font, SDL_Color color, SDL_Rect *location)
+{
+  SDL_Surface *initial;
+  SDL_Surface *intermediary;
+  SDL_Rect rect;
+  int w,h;
+  int texture;
+  
+  /* Use SDL_TTF to render our text */
+  initial = TTF_RenderText_Blended(font, text, color);
+  
+  /* Convert the rendered text to a known format */
+/*  w = nextpoweroftwo(initial->w);
+  h = nextpoweroftwo(initial->h); */
+}
+
+int showMainMenuOptions()
+{
+  SDL_Color color;
+  SDL_Rect position;
+  /* Load font */
+  TTF_Font* font;
+  if(!(font = TTF_OpenFont(fontpath, 112)))
+  {
+    printf("Error loading font: %s", TTF_GetError());
+    return 1;
+  }
+}
 
 int loadBG()
 {
@@ -19,12 +51,14 @@ int loadBG()
   { 
 
     /* Check that the image's width is a power of 2 */
-    if ( (surface->w & (surface->w - 1)) != 0 ) {
+    if ((surface->w & (surface->w - 1)) != 0)
+    {
       printf("warning: image.png's width is not a power of 2\n");
     }
 
     /* Also check if the height is a power of 2 */
-    if ( (surface->h & (surface->h - 1)) != 0 ) {
+    if ((surface->h & (surface->h - 1)) != 0)
+    {
       printf("warning: image.png's height is not a power of 2\n");
     }
  
@@ -63,7 +97,8 @@ int loadBG()
     glTexImage2D(GL_TEXTURE_2D, 0, nOfColors, surface->w, surface->h, 0,
                  texture_format, GL_UNSIGNED_BYTE, surface->pixels);
   } 
-  else {
+  else
+  {
     printf("SDL could not load image.png: %s\n", SDL_GetError());
     SDL_Quit();
     return 1;
@@ -79,11 +114,11 @@ int loadBG()
   glBindTexture(GL_TEXTURE_2D, texture);
  
   glBegin(GL_QUADS);
-    // For flat objects, glTexCoord3i is ALWAYS (0, 0), (1, 0), (1, 1), (0, 1) consecutively when in this order
+  /* For flat objects, glTexCoord3i is ALWAYS (0, 0), (1, 0), (1, 1), (0, 1) consecutively when in this order (TL, TR, BR, BL) */
   glTexCoord2i(0, 0); glVertex2i(0, 0); // Top-left vertex (corner)
-  glTexCoord2i(1, 0); glVertex2i(800, 0); // Bottom-left vertex (corner)
+  glTexCoord2i(1, 0); glVertex2i(800, 0); // Top-right vertex
   glTexCoord2i(1, 1); glVertex2i(800, 600); // Bottom-right vertex (corner)
-  glTexCoord2i(0, 1); glVertex2i(0, 600); // Top-right vertex (corner)
+  glTexCoord2i(0, 1); glVertex2i(0, 600); // Bottom-left vertex (x offset, same y offset as above)
   glEnd();
 
   SDL_GL_SwapBuffers();
@@ -165,9 +200,9 @@ int loadLogo()
   glBegin(GL_QUADS);
     // For flat objects, glTexCoord3i is ALWAYS (0, 0), (1, 0), (1, 1), (0, 1) consecutively when in this order
   glTexCoord2i(0, 0); glVertex2i(10+82, 10+82); // Top-left vertex (corner); 82 pixels is the offset away from top-corner
-  glTexCoord2i(1, 0); glVertex2i(638+82, 10+82); // Bottom-left vertex (corner)
+  glTexCoord2i(1, 0); glVertex2i(638+82, 10+82); // Top-right vertex
   glTexCoord2i(1, 1); glVertex2i(638+82, 245+82); // Bottom-right vertex (corner)
-  glTexCoord2i(0, 1); glVertex2i(10+82, 245+82); // Top-right vertex (corner)
+  glTexCoord2i(0, 1); glVertex2i(10+82, 245+82); // Bottom-left vertex (x offset, same y offset as above)
   glEnd();
 
   SDL_GL_SwapBuffers();
@@ -272,6 +307,13 @@ int main()
     return 1;
   }
   
+  /* Test SDL_ttf */
+  if (TTF_Init() == -1) 
+  {
+    printf("Unable to initialize SDL_ttf: %s\n", TTF_GetError());
+    return 1;
+  }
+  
   /* Enable SDL OpenGL Double-buffering */
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   
@@ -284,6 +326,7 @@ int main()
     return 1;
   }
   
+  /* Set window title and icon title */
   SDL_WM_SetCaption("Freeband", "Freeband");
   
   /* OpenGL functions */
@@ -302,6 +345,7 @@ int main()
   loadBG();
   loadLogo();
   loadSelector();
+  showMainMenuOptions();
 
   SDL_Event event;
   int running = 1;
