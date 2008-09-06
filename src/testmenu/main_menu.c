@@ -10,25 +10,25 @@
 
 int loadBG()
 {
-  GLuint texture;     // This is a handle to our texture object
-  SDL_Surface *surface; // This surface will tell us the details of the image
+  GLuint texture;     /* This is a handle to our texture object */
+  SDL_Surface *surface; /* This surface will tell us the details of the image */
   GLenum texture_format;
   GLint nOfColors;
-  
+
   if ((surface = IMG_Load_RW(SDL_RWFromFile("bg.png", "rb"), 1)))
   { 
- 
-  // Check that the image's width is a power of 2
+
+    /* Check that the image's width is a power of 2 */
     if ( (surface->w & (surface->w - 1)) != 0 ) {
       printf("warning: image.png's width is not a power of 2\n");
     }
-  
-  // Also check if the height is a power of 2
+
+    /* Also check if the height is a power of 2 */
     if ( (surface->h & (surface->h - 1)) != 0 ) {
       printf("warning: image.png's height is not a power of 2\n");
     }
  
-        // get the number of channels in the SDL surface
+    // get the number of channels in the SDL surface
     nOfColors = surface->format->BytesPerPixel;
     if (nOfColors == 4)     // contains an alpha channel
     {
@@ -89,6 +89,7 @@ int loadBG()
   SDL_GL_SwapBuffers();
   
   glDeleteTextures(1, &texture);
+  return 0;
 }
 
 int loadLogo()
@@ -172,6 +173,7 @@ int loadLogo()
   SDL_GL_SwapBuffers();
   
   glDeleteTextures(1, &texture);
+  return 0;
 }
 
 int loadSelector()
@@ -259,6 +261,7 @@ int loadSelector()
   
   SDL_GL_SwapBuffers();
   glDeleteTextures(1, &texture);
+  return 0;
 }
 
 int main()
