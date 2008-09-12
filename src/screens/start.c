@@ -11,7 +11,7 @@ int loadBG_GL()
   GLenum texture_format;
   GLint nOfColors;
 
-  if ((surface = IMG_Load_RW(SDL_RWFromFile("testmenu/bg.png", "rb"), 1)))
+  if ((surface = IMG_Load_RW(SDL_RWFromFile("screens/bg.png", "rb"), 1)))
   { 
 
     /* Check that the image's width is a power of 2 */
@@ -99,7 +99,7 @@ int loadLogo_GL()
   GLenum texture_format;
   GLint nOfColors;
   
-  if ((surface = IMG_Load_RW(SDL_RWFromFile("testmenu/logo.png", "rb"), 1)))
+  if ((surface = IMG_Load_RW(SDL_RWFromFile("screens/logo.png", "rb"), 1)))
   { 
 
     if ( (surface->w & (surface->w - 1)) != 0 ) {
@@ -175,7 +175,7 @@ int loadSelector_GL()
   GLenum texture_format;
   GLint nOfColors;
   
-  char *image = "testmenu/selector.png";
+  char *image = "screens/selector.png";
   
   if ((surface = IMG_Load_RW(SDL_RWFromFile(image, "rb"), 1)))
   { 
