@@ -11,7 +11,7 @@ int loadBG_GL()
   GLenum texture_format;
   GLint nOfColors;
 
-  if ((surface = IMG_Load_RW(SDL_RWFromFile("screens/bg.png", "rb"), 1)))
+  if ((surface = IMG_Load_RW(SDL_RWFromFile("themes/default/global/bg.png", "rb"), 1)))
   { 
 
     /* Check that the image's width is a power of 2 */
@@ -99,7 +99,7 @@ int loadLogo_GL()
   GLenum texture_format;
   GLint nOfColors;
   
-  if ((surface = IMG_Load_RW(SDL_RWFromFile("screens/logo.png", "rb"), 1)))
+  if ((surface = IMG_Load_RW(SDL_RWFromFile("themes/default/screenStart/banner.png", "rb"), 1)))
   { 
 
     if ( (surface->w & (surface->w - 1)) != 0 ) {
@@ -175,7 +175,7 @@ int loadSelector_GL()
   GLenum texture_format;
   GLint nOfColors;
   
-  char *image = "screens/selector.png";
+  char *image = "themes/default/screenStart/selector.png";
   
   if ((surface = IMG_Load_RW(SDL_RWFromFile(image, "rb"), 1)))
   { 
@@ -252,6 +252,14 @@ int loadSelector_GL()
 }
 #endif
 
+struct {
+  int singlePlayer;
+  int multiplayer;
+  int online;
+  int options;
+  int quit;
+} mainMenu;
+
 void showMainMenu()
 {
 #ifdef __GL__
@@ -261,4 +269,83 @@ void showMainMenu()
   loadSelector_GL();
 /*  showMainMenuOptions_GL(); */
 #endif
+
+  SDL_Event startmenu;
+  int running = 1;
+  mainMenu.singlePlayer = 1;
+
+  /* Main loop to keep window running */
+  while(running) {
+    while(SDL_PollEvent(&startmenu)) {
+      switch(startmenu.type){
+        /* End loop if user hits ESC or closes the window */
+        case SDL_KEYDOWN:
+          if (startmenu.key.keysym.sym == SDLK_ESCAPE)
+            running = 0;
+          else if (startmenu.key.keysym.sym == SDLK_RETURN)
+            printf("Enter\n");
+          else if (startmenu.key.keysym.sym == SDLK_DOWN) {
+            if (mainMenu.singlePlayer == 1) {
+              mainMenu.singlePlayer = 0;
+              mainMenu.multiplayer = 1;
+              printf("Multiplayer selected.\n");
+            }
+            else if (mainMenu.multiplayer == 1) {
+              mainMenu.multiplayer = 0;
+              mainMenu.online = 1;
+              printf("Online selected.\n");
+            }
+            else if (mainMenu.online == 1) {
+              mainMenu.online = 0;
+              mainMenu.options = 1;
+              printf("Options selected.\n");
+            }
+            else if (mainMenu.options == 1) {
+              mainMenu.options = 0;
+              mainMenu.quit = 1;
+              printf("Quit selected.\n");
+            }
+            /* Cycled through all menu options using just the down arrow */
+            else {
+              mainMenu.quit = 0;
+              mainMenu.singlePlayer = 1;
+              printf("Single player selected.\n");
+            }
+          }
+          else if (startmenu.key.keysym.sym == SDLK_UP) {
+            /* Backwards of above code */
+            if (mainMenu.singlePlayer == 1) {
+              mainMenu.singlePlayer = 0;
+              mainMenu.quit = 1;
+              printf("Quit selected.\n");
+            }
+            else if (mainMenu.quit == 1) {
+              mainMenu.quit = 0;
+              mainMenu.options = 1;
+              printf("Options selected.\n");
+            }
+            else if (mainMenu.options == 1) {
+              mainMenu.options = 0;
+              mainMenu.online = 1;
+              printf("Online selected.\n");
+            }
+            else if (mainMenu.online == 1) {
+              mainMenu.online = 0;
+              mainMenu.multiplayer = 1;
+              printf("Multiplayer selected.\n");
+            }
+            /* Cycled through all menu options using just the up arrow */
+            else {
+              mainMenu.multiplayer = 0;
+              mainMenu.singlePlayer = 1;
+              printf("Single player selected.\n");
+            }
+          }
+          break;
+        case SDL_QUIT:
+          running = 0;
+          break;
+      }
+    }
+  }
 }
