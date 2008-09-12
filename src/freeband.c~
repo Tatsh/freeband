@@ -53,7 +53,8 @@ int main(int argc, char *argv[])
   }
 #endif
 
-  showMainMenu();
+  enableMenuGL();
+  
 
   SDL_Event game;
   int running = 1;

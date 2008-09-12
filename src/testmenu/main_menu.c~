@@ -10,17 +10,6 @@
 
 /* This is by NO MEANS final code! This is test code to generate the main menu of Freeband. */
 
-int new_round(double x)
-{
-  return (int)(x + 0.5);
-}
-
-int nextpoweroftwo(int x)
-{
-  double logbase2 = log(x) / log(2);
-  return new_round(pow(2,ceil(logbase2)));
-}
-
 char fontpath[] = "crillee.ttf";
 void SDL_GL_RenderText(char *text, TTF_Font *font, SDL_Color color, SDL_Rect *location)
 {

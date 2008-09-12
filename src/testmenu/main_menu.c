@@ -40,7 +40,7 @@ int showMainMenuOptions()
   }
 }
 
-int loadBG()
+void loadBG()
 {
   GLuint texture;     /* This is a handle to our texture object */
   SDL_Surface *surface; /* This surface will tell us the details of the image */
@@ -124,7 +124,6 @@ int loadBG()
   SDL_GL_SwapBuffers();
   
   glDeleteTextures(1, &texture);
-  return 0;
 }
 
 int loadLogo()
