@@ -53,9 +53,7 @@ int main(int argc, char *argv[])
   }
 #endif
 
-  showMainMenu();
-
-
+  showMainMenu(); /* screens/start.c */
 
   return 0;
 }

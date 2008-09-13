@@ -55,24 +55,5 @@ int main(int argc, char *argv[])
 
   showMainMenu();
 
-  SDL_Event game;
-  int running = 1;
-
-  /* Main loop to keep window running */
-  while(running) {
-    while(SDL_PollEvent(&game)) {
-      switch(game.type){
-        /* End loop if user hits ESC or closes the window */
-        case SDL_KEYDOWN:
-          if (game.key.keysym.sym == SDLK_ESCAPE)
-            running = 0;
-          break;
-        case SDL_QUIT:
-          running = 0;
-          break;
-      }
-    }
-  }
-
   return 0;
 }

@@ -252,7 +252,7 @@ int loadSelector_GL()
 }
 #endif
 
-struct {
+struct selection {
   int singlePlayer;
   int multiplayer;
   int online;
@@ -282,8 +282,6 @@ void showMainMenu()
         case SDL_KEYDOWN:
           if (startmenu.key.keysym.sym == SDLK_ESCAPE)
             running = 0;
-          else if (startmenu.key.keysym.sym == SDLK_RETURN)
-            printf("Enter\n");
           else if (startmenu.key.keysym.sym == SDLK_DOWN) {
             if (mainMenu.singlePlayer == 1) {
               mainMenu.singlePlayer = 0;
@@ -340,6 +338,44 @@ void showMainMenu()
               mainMenu.singlePlayer = 1;
               printf("Single player selected.\n");
             }
+          }
+          /* User selects mode to play */
+          else if (startmenu.key.keysym.sym == SDLK_RETURN) {
+              if (mainMenu.singlePlayer == 1) {
+                printf("Starting single player mode.\n");
+                /* startGame(1); */
+              }
+              else if (mainMenu.multiplayer == 1) {
+                printf("Starting multiplayer mode.\n");
+                /* int numPlayers;
+                  Check if enumControllers found any, otherwise set value to 2
+                if (enumControllers() == -1)
+                  numPlayers = 2;
+                else
+                  numPlayers = enumControllers();
+                startGame(numPlayers); */
+              }
+              else if (mainMenu.online == 1)
+                printf("Starting online mode.\n");
+              /* int numPlayers;
+                 Check if enumControllers found any, otherwise set value to 1
+                if (enumControllers() == -1)
+                  numPlayers = 1;
+                else
+                  numPlayers = enumControllers();
+                startGame(numPlayers); */
+              else if (mainMenu.options == 1)
+                printf("Going to options menu.\n");
+/*
+#ifdef __GL__
+                showOptionsMenu_GL();
+#else
+                showOptionsMenu();
+#endif */
+              else /* Assume selection is Quit */ {
+                printf("Quitting...\n");
+                running = 0;
+              }
           }
           break;
         case SDL_QUIT:
