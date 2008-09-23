@@ -17,17 +17,17 @@ int loadFlatTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValu
   GLint nOfColors;        /* This value is the number of channels in the SDL surface, will reveal if alpha channel exists or not (4) */
 
   if ((surface = IMG_Load_RW(SDL_RWFromFile(image, "rb"), 1))) {
-    
+
     /* Check that a texture's width is a power of two, eventually convert on-the-fly */
     if ((surface->w & (surface->w - 1)) != 0) { /* We cannot use boolean values here */
       printf("Warning: %s's width is not a power of 2.\n", image);
     }
-    
+
     /* Also check that heigh is a power of 2 */
     if ((surface->h & (surface->h - 1)) != 0) {
       printf("Warning: %s's height is not a power of 2.\n", image);
     }
-    
+
     /* Set special modes based upon alpha channel existence. */
     nOfColors = getNumColors(surface);
     if (nOfColors == 4) {
@@ -78,6 +78,7 @@ int loadFlatTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValu
 
 #ifdef __DEBUG__
   int i;
+  printf("%s properties:\n", image);
   for (i = 0; i < 4; i++) {
     printf("vertexW[%d]: %d\n", i, vertexW[i]);
   }
@@ -100,7 +101,7 @@ int loadFlatTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValu
   glEnd();
 
   SDL_GL_SwapBuffers();
-  
+
   glDeleteTextures(1, &texture);
 
   return 0;
@@ -138,12 +139,18 @@ void showMainMenu()
   float logoAlpha[] = { 1.0f, 1.0f, 1.0f, 1.0f };
   loadFlatTexture_GL(logoTexture, logoArrayW, logoArrayH, logoAlpha);
   
-  /* Selector */
+  /* Selector default position */
   char *selectorTexture = "themes/default/screenStart/selector.png";
   int selectorArrayW[] = { 425, 425, 765, 765 };
-  int selectorArrayH[] = { 300, 360, 300, 360 };
+  int selectorArrayH[] = { 300, 350, 300, 350 };
   float selectorAlpha[] = { 1.0f , 1.0f , 1.0f , SELECTBLENDSRC };
   loadFlatTexture_GL(selectorTexture, selectorArrayW, selectorArrayH, selectorAlpha);
+  
+  /* Other positions for selector */
+  int mpSelectorArrayH[] =      { 355, 405, 355, 405 }; /* Multiplayer */
+  int olSelectorArrayH[] =      { 410, 460, 410, 460 }; /* Online */
+  int optionsSelectorArrayH[] = { 465, 515, 465, 515 }; /* Options */
+  int quitSelectorArrayH[] =    { 520, 570, 520, 570 }; /* Quit */
 /*  showMainMenuOptions_GL(); */
 #endif
 
@@ -163,6 +170,7 @@ void showMainMenu()
             if (mainMenu.singlePlayer == true) {
               mainMenu.singlePlayer = false;
               mainMenu.multiplayer = true;
+              loadFlatTexture_GL(selectorTexture, selectorArrayW, mpSelectorArrayH, selectorAlpha);
 #ifdef __DEBUG__
               printf("Multiplayer selected.\n");
 #endif
@@ -170,6 +178,7 @@ void showMainMenu()
             else if (mainMenu.multiplayer == true) {
               mainMenu.multiplayer = false;
               mainMenu.online = true;
+              loadFlatTexture_GL(selectorTexture, selectorArrayW, olSelectorArrayH, selectorAlpha);
 #ifdef __DEBUG__
               printf("Online selected.\n");
 #endif
@@ -177,11 +186,14 @@ void showMainMenu()
             else if (mainMenu.online == true) {
               mainMenu.online = false;
               mainMenu.options = true;
+
+              loadFlatTexture_GL(selectorTexture, selectorArrayW, optionsSelectorArrayH, selectorAlpha);
               printf("Options selected.\n");
             }
             else if (mainMenu.options == true) {
               mainMenu.options = false;
               mainMenu.quit = true;
+              loadFlatTexture_GL(selectorTexture, selectorArrayW, quitSelectorArrayH, selectorAlpha);
 #ifdef __DEBUG__
               printf("Quit selected.\n");
 #endif

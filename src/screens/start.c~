@@ -17,17 +17,17 @@ int loadFlatTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValu
   GLint nOfColors;        /* This value is the number of channels in the SDL surface, will reveal if alpha channel exists or not (4) */
 
   if ((surface = IMG_Load_RW(SDL_RWFromFile(image, "rb"), 1))) {
-    
+
     /* Check that a texture's width is a power of two, eventually convert on-the-fly */
     if ((surface->w & (surface->w - 1)) != 0) { /* We cannot use boolean values here */
       printf("Warning: %s's width is not a power of 2.\n", image);
     }
-    
+
     /* Also check that heigh is a power of 2 */
     if ((surface->h & (surface->h - 1)) != 0) {
       printf("Warning: %s's height is not a power of 2.\n", image);
     }
-    
+
     /* Set special modes based upon alpha channel existence. */
     nOfColors = getNumColors(surface);
     if (nOfColors == 4) {
@@ -78,6 +78,7 @@ int loadFlatTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValu
 
 #ifdef __DEBUG__
   int i;
+  printf("%s properties:\n", image);
   for (i = 0; i < 4; i++) {
     printf("vertexW[%d]: %d\n", i, vertexW[i]);
   }
@@ -100,85 +101,9 @@ int loadFlatTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValu
   glEnd();
 
   SDL_GL_SwapBuffers();
-  
+
   glDeleteTextures(1, &texture);
 
-  return 0;
-}
-
-int loadLogo_GL()
-{
-  GLuint texture;
-  SDL_Surface *surface;
-  GLenum texture_format;
-  GLint nOfColors;
-  
-  if ((surface = IMG_Load_RW(SDL_RWFromFile("themes/default/screenStart/banner.png", "rb"), 1)))
-  { 
-
-    if ( (surface->w & (surface->w - 1)) != 0 ) {
-      printf("warning: banner.png's width is not a power of 2\n");
-    }
-
-    if ( (surface->h & (surface->h - 1)) != 0 ) {
-      printf("warning: banner.png's height is not a power of 2\n");
-    }
-
-    nOfColors = surface->format->BytesPerPixel;
-    if (nOfColors == 4) /* has an alpha channel */
-    {
-      if (surface->format->Rmask == 0x000000ff)
-        texture_format = GL_RGBA;
-      else
-        texture_format = GL_BGRA;
-    }
-    else if (nOfColors == 3) /* no alpha channel */
-    {
-      if (surface->format->Rmask == 0x000000ff)
-        texture_format = GL_RGB;
-      else
-        texture_format = GL_BGR;
-    } 
-    else
-    {
-      printf("Warning: the image is not true colour. This will probably break.\n");
-      return 1;
-    }
-
-    glGenTextures(1, &texture);
-
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, nOfColors, surface->w, surface->h, 0,
-                 texture_format, GL_UNSIGNED_BYTE, surface->pixels);
-  } 
-  else {
-    printf("SDL could not load image.png: %s\n", SDL_GetError());
-    SDL_Quit();
-    return 1;
-  }
-
-  if (surface)
-  {
-    SDL_FreeSurface(surface);
-  }
-
-  glBindTexture(GL_TEXTURE_2D, texture);
- 
-  glBegin(GL_QUADS);
-  /* For flat objects, glTexCoord3i is ALWAYS (0, 0), (1, 0), (1, 1), (0, 1) consecutively when in this order */
-  glTexCoord2i(0, 0); glVertex2i(10+82, 10+82); /* Top-left vertex (corner); 82 pixels is the offset away from top-corner */
-  glTexCoord2i(1, 0); glVertex2i(638+82, 10+82); /* Top-right vertex */
-  glTexCoord2i(1, 1); glVertex2i(638+82, 245+82); /* Bottom-right vertex (corner) */
-  glTexCoord2i(0, 1); glVertex2i(10+82, 245+82); /* Bottom-left vertex (x offset, same y offset as above) */
-  glEnd();
-
-  SDL_GL_SwapBuffers();
-  
-  glDeleteTextures(1, &texture);
   return 0;
 }
 #endif
@@ -214,12 +139,18 @@ void showMainMenu()
   float logoAlpha[] = { 1.0f, 1.0f, 1.0f, 1.0f };
   loadFlatTexture_GL(logoTexture, logoArrayW, logoArrayH, logoAlpha);
   
-  /* Selector */
+  /* Selector default position */
   char *selectorTexture = "themes/default/screenStart/selector.png";
   int selectorArrayW[] = { 425, 425, 765, 765 };
-  int selectorArrayH[] = { 300, 360, 300, 360 };
+  int selectorArrayH[] = { 300, 350, 300, 350 };
   float selectorAlpha[] = { 1.0f , 1.0f , 1.0f , SELECTBLENDSRC };
   loadFlatTexture_GL(selectorTexture, selectorArrayW, selectorArrayH, selectorAlpha);
+  
+  /* Other positions for selector */
+  int mpSelectorArrayH[] =      { 355, 405, 355, 405 }; /* Multiplayer */
+  int olSelectorArrayH[] =      { 410, 460, 410, 460 }; /* Online */
+  int optionsSelectorArrayH[] = { 465, 515, 465, 515 }; /* Options */
+  int quitSelectorArrayH[] =    { 520, 570, 520, 570 }; /* Quit */
 /*  showMainMenuOptions_GL(); */
 #endif
 
@@ -239,6 +170,7 @@ void showMainMenu()
             if (mainMenu.singlePlayer == true) {
               mainMenu.singlePlayer = false;
               mainMenu.multiplayer = true;
+              loadFlatTexture_GL(selectorTexture, selectorArrayW, mpSelectorArrayH, selectorAlpha);
 #ifdef __DEBUG__
               printf("Multiplayer selected.\n");
 #endif
@@ -246,6 +178,7 @@ void showMainMenu()
             else if (mainMenu.multiplayer == true) {
               mainMenu.multiplayer = false;
               mainMenu.online = true;
+              loadFlatTexture_GL(selectorTexture, selectorArrayW, olSelectorArrayH, selectorAlpha);
 #ifdef __DEBUG__
               printf("Online selected.\n");
 #endif
@@ -253,11 +186,14 @@ void showMainMenu()
             else if (mainMenu.online == true) {
               mainMenu.online = false;
               mainMenu.options = true;
+
+              loadFlatTexture_GL(selectorTexture, selectorArrayW, optionsSelectorArrayH, selectorAlpha);
               printf("Options selected.\n");
             }
             else if (mainMenu.options == true) {
               mainMenu.options = false;
               mainMenu.quit = true;
+              loadFlatTexture_GL(selectorTexture, selectorArrayW, quitSelectorArrayH, selectorAlpha);
 #ifdef __DEBUG__
               printf("Quit selected.\n");
 #endif
