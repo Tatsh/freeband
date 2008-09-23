@@ -1,1 +1,3 @@
-gcc -o freeband -lSDL -lSDL_image -lSDL_ttf -lGL -D__GL__ -O2 freeband.c screens/start.c screens/menus.c
+#!/bin/bash
+
+gcc -o freeband -lSDL -lSDL_image -lSDL_ttf -lGL -D__DEBUG__ -D__GL__ -ansi -Wall -O2 freeband.c screens/start.c screens/menus.c
