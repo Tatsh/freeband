@@ -1,13 +1,13 @@
 /* Nearly all source files need this header */
 
 #include <math.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "SDL/SDL_ttf.h"
-
 
 /* Optional includes */
 /* #ifdef __D3D__
@@ -27,4 +27,7 @@ int SDLtest();
 /* Main menu */
 void showMainMenu();
 void retnMainMenu();
+
+/* Game main functions */
+void startGame(int num_players);
 

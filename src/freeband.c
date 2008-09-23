@@ -1,5 +1,10 @@
 #include "freeband.h"
 
+void startGame(int num_players)
+{
+
+}
+
 int SDLtest()
 {
   /* Test SDL video */

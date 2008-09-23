@@ -252,12 +252,14 @@ int loadSelector_GL()
 }
 #endif
 
+/* Use bool to save memory :) */
+
 struct selection {
-  int singlePlayer;
-  int multiplayer;
-  int online;
-  int options;
-  int quit;
+  bool singlePlayer;
+  bool multiplayer;
+  bool online;
+  bool options;
+  bool quit;
 } mainMenu;
 
 void showMainMenu()
@@ -271,8 +273,8 @@ void showMainMenu()
 #endif
 
   SDL_Event startmenu;
-  int running = 1;
-  mainMenu.singlePlayer = 1;
+  bool running = true;
+  mainMenu.singlePlayer = true;
 
   /* Main loop to keep window running */
   while(running) {
@@ -283,69 +285,69 @@ void showMainMenu()
           if (startmenu.key.keysym.sym == SDLK_ESCAPE)
             running = 0;
           else if (startmenu.key.keysym.sym == SDLK_DOWN) {
-            if (mainMenu.singlePlayer == 1) {
-              mainMenu.singlePlayer = 0;
-              mainMenu.multiplayer = 1;
+            if (mainMenu.singlePlayer == true) {
+              mainMenu.singlePlayer = false;
+              mainMenu.multiplayer = true;
               printf("Multiplayer selected.\n");
             }
-            else if (mainMenu.multiplayer == 1) {
-              mainMenu.multiplayer = 0;
-              mainMenu.online = 1;
+            else if (mainMenu.multiplayer == true) {
+              mainMenu.multiplayer = FALSE;
+              mainMenu.online = true;
               printf("Online selected.\n");
             }
-            else if (mainMenu.online == 1) {
-              mainMenu.online = 0;
-              mainMenu.options = 1;
+            else if (mainMenu.online == true) {
+              mainMenu.online = FALSE;
+              mainMenu.options = true;
               printf("Options selected.\n");
             }
-            else if (mainMenu.options == 1) {
-              mainMenu.options = 0;
-              mainMenu.quit = 1;
+            else if (mainMenu.options == true) {
+              mainMenu.options = FALSE;
+              mainMenu.quit = true;
               printf("Quit selected.\n");
             }
             /* Cycled through all menu options using just the down arrow */
             else {
-              mainMenu.quit = 0;
-              mainMenu.singlePlayer = 1;
+              mainMenu.quit = FALSE;
+              mainMenu.singlePlayer = true;
               printf("Single player selected.\n");
             }
           }
           else if (startmenu.key.keysym.sym == SDLK_UP) {
             /* Backwards of above code */
-            if (mainMenu.singlePlayer == 1) {
-              mainMenu.singlePlayer = 0;
-              mainMenu.quit = 1;
+            if (mainMenu.singlePlayer == true) {
+              mainMenu.singlePlayer = FALSE;
+              mainMenu.quit = true;
               printf("Quit selected.\n");
             }
-            else if (mainMenu.quit == 1) {
-              mainMenu.quit = 0;
-              mainMenu.options = 1;
+            else if (mainMenu.quit == true) {
+              mainMenu.quit = FALSE;
+              mainMenu.options = true;
               printf("Options selected.\n");
             }
-            else if (mainMenu.options == 1) {
-              mainMenu.options = 0;
-              mainMenu.online = 1;
+            else if (mainMenu.options == true) {
+              mainMenu.options = FALSE;
+              mainMenu.online = true;
               printf("Online selected.\n");
             }
-            else if (mainMenu.online == 1) {
-              mainMenu.online = 0;
-              mainMenu.multiplayer = 1;
+            else if (mainMenu.online == true) {
+              mainMenu.online = FALSE;
+              mainMenu.multiplayer = true;
               printf("Multiplayer selected.\n");
             }
             /* Cycled through all menu options using just the up arrow */
             else {
-              mainMenu.multiplayer = 0;
-              mainMenu.singlePlayer = 1;
+              mainMenu.multiplayer = FALSE;
+              mainMenu.singlePlayer = true;
               printf("Single player selected.\n");
             }
           }
           /* User selects mode to play */
           else if (startmenu.key.keysym.sym == SDLK_RETURN) {
-              if (mainMenu.singlePlayer == 1) {
+              if (mainMenu.singlePlayer == true) {
                 printf("Starting single player mode.\n");
                 /* startGame(1); */
               }
-              else if (mainMenu.multiplayer == 1) {
+              else if (mainMenu.multiplayer == true) {
                 printf("Starting multiplayer mode.\n");
                 /* int numPlayers;
                   Check if enumControllers found any, otherwise set value to 2
@@ -355,7 +357,7 @@ void showMainMenu()
                   numPlayers = enumControllers();
                 startGame(numPlayers); */
               }
-              else if (mainMenu.online == 1)
+              else if (mainMenu.online == true)
                 printf("Starting online mode.\n");
               /* int numPlayers;
                  Check if enumControllers found any, otherwise set value to 1
@@ -364,7 +366,7 @@ void showMainMenu()
                 else
                   numPlayers = enumControllers();
                 startGame(numPlayers); */
-              else if (mainMenu.options == 1)
+              else if (mainMenu.options == true)
                 printf("Going to options menu.\n");
 /*
 #ifdef __GL__
