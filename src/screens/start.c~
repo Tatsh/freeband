@@ -15,7 +15,7 @@ int loadFlatTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValu
   SDL_Surface *surface;   /* Surface from SDL to reveal details of image */
   GLenum texture_format;
   GLint nOfColors;        /* This value is the number of channels in the SDL surface, will reveal if alpha channel exists or not (4) */
-
+  
   if ((surface = IMG_Load_RW(SDL_RWFromFile(image, "rb"), 1))) {
 
     /* Check that a texture's width is a power of two, eventually convert on-the-fly */
@@ -80,12 +80,12 @@ int loadFlatTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValu
   int i;
   printf("%s properties:\n", image);
   for (i = 0; i < 4; i++) {
-    printf("vertexW[%d]: %d\n", i, vertexW[i]);
+    printf("vertexH[%d]: %d\n", i, vertexW[i]);
   }
 
   int j;
   for (j = 0; j < 4; j++) {
-    printf("vertexH[%d]: %d\n", j, vertexH[j]);
+    printf("vertexV[%d]: %d\n", j, vertexH[j]);
   }
 #endif
   
@@ -104,11 +104,31 @@ int loadFlatTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValu
 
   glDeleteTextures(1, &texture);
 
+  /* Flush GL rendering pipeline */
+  glFlush ();
+  
   return 0;
 }
-#endif
 
-/* Use bool to save memory :) */
+void useSelector_GL(int translateV){
+  /* Selector's default position, horizontal, vertical, and default alpha values */
+  char *selectorTexture = "themes/default/screenStart/selector.png";
+  int selectorArrayH[] = { 425, 425, 765, 765 };
+  int selectorArrayV[] = { 300, 350, 300, 350 };
+  float selectorAlpha[] = { 1.0f, 1.0f, 1.0f, SELECTBLENDSRC };
+
+  int i;
+  if (translateV != 0) {
+    for (i = 0; i < 4; i++) {
+      selectorArrayV[i] = selectorArrayV[i]+translateV;
+    }
+    loadFlatTexture_GL(selectorTexture, selectorArrayH, selectorArrayV, selectorAlpha);
+  }
+  else {
+    loadFlatTexture_GL(selectorTexture, selectorArrayH, selectorArrayV, selectorAlpha);
+  }
+}
+#endif
 
 struct selection {
   bool singlePlayer;
@@ -139,18 +159,12 @@ void showMainMenu()
   float logoAlpha[] = { 1.0f, 1.0f, 1.0f, 1.0f };
   loadFlatTexture_GL(logoTexture, logoArrayW, logoArrayH, logoAlpha);
   
-  /* Selector default position */
-  char *selectorTexture = "themes/default/screenStart/selector.png";
-  int selectorArrayW[] = { 425, 425, 765, 765 };
-  int selectorArrayH[] = { 300, 350, 300, 350 };
-  float selectorAlpha[] = { 1.0f , 1.0f , 1.0f , SELECTBLENDSRC };
-  loadFlatTexture_GL(selectorTexture, selectorArrayW, selectorArrayH, selectorAlpha);
+  /* Selector function, 0 is value to translate vertically */
+  useSelector_GL(0);
   
   /* Other positions for selector */
-  int mpSelectorArrayH[] =      { 355, 405, 355, 405 }; /* Multiplayer */
-  int olSelectorArrayH[] =      { 410, 460, 410, 460 }; /* Online */
-  int optionsSelectorArrayH[] = { 465, 515, 465, 515 }; /* Options */
-  int quitSelectorArrayH[] =    { 520, 570, 520, 570 }; /* Quit */
+
+  
 /*  showMainMenuOptions_GL(); */
 #endif
 
@@ -170,7 +184,9 @@ void showMainMenu()
             if (mainMenu.singlePlayer == true) {
               mainMenu.singlePlayer = false;
               mainMenu.multiplayer = true;
-              loadFlatTexture_GL(selectorTexture, selectorArrayW, mpSelectorArrayH, selectorAlpha);
+#ifdef __GL__
+              useSelector_GL(55);
+#endif
 #ifdef __DEBUG__
               printf("Multiplayer selected.\n");
 #endif
@@ -178,7 +194,9 @@ void showMainMenu()
             else if (mainMenu.multiplayer == true) {
               mainMenu.multiplayer = false;
               mainMenu.online = true;
-              loadFlatTexture_GL(selectorTexture, selectorArrayW, olSelectorArrayH, selectorAlpha);
+#ifdef __GL__
+              useSelector_GL(55 * 2);
+#endif
 #ifdef __DEBUG__
               printf("Online selected.\n");
 #endif
@@ -186,14 +204,17 @@ void showMainMenu()
             else if (mainMenu.online == true) {
               mainMenu.online = false;
               mainMenu.options = true;
-
-              loadFlatTexture_GL(selectorTexture, selectorArrayW, optionsSelectorArrayH, selectorAlpha);
+#ifdef __GL__
+              useSelector_GL(55 * 3);
+#endif
               printf("Options selected.\n");
             }
             else if (mainMenu.options == true) {
               mainMenu.options = false;
               mainMenu.quit = true;
-              loadFlatTexture_GL(selectorTexture, selectorArrayW, quitSelectorArrayH, selectorAlpha);
+#ifdef __GL__
+              useSelector_GL(55 * 4);
+#endif
 #ifdef __DEBUG__
               printf("Quit selected.\n");
 #endif
@@ -202,6 +223,9 @@ void showMainMenu()
             else {
               mainMenu.quit = false;
               mainMenu.singlePlayer = true;
+#ifdef __GL__
+              useSelector_GL(0);
+#endif
 #ifdef __DEBUG__
               printf("Single player selected.\n");
 #endif
