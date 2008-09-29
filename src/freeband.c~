@@ -1,8 +1,20 @@
 #include "freeband.h"
 
-void startGame(int num_players)
-{
-
+void startGame(int num_players) {
+  /* Poll for correct type of controller */
+  /* if 1 player, use poll1P_Controller(); */
+  /* int poll1P_Controller(): returns -1 if no controllers, other numeric codes for other controllers */
+  if (num_players == 1)
+#ifdef __DEBUG__
+    printf("Starting game with 1 player.\n");
+#endif
+    bool game_status;
+#ifdef __GL__
+    game_status = showSongsMenu_GL();
+    if (!game_status)
+      reloadStaticMenuItems();
+      num_players = showMainMenu();
+#endif
 }
 
 int SDLtest()
@@ -41,12 +53,15 @@ int main(int argc, char *argv[])
   else {
     printf("Start-up tests completed successfully.\n");
   }
+  
+  int numplayers;
 
   SDL_WM_SetCaption("Freeband", "Freeband");
 
-#ifdef __GL__
-  /* Enable SDL OpenGL Double-buffering */
-  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+#ifdef __GL__ 
+  /* These are SDL-OpenGL functions */
+  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); /* Enable SDL OpenGL Double-buffering */
+  SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1); /* Force hardware acceleration */
 
   /* Set window 800x600 with 24-bit colours, with OpenGL enabled */
   SDL_Surface *screen;
@@ -58,7 +73,15 @@ int main(int argc, char *argv[])
   }
 #endif
 
-  showMainMenu(); /* screens/start.c */
+  bool running = true;
+
+  while (running) {
+    numplayers = showMainMenu(); /* screens/start.c */
+    if (numplayers != -1) {
+      running = false;
+      startGame(numplayers);
+    }
+  }
 
   return 0;
 }

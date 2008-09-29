@@ -1,6 +1,7 @@
-/* Nearly all source files need this header */
+/* Nearly all source files need these headers */
 
 #include <math.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -14,19 +15,16 @@
 int d3dTest();
 #endif */
 
+/* For convenience only */
 #ifdef __GL__
 #include "SDL/SDL_opengl.h"
 void enableMenuGL();
 #endif
 
-/* Function definitions */
-/* Start-up ests */
-int SDLtest();
-
-/* Main menu */
-void showMainMenu();
-void retnMainMenu();
+int SDLtest();          /* Basic SDL test */
+int showMainMenu();    /* Main menu, returns number of players */
+void reloadStaticMenuItems(); /* To reset screen to refresh main menu */
+void showSongsMenu_GL();   /* Songs menu */
 
 /* Game main functions */
 void startGame(int num_players);
-

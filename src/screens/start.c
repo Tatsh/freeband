@@ -4,6 +4,20 @@
 #define SELECTBLENDDEST 0.60f
 
 #ifdef __GL__
+/* Background, static till game is themeable */
+char *bgTexture = "themes/default/global/bg.png";
+/* Top-left width, bottom-left width, top-right width, bottom-right width */
+int bgArrayW[] = { 0, 0, 800, 800 };
+/* Top-left height, bottom-left height, top-right height, bottom-right height */
+int bgArrayH[] = { 0, 600, 0, 600 };
+float bgAlpha[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+/* Logo */
+char *logoTexture = "themes/default/screenStart/banner.png";
+int logoArrayW[] = { 92, 92, 720, 720 };
+int logoArrayH[] = { 92, 327, 92, 327 };
+float logoAlpha[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
 int getNumColors(SDL_Surface *surface) {
   int nOfColors;
   nOfColors = surface->format->BytesPerPixel;
@@ -106,7 +120,7 @@ int loadFlatTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValu
 
   /* Flush GL rendering pipeline */
   glFlush ();
-  
+
   return 0;
 }
 
@@ -128,6 +142,13 @@ void useSelector_GL(int translateV){
     loadFlatTexture_GL(selectorTexture, selectorArrayH, selectorArrayV, selectorAlpha);
   }
 }
+
+void reloadStaticMenuItems() {
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* Clear buffers to draw next frame efficiently */
+  glColor4f(1.0, 1.0, 1.0, 1.0); /* Transparent colour */
+  loadFlatTexture_GL(bgTexture, bgArrayW, bgArrayH, bgAlpha); /* Reload background */
+  loadFlatTexture_GL(logoTexture, logoArrayW, logoArrayH, logoAlpha); /* Reload logo */
+}
 #endif
 
 struct selection {
@@ -138,28 +159,7 @@ struct selection {
   bool quit;
 } mainMenu;
 
-/* Background */
-char *bgTexture = "themes/default/global/bg.png";
-/* Top-left width, bottom-left width, top-right width, bottom-right width */
-int bgArrayW[] = { 0, 0, 800, 800 };
-/* Top-left height, bottom-left height, top-right height, bottom-right height */
-int bgArrayH[] = { 0, 600, 0, 600 };
-float bgAlpha[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-
-/* Logo */
-char *logoTexture = "themes/default/screenStart/banner.png";
-int logoArrayW[] = { 92, 92, 720, 720 };
-int logoArrayH[] = { 92, 327, 92, 327 };
-float logoAlpha[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-
-void reloadStaticMenuItems() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* Clear buffers to draw next frame efficiently */
-  glColor4f(1.0, 1.0, 1.0, 1.0); /* Transparent colour */
-  loadFlatTexture_GL(bgTexture, bgArrayW, bgArrayH, bgAlpha); /* Reload background */
-  loadFlatTexture_GL(logoTexture, logoArrayW, logoArrayH, logoAlpha); /* Reload logo */
-}
-
-void showMainMenu()
+int showMainMenu()
 {
 #ifdef __GL__
   enableMenuGL();
@@ -168,7 +168,7 @@ void showMainMenu()
   loadFlatTexture_GL(bgTexture, bgArrayW, bgArrayH, bgAlpha);
   loadFlatTexture_GL(logoTexture, logoArrayW, logoArrayH, logoAlpha);
 
-  /* Selector function, argument is the value to translate vertically */
+  /* Selector function (OpenGL), argument is the value to translate vertically */
   useSelector_GL(0);
 
 /*  showMainMenuOptions_GL(); */
@@ -176,7 +176,9 @@ void showMainMenu()
 
   SDL_Event startmenu;
   bool running = true;
+  bool selecting = false;
   mainMenu.singlePlayer = true;
+  int numplayers = 1;
 
   /* Main loop to keep window running */
   while(running) {
@@ -184,6 +186,7 @@ void showMainMenu()
       switch(startmenu.type){
         /* End loop if user hits ESC or closes the window */
         case SDL_KEYDOWN:
+          selecting = true;
           if (startmenu.key.keysym.sym == SDLK_ESCAPE)
             running = false;
           else if (startmenu.key.keysym.sym == SDLK_DOWN) {
@@ -307,43 +310,30 @@ void showMainMenu()
 #ifdef __DEBUG__
                 printf("Starting single player mode.\n");
 #endif
-                /* startGame(1); */
+                numplayers = 1;
+                running = false;
               }
               else if (mainMenu.multiplayer == true) {
 #ifdef __DEBUG__
                 printf("Starting multiplayer mode.\n");
 #endif
-                /* int numPlayers;
-                  Check if enumControllers found any, otherwise set value to 2
-                if (enumControllers() == -1)
-                  numPlayers = 2;
-                else
-                  numPlayers = enumControllers();
-                startGame(numPlayers); */
+                numplayers = 2;
               }
-              else if (mainMenu.online == true)
+              else if (mainMenu.online == true) {
 #ifdef __DEBUG__
                 printf("Starting online mode.\n");
 #endif
-              /* int numPlayers;
-                 Check if enumControllers found any, otherwise set value to 1
-                if (enumControllers() == -1)
-                  numPlayers = 1;
-                else
-                  numPlayers = enumControllers();
-                startGame(numPlayers); */
-              else if (mainMenu.options == true)
+                numplayers = 1;
+              }
+              else if (mainMenu.options == true) {
 #ifdef __DEBUG__
                 printf("Going to options menu.\n");
 #endif
-/*
-#ifdef __GL__
-                showOptionsMenu_GL();
-#else
-                showOptionsMenu();
-#endif */
-              else /* Assume selection is Quit */ {
+                numplayers = 0;
+              }
+              else { /* Assume selection is Quit */
                 printf("Quitting...\n");
+                numplayers = -1;
                 running = false;
               }
           }
@@ -351,7 +341,8 @@ void showMainMenu()
         case SDL_QUIT:
           running = false;
           break;
-      }
-    }
-  }
-}
+      }   /* matches switch(startmenu.type) */
+    }     /* matches while(SDL_PollEvent(&startmenu)) */
+  }       /* while(running) */
+  return numplayers;
+}         /* matches function */
