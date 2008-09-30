@@ -1,7 +1,7 @@
 #include "../freeband.h"
 
 #ifdef __GL__
-void enableMenuGL()
+void enableMenu_GL()
 {
   /* OpenGL functions */
   glEnable(GL_TEXTURE_2D);               /* Enable Texture mapping */

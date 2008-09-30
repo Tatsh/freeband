@@ -1,11 +1,12 @@
 #include "../freeband.h"
 
+#ifdef __GL__
+
 #define SELECTBLENDSRC  0.30f
 #define SELECTBLENDDEST 0.60f
 
-#ifdef __GL__
 /* Background, static till game is themeable */
-char *bgTexture = "themes/default/global/bg.png";
+char *bgTexture = "GameData/themes/default/global/bg.png";
 /* Top-left width, bottom-left width, top-right width, bottom-right width */
 int bgArrayW[] = { 0, 0, 800, 800 };
 /* Top-left height, bottom-left height, top-right height, bottom-right height */
@@ -13,7 +14,7 @@ int bgArrayH[] = { 0, 600, 0, 600 };
 float bgAlpha[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 /* Logo */
-char *logoTexture = "themes/default/screenStart/banner.png";
+char *logoTexture = "GameData/themes/default/screenStart/banner.png";
 int logoArrayW[] = { 92, 92, 720, 720 };
 int logoArrayH[] = { 92, 327, 92, 327 };
 float logoAlpha[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -124,9 +125,16 @@ int loadFlatTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValu
   return 0;
 }
 
-void useSelector_GL(int translateV){
+void reloadStaticMenuItems_GL() {
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* Clear buffers to draw next frame efficiently */
+  glColor4f(1.0, 1.0, 1.0, 1.0); /* Transparent colour */
+  loadFlatTexture_GL(bgTexture, bgArrayW, bgArrayH, bgAlpha); /* Reload background */
+  loadFlatTexture_GL(logoTexture, logoArrayW, logoArrayH, logoAlpha); /* Reload logo */
+}
+
+void useSelector_GL(int translateV) {
   /* Selector's default position, horizontal, vertical, and default alpha values */
-  char *selectorTexture = "themes/default/screenStart/selector.png";
+  char *selectorTexture = "GameData/themes/default/screenStart/selector.png";
   int selectorArrayH[] = { 425, 425, 765, 765 };
   int selectorArrayV[] = { 300, 350, 300, 350 };
   float selectorAlpha[] = { 1.0f, 1.0f, 1.0f, SELECTBLENDSRC };
@@ -142,13 +150,6 @@ void useSelector_GL(int translateV){
     loadFlatTexture_GL(selectorTexture, selectorArrayH, selectorArrayV, selectorAlpha);
   }
 }
-
-void reloadStaticMenuItems() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* Clear buffers to draw next frame efficiently */
-  glColor4f(1.0, 1.0, 1.0, 1.0); /* Transparent colour */
-  loadFlatTexture_GL(bgTexture, bgArrayW, bgArrayH, bgAlpha); /* Reload background */
-  loadFlatTexture_GL(logoTexture, logoArrayW, logoArrayH, logoAlpha); /* Reload logo */
-}
 #endif
 
 struct selection {
@@ -162,7 +163,7 @@ struct selection {
 int showMainMenu()
 {
 #ifdef __GL__
-  enableMenuGL();
+  enableMenu_GL();
 
   /* Initial loading of background and logo */
   loadFlatTexture_GL(bgTexture, bgArrayW, bgArrayH, bgAlpha);
@@ -178,7 +179,7 @@ int showMainMenu()
   bool running = true;
   bool selecting = false;
   mainMenu.singlePlayer = true;
-  int numplayers = 1;
+  int gameMode = 1;
 
   /* Main loop to keep window running */
   while(running) {
@@ -194,7 +195,7 @@ int showMainMenu()
               mainMenu.singlePlayer = false;
               mainMenu.multiplayer = true; /* Switch to Multiplayer */
 #ifdef __GL__
-              reloadStaticMenuItems();
+              reloadStaticMenuItems_GL();
               useSelector_GL(55);
 #endif
 #ifdef __DEBUG__
@@ -205,7 +206,7 @@ int showMainMenu()
               mainMenu.multiplayer = false;
               mainMenu.online = true; /* Switch to Online */
 #ifdef __GL__
-              reloadStaticMenuItems();
+              reloadStaticMenuItems_GL();
               useSelector_GL(55 * 2);
 #endif
 #ifdef __DEBUG__
@@ -216,7 +217,7 @@ int showMainMenu()
               mainMenu.online = false;
               mainMenu.options = true; /* Switch to Options */
 #ifdef __GL__
-              reloadStaticMenuItems();
+              reloadStaticMenuItems_GL();
               useSelector_GL(55 * 3);
 #endif
               printf("Options selected.\n");
@@ -225,7 +226,7 @@ int showMainMenu()
               mainMenu.options = false;
               mainMenu.quit = true; /* Switch to Quit */
 #ifdef __GL__
-              reloadStaticMenuItems();
+              reloadStaticMenuItems_GL();
               useSelector_GL(55 * 4);
 #endif
 #ifdef __DEBUG__
@@ -237,7 +238,7 @@ int showMainMenu()
               mainMenu.quit = false;
               mainMenu.singlePlayer = true; /* Switch back to Single Player */
 #ifdef __GL__
-              reloadStaticMenuItems();
+              reloadStaticMenuItems_GL();
               useSelector_GL(0);
 #endif
 #ifdef __DEBUG__
@@ -251,7 +252,7 @@ int showMainMenu()
               mainMenu.singlePlayer = false;
               mainMenu.quit = true; /* Switch to Quit */
 #ifdef __GL__
-              reloadStaticMenuItems();
+              reloadStaticMenuItems_GL();
               useSelector_GL(55 * 4);
 #endif
 #ifdef __DEBUG__
@@ -262,7 +263,7 @@ int showMainMenu()
               mainMenu.quit = false;
               mainMenu.options = true; /* Switch to Options */
 #ifdef __GL__
-              reloadStaticMenuItems();
+              reloadStaticMenuItems_GL();
               useSelector_GL(55 * 3);
 #endif
 #ifdef __DEBUG__
@@ -273,7 +274,7 @@ int showMainMenu()
               mainMenu.options = false;
               mainMenu.online = true; /* Switch to Online */
 #ifdef __GL__
-              reloadStaticMenuItems();
+              reloadStaticMenuItems_GL();
               useSelector_GL(55 * 2);
 #endif
 #ifdef __DEBUG__
@@ -284,7 +285,7 @@ int showMainMenu()
               mainMenu.online = false;
               mainMenu.multiplayer = true; /* Switch to Multiplayer */
 #ifdef __GL__
-              reloadStaticMenuItems();
+              reloadStaticMenuItems_GL();
               useSelector_GL(55);
 #endif
 #ifdef __DEBUG__
@@ -296,7 +297,7 @@ int showMainMenu()
               mainMenu.multiplayer = false;
               mainMenu.singlePlayer = true; /* Switch to Single Player */
 #ifdef __GL__
-              reloadStaticMenuItems();
+              reloadStaticMenuItems_GL();
               useSelector_GL(0);
 #endif
 #ifdef __DEBUG__
@@ -307,33 +308,21 @@ int showMainMenu()
           /* User selects mode to play */
           else if (startmenu.key.keysym.sym == SDLK_RETURN) {
               if (mainMenu.singlePlayer == true) {
-#ifdef __DEBUG__
-                printf("Starting single player mode.\n");
-#endif
-                numplayers = 1;
+                gameMode = 1;
                 running = false;
               }
               else if (mainMenu.multiplayer == true) {
-#ifdef __DEBUG__
-                printf("Starting multiplayer mode.\n");
-#endif
-                numplayers = 2;
+                gameMode = 2;
               }
               else if (mainMenu.online == true) {
-#ifdef __DEBUG__
-                printf("Starting online mode.\n");
-#endif
-                numplayers = 1;
+                gameMode = 3;
               }
               else if (mainMenu.options == true) {
-#ifdef __DEBUG__
-                printf("Going to options menu.\n");
-#endif
-                numplayers = 0;
+                gameMode = 4;
               }
               else { /* Assume selection is Quit */
                 printf("Quitting...\n");
-                numplayers = -1;
+                gameMode = -1;
                 running = false;
               }
           }
@@ -344,5 +333,5 @@ int showMainMenu()
       }   /* matches switch(startmenu.type) */
     }     /* matches while(SDL_PollEvent(&startmenu)) */
   }       /* while(running) */
-  return numplayers;
+  return gameMode;
 }         /* matches function */

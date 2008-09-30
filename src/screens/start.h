@@ -1,2 +1,0 @@
-void quitGame()
-void showMainMenu();
