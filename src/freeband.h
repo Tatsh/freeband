@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
@@ -15,16 +16,19 @@ bool testSDL();/* Basic SDL test */
 /* Game main functions */
 void startGame(int gameMode);
 
-int showMainMenu(); /* Main menu, returns game mode */
+void showMainMenu(); /* Main menu, returns game mode */
+int mainMenuUpDown(SDL_keysym *keysym); /* Handle up and down on the main menu, return game mode */
 
 #ifdef __GL__
 #include "SDL/SDL_opengl.h"
-void enableMenu_GL(); /* General OpenGL functionality for the 2D menus */
+void init_GL(); /* General OpenGL functionality */
 int loadFlatTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValues);  /* General load flat texture function */
-void reloadStaticMenuItems_GL();  /* To reset screen to refresh main menu */
+
+void reloadStaticMenuItems_GL();  /* Refresh main menu */
+
 void useSelector_GL(int translateV);
 
-void showSongsMenu_GL();  /* Songs menu */
+void loadSongsMenu_GL();  /* Songs menu */
 
 void goOnline_GL(); /* Online menu */
 
