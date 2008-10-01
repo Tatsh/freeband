@@ -25,7 +25,7 @@ int getNumColors(SDL_Surface *surface) {
   return nOfColors;
 }
 
-int loadFlatTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValues) {
+int loadTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValues) {
   GLuint texture;         /* Handle to texture object */
   SDL_Surface *surface;   /* Surface from SDL to reveal details of image */
   GLenum texture_format;
@@ -146,8 +146,8 @@ int loadFlatTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValu
 void reloadStaticMenuItems_GL() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* Clear buffers to draw next frame efficiently */
   glColor4f(1.0, 1.0, 1.0, 1.0); /* Transparent colour */
-  loadFlatTexture_GL(bgTexture, bgArrayW, bgArrayH, bgAlpha); /* Reload background */
-  loadFlatTexture_GL(logoTexture, logoArrayW, logoArrayH, logoAlpha); /* Reload logo */
+  loadTexture_GL(bgTexture, bgArrayW, bgArrayH, bgAlpha); /* Reload background */
+  loadTexture_GL(logoTexture, logoArrayW, logoArrayH, logoAlpha); /* Reload logo */
 }
 
 void useSelector_GL(int translateV) {
@@ -162,10 +162,10 @@ void useSelector_GL(int translateV) {
     for (i = 0; i < 4; i++) {
       selectorArrayV[i] = selectorArrayV[i]+translateV;
     }
-    loadFlatTexture_GL(selectorTexture, selectorArrayH, selectorArrayV, selectorAlpha);
+    loadTexture_GL(selectorTexture, selectorArrayH, selectorArrayV, selectorAlpha);
   }
   else {
-    loadFlatTexture_GL(selectorTexture, selectorArrayH, selectorArrayV, selectorAlpha);
+    loadTexture_GL(selectorTexture, selectorArrayH, selectorArrayV, selectorAlpha);
   }
 }
 #endif
@@ -316,6 +316,9 @@ int mainMenuUpDown(SDL_keysym *keysym) {
       break;
 
     /* User selects mode to play, gameMode determined by above code */
+/*    case SDLK_RETURN:
+      selecting = false;
+      return gameMode; */
 
     default:
       break;
@@ -328,8 +331,8 @@ void showMainMenu()
 {
 #ifdef __GL__
   /* Initial loading of background and logo */
-  loadFlatTexture_GL(bgTexture, bgArrayW, bgArrayH, bgAlpha);
-  loadFlatTexture_GL(logoTexture, logoArrayW, logoArrayH, logoAlpha);
+  loadTexture_GL(bgTexture, bgArrayW, bgArrayH, bgAlpha);
+  loadTexture_GL(logoTexture, logoArrayW, logoArrayH, logoAlpha);
 
   /* Selector function (OpenGL), argument is the value to translate vertically */
   useSelector_GL(0); /* Initial position */
@@ -402,6 +405,7 @@ void showMainMenu()
           break;
 
         default:
+          /* Keep loading graphics */
           reloadStaticMenuItems_GL();
           if (menuSelection == 1) {
 #ifdef __GL__

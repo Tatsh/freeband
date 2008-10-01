@@ -4,7 +4,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
@@ -22,7 +21,7 @@ int mainMenuUpDown(SDL_keysym *keysym); /* Handle up and down on the main menu, 
 #ifdef __GL__
 #include "SDL/SDL_opengl.h"
 void init_GL(); /* General OpenGL functionality */
-int loadFlatTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValues);  /* General load flat texture function */
+int loadTexture_GL(char *image, int *vertexW, int *vertexH, float *alphaValues);  /* General load texture function */
 
 void reloadStaticMenuItems_GL();  /* Refresh main menu */
 

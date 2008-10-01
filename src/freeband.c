@@ -61,6 +61,7 @@ int main(int arg, char *argv[]) {
   init_GL();
 #endif
 
+  /* Obviously we start the game at the main menu. Later on, listen to arguments like --testmode for testing files. */
   showMainMenu();
 
   return EXIT_SUCCESS;
