@@ -10,7 +10,7 @@
 
 #define MAX_TEXTURES 10
 
-GLuint texture[MAX_TEXTURES]; /* Storage space for textures; this is maximum at any given time during runtime */
+GLuint texture[MAX_TEXTURES]; /* Storage space for textures; this is the maximum at any given time */
 
 /* General functions */
 void quitGame(int retnCode);
@@ -19,7 +19,7 @@ void quitGame(int retnCode);
 bool initGL();
 bool resizeWindow(int width, int height);
 void drawFreeband(GLvoid);
-GLuint loadTexture(char *filename);
+GLuint loadTexture(const char *filename);
 void positionTexture2D(GLuint *texID);
 GLvoid drawGLCube( GLvoid );
 

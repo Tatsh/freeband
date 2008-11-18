@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 
   bool hasQuit = false;             /* Main game loop variable */
 /*  bool windowActive = true;        Whether or not window is active */
-  bool menuScreen = true;           /* Start at a menu screen rather than game screen, used for menuKeys function */
+  /*bool menuScreen = true;            Start at a menu screen rather than game screen, used for menuKeys function */
 
   SDL_Event freeband;               /* Event collector */
 
@@ -72,9 +72,9 @@ int main(int argc, char *argv[]) {
   resizeWindow(WIDTH, HEIGHT);
   
   /* Load main menu textures */
-/*  if ((bgID = loadTexture(bgTexture)) != -1);
+  if ((bgID = loadTexture(bgTexture)) != -1);
   else
-    fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);*/
+    fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
   if ((logoID = loadTexture(logoTexture)) != -1);
   else
     fprintf(stderr, "Unable to load texture: %s.\n", logoTexture);
@@ -84,22 +84,7 @@ int main(int argc, char *argv[]) {
     while (SDL_PollEvent(&freeband)) {
       
       switch(freeband.type) {
-        
-/*        case SDL_ACTIVEEVENT:  Whether or not window is active
-          if (freeband.active.gain != 0) {
-            windowActive = true;
-#ifdef __DEBUG__
-            fprintf(stdout, "Window has focus\n");
-#endif
-          }
-          else {
-            windowActive = false;
-#ifdef __DEBUG__
-            fprintf(stdout, "Window lost focus\n");
-#endif
-          }
-          break;*/
-          
+
         case SDL_VIDEORESIZE: /* Handle resize event */
           fbSurface = SDL_SetVideoMode(freeband.resize.w, freeband.resize.h, 32, videoFlags);
           if (!fbSurface) {

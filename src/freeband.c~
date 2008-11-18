@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 
   bool hasQuit = false;             /* Main game loop variable */
 /*  bool windowActive = true;        Whether or not window is active */
-  bool menuScreen = true;           /* Start at a menu screen rather than game screen, used for menuKeys function */
+  /*bool menuScreen = true;            Start at a menu screen rather than game screen, used for menuKeys function */
 
   SDL_Event freeband;               /* Event collector */
 
