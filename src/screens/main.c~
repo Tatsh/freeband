@@ -1,0 +1,13 @@
+#include "../freeband.h"
+
+#define SELECTBLENDSRC  0.30f
+#define SELECTBLENDDEST 0.60f
+
+/* Static till game is themeable */
+char *bgTexture = "GameData/themes/default/global/bg.png";
+char *logoTexture = "GameData/themes/default/screenStart/banner.png";
+
+void screenMain() {
+
+  return;
+}

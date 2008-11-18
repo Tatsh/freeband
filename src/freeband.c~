@@ -72,9 +72,9 @@ int main(int argc, char *argv[]) {
   resizeWindow(WIDTH, HEIGHT);
   
   /* Load main menu textures */
-/*  if ((bgID = loadTexture(bgTexture)) != -1);
+  if ((bgID = loadTexture(bgTexture)) != -1);
   else
-    fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);*/
+    fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
   if ((logoID = loadTexture(logoTexture)) != -1);
   else
     fprintf(stderr, "Unable to load texture: %s.\n", logoTexture);

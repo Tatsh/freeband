@@ -10,7 +10,7 @@
 
 #define MAX_TEXTURES 10
 
-GLuint texture[MAX_TEXTURES]; /* Storage space for textures; this is the maximum at any given time during runtime */
+GLuint texture[MAX_TEXTURES]; /* Storage space for textures; this is maximum at any given time during runtime */
 
 /* General functions */
 void quitGame(int retnCode);
