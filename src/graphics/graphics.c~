@@ -1,4 +1,12 @@
 #include "../freeband.h"
+#include "graphics.h"
+
+/* Negative is to the left, positive is to the right when horizontal (x)
+   Negative is to the top, positive is to the bottom when vertical (y)
+   Negative is to the outside, positive is going inside (z) */
+GLfloat defVertexZ[] = {  -2.5f,  -2.5f, -2.5f, -2.5f };    /* All flat facing user textures use this z value */
+GLfloat fillBGVertexX[] = {  -1.4f, -1.4f,  1.4f,   1.4f }; /* Fill entire background position */
+GLfloat fillBGVertexY[] = { -1.04f, 1.04f, 1.04f, -1.04f };
 
 bool initGL() {
   /* OpenGL functions */
@@ -21,14 +29,14 @@ bool initGL() {
   return true;
 }
 
-GLuint loadTexture(const char *filename) {
+GLuint loadTexture(const char *filename, int index) {
   SDL_Surface *surface; /* Store information here, size, etc */
   
   if ((surface = IMG_Load(filename))) {
     /* GLU will convert textures to POT before sending to GL */
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-    glGenTextures(1, &texture[0]);
-    glBindTexture(GL_TEXTURE_2D, texture[0]);
+    glGenTextures(1, &texture[index]);
+    glBindTexture(GL_TEXTURE_2D, texture[index]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     SDL_PixelFormat *format = surface->format;
@@ -51,18 +59,16 @@ GLuint loadTexture(const char *filename) {
   else
     return -1;
 
-  return texture[0];
+  return texture[index];
 }
 
-GLvoid drawGLCube( GLvoid ) {
+GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ) {
+
   glBegin(GL_QUADS);
-  /* Negative is to the left, positive is to the right when horizontal (x)
-     Negative is to the top, positive is to the bottom when vertical (y)
-     Negative is to the outside, positive is going inside (z) */
-    glTexCoord2f( 0.0f, 0.0f ); glVertex3f( -1.25f, -1.0f, -2.5f ); /* Top left corner */
-    glTexCoord2f( 0.0f, 1.0f ); glVertex3f( -1.25f,  0.0f, -2.5f ); /* Bottom left corner */
-    glTexCoord2f( 1.0f, 1.0f ); glVertex3f(  1.26f,  0.0f,  -2.5f ); /* Bottom right corner */
-    glTexCoord2f( 1.0f, 0.0f ); glVertex3f(  1.26f,  -1.0f,  -2.5f ); /* Top right corner */
+    glTexCoord2f( 0.0f, 0.0f ); glVertex3f( vertexX[0], vertexY[0], vertexZ[0] ); /* Top left corner */
+    glTexCoord2f( 0.0f, 1.0f ); glVertex3f( vertexX[1], vertexY[1], vertexZ[1] ); /* Bottom left corner */
+    glTexCoord2f( 1.0f, 1.0f ); glVertex3f( vertexX[2], vertexY[2], vertexZ[2] ); /* Bottom right corner */
+    glTexCoord2f( 1.0f, 0.0f ); glVertex3f( vertexX[3], vertexY[3], vertexZ[3] ); /* Top right corner */
   glEnd();
 
   return;
@@ -74,8 +80,8 @@ bool resizeWindow(int width, int height) {
   if (height == 0)  /* Protect against a divide by zero */
     height = 1;
 
-  ratio = ( GLfloat )width / ( GLfloat )height;
-  glViewport( 0, 0, ( GLsizei )width, ( GLsizei )height ); /* Setup our viewport. */
+  ratio = (GLfloat)width / (GLfloat)height;
+  glViewport(0, 0, (GLsizei)width, (GLsizei)height ); /* Setup our viewport. */
   glMatrixMode(GL_PROJECTION); /* change to the projection matrix and set our viewing volume. */
   glLoadIdentity();
   gluPerspective( 45.0f, ratio, 0.1f, 100.0f ); /* Set our perspective */
@@ -90,10 +96,9 @@ void drawFreeband(GLvoid) {
 
   glLoadIdentity();
   glScalef(1, -1, 1); /* Flip texture because of SDL's upside down issue */
-  
-  glBindTexture( GL_TEXTURE_2D, texture[0] );
 
-    drawGLCube();
+  if (screenID == 0)
+    screenMain();
 
   SDL_GL_SwapBuffers();
 

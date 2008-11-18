@@ -1,8 +1,10 @@
 #include "../freeband.h"
+#include "../screens/main.h"
 
 void menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
 
   Uint8 *keystates = SDL_GetKeyState(NULL);
+  int i;
   
   switch (keysym->sym) {
 
@@ -11,6 +13,16 @@ void menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
       fprintf(stdout, "Quitting...\n");
 #endif
       quitGame(0);
+      break;
+      
+    case SDLK_q: /* Can anyone say 'easter egg'?
+      for ( i = 0; i < 4; i++ )
+        logoVertexX[i] = logoVertexX[i] - 0.01;
+      break;
+      
+    case SDLK_w:
+      for ( i = 0; i < 4; i++ )
+        logoVertexX[i] = logoVertexX[i] + 0.01;
       break;
 
     case SDLK_RETURN:

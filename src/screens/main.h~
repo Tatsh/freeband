@@ -1,0 +1,4 @@
+extern GLfloat logoVertexX[];
+extern GLfloat logoVertexY[];
+extern GLfloat defSelectorVertexX[]; /* Main menu selector's default position */
+extern GLfloat defSelectorVertexY[];

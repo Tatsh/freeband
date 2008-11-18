@@ -1,9 +1,25 @@
 #include "../freeband.h"
+#include "../graphics/graphics.h"
 
 #define SELECTBLENDSRC  0.30f
 #define SELECTBLENDDEST 0.60f
 
+GLfloat logoVertexX[] = { -1.25f, -1.25f, 1.26f, 1.26f }; /* Logo position */
+GLfloat logoVertexY[] = {  -1.0f,   0.0f,  0.0f, -1.0f };
+
+GLfloat mSelectorVertexX[] = { -1.25f, -1.25f, 1.26f, 1.26f }; /* Main menu selector's default position */
+GLfloat mSelectorVertexY[] = {  -1.0f,   0.0f,  0.0f, -1.0f };
+
 void screenMain() {
+
+  glBindTexture( GL_TEXTURE_2D, texture[0] );
+  positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
+
+  glBindTexture( GL_TEXTURE_2D, texture[1] );
+  positionTexture(logoVertexX, logoVertexY, defVertexZ);
+  
+  glBindTexture( GL_TEXTURE_2D, texture[2] ); /* Use selector's default position */
+  positionTexture(mSelectorVertexX, mSelectorVertexY, defVertexZ);
 
   return;
 }

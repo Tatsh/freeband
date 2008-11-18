@@ -6,12 +6,13 @@
 
 char windowTitle[] = "Freeband";
 
-/* Main screen textures
-   Static till game is themeable */
 char *bgTexture = "GameData/themes/default/global/bg.png";
 char *logoTexture = "GameData/themes/default/screenStart/banner.png";
+char *mainSelector = "GameData/themes/default/screenStart/selector.png";
 
 SDL_Surface *fbSurface; /* Main game surface */
+
+tCurrentScreen currentScreen;
 
 void quitGame(int retnCode) {
   glDeleteTextures( MAX_TEXTURES, &texture[0] );
@@ -20,13 +21,12 @@ void quitGame(int retnCode) {
 }
 
 int main(int argc, char *argv[]) {
-  int videoFlags;                       /* Flags to send to SDL */
-  GLuint bgID, logoID;                   /* Main screen texture handles */
-
+  int i;
+  for (i = 0; i < 10; i++)
+    texture[i] = -1;
+  
+  int videoFlags;                   /* Flags to send to SDL */
   bool hasQuit = false;             /* Main game loop variable */
-/*  bool windowActive = true;        Whether or not window is active */
-  /*bool menuScreen = true;            Start at a menu screen rather than game screen, used for menuKeys function */
-
   SDL_Event freeband;               /* Event collector */
 
   const SDL_VideoInfo *videoInfo;   /* Holds info about current display */
@@ -61,6 +61,11 @@ int main(int argc, char *argv[]) {
     fprintf(stderr,  "Video mode set failed: %s.\n", SDL_GetError());
     quitGame(1);
   }
+  
+  if ((SDL_EnableKeyRepeat(100, SDL_DEFAULT_REPEAT_INTERVAL))) { /* Enable key repeat */
+    fprintf(stderr, "Setting keyboard repeat failed: %s\n", SDL_GetError());
+    quitGame(1);
+  }
 
   if (initGL() != true) {
     fprintf(stderr, "Unable to initialise OpenGL.\n");
@@ -71,13 +76,17 @@ int main(int argc, char *argv[]) {
 
   resizeWindow(WIDTH, HEIGHT);
   
+  currentScreen.mainMenu = true; /* Set to main screen */
+  
   /* Load main menu textures */
-  if ((bgID = loadTexture(bgTexture)) != -1);
-  else
+  if ((texture[0] = loadTexture(bgTexture, 0)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
-  if ((logoID = loadTexture(logoTexture)) != -1);
-  else
+
+  if ((texture[1] = loadTexture(logoTexture, 1)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", logoTexture);
+  
+  if ((texture[2] = loadTexture(mainSelector, 2)) == -1)
+    fprintf(stderr, "Unable to load texture: %s.\n", mainSelector);
   
   while (!hasQuit) {
     
@@ -98,6 +107,7 @@ int main(int argc, char *argv[]) {
           break;
           
         case SDL_KEYDOWN: /* Handle key down event */
+          menuKeys(&freeband.key.keysym, fbSurface);
 #ifdef __DEBUG__
           fprintf(stdout, "Key pressed.\n");
 #endif

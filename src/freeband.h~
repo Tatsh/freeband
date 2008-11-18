@@ -10,6 +10,17 @@
 
 #define MAX_TEXTURES 10
 
+/* Variables */
+struct {
+  bool mainMenu;
+  bool multiPlayer;
+  bool online;
+  bool options;
+  bool game;
+} tCurrentScreen;
+
+extern tCurrentScreen currentScreen;
+
 GLuint texture[MAX_TEXTURES]; /* Storage space for textures; this is the maximum at any given time */
 
 /* General functions */
@@ -19,9 +30,8 @@ void quitGame(int retnCode);
 bool initGL();
 bool resizeWindow(int width, int height);
 void drawFreeband(GLvoid);
-GLuint loadTexture(const char *filename);
-void positionTexture2D(GLuint *texID);
-GLvoid drawGLCube( GLvoid );
+GLuint loadTexture(const char *filename, int index);
+GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ);
 
 /* Input */
 void gameKeys(SDL_keysym *keysym, SDL_Surface *surface, bool note, int nPlayers);

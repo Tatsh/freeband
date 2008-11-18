@@ -1,0 +1,3 @@
+extern GLfloat defVertexZ[];            /* All flat facing user textures use this z value */
+extern GLfloat fillBGVertexX[];         /* Fill entire background position */
+extern GLfloat fillBGVertexY[];
