@@ -1,3 +1,5 @@
 extern GLfloat defVertexZ[];            /* All flat facing user textures use this z value */
 extern GLfloat fillBGVertexX[];         /* 'Fill entire background' position */
 extern GLfloat fillBGVertexY[];
+
+GLuint loadText(char *text, TTF_Font *font, SDL_Color color, int index);

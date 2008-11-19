@@ -1,4 +1,5 @@
 #include "freeband.h"
+#include "screens/main.h"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -6,17 +7,21 @@
 
 char windowTitle[] = "Freeband";
 
-char *bgTexture = "GameData/themes/default/global/bg.png";
-char *logoTexture = "GameData/themes/default/screenStart/banner.png";
-char *mainSelector = "GameData/themes/default/screenStart/selector.png";
+char bgTexture[] = "GameData/themes/default/global/bg.png";
+char logoTexture[] = "GameData/themes/default/screenStart/banner.png";
+char mainSelector[] = "GameData/themes/default/screenStart/selector.png";
 
+GLfloat text_SinglePlayerY[] = { -0.035f, 0.20f, 0.20f, -0.035f }; /* 'Single Player' text's default position */
+GLfloat text_MultiplayerY[4], text_OnlineY[4], text_OptionsY[4], text_QuitY[4];
 SDL_Surface *fbSurface; /* Main game surface */
-
-tCurrentScreen currentScreen;
+tCurrentScreen currentScreen; /* The current screen */
 
 void quitGame(int retnCode) {
   glDeleteTextures( MAX_TEXTURES, &texture[0] );
   SDL_Quit();     /* Clean window */
+#ifdef __DEBUG__
+  fprintf(stdout, "Quitting...\n");
+#endif
   exit(retnCode);
 }
 
@@ -34,6 +39,11 @@ int main(int argc, char *argv[]) {
   /* Initialise SDL */
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     fprintf(stderr, "Video initialisation failed: %s.\n", SDL_GetError());
+    quitGame(1);
+  }
+  
+  if(TTF_Init() < 0) {
+    fprintf(stderr, "Could not initialise SDL_ttf: %s.\n", TTF_GetError());
     quitGame(1);
   }
   
@@ -88,6 +98,32 @@ int main(int argc, char *argv[]) {
   if ((texture[2] = loadTexture(mainSelector, 2)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", mainSelector);
   
+  /* Generate arrays of Y coordinates for each text, based upon initial position of Single Player */
+  for ( i = 0; i < 4; i++ ) {
+    if ( i < 1 || i == 3 )
+      text_MultiplayerY[i] = text_SinglePlayerY[i] + 0.195;
+    else
+      text_MultiplayerY[i] = text_SinglePlayerY[i] + 0.21;
+  }
+  for ( i = 0; i < 4; i++ ) {
+    if ( i < 1 || i == 3 )
+      text_OnlineY[i] = text_MultiplayerY[i] + 0.195;
+    else
+      text_OnlineY[i] = text_MultiplayerY[i] + 0.21;
+  }
+  for ( i = 0; i < 4; i++ ) {
+    if ( i < 1 || i == 3 )
+      text_OptionsY[i] = text_OnlineY[i] + 0.195;
+    else
+      text_OptionsY[i] = text_OnlineY[i] + 0.21;
+  }
+  for ( i = 0; i < 4; i++ ) {
+    if ( i < 1 || i == 3 )
+      text_QuitY[i] = text_OptionsY[i] + 0.195;
+    else
+      text_QuitY[i] = text_OptionsY[i] + 0.21;
+  }
+  
   while (!hasQuit) {
     
     while (SDL_PollEvent(&freeband)) {
@@ -115,9 +151,6 @@ int main(int argc, char *argv[]) {
           
         case SDL_QUIT:
           hasQuit = true;
-#ifdef __DEBUG__
-          fprintf(stdout, "Quitting...\n");
-#endif
           break;
           
         default:

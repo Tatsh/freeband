@@ -9,25 +9,86 @@ void menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
   switch (keysym->sym) {
 
     case SDLK_ESCAPE:
-#ifdef __DEBUG__
-      fprintf(stdout, "Quitting...\n");
-#endif
       quitGame(0);
       break;
       
     case SDLK_q: /* Can anyone say 'easter egg'? */
-      for ( i = 0; i < 4; i++ )
-        logoVertexX[i] = logoVertexX[i] - 0.01;
+      if (currentScreen.mainMenu == true) {
+        for ( i = 0; i < 4; i++ )
+          logoVertexX[i] = logoVertexX[i] - 0.01;
+      }
       break;
       
     case SDLK_w:
-      for ( i = 0; i < 4; i++ )
-        logoVertexX[i] = logoVertexX[i] + 0.01;
+      if (currentScreen.mainMenu == true) {
+        for ( i = 0; i < 4; i++ )
+          logoVertexX[i] = logoVertexX[i] + 0.01;
+      }
+      break;
+      
+    case SDLK_DOWN:
+      if (currentScreen.mainMenu == true) {
+        menuSelection++;
+        setMainMenuState(menuSelection);
+#ifdef __DEBUG__
+        fprintf(stdout, "menuSelection = %d\n", menuSelection);
+#endif
+        if ( menuSelection < 5 ) {
+          for ( i = 0; i < 4; i++ )
+            mSelectorVertexY[i] = mSelectorVertexY[i] + 0.20;
+        }
+        else {
+          menuSelection = 0;
+#ifdef __DEBUG__
+          fprintf(stdout, "menuSelection = %d\n", menuSelection);
+#endif
+          setMainMenuState(menuSelection);
+          mSelectorVertexY[0] = 0.18f;
+          mSelectorVertexY[1] = 0.0f;
+          mSelectorVertexY[2] = 0.0f;
+          mSelectorVertexY[3] = 0.18f;
+        }
+      }
+      break;
+      
+    case SDLK_UP:
+      if (currentScreen.mainMenu == true ) {
+        if (menuSelection > 0) {
+          menuSelection--;
+          setMainMenuState(menuSelection);
+#ifdef __DEBUG__
+          fprintf(stdout, "menuSelection = %d\n", menuSelection);
+#endif
+          for ( i = 0; i < 4; i++ )
+            mSelectorVertexY[i] = mSelectorVertexY[i] - 0.2;
+        }
+        else if (menuSelection == 0 ) {
+          for ( i = 0; i < 4; i++ )
+            mSelectorVertexY[i] = mSelectorVertexY[i] + 0.8;
+          menuSelection = 4;
+          setMainMenuState(menuSelection);
+#ifdef __DEBUG__
+          fprintf(stdout, "menuSelection = %d\n", menuSelection);
+#endif
+        }
+      }
       break;
 
     case SDLK_RETURN:
       if (keystates[SDLK_LALT] || keystates[SDLK_RALT]) /* Switch to full screen only if Alt+Enter is pressed */
         SDL_WM_ToggleFullScreen(surface);
+      else {
+        if (menuSelection < 1)
+          fprintf(stdout, "Starting single player mode.\n");
+        if (menuSelection < 2)
+          fprintf(stdout, "Starting multiplayer mode.\n");
+        if (menuSelection < 3)
+          fprintf(stdout, "Starting online mode.\n");
+        if (menuSelection < 4)
+          fprintf(stdout, "Going to options menu.\n");
+        else
+          quitGame(0);
+      }
       break;
 
     default:

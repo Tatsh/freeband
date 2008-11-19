@@ -2,13 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "SDL/SDL.h"
-#include "SDL/SDL_image.h"
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
 
-#include "GL/gl.h"
-#include "GL/glu.h"
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
 
-#define MAX_TEXTURES 10
+#define MAX_TEXTURES 20
 
 /* Variables */
 typedef struct {
@@ -36,9 +38,6 @@ GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ);
 /* Input */
 void gameKeys(SDL_keysym *keysym, SDL_Surface *surface, bool note, int nPlayers);
 void menuKeys(SDL_keysym *keysym, SDL_Surface *surface);
-
-/* Menus */
-void screenMain();
 
 /* Other screens */
 void screenDemo();

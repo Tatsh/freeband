@@ -1,4 +1,3 @@
 #!/bin/bash
 
-gcc -o freeband -lSDL -lSDL_image -lGL -lGLU -D__DEBUG__ -ansi -Wall \
--O2 freeband.c screens/main.c graphics/graphics.c input/input.c
+gcc -g -o freeband -lSDL -lSDL_image -lSDL_ttf -lGL -lGLU -D__DEBUG__ -ansi -Wall -O2 freeband.c graphics/graphics.c screens/main.c input/input.c

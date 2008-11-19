@@ -1,10 +1,11 @@
 #include "../freeband.h"
+#include "../screens/main.h"
 #include "graphics.h"
 
 /* Negative is to the left, positive is to the right when horizontal (x)
    Negative is to the top, positive is to the bottom when vertical (y)
    Negative is to the outside, positive is going inside (z) */
-GLfloat defVertexZ[] = {  -2.5f,  -2.5f, -2.5f, -2.5f };    /* All flat facing user textures use this z value */
+GLfloat defVertexZ[] = { -2.5f,  -2.5f, -2.5f, -2.5f };    /* All flat facing user textures use this z value */
 GLfloat fillBGVertexX[] = {  -1.4f, -1.4f,  1.4f,   1.4f }; /* Fill entire background position */
 GLfloat fillBGVertexY[] = { -1.04f, 1.04f, 1.04f, -1.04f };
 
@@ -50,7 +51,7 @@ GLuint loadTexture(const char *filename, int index) {
   else {
     fprintf(stderr, "SDL could not load %s.\n%s\n", filename, SDL_GetError());
     SDL_Quit();
-    return 1;
+    return -1;
   }
  
   /* Free the SDL_Surface only if it was successfully created */
@@ -59,6 +60,34 @@ GLuint loadTexture(const char *filename, int index) {
   else
     return -1;
 
+  return texture[index];
+}
+
+GLuint loadText(char *text, TTF_Font *font, SDL_Color color, int index) {
+  SDL_Surface *textTexture;
+  
+  /* Use SDL_TTF to render our text */
+  if ( (textTexture = TTF_RenderText_Blended(font, text, color)) ) {
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+    glGenTextures(1, &texture[index]);
+    glBindTexture(GL_TEXTURE_2D, texture[index]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    gluBuild2DMipmaps(GL_TEXTURE_2D, 4, textTexture->w, textTexture->h, GL_RGBA, GL_UNSIGNED_BYTE, textTexture->pixels);
+  }
+  else {
+    fprintf(stderr, "SDL_ttf could load %s.\n%s\n", font, TTF_GetError());
+    SDL_Quit();
+    return -1;
+  }
+
+  /* Clean up */
+  if (textTexture)
+    SDL_FreeSurface(textTexture);
+  else
+    return -1;
+  
   return texture[index];
 }
 
@@ -95,10 +124,12 @@ void drawFreeband(GLvoid) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* Clear the screen and the depth buffer */
 
   glLoadIdentity();
-  glScalef(1, -1, 1); /* Flip texture because of SDL's upside down issue */
-
-  if (screenID == 0)
+  glScalef(1, -1, 1); /* Flip framebuffer because of SDL's upside down issue */
+  
+  glPushMatrix();
+  if (currentScreen.mainMenu == true)
     screenMain();
+  glPopMatrix();
 
   SDL_GL_SwapBuffers();
 
