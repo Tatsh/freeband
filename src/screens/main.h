@@ -1,3 +1,6 @@
+#define SELECTSRC_ALPHA 0.3
+#define SELECTDST_ALPHA 0.6
+
 typedef struct {
   bool single; /* This does NOT affect the initial position of the selector */
   bool multiplayer;
@@ -6,15 +9,22 @@ typedef struct {
   bool quit;
 } tMenuState;
 
-extern char defaultFont[];
-extern tMenuState menuState;
+extern bool nonGame;
+extern bool online;
+extern bool options;
+extern char bgTexture[];
+extern char logoTexture[];
+extern char mainSelector[];
 extern GLfloat logoVertexX[];
 extern GLfloat logoVertexY[];
 extern GLfloat mSelectorVertexX[]; /* Main menu selector's default position */
 extern GLfloat mSelectorVertexY[];
-extern GLuint menuSelection;
 extern GLfloat text_SinglePlayerY[], text_MultiplayerY[], text_OnlineY[], text_OptionsY[], text_QuitY[];
+extern GLuint menuSelection;
+extern tMenuState menuState;
 
-void setMainMenuState(int selectID);
-void setMainText();
-void screenMain();
+GLvoid handleMainMenu();
+GLvoid setMainMenuState(GLuint selectID);
+GLvoid setMainImages();
+GLvoid setMainText();
+GLvoid screenMain();

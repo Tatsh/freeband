@@ -1,79 +1,83 @@
 #include "../freeband.h"
+#include "../graphics/graphics.h"
+#include "../screens/instruments.h"
 #include "../screens/main.h"
 
-void menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
+GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
 
   Uint8 *keystates = SDL_GetKeyState(NULL);
-  int i;
+  GLuint i;
+  nonGame = true;
+  online = options = false;
   
   switch (keysym->sym) {
-
-    case SDLK_ESCAPE:
-#ifdef __DEBUG__
-      fprintf(stdout, "Quitting...\n");
-#endif
-      quitGame(0);
-      break;
-      
-    case SDLK_q: /* Can anyone say 'easter egg'? */
-      if (currentScreen.mainMenu == true) {
-        for ( i = 0; i < 4; i++ )
-          logoVertexX[i] = logoVertexX[i] - 0.01;
-      }
-      break;
-      
-    case SDLK_w:
-      if (currentScreen.mainMenu == true) {
-        for ( i = 0; i < 4; i++ )
-          logoVertexX[i] = logoVertexX[i] + 0.01;
-      }
-      break;
-      
+    
     case SDLK_DOWN:
-      if (currentScreen.mainMenu == true) {
+      if (currentScreen.mainMenu != false) {
+
         menuSelection++;
         setMainMenuState(menuSelection);
-#ifdef __DEBUG__
-        fprintf(stdout, "menuSelection = %d\n", menuSelection);
-#endif
+
         if ( menuSelection < 5 ) {
           for ( i = 0; i < 4; i++ )
-            mSelectorVertexY[i] = mSelectorVertexY[i] + 0.20;
+            mSelectorVertexY[i] = mSelectorVertexY[i] + 0.2;
         }
         else {
           menuSelection = 0;
-#ifdef __DEBUG__
-          fprintf(stdout, "menuSelection = %d\n", menuSelection);
-#endif
           setMainMenuState(menuSelection);
           mSelectorVertexY[0] = 0.18f;
           mSelectorVertexY[1] = 0.0f;
           mSelectorVertexY[2] = 0.0f;
           mSelectorVertexY[3] = 0.18f;
         }
+
+      }
+
+      else if (currentScreen.instruments != false) {
+
+        if (nPlayers < 2) {
+          if (instSelection == 3)
+            instSelection = 0;
+          else
+            instSelection++;
+          setInstrumentsMenuState_1P(instSelection);
+        }
+
       }
       break;
       
     case SDLK_UP:
-      if (currentScreen.mainMenu == true ) {
+      if (currentScreen.mainMenu != false) {
+ 
         if (menuSelection > 0) {
           menuSelection--;
           setMainMenuState(menuSelection);
-#ifdef __DEBUG__
-          fprintf(stdout, "menuSelection = %d\n", menuSelection);
-#endif
           for ( i = 0; i < 4; i++ )
             mSelectorVertexY[i] = mSelectorVertexY[i] - 0.2;
         }
-        else if (menuSelection == 0 ) {
+        else if (menuSelection < 1 ) {
           for ( i = 0; i < 4; i++ )
             mSelectorVertexY[i] = mSelectorVertexY[i] + 0.8;
           menuSelection = 4;
           setMainMenuState(menuSelection);
-#ifdef __DEBUG__
-          fprintf(stdout, "menuSelection = %d\n", menuSelection);
-#endif
         }
+
+      }
+
+      else if (currentScreen.instruments != false) {
+
+        if (nPlayers < 2) {
+          if (instSelection > 0) {
+            instSelection--;
+            setInstrumentsMenuState_1P(instSelection);
+          }
+          else if (instSelection < 1 ) {
+            instSelection = 3; /* Vocals */
+            setInstrumentsMenuState_1P(instSelection);
+          }
+
+        }
+
       }
       break;
 
@@ -81,29 +85,71 @@ void menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
       if (keystates[SDLK_LALT] || keystates[SDLK_RALT]) /* Switch to full screen only if Alt+Enter is pressed */
         SDL_WM_ToggleFullScreen(surface);
       else {
-        if (menuSelection < 1)
-          fprintf(stdout, "Starting single player mode.\n");
-        if (menuSelection < 2)
-          fprintf(stdout, "Starting multiplayer mode.\n");
-        if (menuSelection < 3)
-          fprintf(stdout, "Starting online mode.\n");
-        if (menuSelection < 4)
-          fprintf(stdout, "Going to options menu.\n");
-        else
-          quitGame(0);
+        if (currentScreen.mainMenu != false) {
+          handleMainMenu();
+
+          if (nonGame != true)
+            screenInstrumentsBuffer(nPlayers); /* Note: 1 player screen is significantly different from multiplayer */
+          else
+            fprintf(stdout, "Not implemented yet.\n");
+        }
+
+        else if (currentScreen.instruments != false) {
+
+          handleInstrumentsMenu();
+          
+          if (instrument.guitar != false) {
+            /* screenCharactersBuffer(nPlayers); someday */
+            /* screenSongsBuffer(); */
+#ifdef __DEBUG__
+            fprintf(stdout, "Starting %d player guitar game.\n", nPlayers);
+#endif
+          }
+          else if (instrument.guitar == false )
+            fprintf(stdout, "Not implemented yet.\n");
+        }
+
+      }
+      break;
+
+    case SDLK_ESCAPE:
+      if (currentScreen.mainMenu != false)
+        quitGame(0);
+      else if (currentScreen.instruments != false) {
+        menuQuit = loading = true;
+        clearScreen();
+        setMainImages();
+        setMainText();
+        currentScreen.instruments = loading = menuQuit = false;
+        currentScreen.mainMenu = true;
+#ifdef __DEBUG__
+        fprintf(stdout, "Successfully switched back to screenMain.\n");
+#endif
+      }
+      break;
+      
+    case SDLK_q: /* Can anyone say 'easter egg'? Maybe things like this will help themers */
+      if (currentScreen.mainMenu != false) {
+        for ( i = 0; i < 4; i++ )
+          logoVertexX[i] = logoVertexX[i] - 0.01;
+      }
+      break;
+      
+    case SDLK_w:
+      if (currentScreen.mainMenu != false) {
+        for ( i = 0; i < 4; i++ )
+          logoVertexX[i] = logoVertexX[i] + 0.01;
       }
       break;
 
     default:
       break;
-
   }
 
   return;
-
 }
 
-void gameKeys(SDL_keysym *keysym, SDL_Surface *surface, bool note, int nPlayers) {
+GLvoid gameKeys(SDL_keysym *keysym, SDL_Surface *surface, bool note, GLuint nPlayers) {
   
   Uint8 *keystates = SDL_GetKeyState(NULL);
   
@@ -120,8 +166,4 @@ void gameKeys(SDL_keysym *keysym, SDL_Surface *surface, bool note, int nPlayers)
   }
   
   return;
-}
-
-int getNumPlayers() {
-  return 0;
 }

@@ -1,6 +1,24 @@
+#define DEFAULT_TEXT_PT 72
+
+extern bool menuQuit;
+extern bool loading; /* Whether or not we are buffering textures */
 extern char defaultFont[];
+extern char statusFont[];
+extern GLfloat defaultAlpha[];
 extern GLfloat defVertexZ[];            /* All flat facing user textures use this z value */
 extern GLfloat fillBGVertexX[];         /* 'Fill entire background' position */
 extern GLfloat fillBGVertexY[];
+extern GLfloat offscreenVertexXY[];
+extern SDL_Color blue_7CA4F6;
+extern SDL_Color yellow;
+extern SDL_Color white;
 
-GLuint loadText(char *text, TTF_Font *font, SDL_Color color, int index);
+bool initGL();
+bool resizeWindow(GLuint width, GLuint height);
+
+GLuint loadText(char *input, TTF_Font *font, SDL_Color color, GLuint index);
+GLuint loadTexture(const char *filename, GLuint index);
+
+GLvoid drawFreeband();
+GLvoid setupColors();
+GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ, GLfloat *nTexAlpha);

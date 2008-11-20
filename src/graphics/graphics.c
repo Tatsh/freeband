@@ -1,13 +1,25 @@
 #include "../freeband.h"
+#include "../screens/instruments.h"
 #include "../screens/main.h"
 #include "graphics.h"
 
+bool loading;
+
+char defaultFont[] = "GameData/themes/default/global/crillee.ttf";
+char statusFont[] = "GameData/themes/default/global/bitstream-vera-sans-bold.ttf";
+
+GLfloat defaultAlpha[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 /* Negative is to the left, positive is to the right when horizontal (x)
    Negative is to the top, positive is to the bottom when vertical (y)
    Negative is to the outside, positive is going inside (z) */
 GLfloat defVertexZ[] = { -2.5f,  -2.5f, -2.5f, -2.5f };    /* All flat facing user textures use this z value */
 GLfloat fillBGVertexX[] = {  -1.4f, -1.4f,  1.4f,   1.4f }; /* Fill entire background position */
 GLfloat fillBGVertexY[] = { -1.04f, 1.04f, 1.04f, -1.04f };
+GLfloat offscreenVertexXY[] = { 0.0, 0.0, 0.0, 0.0 };
+
+SDL_Color blue_7CA4F6;
+SDL_Color yellow;
+SDL_Color white;
 
 bool initGL() {
   /* OpenGL functions */
@@ -30,80 +42,7 @@ bool initGL() {
   return true;
 }
 
-GLuint loadTexture(const char *filename, int index) {
-  SDL_Surface *surface; /* Store information here, size, etc */
-  
-  if ((surface = IMG_Load(filename))) {
-    /* GLU will convert textures to POT before sending to GL */
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-    glGenTextures(1, &texture[index]);
-    glBindTexture(GL_TEXTURE_2D, texture[index]);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    SDL_PixelFormat *format = surface->format;
-
-    if (format->Amask) /* Check for alpha channel */
-      gluBuild2DMipmaps(GL_TEXTURE_2D, 4, surface->w, surface->h, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
-    else
-      gluBuild2DMipmaps(GL_TEXTURE_2D, 3, surface->w, surface->h, GL_RGB, GL_UNSIGNED_BYTE, surface->pixels);
-
-  }
-  else {
-    fprintf(stderr, "SDL could not load %s.\n%s\n", filename, SDL_GetError());
-    SDL_Quit();
-    return -1;
-  }
- 
-  /* Free the SDL_Surface only if it was successfully created */
-  if (surface)
-    SDL_FreeSurface(surface);
-  else
-    return -1;
-
-  return texture[index];
-}
-
-GLuint loadText(char *text, TTF_Font *font, SDL_Color color, int index) {
-  SDL_Surface *textTexture;
-  
-  /* Use SDL_TTF to render our text */
-  if ( (textTexture = TTF_RenderText_Blended(font, text, color)) ) {
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-    glGenTextures(1, &texture[index]);
-    glBindTexture(GL_TEXTURE_2D, texture[index]);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    gluBuild2DMipmaps(GL_TEXTURE_2D, 4, textTexture->w, textTexture->h, GL_RGBA, GL_UNSIGNED_BYTE, textTexture->pixels);
-  }
-  else {
-    fprintf(stderr, "SDL_ttf could render %s.\n%s\n", text, TTF_GetError());
-    SDL_Quit();
-    return -1;
-  }
-
-  /* Clean up */
-  if (textTexture)
-    SDL_FreeSurface(textTexture);
-  else
-    return -1;
-  
-  return texture[index];
-}
-
-GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ) {
-
-  glBegin(GL_QUADS);
-    glTexCoord2f( 0.0f, 0.0f ); glVertex3f( vertexX[0], vertexY[0], vertexZ[0] ); /* Top left corner */
-    glTexCoord2f( 0.0f, 1.0f ); glVertex3f( vertexX[1], vertexY[1], vertexZ[1] ); /* Bottom left corner */
-    glTexCoord2f( 1.0f, 1.0f ); glVertex3f( vertexX[2], vertexY[2], vertexZ[2] ); /* Bottom right corner */
-    glTexCoord2f( 1.0f, 0.0f ); glVertex3f( vertexX[3], vertexY[3], vertexZ[3] ); /* Top right corner */
-  glEnd();
-
-  return;
-}
-
-bool resizeWindow(int width, int height) {
+bool resizeWindow(GLuint width, GLuint height) {
   GLfloat ratio; /* Height/width ration */
 
   if (height == 0)  /* Protect against a divide by zero */
@@ -120,16 +59,113 @@ bool resizeWindow(int width, int height) {
   return true;
 }
 
-void drawFreeband(GLvoid) {
+GLuint loadText(char *input, TTF_Font *font, SDL_Color color, GLuint index) {
+  SDL_Surface *textTexture;
+  
+  /* Use SDL_ttf to render text */
+  if ( (textTexture = TTF_RenderText_Blended(font, input, color)) ) {
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+    glGenTextures(1, &text[index]);
+    glBindTexture(GL_TEXTURE_2D, text[index]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    gluBuild2DMipmaps(GL_TEXTURE_2D, 4, textTexture->w, textTexture->h, GL_RGBA, GL_UNSIGNED_BYTE, textTexture->pixels);
+  }
+  else {
+    fprintf(stderr, "SDL_ttf could render %s.\n%s\n", input, TTF_GetError());
+    quitGame(1);
+  }
+
+  /* Clean up */
+  if (textTexture)
+    SDL_FreeSurface(textTexture);
+  else
+    return -1;
+  
+  return text[index];
+}
+
+GLuint loadTexture(const char *filename, GLuint index) {
+  SDL_Surface *surface; /* Store information here, size, etc */
+  
+  if ((surface = IMG_Load(filename))) {
+    /* GLU will convert textures to POT before sending to GL */
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+    glGenTextures(1, &texture[index]);
+    glBindTexture(GL_TEXTURE_2D, texture[index]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    SDL_PixelFormat *format = surface->format;
+
+    if (format->Amask) /* Check for alpha channel */
+      gluBuild2DMipmaps(GL_TEXTURE_2D, 4, surface->w, surface->h, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
+    else
+      gluBuild2DMipmaps(GL_TEXTURE_2D, 3, surface->w, surface->h, GL_RGB, GL_UNSIGNED_BYTE, surface->pixels);
+  }
+  else {
+    fprintf(stderr, "SDL could not load %s.\n%s\n", filename, SDL_GetError());
+    quitGame(1);
+  }
+ 
+  /* Free the SDL_Surface only if it was successfully created */
+  if (surface)
+    SDL_FreeSurface(surface);
+  else
+    return -1;
+
+  return texture[index];
+}
+
+GLvoid clearScreen() {
+  glDeleteTextures(MAX_IMAGES, &texture[0]); /* Clean up old screen */
+  glDeleteTextures(MAX_TEXT, &text[0]);
+  return;
+}
+
+GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ, GLfloat *nTexAlpha) {
+
+  glBegin(GL_QUADS);
+    glTexCoord2f( 0.0f, 0.0f ); glVertex3f( vertexX[0], vertexY[0], vertexZ[0] ); /* Top left corner */
+    glTexCoord2f( 0.0f, 1.0f ); glVertex3f( vertexX[1], vertexY[1], vertexZ[1] ); /* Bottom left corner */
+    glTexCoord2f( 1.0f, 1.0f ); glVertex3f( vertexX[2], vertexY[2], vertexZ[2] ); /* Bottom right corner */
+    glTexCoord2f( 1.0f, 0.0f ); glVertex3f( vertexX[3], vertexY[3], vertexZ[3] ); /* Top right corner */
+  glEnd();
+  
+  glColor4f(nTexAlpha[0], nTexAlpha[1], nTexAlpha[2], nTexAlpha[3]);
+  
+  glFinish();
+
+  return;
+}
+
+GLvoid setupColors() {
+  blue_7CA4F6.r = 253;
+  blue_7CA4F6.g = 166;
+  blue_7CA4F6.b = 118;
+  
+  white.r = 255; /* White */
+  white.g = 255;
+  white.b = 255;
+    
+  yellow.r = 7; /* r and b are reversed because we load a BGR space with OpenGL */
+  yellow.g = 255;
+  yellow.b = 240;
+  
+  return;
+}
+
+GLvoid drawFreeband() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* Clear the screen and the depth buffer */
 
   glLoadIdentity();
   glScalef(1, -1, 1); /* Flip framebuffer because of SDL's upside down issue */
-  
-  glPushMatrix();
-  if (currentScreen.mainMenu == true)
+
+  if (loading != false); /* Do nothing and wait till loading = false */
+  else if (currentScreen.mainMenu != false && menuQuit != true)
     screenMain();
-  glPopMatrix();
+  else if (currentScreen.instruments != false && menuQuit != true)
+    screenInstruments(nPlayers);
 
   SDL_GL_SwapBuffers();
 

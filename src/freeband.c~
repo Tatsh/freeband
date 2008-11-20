@@ -1,22 +1,31 @@
 #include "freeband.h"
+#include "graphics/graphics.h"
+#include "input/input.h"
+#include "screens/instruments.h"
 #include "screens/main.h"
 
 #define WIDTH 800
 #define HEIGHT 600
 #define BPP 32
 
+bool menuQuit;
+
 char windowTitle[] = "Freeband";
 
-char bgTexture[] = "GameData/themes/default/global/bg.png";
-char logoTexture[] = "GameData/themes/default/screenStart/banner.png";
-char mainSelector[] = "GameData/themes/default/screenStart/selector.png";
-
 GLfloat text_SinglePlayerY[] = { -0.035f, 0.20f, 0.20f, -0.035f }; /* 'Single Player' text's default position */
+GLfloat text_MultiplayerY[4], text_OnlineY[4], text_OptionsY[4], text_QuitY[4];
+
+GLuint nPlayers; /* Number of players */
+GLuint texture[MAX_IMAGES]; /* Normal images */
+GLuint text[MAX_TEXT]; /* Text only! */
+
 SDL_Surface *fbSurface; /* Main game surface */
+
 tCurrentScreen currentScreen; /* The current screen */
 
-void quitGame(int retnCode) {
-  glDeleteTextures( MAX_TEXTURES, &texture[0] );
+GLvoid quitGame(GLint retnCode) {
+  glDeleteTextures( MAX_IMAGES, &texture[0] );
+  TTF_Quit();
   SDL_Quit();     /* Clean window */
 #ifdef __DEBUG__
   fprintf(stdout, "Quitting...\n");
@@ -24,12 +33,10 @@ void quitGame(int retnCode) {
   exit(retnCode);
 }
 
-int main(int argc, char *argv[]) {
-  int i;
+GLint main(GLint argc, char *argv[]) {
+  GLuint i;
   for (i = 0; i < 10; i++)
     texture[i] = -1;
-
-  GLfloat text_MultiplayerY[4], text_OnlineY[4], text_OptionsY[4], text_QuitY[4];
   
   int videoFlags;                   /* Flags to send to SDL */
   bool hasQuit = false;             /* Main game loop variable */
@@ -87,40 +94,32 @@ int main(int argc, char *argv[]) {
 
   resizeWindow(WIDTH, HEIGHT);
   
+  setupColors(); /* Initialise colours */
+  
   currentScreen.mainMenu = true; /* Set to main screen */
+  menuQuit = false; /* Have we left a menu yet? */
   
-  /* Load main menu textures */
-  if ((texture[0] = loadTexture(bgTexture, 0)) == -1)
-    fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
-
-  if ((texture[1] = loadTexture(logoTexture, 1)) == -1)
-    fprintf(stderr, "Unable to load texture: %s.\n", logoTexture);
-  
-  if ((texture[2] = loadTexture(mainSelector, 2)) == -1)
-    fprintf(stderr, "Unable to load texture: %s.\n", mainSelector);
+  /* Load main menu textures and text */
+  setMainImages();
+  setMainText();
   
   /* Generate arrays of Y coordinates for each text, based upon initial position of Single Player */
+  for ( i = 0; i < 4; i++ ) text_MultiplayerY[i] = text_SinglePlayerY[i] + 0.2;
   for ( i = 0; i < 4; i++ ) {
     if ( i < 1 || i == 3 )
-      text_MultiplayerY[i] = text_SinglePlayerY[i] + 0.195;
+      text_OnlineY[i] = text_MultiplayerY[i] + 0.2;
     else
-      text_MultiplayerY[i] = text_SinglePlayerY[i] + 0.21;
+      text_OnlineY[i] = text_MultiplayerY[i] + 0.2;
   }
   for ( i = 0; i < 4; i++ ) {
     if ( i < 1 || i == 3 )
-      text_OnlineY[i] = text_MultiplayerY[i] + 0.195;
+      text_OptionsY[i] = text_OnlineY[i] + 0.2;
     else
-      text_OnlineY[i] = text_MultiplayerY[i] + 0.21;
+      text_OptionsY[i] = text_OnlineY[i] + 0.2;
   }
   for ( i = 0; i < 4; i++ ) {
     if ( i < 1 || i == 3 )
-      text_OptionsY[i] = text_OnlineY[i] + 0.195;
-    else
-      text_OptionsY[i] = text_OnlineY[i] + 0.21;
-  }
-  for ( i = 0; i < 4; i++ ) {
-    if ( i < 1 || i == 3 )
-      text_QuitY[i] = text_OptionsY[i] + 0.195;
+      text_QuitY[i] = text_OptionsY[i] + 0.2;
     else
       text_QuitY[i] = text_OptionsY[i] + 0.21;
   }
@@ -138,20 +137,16 @@ int main(int argc, char *argv[]) {
             quitGame(1);
           }
           resizeWindow(freeband.resize.w, freeband.resize.h);
-#ifdef __DEBUG__
-          fprintf(stdout, "Window resized.\n");
-#endif
           break;
           
         case SDL_KEYDOWN: /* Handle key down event */
           menuKeys(&freeband.key.keysym, fbSurface);
-#ifdef __DEBUG__
-          fprintf(stdout, "Key pressed.\n");
-#endif
           break;
           
         case SDL_QUIT:
+#ifdef __DEBUG__
           hasQuit = true;
+#endif
           break;
           
         default:
