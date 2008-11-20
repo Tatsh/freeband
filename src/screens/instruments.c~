@@ -3,13 +3,25 @@
 #include "instruments.h"
 #include "main.h"
 
-GLfloat text_GuitarX[] = { 0.0f, 0.0f, 1.3f, 1.3f }; /* Main menu selector's default position */
-GLfloat text_GuitarY[] = { -0.18f, 0.0f, 0.0f, -0.18f }; /* Use this as basis to calculate the other Y coordinates */
-GLfloat text_BassX[] = { 0.0f, 0.0f, 1.3f, 1.3f };
+char instCanvas[] = "GameData/themes/default/screenInstruments/canvas.png";
+char selectedGradient[] = "GameData/themes/default/screenInstruments/selectedgrad.png";
+
+/* Negative is to the left, positive is to the right when horizontal (x)
+   Negative is to the top, positive is to the bottom when vertical (y)
+   Negative is to the outside, positive is going inside (z)
+   Order of corners: top-left, bottom-left, bottom-right, top-right */
+GLfloat instCanvasX[] = { 0.1f, 0.1f, 1.2f, 1.2f };
+GLfloat instCanvasY[] = { -0.4f, 0.6f, 0.6f, -0.4 };
+GLfloat selectedGradientX[4];
+GLfloat selectedGradientY[4];
+
+GLfloat text_GuitarX[] = { 0.35f, 0.35f, 0.95f, 0.95f }; /* Guitar selector's default position */
+GLfloat text_GuitarY[] = { -0.38f, -0.2f, -0.2f, -0.38f }; /* Use this as basis to calculate the other Y coordinates */
+GLfloat text_BassX[] = { 0.45f, 0.45f, 0.85f, 0.85f };
 GLfloat text_BassY[4];
-GLfloat text_DrumsX[] = { 0.0f, 0.0f, 1.3f, 1.3f };
+GLfloat text_DrumsX[] = { 0.4f, 0.4f, 0.92f, 0.92f };
 GLfloat text_DrumsY[4];
-GLfloat text_VocalsX[] = { 0.0f, 0.0f, 1.3f, 1.3f };
+GLfloat text_VocalsX[] = { 0.33f, 0.33f, 0.97f, 0.97f };
 GLfloat text_VocalsY[4];
 
 GLfloat text_GuitarX_hl[4];
@@ -20,6 +32,9 @@ GLfloat text_DrumsX_hl[4];
 GLfloat text_DrumsY_hl[4];
 GLfloat text_VocalsX_hl[4];
 GLfloat text_VocalsY_hl[4];
+
+GLfloat text_SelectInstrumentX[] = { -0.9f, -0.85f, 0.85f, 0.8f }; /* Crillee is italic on its own, this makes it appear not italic */
+GLfloat text_SelectInstrumentY[] = { -1.1f, -0.7f, -0.7f, -1.1f };
 
 GLuint instSelection = 0; /* Guitar */
 
@@ -34,9 +49,8 @@ GLvoid setInstrumentsMenuState_1P(GLuint instSelection) {
   GLuint i;
   GLfloat tempX[4], tempY[4];
   
-  instrument.guitar = true;
-  
   if (instSelection < 1) { /* Guitar */
+    instrument.guitar = true;
     instrument.bass = false;
     instrument.drums = false;
     instrument.vocals = false;
@@ -108,37 +122,42 @@ GLvoid setInstrumentsMenuState_1P(GLuint instSelection) {
 }
 
 GLvoid setInstrumentsImages_1P() {
+  if ((texture[0] = loadTexture(bgTexture, 0)) == -1)
+    fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
+  
+  if ((texture[1] = loadTexture(instCanvas, 1)) == -1)
+    fprintf(stderr, "Unable to load texture: %s.\n", instCanvas);
+  
+  if ((texture[2] = loadTexture(selectedGradient, 2)) == -1)
+    fprintf(stderr, "Unable to load texture: %s.\n", selectedGradient);
   
   return;
 }
 
 GLvoid setInstrumentsText_1P() {
-  TTF_Font *font, *status;
+  TTF_Font *font, *instFont;
   font = TTF_OpenFont(defaultFont, DEFAULT_TEXT_PT); /* 72 seems to be the best size for this font */
-  status = TTF_OpenFont(statusFont, DEFAULT_TEXT_PT);
+  instFont = TTF_OpenFont(bitstreamFont, DEFAULT_TEXT_PT);
   if (!font)
     fprintf(stderr, "SDL_ttf: TTF_OpenFont() response: %s\n", TTF_GetError());
-  else if (!status)
+  else if (!instFont)
     fprintf(stderr, "SDL_ttf: TTF_OpenFont() response: %s\n", TTF_GetError());
   else {
     GLuint guitar, bass, drums, vocals;
     GLuint guitarS, bassS, drumsS, vocalsS; /* Selected versions */
-    GLuint statusGuitar, statusBass, statusDrums, statusVocals;
+    GLuint selectInstrument;
     
-    guitar = loadText("GUITAR", font, white, 0);
-    bass = loadText("BASS", font, white, 1);
-    drums = loadText("DRUMS", font, white, 2);
-    vocals = loadText("VOCALS", font, white, 3);
+    guitar = loadText("GUITAR", instFont, white, 0);
+    bass = loadText("BASS", instFont, white, 1);
+    drums = loadText("DRUMS", instFont, white, 2);
+    vocals = loadText("VOCALS", instFont, white, 3);
     
-    guitarS = loadText("GUITAR", font, yellow, 4); /* Prepare selected versions */
-    bassS = loadText("BASS", font, yellow, 5);
-    drumsS = loadText("DRUMS", font, yellow, 6);
-    vocalsS = loadText("VOCALS", font, yellow, 7);
+    guitarS = loadText("GUITAR", instFont, yellow, 4); /* Prepare selected versions */
+    bassS = loadText("BASS", instFont, yellow, 5);
+    drumsS = loadText("DRUMS", instFont, yellow, 6);
+    vocalsS = loadText("VOCALS", instFont, yellow, 7);
     
-    statusGuitar = loadText("Ultimate maximum guitar fun!", status, white, 8);
-    statusBass = loadText("Maximum bass fun!", status, white, 9);
-    statusDrums = loadText("Drum fun!", status, white, 10);
-    statusVocals = loadText("Singing fun!", status, white, 11);
+    selectInstrument = loadText("SELECT INSTRUMENT", font, white, 8);
   }
     
   if (font)
@@ -162,6 +181,7 @@ GLvoid screenInstrumentsBuffer(GLuint nPlayers) {
       text_GuitarX_hl[i] = text_GuitarX[i];
       text_GuitarY_hl[i] = text_GuitarY[i];
     }
+
     
     /* Set all highlight versions off screen, except for first option since that is highlighted by default */
     for ( i = 0; i < 4; i++ ) {
@@ -187,6 +207,12 @@ GLvoid screenInstrumentsBuffer(GLuint nPlayers) {
 }
 
 GLvoid screenInstruments(GLuint nPlayers) {
+  glBindTexture( GL_TEXTURE_2D, texture[0] );
+  positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ, defaultAlpha);
+  
+  glBindTexture( GL_TEXTURE_2D, texture[1] );
+  positionTexture(instCanvasX, instCanvasY, defVertexZ, defaultAlpha);
+  
   /* Text elements */
   glBindTexture( GL_TEXTURE_2D, text[0] );
   positionTexture(text_GuitarX, text_GuitarY, defVertexZ, defaultAlpha);
@@ -211,5 +237,8 @@ GLvoid screenInstruments(GLuint nPlayers) {
   
   glBindTexture( GL_TEXTURE_2D, text[7] );
   positionTexture(text_VocalsX_hl, text_VocalsY_hl, defVertexZ, defaultAlpha);
+  
+  glBindTexture( GL_TEXTURE_2D, text[8] ); /* Top screen title */
+  positionTexture(text_SelectInstrumentX, text_SelectInstrumentY, defVertexZ, defaultAlpha);
   
 }

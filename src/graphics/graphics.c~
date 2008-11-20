@@ -6,12 +6,13 @@
 bool loading;
 
 char defaultFont[] = "GameData/themes/default/global/crillee.ttf";
-char statusFont[] = "GameData/themes/default/global/bitstream-vera-sans-bold.ttf";
+char bitstreamFont[] = "GameData/themes/default/global/bitstream-vera-sans-bold.ttf";
 
 GLfloat defaultAlpha[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 /* Negative is to the left, positive is to the right when horizontal (x)
    Negative is to the top, positive is to the bottom when vertical (y)
-   Negative is to the outside, positive is going inside (z) */
+   Negative is to the outside, positive is going inside (z)
+   Order of corners: top-left, bottom-left, bottom-right, top-right */
 GLfloat defVertexZ[] = { -2.5f,  -2.5f, -2.5f, -2.5f };    /* All flat facing user textures use this z value */
 GLfloat fillBGVertexX[] = {  -1.4f, -1.4f,  1.4f,   1.4f }; /* Fill entire background position */
 GLfloat fillBGVertexY[] = { -1.04f, 1.04f, 1.04f, -1.04f };
@@ -63,7 +64,7 @@ GLuint loadText(char *input, TTF_Font *font, SDL_Color color, GLuint index) {
   SDL_Surface *textTexture;
   
   /* Use SDL_ttf to render text */
-  if ( (textTexture = TTF_RenderText_Blended(font, input, color)) ) {
+  if ( (textTexture = TTF_RenderUTF8_Blended(font, input, color)) ) {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
     glGenTextures(1, &text[index]);
     glBindTexture(GL_TEXTURE_2D, text[index]);
@@ -120,6 +121,7 @@ GLuint loadTexture(const char *filename, GLuint index) {
 GLvoid clearScreen() {
   glDeleteTextures(MAX_IMAGES, &texture[0]); /* Clean up old screen */
   glDeleteTextures(MAX_TEXT, &text[0]);
+  return;
 }
 
 GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ, GLfloat *nTexAlpha) {

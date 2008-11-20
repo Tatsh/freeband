@@ -3,7 +3,7 @@
 extern bool menuQuit;
 extern bool loading; /* Whether or not we are buffering textures */
 extern char defaultFont[];
-extern char statusFont[];
+extern char bitstreamFont[];
 extern GLfloat defaultAlpha[];
 extern GLfloat defVertexZ[];            /* All flat facing user textures use this z value */
 extern GLfloat fillBGVertexX[];         /* 'Fill entire background' position */

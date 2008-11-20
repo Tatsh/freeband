@@ -19,6 +19,7 @@ bool resizeWindow(GLuint width, GLuint height);
 GLuint loadText(char *input, TTF_Font *font, SDL_Color color, GLuint index);
 GLuint loadTexture(const char *filename, GLuint index);
 
+GLvoid clearScreen();
 GLvoid drawFreeband();
-GLvoid setupColors();
 GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ, GLfloat *nTexAlpha);
+GLvoid setupColors();
