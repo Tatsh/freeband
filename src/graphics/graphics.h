@@ -9,6 +9,7 @@ extern GLfloat defVertexZ[];            /* All flat facing user textures use thi
 extern GLfloat fillBGVertexX[];         /* 'Fill entire background' position */
 extern GLfloat fillBGVertexY[];
 extern GLfloat offscreenVertexXY[];
+extern GLUquadricObj *quadratic;
 extern SDL_Color blue_7CA4F6;
 extern SDL_Color yellow;
 extern SDL_Color white;
@@ -23,3 +24,4 @@ GLvoid clearScreen();
 GLvoid drawFreeband();
 GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ, GLfloat *nTexAlpha);
 GLvoid setupColors();
+

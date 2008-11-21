@@ -13,15 +13,21 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
   switch (keysym->sym) {
     
     case SDLK_DOWN:
+      loading = true;
+      glTranslatef(-0.15f, 0.0f, 2.0f);
+      glRotatef( 90.0f, 1.0f, 0.0f, 0.0f );
+      glPushMatrix();
+      glBindTexture( GL_TEXTURE_2D, texture[0] );
+      gluCylinder( quadratic, 0.05f, 0.05f, 0.1f, 32, 32 );
+      glPopMatrix();
+      loading = false;
       if (currentScreen.mainMenu != false) {
 
         menuSelection++;
         setMainMenuState(menuSelection);
 
-        if ( menuSelection < 5 ) {
-          for ( i = 0; i < 4; i++ )
-            mSelectorVertexY[i] = mSelectorVertexY[i] + 0.2;
-        }
+        if ( menuSelection < 5 )
+          for ( i = 0; i < 4; i++ ) mSelectorVertexY[i] = mSelectorVertexY[i] + 0.2;
         else {
           menuSelection = 0;
           setMainMenuState(menuSelection);
@@ -36,11 +42,16 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
       else if (currentScreen.instruments != false) {
 
         if (nPlayers < 2) {
-          if (instSelection == 3)
-            instSelection = 0;
-          else
-            instSelection++;
+          instSelection++;
           setInstrumentsMenuState_1P(instSelection);
+
+          if ( instSelection < 4 )
+            for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY[i] + 0.23;
+          else {
+            instSelection = 0;
+            setInstrumentsMenuState_1P(instSelection);
+            for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY_reset[i];
+          }
         }
 
       }
@@ -52,14 +63,12 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
         if (menuSelection > 0) {
           menuSelection--;
           setMainMenuState(menuSelection);
-          for ( i = 0; i < 4; i++ )
-            mSelectorVertexY[i] = mSelectorVertexY[i] - 0.2;
+          for ( i = 0; i < 4; i++ ) mSelectorVertexY[i] = mSelectorVertexY[i] - 0.2;
         }
         else if (menuSelection < 1 ) {
-          for ( i = 0; i < 4; i++ )
-            mSelectorVertexY[i] = mSelectorVertexY[i] + 0.8;
           menuSelection = 4;
           setMainMenuState(menuSelection);
+          for ( i = 0; i < 4; i++ ) mSelectorVertexY[i] = mSelectorVertexY[i] + 0.8;
         }
 
       }
@@ -70,10 +79,12 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
           if (instSelection > 0) {
             instSelection--;
             setInstrumentsMenuState_1P(instSelection);
+            for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY[i] - 0.23;
           }
           else if (instSelection < 1 ) {
             instSelection = 3; /* Vocals */
             setInstrumentsMenuState_1P(instSelection);
+            for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY[i] + 0.69;
           }
 
         }
@@ -105,7 +116,7 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
             fprintf(stdout, "Starting %d player guitar game.\n", nPlayers);
 #endif
           }
-          else if (instrument.guitar == false )
+          else
             fprintf(stdout, "Not implemented yet.\n");
         }
 

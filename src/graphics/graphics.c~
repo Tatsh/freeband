@@ -13,10 +13,13 @@ GLfloat defaultAlpha[] = { 1.0f, 1.0f, 1.0f, 1.0f };
    Negative is to the top, positive is to the bottom when vertical (y)
    Negative is to the outside, positive is going inside (z)
    Order of corners: top-left, bottom-left, bottom-right, top-right */
-GLfloat defVertexZ[] = { -2.5f,  -2.5f, -2.5f, -2.5f };    /* All flat facing user textures use this z value */
+GLfloat defVertexZ[] = { 0.0f, 0.0f, 0.0f, 0.0f };    /* All flat facing user textures use this z value */
 GLfloat fillBGVertexX[] = {  -1.4f, -1.4f,  1.4f,   1.4f }; /* Fill entire background position */
 GLfloat fillBGVertexY[] = { -1.04f, 1.04f, 1.04f, -1.04f };
-GLfloat offscreenVertexXY[] = { 0.0, 0.0, 0.0, 0.0 };
+GLfloat offscreenVertexXY[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+GLfloat z = -2.5f;
+
+GLUquadricObj *quadratic;
 
 SDL_Color blue_7CA4F6;
 SDL_Color yellow;
@@ -39,6 +42,13 @@ bool initGL() {
   glClearDepth(1.0f);                     /* Depth buffer setup */
   glEnable(GL_DEPTH_TEST);                /* Enables Depth Testing */
   glDepthFunc(GL_LEQUAL);                 /* Type of depth testing */
+  
+  /* test */
+  quadratic = gluNewQuadric( );
+  /* Create Smooth Normals */
+  gluQuadricNormals( quadratic, GLU_SMOOTH );
+  /* Create Texture Coords */
+  gluQuadricTexture( quadratic, GL_TRUE );
 
   return true;
 }
@@ -160,6 +170,8 @@ GLvoid drawFreeband() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* Clear the screen and the depth buffer */
 
   glLoadIdentity();
+  glTranslatef(0.0f, 0.0f, z);
+  
   glScalef(1, -1, 1); /* Flip framebuffer because of SDL's upside down issue */
 
   if (loading != false); /* Do nothing and wait till loading = false */

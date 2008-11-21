@@ -5,6 +5,7 @@ typedef struct {
   bool vocals;
 } tInstrument;
 
+extern GLfloat selectedGradientY[], selectedGradientY_reset[];
 extern GLuint instSelection;
 extern tInstrument instrument;
 

@@ -18,10 +18,8 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
         menuSelection++;
         setMainMenuState(menuSelection);
 
-        if ( menuSelection < 5 ) {
-          for ( i = 0; i < 4; i++ )
-            mSelectorVertexY[i] = mSelectorVertexY[i] + 0.2;
-        }
+        if ( menuSelection < 5 )
+          for ( i = 0; i < 4; i++ ) mSelectorVertexY[i] = mSelectorVertexY[i] + 0.2;
         else {
           menuSelection = 0;
           setMainMenuState(menuSelection);
@@ -36,11 +34,16 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
       else if (currentScreen.instruments != false) {
 
         if (nPlayers < 2) {
-          if (instSelection == 3)
-            instSelection = 0;
-          else
-            instSelection++;
+          instSelection++;
           setInstrumentsMenuState_1P(instSelection);
+
+          if ( instSelection < 4 )
+            for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY[i] + 0.23;
+          else {
+            instSelection = 0;
+            setInstrumentsMenuState_1P(instSelection);
+            for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY_reset[i];
+          }
         }
 
       }
@@ -52,14 +55,12 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
         if (menuSelection > 0) {
           menuSelection--;
           setMainMenuState(menuSelection);
-          for ( i = 0; i < 4; i++ )
-            mSelectorVertexY[i] = mSelectorVertexY[i] - 0.2;
+          for ( i = 0; i < 4; i++ ) mSelectorVertexY[i] = mSelectorVertexY[i] - 0.2;
         }
         else if (menuSelection < 1 ) {
-          for ( i = 0; i < 4; i++ )
-            mSelectorVertexY[i] = mSelectorVertexY[i] + 0.8;
           menuSelection = 4;
           setMainMenuState(menuSelection);
+          for ( i = 0; i < 4; i++ ) mSelectorVertexY[i] = mSelectorVertexY[i] + 0.8;
         }
 
       }
@@ -70,10 +71,12 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
           if (instSelection > 0) {
             instSelection--;
             setInstrumentsMenuState_1P(instSelection);
+            for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY[i] - 0.23;
           }
           else if (instSelection < 1 ) {
             instSelection = 3; /* Vocals */
             setInstrumentsMenuState_1P(instSelection);
+            for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY[i] + 0.69;
           }
 
         }
