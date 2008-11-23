@@ -19,6 +19,9 @@ GLvoid loadGameTextures() {
   if ((texture[0] = loadTexture(trackloop_a, 0)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", trackloop_a);
   
+  if ((texture[1] = loadTexture(bgTexture, 1)) == -1)
+    fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
+  
   return;
 }
 
@@ -65,6 +68,13 @@ GLvoid screenGameBuffer() {
 }
 
 GLvoid screenGame() {
+  glPushMatrix();
+  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+  glTranslatef(0.0f, 0.0f, -2.5f);
+  glBindTexture( GL_TEXTURE_2D, texture[1] );
+  positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
+  glPopMatrix();
+  
   /* Generate track */
   glPushMatrix();
   glRotatef( 90.0f, 0.0f, 0.5f, 0.0f );
@@ -74,10 +84,10 @@ GLvoid screenGame() {
   glBindTexture( GL_TEXTURE_2D, texture[0] );
   glBegin( GL_QUADS );
     glNormal3f( 0.0f, 0.5f, 0.0f );
-    glTexCoord2f( NE_coord_pos, 1.0 ); glVertex3f( -3.5f, 0.5f, -0.5f );
-    glTexCoord2f( NE_coord_pos, 0.0 ); glVertex3f( -3.5f, 0.5f,  0.5f );
-    glTexCoord2f( NE_coord_neg, 0.0 ); glVertex3f( 2.0f, 0.5f,  0.5f );
-    glTexCoord2f( NE_coord_neg, 1.0 ); glVertex3f( 2.0f, 0.5f, -0.5f );
+    glTexCoord2f( NE_coord_pos, 1.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -3.5f, 0.5f, -0.5f );
+    glTexCoord2f( NE_coord_pos, 0.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -3.5f, 0.5f,  0.5f );
+    glTexCoord2f( NE_coord_neg, 0.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f( 2.0f, 0.5f,  0.5f );
+    glTexCoord2f( NE_coord_neg, 1.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f( 2.0f, 0.5f, -0.5f );
   glEnd();
   glPopMatrix();
 
@@ -99,6 +109,7 @@ GLvoid screenGame() {
   glPopMatrix();
   
   if (bringDownAngle < 0.0f) { /* Only load after track, etc has been placed down entirely */
+    
     /* Score */
     glPushMatrix();
     glTranslatef( -0.5f, 0.0f, 0.0f );
