@@ -1,6 +1,7 @@
 #include "freeband.h"
 #include "graphics/graphics.h"
 #include "input/input.h"
+#include "screens/game.h"
 #include "screens/instruments.h"
 #include "screens/main.h"
 
@@ -37,6 +38,9 @@ GLint main(GLint argc, char *argv[]) {
   GLuint i;
   for (i = 0; i < 10; i++)
     texture[i] = -1;
+  
+  /* GLUT */
+  glutInit(&argc, argv);
   
   int videoFlags;                   /* Flags to send to SDL */
   bool hasQuit = false;             /* Main game loop variable */
@@ -105,24 +109,9 @@ GLint main(GLint argc, char *argv[]) {
   
   /* Generate arrays of Y coordinates for each text, based upon initial position of Single Player */
   for ( i = 0; i < 4; i++ ) text_MultiplayerY[i] = text_SinglePlayerY[i] + 0.2;
-  for ( i = 0; i < 4; i++ ) {
-    if ( i < 1 || i == 3 )
-      text_OnlineY[i] = text_MultiplayerY[i] + 0.2;
-    else
-      text_OnlineY[i] = text_MultiplayerY[i] + 0.2;
-  }
-  for ( i = 0; i < 4; i++ ) {
-    if ( i < 1 || i == 3 )
-      text_OptionsY[i] = text_OnlineY[i] + 0.2;
-    else
-      text_OptionsY[i] = text_OnlineY[i] + 0.2;
-  }
-  for ( i = 0; i < 4; i++ ) {
-    if ( i < 1 || i == 3 )
-      text_QuitY[i] = text_OptionsY[i] + 0.2;
-    else
-      text_QuitY[i] = text_OptionsY[i] + 0.21;
-  }
+  for ( i = 0; i < 4; i++ ) text_OnlineY[i] = text_MultiplayerY[i] + 0.2;
+  for ( i = 0; i < 4; i++ ) text_OptionsY[i] = text_OnlineY[i] + 0.2;
+  for ( i = 0; i < 4; i++ ) text_QuitY[i] = text_OptionsY[i] + 0.21;
   
   while (!hasQuit) {
     
@@ -140,15 +129,38 @@ GLint main(GLint argc, char *argv[]) {
           break;
           
         case SDL_KEYDOWN: /* Handle key down event */
-          menuKeys(&freeband.key.keysym, fbSurface);
+          if (!menuQuit)
+            menuKeys(&freeband.key.keysym, fbSurface);
+          else if (!gamePaused)
+            gameKeys(&freeband.key.keysym, fbSurface, nPlayers);
           break;
           
-        case SDL_QUIT:
+        case SDL_QUIT: /* Only allow to exit via ^C or close button if at main menu */
+          if (currentScreen.mainMenu)
+            hasQuit = true;
+          else if (currentScreen.instruments) {
+            menuQuit = loading = true;
+            clearScreen();
+            setMainImages();
+            setMainText();
+            currentScreen.instruments = loading = menuQuit = false;
+            currentScreen.mainMenu = true;
 #ifdef __DEBUG__
-          hasQuit = true;
+            fprintf(stdout, "Successfully switched back to screenMain.\n");
 #endif
+          }
+          else if (currentScreen.songs) {
+            menuQuit = loading = true;
+            clearScreen();
+            setInstrumentsImages_1P();
+            setInstrumentsText_1P();
+            currentScreen.instruments = loading = menuQuit = false;
+            currentScreen.instruments = true;
+          }
+          else if (currentScreen.game)
+            hasQuit = true;
           break;
-          
+
         default:
           break;
 

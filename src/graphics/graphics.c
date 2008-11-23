@@ -1,14 +1,27 @@
 #include "../freeband.h"
+#include "../screens/game.h"
 #include "../screens/instruments.h"
 #include "../screens/main.h"
+#include "../screens/songs.h"
 #include "graphics.h"
 
 bool loading;
 
 char defaultFont[] = "GameData/themes/default/global/crillee.ttf";
 char bitstreamFont[] = "GameData/themes/default/global/bitstream-vera-sans-bold.ttf";
+char bitstreamMonoBoldFont[] = "GameData/themes/default/global/bitstream-vera-mono-bold.ttf";
+char freeSansFont[] = "GameData/themes/default/global/freesans.ttf";
+char freeSansBoldFont[] = "GameData/themes/default/global/freesans-bold.ttf";
 
-GLfloat defaultAlpha[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+GLfloat buttonColour_green[] = { 0.137f, 0.585, 0.0f, 1.0f };
+GLfloat buttonColour_red[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+GLfloat buttonColour_yellow[] = { 1.0f, 1.0f, 0.347, 1.0f };
+GLfloat buttonColour_blue[] = { 0.059f, 0.0f, 0.71f, 1.0f};
+GLfloat buttonColour_orange[] = { 1.0f, 0.647, 0.114, 1.0f };
+
+GLfloat colour_blue_7CA4F6[] = { 0.484f, 0.643f, 0.964f, 1.0f }; /* approximations */
+GLfloat colour_yellow_F0FF07[] = { 0.941, 1.0f, 0.027f, 1.0f };
+
 /* Negative is to the left, positive is to the right when horizontal (x)
    Negative is to the top, positive is to the bottom when vertical (y)
    Negative is to the outside, positive is going inside (z)
@@ -27,7 +40,7 @@ SDL_Color white;
 
 bool initGL() {
   /* OpenGL functions */
-  glEnable(GL_TEXTURE_2D);                /* Enable Texture mapping */
+  glEnable(GL_TEXTURE_2D);                /* Enable texture mapping */
   glShadeModel(GL_SMOOTH);                /* Enable smooth shading */
   glEnable(GL_BLEND);                     /* Enable Alpha channel mapping */
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);   /* Black background */
@@ -40,7 +53,7 @@ bool initGL() {
   glLoadIdentity();
   glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
   glClearDepth(1.0f);                     /* Depth buffer setup */
-  glEnable(GL_DEPTH_TEST);                /* Enables Depth Testing */
+  glEnable(GL_DEPTH_TEST);                /* Enables depth testing */
   glDepthFunc(GL_LEQUAL);                 /* Type of depth testing */
   
   /* test */
@@ -107,6 +120,7 @@ GLuint loadTexture(const char *filename, GLuint index) {
     glBindTexture(GL_TEXTURE_2D, texture[index]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR);
     SDL_PixelFormat *format = surface->format;
 
     if (format->Amask) /* Check for alpha channel */
@@ -134,7 +148,7 @@ GLvoid clearScreen() {
   return;
 }
 
-GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ, GLfloat *nTexAlpha) {
+GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ) {
 
   glBegin(GL_QUADS);
     glTexCoord2f( 0.0f, 0.0f ); glVertex3f( vertexX[0], vertexY[0], vertexZ[0] ); /* Top left corner */
@@ -142,10 +156,6 @@ GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ, GLf
     glTexCoord2f( 1.0f, 1.0f ); glVertex3f( vertexX[2], vertexY[2], vertexZ[2] ); /* Bottom right corner */
     glTexCoord2f( 1.0f, 0.0f ); glVertex3f( vertexX[3], vertexY[3], vertexZ[3] ); /* Top right corner */
   glEnd();
-  
-  glColor4f(nTexAlpha[0], nTexAlpha[1], nTexAlpha[2], nTexAlpha[3]);
-  
-  glFinish();
 
   return;
 }
@@ -173,11 +183,15 @@ GLvoid drawFreeband() {
   
   glScalef(1, -1, 1); /* Flip framebuffer because of SDL's upside down issue */
 
-  if (loading != false); /* Do nothing and wait till loading = false */
-  else if (currentScreen.mainMenu != false && menuQuit != true)
+  if (loading); /* Do nothing and wait till loading = false */
+  else if (currentScreen.mainMenu && !menuQuit)
     screenMain();
-  else if (currentScreen.instruments != false && menuQuit != true)
+  else if (currentScreen.instruments && !menuQuit)
     screenInstruments(nPlayers);
+  else if (currentScreen.songs && !menuQuit)
+    screenSongs();
+  else if (currentScreen.game && gamePaused != true)
+    screenGame();
 
   SDL_GL_SwapBuffers();
 

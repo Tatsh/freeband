@@ -1,8 +1,10 @@
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <GL/gl.h>
+#include <GL/glext.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
 
@@ -20,6 +22,8 @@ typedef struct {
   bool online;
   bool options;
   bool instruments;
+  bool songs;
+  bool difficulty;
   bool game;
 } tCurrentScreen;
 

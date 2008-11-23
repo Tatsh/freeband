@@ -19,7 +19,7 @@ extern GLfloat logoVertexX[];
 extern GLfloat logoVertexY[];
 extern GLfloat mSelectorVertexX[]; /* Main menu selector's default position */
 extern GLfloat mSelectorVertexY[];
-extern GLfloat text_SinglePlayerY[], text_MultiplayerY[], text_OnlineY[], text_OptionsY[], text_QuitY[];
+extern GLfloat text_MultiplayerY[], text_OnlineY[], text_OptionsY[], text_QuitY[];
 extern GLuint menuSelection;
 extern tMenuState menuState;
 

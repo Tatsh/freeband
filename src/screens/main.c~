@@ -18,150 +18,150 @@ char mainSelector[] = "GameData/themes/default/screenStart/selector.png";
    Order of corners: top-left, bottom-left, bottom-right, top-right */
 GLfloat logoVertexX[] = { -1.25f, -1.25f, 1.26f, 1.26f }; /* Logo position */
 GLfloat logoVertexY[] = {  -1.0f,   0.0f,  0.0f, -1.0f };
+GLfloat mSelectorAlpha = 0.3f;
 GLfloat mSelectorVertexX[] = { 0.0f, 0.0f, 1.3f, 1.3f }; /* Main menu selector's default position */
 GLfloat mSelectorVertexY[] = {  0.18f, 0.0f, 0.0f, 0.18f };
-GLfloat mSelectorAlpha[] = { 1.0, 1.0, 1.0, SELECTSRC_ALPHA };
 
 /* Text positions, all are false italic. These take FOREVER!
    There is NO way to calculate these for now, all depends on mechanics of the font, specific to EVERY font */
 GLfloat text_SinglePlayerX[] = { 0.09f, 0.07f, 1.22f, 1.24f }; /* SINGLE PLAYER */
+GLfloat text_SinglePlayerY[4];
 GLfloat text_MultiplayerX[]  = { 0.11f, 0.09f, 1.18f, 1.2f }; /* MULTIPLAYER */
 GLfloat text_OnlineX[] = { 0.36f, 0.34f, 0.94f, 0.96f }; /* ONLINE */
 GLfloat text_OptionsX[] = { 0.28f, 0.26f, 0.98f, 1.0f };
 GLfloat text_QuitX[] = { 0.40f, 0.38f, 0.8f, 0.82f };
 
-GLfloat text_SinglePlayerX_hl[4];
-GLfloat text_SinglePlayerY_hl[4];
-GLfloat text_MultiplayerX_hl[4];
-GLfloat text_MultiplayerY_hl[4];
-GLfloat text_OnlineX_hl[4];
-GLfloat text_OnlineY_hl[4];
-GLfloat text_OptionsX_hl[4];
-GLfloat text_OptionsY_hl[4];
-GLfloat text_QuitX_hl[4];
-GLfloat text_QuitY_hl[4];
+GLfloat text_SinglePlayer_hl[4];
+GLfloat text_Multiplayer_hl[4];
+GLfloat text_Online_hl[4];
+GLfloat text_Options_hl[4];
+GLfloat text_Quit_hl[4];
 
 GLuint menuSelection = 0;
 
 tMenuState menuState;
 
 GLvoid handleMainMenu() {
-  if (menuSelection < 1) {
-#ifdef __DEBUG__
-    fprintf(stdout, "Starting single player mode.\n");
-#endif
-    nPlayers = 1;
-    menuQuit = true; /* We are leaving the menu */
-    loading = true; /* We are currently loading textures */
 
-    clearScreen(); /* Clean up screen */
+  switch (menuSelection) {
+
+    case 0:
 #ifdef __DEBUG__
-    fprintf(stdout, "Deleted all screen mainMenu elements.\nLoading single player screenInstruments elements...\n");
+      fprintf(stdout, "Starting single player mode.\n");
 #endif
-    currentScreen.mainMenu = loading = menuQuit = false;
-    nonGame = false; /* We are not going to online mode, options menu, or going to quit */
-    currentScreen.instruments = instrument.guitar = true; /* We set guitar to default selection, does not affect highlight */
+      nPlayers = 1;
+      menuQuit = true; /* We are leaving the menu */
+      loading = true; /* We are currently loading textures */
+      clearScreen(); /* Clean up screen */
+#ifdef __DEBUG__
+      fprintf(stdout, "Deleted all screen mainMenu elements.\nLoading single player screenInstruments elements...\n");
+#endif
+      currentScreen.mainMenu = loading = menuQuit = false;
+      nonGame = false; /* We are not going to online mode, options menu, or going to quit */
+      currentScreen.instruments = instrument.guitar = true; /* We set guitar to default selection, does not affect highlight */
+
+    case 1:
+      fprintf(stdout, "Starting multiplayer mode.\n");
+      break;
+
+    case 2:
+      fprintf(stdout, "Starting online mode.\n");
+      nonGame = true;
+      online = true;
+      break;
+
+    case 3:
+      fprintf(stdout, "Going to options menu.\n");
+      nonGame = true;
+      options = true;
+      break;
+
+    case 4:
+      quitGame(0);
+      break;
+
+    default:
+      break;
   }
-  else if (menuSelection < 2)
-    fprintf(stdout, "Starting multiplayer mode.\n");
-  else if (menuSelection < 3) {
-    fprintf(stdout, "Starting online mode.\n");
-    nonGame = true;
-    online = true;
-  }
-  else if (menuSelection < 4) {
-    fprintf(stdout, "Going to options menu.\n");
-    nonGame = true;
-    options = true;
-  }
-  else
-    quitGame(0);
 
   return;
 }
 
 GLvoid setMainMenuState(GLuint selectID) {
   GLuint i;
-  GLfloat tempX[4], tempY[4];
 
-  if (selectID < 1) { /* Single player */
-    menuState.single = true;
-    menuState.multiplayer = false;
-    menuState.online = false;
-    menuState.options = false;
-    menuState.quit = false;
-    for ( i = 0; i < 4; i++ ) { /* Highlight */
-      text_QuitX_hl[i] = offscreenVertexXY[i]; /* From down arrow */
-      text_MultiplayerX_hl[i] = offscreenVertexXY[i]; /* From up arrow */
-      tempX[i] = text_SinglePlayerX[i];
-      tempY[i] = text_SinglePlayerY[i];
-      text_SinglePlayerX_hl[i] = tempX[i];
-      text_SinglePlayerY_hl[i] = tempY[i];
+  switch(selectID) {
+    case 0: /* Single player */
+      menuState.single = true;
+      menuState.multiplayer = false;
+      menuState.online = false;
+      menuState.options = false;
+      menuState.quit = false;
+      for ( i = 0; i < 4; i++ ) { /* Highlight */
+        text_Quit_hl[i] = colour_blue_7CA4F6[i]; /* From down arrow */
+        text_Multiplayer_hl[i] = colour_blue_7CA4F6[i]; /* From up arrow */
+        text_SinglePlayer_hl[i] = 1.0f;
     }
 #ifdef __DEBUG__
     fprintf(stdout, "Selected single player mode.\n");
 #endif
-  }
-  else if (selectID < 2) { /* Multiplayer */
-    menuState.single = false;
-    menuState.multiplayer = true;
-    for ( i = 0; i < 4; i++ ) {
-      text_SinglePlayerX_hl[i] = offscreenVertexXY[i];
-      text_OnlineX_hl[i] = offscreenVertexXY[i];
-      tempX[i] = text_MultiplayerX[i];
-      tempY[i] = text_MultiplayerY[i];
-      text_MultiplayerX_hl[i] = tempX[i];
-      text_MultiplayerY_hl[i] = tempY[i];
-    }
+    break;
+
+    case 1:  /* Multiplayer */
+      menuState.single = false;
+      menuState.multiplayer = true;
+      for ( i = 0; i < 4; i++ ) {
+        text_SinglePlayer_hl[i] = colour_blue_7CA4F6[i];
+        text_Online_hl[i] = colour_blue_7CA4F6[i];
+        text_Multiplayer_hl[i] = 1.0f;
+      }
 #ifdef __DEBUG__
-    fprintf(stdout, "Selected multiplayer player mode.\n");
+      fprintf(stdout, "Selected multiplayer player mode.\n");
 #endif
-  }
-  else if (selectID < 3) { /* Online */
-    menuState.single = false;
-    menuState.multiplayer = false;
-    menuState.online = true;
-    for ( i = 0; i < 4; i++ ) {
-      text_MultiplayerX_hl[i] = offscreenVertexXY[i];
-      text_OptionsX_hl[i] = offscreenVertexXY[i];
-      tempX[i] = text_OnlineX[i];
-      tempY[i] = text_OnlineY[i];
-      text_OnlineX_hl[i] = tempX[i];
-      text_OnlineY_hl[i] = tempY[i];
-    }
+      break;
+
+    case 2: /* Online */
+      menuState.single = false;
+      menuState.multiplayer = false;
+      menuState.online = true;
+      for ( i = 0; i < 4; i++ ) {
+        text_Multiplayer_hl[i] = colour_blue_7CA4F6[i];
+        text_Options_hl[i] = colour_blue_7CA4F6[i];
+        text_Online_hl[i] = 1.0f;
+      }
 #ifdef __DEBUG__
-    fprintf(stdout, "Selected online mode.\n");
+      fprintf(stdout, "Selected online mode.\n");
 #endif
-  }
-  else if (selectID < 4) { /* Options */
-    menuState.online = false;
-    menuState.options = true;
-    for ( i = 0; i < 4; i++ ) {
-      text_OnlineX_hl[i] = offscreenVertexXY[i];
-      text_QuitX_hl[i] = offscreenVertexXY[i];
-      tempX[i] = text_OptionsX[i];
-      tempY[i] = text_OptionsY[i];
-      text_OptionsX_hl[i] = tempX[i];
-      text_OptionsY_hl[i] = tempY[i];
-    }
+      break;
+
+    case 3: /* Options */
+      menuState.online = false;
+      menuState.options = true;
+      for ( i = 0; i < 4; i++ ) {
+        text_Online_hl[i] = colour_blue_7CA4F6[i];
+        text_Quit_hl[i] = colour_blue_7CA4F6[i];
+        text_Options_hl[i] = 1.0f;
+      }
 #ifdef __DEBUG__
-    fprintf(stdout, "Selected options menu.\n");
+      fprintf(stdout, "Selected options menu.\n");
 #endif
-  }
-  else { /* Quit */
-    menuState.options = false;
-    menuState.quit = true;
-    for ( i = 0; i < 4; i++ ) {
-      text_OptionsX_hl[i] = offscreenVertexXY[i];
-      text_SinglePlayerX_hl[i] = offscreenVertexXY[i];
-      tempX[i] = text_QuitX[i];
-      tempY[i] = text_QuitY[i];
-      text_QuitX_hl[i] = tempX[i];
-      text_QuitY_hl[i] = tempY[i];
-    }
+      break;
+
+    case 4: /* Quit */
+      menuState.options = false;
+      menuState.quit = true;
+      for ( i = 0; i < 4; i++ ) {
+        text_Options_hl[i] = colour_blue_7CA4F6[i];
+        text_SinglePlayer_hl[i] = colour_blue_7CA4F6[i];
+        text_Quit_hl[i] = 1.0f;
+      }
 #ifdef __DEBUG__
-    fprintf(stdout, "Selected to quit.\n");
+      fprintf(stdout, "Selected to quit.\n");
 #endif
+      break;
+
+      default:
+        break;
   }
 
   return;
@@ -172,19 +172,11 @@ GLvoid setMainImages() {
 
   /* Set 'SINGLE PLAYER' to be highlighted */
   for ( i = 0; i < 4; i++ ) {
-    text_SinglePlayerX_hl[i] = text_SinglePlayerX[i];
-    text_SinglePlayerY_hl[i] = text_SinglePlayerY[i]; 
-  }
-  
-  for ( i = 0; i < 4; i++ ) { /* Set all highlighted versions of text except for 'SINGLE PLAYER' to offscreen */
-    text_MultiplayerX_hl[i] = offscreenVertexXY[i];
-    text_MultiplayerY_hl[i] = offscreenVertexXY[i];
-    text_OnlineX_hl[i] = offscreenVertexXY[i];
-    text_OnlineY_hl[i] = offscreenVertexXY[i];
-    text_OptionsX_hl[i] = offscreenVertexXY[i];
-    text_OptionsY_hl[i] = offscreenVertexXY[i];
-    text_QuitX_hl[i] = offscreenVertexXY[i];
-    text_QuitY_hl[i] = offscreenVertexXY[i];
+    text_SinglePlayer_hl[i] = 1.0f;
+    text_Multiplayer_hl[i] = colour_blue_7CA4F6[i];
+    text_Online_hl[i] = colour_blue_7CA4F6[i];
+    text_Options_hl[i] = colour_blue_7CA4F6[i];
+    text_Quit_hl[i] = colour_blue_7CA4F6[i];
   }
   
   if ((texture[0] = loadTexture(bgTexture, 0)) == -1)
@@ -206,20 +198,12 @@ GLvoid setMainText() {
     fprintf(stderr, "SDL_ttf: TTF_OpenFont() response: %s\n", TTF_GetError());
   else {
     GLuint single, multiplayer, online, options, quit;
-    GLuint singleS, multiplayerS, onlineS, optionsS, quitS; /* Selected equivalents */
     
-    single = loadText("SINGLE PLAYER", font, blue_7CA4F6, 0);
-    multiplayer = loadText("MULTIPLAYER", font, blue_7CA4F6, 1);
-    online = loadText("ONLINE", font, blue_7CA4F6, 2);
-    options = loadText("OPTIONS", font, blue_7CA4F6, 3);
-    quit = loadText("QUIT", font, blue_7CA4F6, 4); /* Currently a nasty artifact to the right */
-    
-    /* Remember difference between selected equivalent and original texture is 5 in this case */
-    singleS = loadText("SINGLE PLAYER", font, white, 5);
-    multiplayerS = loadText("MULTIPLAYER", font, white, 6);
-    onlineS = loadText("ONLINE", font, white, 7);
-    optionsS = loadText("OPTIONS", font, white, 8);
-    quitS = loadText("QUIT", font, white, 9);
+    single = loadText("SINGLE PLAYER", font, white, 0); /* We ALMOST ALWAYS load text as white to start */
+    multiplayer = loadText("MULTIPLAYER", font, white, 1);
+    online = loadText("ONLINE", font, white, 2);
+    options = loadText("OPTIONS", font, white, 3);
+    quit = loadText("QUIT", font, white, 4); /* Currently a nasty artifact to the right */
   }
 
   if (font)
@@ -229,54 +213,41 @@ GLvoid setMainText() {
 }
 
 GLvoid screenMain() {
+  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   glBindTexture( GL_TEXTURE_2D, texture[0] );
-  positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ, defaultAlpha);
+  positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
 
+  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   glBindTexture( GL_TEXTURE_2D, texture[1] );
-  positionTexture(logoVertexX, logoVertexY, defVertexZ, mSelectorAlpha); /* Remember last argument is the next texture's alpha value */
+  positionTexture(logoVertexX, logoVertexY, defVertexZ);
 
+  glColor4f(1.0, 1.0f, 1.0f, mSelectorAlpha);
   glBindTexture( GL_TEXTURE_2D, texture[2] ); /* Use selector's default position */
-  positionTexture(mSelectorVertexX, mSelectorVertexY, defVertexZ, defaultAlpha);
+  positionTexture(mSelectorVertexX, mSelectorVertexY, defVertexZ);
   
   /* Text positions */
+  glColor4f(text_SinglePlayer_hl[0], text_SinglePlayer_hl[1], text_SinglePlayer_hl[2], text_SinglePlayer_hl[3]);
   glBindTexture( GL_TEXTURE_2D, text[0] );
-  positionTexture(text_SinglePlayerX, text_SinglePlayerY, defVertexZ, defaultAlpha);
-  
-  glBindTexture( GL_TEXTURE_2D, text[1] );
-  positionTexture(text_MultiplayerX, text_MultiplayerY, defVertexZ, defaultAlpha);
-  
-  glBindTexture( GL_TEXTURE_2D, text[2] );
-  positionTexture(text_OnlineX, text_OnlineY, defVertexZ, defaultAlpha);
-  
-  glBindTexture( GL_TEXTURE_2D, text[3] );
-  positionTexture(text_OptionsX, text_OptionsY, defVertexZ, defaultAlpha);
+  positionTexture(text_SinglePlayerX, text_SinglePlayerY, defVertexZ);
 
+  glColor4f(text_Multiplayer_hl[0], text_Multiplayer_hl[1], text_Multiplayer_hl[2], text_Multiplayer_hl[3]);
+  glBindTexture( GL_TEXTURE_2D, text[1] );
+  positionTexture(text_MultiplayerX, text_MultiplayerY, defVertexZ);
+
+  glColor4f(text_Online_hl[0], text_Online_hl[1], text_Online_hl[2], text_Online_hl[3]); 
+  glBindTexture( GL_TEXTURE_2D, text[2] );
+  positionTexture(text_OnlineX, text_OnlineY, defVertexZ);
+
+  glColor4f(text_Options_hl[0], text_Options_hl[1], text_Options_hl[2], text_Options_hl[3]);
+  glBindTexture( GL_TEXTURE_2D, text[3] );
+  positionTexture(text_OptionsX, text_OptionsY, defVertexZ);
+  
+  glColor4f(text_Quit_hl[0], text_Quit_hl[1], text_Quit_hl[2], text_Quit_hl[3]);
   glBindTexture( GL_TEXTURE_2D, text[4] );
-  positionTexture(text_QuitX, text_QuitY, defVertexZ, defaultAlpha);
-  
-  glBindTexture( GL_TEXTURE_2D, text[5] );
-  positionTexture(text_SinglePlayerX_hl, text_SinglePlayerY_hl, defVertexZ, defaultAlpha);
-  
-  glBindTexture( GL_TEXTURE_2D, text[6] );
-  positionTexture(text_MultiplayerX_hl, text_MultiplayerY_hl, defVertexZ, defaultAlpha);
-  
-  glBindTexture( GL_TEXTURE_2D, text[7] );
-  positionTexture(text_OnlineX_hl, text_OnlineY_hl, defVertexZ, defaultAlpha);
-  
-  glBindTexture( GL_TEXTURE_2D, text[8] );
-  positionTexture(text_OptionsX_hl, text_OptionsY_hl, defVertexZ, defaultAlpha);
-  
-  glBindTexture( GL_TEXTURE_2D, text[9] );
-  positionTexture(text_QuitX_hl, text_QuitY_hl, defVertexZ, defaultAlpha);
-  
-  loading = true;
-  glTranslatef(-0.15f, 0.0f, 2.0f);
-  glRotatef( 90.0f, 1.0f, 0.0f, 0.0f );
-  glPushMatrix();
-  glBindTexture( GL_TEXTURE_2D, texture[0] );
-  gluCylinder( quadratic, 0.05f, 0.05f, 0.1f, 32, 32 );
-  glPopMatrix();
-  loading = false;
+  positionTexture(text_QuitX, text_QuitY, defVertexZ);
+
+  if (mSelectorAlpha < 0.5)
+    mSelectorAlpha += 0.005f;
 
   return;
 }

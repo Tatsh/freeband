@@ -1,0 +1,25 @@
+#include "../freeband.h"
+#include "../graphics/graphics.h"
+#include "songs.h"
+
+bool gamePaused = false;
+
+GLuint gdegree = 0.0f;
+
+GLvoid screenSongsBuffer() {
+}
+
+GLvoid screenSongs() {
+  glTranslatef(0.0f, 0.0f, 2.0f);
+  glRotatef( 110.0f, -0.05f, 0.0f, 0.0f );
+  glRotatef( gdegree, 0.0f, 0.0f, 0.05f );
+  glPushMatrix();
+  glColor4f(1.0f, 0.5f, 1.0f, 1.0f);
+  gluCylinder( quadratic, 0.05f, 0.05f, 0.1f, 32, 32 );
+  glPopMatrix();
+  
+  if (gdegree == 360.0f)
+    gdegree = 0.0f;
+  else
+    gdegree += 0.5f;
+}

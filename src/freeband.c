@@ -1,6 +1,7 @@
 #include "freeband.h"
 #include "graphics/graphics.h"
 #include "input/input.h"
+#include "screens/game.h"
 #include "screens/instruments.h"
 #include "screens/main.h"
 
@@ -37,6 +38,9 @@ GLint main(GLint argc, char *argv[]) {
   GLuint i;
   for (i = 0; i < 10; i++)
     texture[i] = -1;
+  
+  /* GLUT */
+  glutInit(&argc, argv);
   
   int videoFlags;                   /* Flags to send to SDL */
   bool hasQuit = false;             /* Main game loop variable */
@@ -125,15 +129,38 @@ GLint main(GLint argc, char *argv[]) {
           break;
           
         case SDL_KEYDOWN: /* Handle key down event */
-          menuKeys(&freeband.key.keysym, fbSurface);
+          if (!menuQuit)
+            menuKeys(&freeband.key.keysym, fbSurface);
+          else if (!gamePaused)
+            gameKeys(&freeband.key.keysym, fbSurface, nPlayers);
           break;
           
-        case SDL_QUIT:
+        case SDL_QUIT: /* Only allow to exit via ^C or close button if at main menu */
+          if (currentScreen.mainMenu)
+            hasQuit = true;
+          else if (currentScreen.instruments) {
+            menuQuit = loading = true;
+            clearScreen();
+            setMainImages();
+            setMainText();
+            currentScreen.instruments = loading = menuQuit = false;
+            currentScreen.mainMenu = true;
 #ifdef __DEBUG__
-          hasQuit = true;
+            fprintf(stdout, "Successfully switched back to screenMain.\n");
 #endif
+          }
+          else if (currentScreen.songs) {
+            menuQuit = loading = true;
+            clearScreen();
+            setInstrumentsImages_1P();
+            setInstrumentsText_1P();
+            currentScreen.instruments = loading = menuQuit = false;
+            currentScreen.instruments = true;
+          }
+          else if (currentScreen.game)
+            hasQuit = true;
           break;
-          
+
         default:
           break;
 

@@ -1,7 +1,9 @@
 #include "../freeband.h"
 #include "../graphics/graphics.h"
+#include "../screens/game.h"
 #include "../screens/instruments.h"
 #include "../screens/main.h"
+#include "../screens/songs.h"
 
 GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
 
@@ -13,7 +15,7 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
   switch (keysym->sym) {
     
     case SDLK_DOWN:
-      if (currentScreen.mainMenu != false) {
+      if (currentScreen.mainMenu) {
 
         menuSelection++;
         setMainMenuState(menuSelection);
@@ -31,17 +33,17 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
 
       }
 
-      else if (currentScreen.instruments != false) {
+      else if (currentScreen.instruments) {
 
         if (nPlayers < 2) {
           instSelection++;
-          setInstrumentsMenuState_1P(instSelection);
+          setInstrument(instSelection);
 
           if ( instSelection < 4 )
             for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY[i] + 0.23;
           else {
             instSelection = 0;
-            setInstrumentsMenuState_1P(instSelection);
+            setInstrument(instSelection);
             for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY_reset[i];
           }
         }
@@ -50,7 +52,7 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
       break;
       
     case SDLK_UP:
-      if (currentScreen.mainMenu != false) {
+      if (currentScreen.mainMenu) {
  
         if (menuSelection > 0) {
           menuSelection--;
@@ -65,17 +67,17 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
 
       }
 
-      else if (currentScreen.instruments != false) {
+      else if (currentScreen.instruments) {
 
         if (nPlayers < 2) {
           if (instSelection > 0) {
             instSelection--;
-            setInstrumentsMenuState_1P(instSelection);
+            setInstrument(instSelection);
             for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY[i] - 0.23;
           }
           else if (instSelection < 1 ) {
             instSelection = 3; /* Vocals */
-            setInstrumentsMenuState_1P(instSelection);
+            setInstrument(instSelection);
             for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY[i] + 0.69;
           }
 
@@ -88,37 +90,73 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
       if (keystates[SDLK_LALT] || keystates[SDLK_RALT]) /* Switch to full screen only if Alt+Enter is pressed */
         SDL_WM_ToggleFullScreen(surface);
       else {
-        if (currentScreen.mainMenu != false) {
+
+        if (currentScreen.mainMenu) {
+
           handleMainMenu();
 
           if (nonGame != true)
             screenInstrumentsBuffer(nPlayers); /* Note: 1 player screen is significantly different from multiplayer */
           else
             fprintf(stdout, "Not implemented yet.\n");
+
         }
 
-        else if (currentScreen.instruments != false) {
-
-          handleInstrumentsMenu();
-          
-          if (instrument.guitar != false) {
-            /* screenCharactersBuffer(nPlayers); someday */
-            /* screenSongsBuffer(); */
+        else if (currentScreen.instruments) {
+          menuQuit = loading = true;
+          currentScreen.instruments = false;
+          clearScreen();
+          currentScreen.songs = true;
+          /* screenCharactersBuffer(nPlayers); someday */
+          screenSongsBuffer();
 #ifdef __DEBUG__
+          if (instrument.guitar)
             fprintf(stdout, "Starting %d player guitar game.\n", nPlayers);
-#endif
-          }
+          else if (instrument.bass)
+            fprintf(stdout, "Starting %d player bass game.\n", nPlayers);
+          else if (instrument.drums)
+            fprintf(stdout, "Starting %d player drums game.\n", nPlayers);
           else
-            fprintf(stdout, "Not implemented yet.\n");
+            fprintf(stdout, "Starting %d player vocals game.\n", nPlayers);
+          fprintf(stdout, "Now at screenSongs().\n");
+#endif
+          screenSongs();
+          loading = menuQuit = false;
+        }
+        else if (currentScreen.songs) {
+          menuQuit = loading = true;
+          currentScreen.songs = false;
+          clearScreen();
+          currentScreen.difficulty = true;
+#ifdef __DEBUG__
+          fprintf(stdout, "Would be at screenDifficulty() currently. Not implemented yet.\n");
+#endif
+          /* screenDifficulty(); */
+          loading = menuQuit = false;
+        }
+        else if (currentScreen.difficulty) {
+          menuQuit = loading = true;
+          currentScreen.difficulty = false;
+          clearScreen();
+#ifdef __DEBUG__
+          fprintf(stdout, "Loading screenGame.\n");
+#endif
+          screenGameBuffer();
+          currentScreen.game = true;
+          screenGame();
+#ifdef __DEBUG__
+          fprintf(stdout, "Now in screenGame() function.\n");
+#endif
+          loading = menuQuit = false;
         }
 
       }
       break;
 
     case SDLK_ESCAPE:
-      if (currentScreen.mainMenu != false)
+      if (currentScreen.mainMenu)
         quitGame(0);
-      else if (currentScreen.instruments != false) {
+      else if (currentScreen.instruments) {
         menuQuit = loading = true;
         clearScreen();
         setMainImages();
@@ -128,18 +166,43 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
 #ifdef __DEBUG__
         fprintf(stdout, "Successfully switched back to screenMain.\n");
 #endif
+        instSelection = 0;
+        for (i = 0; i < 4; i++) selectedGradientY[i] = selectedGradientY_reset[i]; /* Reset gradient to guitar position */
+      }
+      else if (currentScreen.songs) {
+        menuQuit = loading = true;
+        clearScreen();
+        setInstrumentsImages_1P();
+        setInstrumentsText_1P();
+        currentScreen.instruments = loading = menuQuit = false;
+        currentScreen.instruments = true;
+      }
+      else if (currentScreen.game) {
+        loading = true;
+        clearScreen();
+        bringDownAngle = 90.0f; /* Set angle to back to original */
+        clearScreen();
+        currentScreen.songs = true;
+        /* screenCharactersBuffer(nPlayers); someday */
+        screenSongsBuffer();
+        currentScreen.game = loading = menuQuit = false;
+        screenSongs();
+#ifdef __DEBUG__
+        fprintf(stdout, "Now back at screenSongs().\n");
+#endif
+        loading = menuQuit = false;
       }
       break;
       
     case SDLK_q: /* Can anyone say 'easter egg'? Maybe things like this will help themers */
-      if (currentScreen.mainMenu != false) {
+      if (currentScreen.mainMenu) {
         for ( i = 0; i < 4; i++ )
           logoVertexX[i] = logoVertexX[i] - 0.01;
       }
       break;
       
     case SDLK_w:
-      if (currentScreen.mainMenu != false) {
+      if (currentScreen.mainMenu) {
         for ( i = 0; i < 4; i++ )
           logoVertexX[i] = logoVertexX[i] + 0.01;
       }
@@ -152,7 +215,7 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
   return;
 }
 
-GLvoid gameKeys(SDL_keysym *keysym, SDL_Surface *surface, bool note, GLuint nPlayers) {
+GLvoid gameKeys(SDL_keysym *keysym, SDL_Surface *surface, GLuint nPlayers) {
   
   Uint8 *keystates = SDL_GetKeyState(NULL);
   
