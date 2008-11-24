@@ -23,6 +23,7 @@ typedef struct {
   bool options;
   bool instruments;
   bool songs;
+  bool difficulty;
   bool game;
 } tCurrentScreen;
 

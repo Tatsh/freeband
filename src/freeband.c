@@ -129,12 +129,16 @@ GLint main(GLint argc, char *argv[]) {
           break;
           
         case SDL_KEYDOWN: /* Handle key down event */
-          if (!menuQuit)
+          if (!menuQuit || gamePaused)
             menuKeys(&freeband.key.keysym, fbSurface);
-          else if (!gamePaused)
+          else
             gameKeys(&freeband.key.keysym, fbSurface, nPlayers);
           break;
-          
+
+          case SDL_KEYUP: /* Handle key up event */
+            gameKeys(&freeband.key.keysym, fbSurface, nPlayers);
+            break;
+
         case SDL_QUIT: /* Only allow to exit via ^C or close button if at main menu */
           if (currentScreen.mainMenu)
             hasQuit = true;

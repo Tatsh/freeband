@@ -15,7 +15,7 @@ char freeSansBoldFont[] = "GameData/themes/default/global/freesans-bold.ttf";
 
 GLfloat buttonColour_green[] = { 0.137f, 0.585, 0.0f, 1.0f };
 GLfloat buttonColour_red[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-GLfloat buttonColour_yellow[] = { 1.0f, 1.0f, 0.347, 1.0f };
+GLfloat buttonColour_yellow[] = { 1.0f, 1.0f, 0.0, 1.0f };
 GLfloat buttonColour_blue[] = { 0.059f, 0.0f, 0.71f, 1.0f};
 GLfloat buttonColour_orange[] = { 1.0f, 0.647, 0.114, 1.0f };
 

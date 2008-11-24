@@ -139,7 +139,7 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
           currentScreen.difficulty = false;
           clearScreen();
 #ifdef __DEBUG__
-          fprintf(stdout, "Loading screenGame.\n");
+          fprintf(stdout, "Loading screenGame().\n");
 #endif
           screenGameBuffer();
           currentScreen.game = true;
@@ -147,7 +147,7 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
 #ifdef __DEBUG__
           fprintf(stdout, "Now in screenGame() function.\n");
 #endif
-          loading = menuQuit = false;
+          loading = false;
         }
 
       }
@@ -177,21 +177,6 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
         currentScreen.instruments = loading = menuQuit = false;
         currentScreen.instruments = true;
       }
-      else if (currentScreen.game) {
-        loading = true;
-        clearScreen();
-        bringDownAngle = 90.0f; /* Set angle to back to original */
-        clearScreen();
-        currentScreen.songs = true;
-        /* screenCharactersBuffer(nPlayers); someday */
-        screenSongsBuffer();
-        screenSongs();
-        currentScreen.game = loading = menuQuit = false;
-#ifdef __DEBUG__
-        fprintf(stdout, "Now back at screenSongs().\n");
-#endif
-        loading = menuQuit = false;
-      }
       break;
       
     case SDLK_q: /* Can anyone say 'easter egg'? Maybe things like this will help themers */
@@ -219,11 +204,49 @@ GLvoid gameKeys(SDL_keysym *keysym, SDL_Surface *surface, GLuint nPlayers) {
   
   Uint8 *keystates = SDL_GetKeyState(NULL);
   
+  if (keystates[SDLK_F1])
+    button.g = true;
+  else
+    button.g = false;
+  
+  if (keystates[SDLK_F2])
+    button.r = true;
+  else
+    button.r = false;
+  
+  if (keystates[SDLK_F3])
+    button.y = true;
+  else
+    button.y = false;
+  
+  if (keystates[SDLK_F4])
+    button.b = true;
+  else
+    button.b = false;
+  
+  if (keystates[SDLK_F5])
+    button.o = true;
+  else
+    button.o = false;
+  
   switch (keysym->sym) {
 
     case SDLK_RETURN:
       if (keystates[SDLK_LALT] || keystates[SDLK_RALT]) /* Switch to full screen only if Alt+Enter is pressed */
         SDL_WM_ToggleFullScreen(surface);
+      break;
+      
+    case SDLK_ESCAPE:
+      loading = gamePaused = true;
+      bringDownAngle = 90.0f; /* Set angle to back to original */
+      clearScreen();
+      currentScreen.songs = true;
+      screenSongsBuffer();
+      currentScreen.game = loading = menuQuit = false;
+      screenSongs();
+#ifdef __DEBUG__
+      fprintf(stdout, "Now back at screenSongs().\n");
+#endif
       break;
 
     default:

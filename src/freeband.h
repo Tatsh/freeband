@@ -15,7 +15,6 @@
 #define MAX_IMAGES 20
 #define MAX_TEXT 50
 
-/* Variables */
 typedef struct {
   bool mainMenu;
   bool multiPlayer;
