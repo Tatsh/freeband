@@ -7,15 +7,15 @@
 
 bool loading;
 
-char defaultFont[] = "GameData/themes/default/global/crillee.ttf";
-char bitstreamFont[] = "GameData/themes/default/global/bitstream-vera-sans-bold.ttf";
-char bitstreamMonoBoldFont[] = "GameData/themes/default/global/bitstream-vera-mono-bold.ttf";
-char freeSansFont[] = "GameData/themes/default/global/freesans.ttf";
-char freeSansBoldFont[] = "GameData/themes/default/global/freesans-bold.ttf";
+char crilleePath[] = "GameData/themes/default/global/crillee.ttf";
+char bitstreamPath[] = "GameData/themes/default/global/bitstream-vera-sans-bold.ttf";
+char bitstreamMonoBoldPath[] = "GameData/themes/default/global/bitstream-vera-mono-bold.ttf";
+char freeSansPath[] = "GameData/themes/default/global/freesans.ttf";
+char freeSansBoldPath[] = "GameData/themes/default/global/freesans-bold.ttf";
 
 GLfloat buttonColour_green[] = { 0.137f, 0.585, 0.0f, 1.0f };
 GLfloat buttonColour_red[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-GLfloat buttonColour_yellow[] = { 1.0f, 1.0f, 0.347, 1.0f };
+GLfloat buttonColour_yellow[] = { 1.0f, 1.0f, 0.0, 1.0f };
 GLfloat buttonColour_blue[] = { 0.059f, 0.0f, 0.71f, 1.0f};
 GLfloat buttonColour_orange[] = { 1.0f, 0.647, 0.114, 1.0f };
 
@@ -51,17 +51,16 @@ bool initGL() {
   glOrtho(0.0f, 800, 600, 0.0f, -1.0f, 1.0f);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glClearDepth(1.0f);                     /* Depth buffer setup */
   glEnable(GL_DEPTH_TEST);                /* Enables depth testing */
   glDepthFunc(GL_LEQUAL);                 /* Type of depth testing */
-  
-  /* test */
-  quadratic = gluNewQuadric( );
+
+  quadratic = gluNewQuadric();
   /* Create Smooth Normals */
-  gluQuadricNormals( quadratic, GLU_SMOOTH );
+  gluQuadricNormals(quadratic, GLU_SMOOTH);
   /* Create Texture Coords */
-  gluQuadricTexture( quadratic, GL_TRUE );
+  gluQuadricTexture(quadratic, GL_TRUE);
 
   return true;
 }
@@ -101,6 +100,16 @@ GLuint loadText(char *input, TTF_Font *font, SDL_Color color, GLuint index) {
     quitGame(1);
   }
 
+#ifdef __DEBUG__
+  /* Print good AR */
+  GLfloat ar, arinv;
+  ar = (GLfloat)textTexture->w / (GLfloat)textTexture->h;
+  arinv = 1.000f / ar;
+  fprintf(stdout,
+          "Aspect ratios for text '%s': %dx%d pixels, %.3f:1.000, 1.000:%.3f\n",
+          input, textTexture->w, textTexture->h, ar, arinv);
+#endif
+  
   /* Clean up */
   if (textTexture)
     SDL_FreeSurface(textTexture);
@@ -127,6 +136,16 @@ GLuint loadTexture(const char *filename, GLuint index) {
       gluBuild2DMipmaps(GL_TEXTURE_2D, 4, surface->w, surface->h, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
     else
       gluBuild2DMipmaps(GL_TEXTURE_2D, 3, surface->w, surface->h, GL_RGB, GL_UNSIGNED_BYTE, surface->pixels);
+
+#ifdef __DEBUG__
+    /* Print good AR */
+    GLfloat ar, arinv;
+    ar = (GLfloat)surface->w / (GLfloat)surface->h;
+    arinv = 1.000f / ar;
+    fprintf(stdout,
+            "Aspect ratios for image '%s': %dx%d pixels, %.3f:1.000, 1.000:%.3f\n",
+            filename, surface->w, surface->h, ar, arinv);
+#endif
   }
   else {
     fprintf(stderr, "SDL could not load %s.\n%s\n", filename, SDL_GetError());
@@ -145,6 +164,56 @@ GLuint loadTexture(const char *filename, GLuint index) {
 GLvoid clearScreen() {
   glDeleteTextures(MAX_IMAGES, &texture[0]); /* Clean up old screen */
   glDeleteTextures(MAX_TEXT, &text[0]);
+  return;
+}
+
+GLvoid getFont(GLuint font) {
+
+  switch (font) {
+    case 0: /* Crillee */
+      crillee = TTF_OpenFont(crilleePath, DEFAULT_TEXT_PT);
+      if (!crillee) {
+        fprintf(stderr, "Could not load font Crillee: %s\n", TTF_GetError());
+        quitGame(1);
+      }
+      break;
+
+      case 1: /* Bitstream Vera Sans */
+        bitstream = TTF_OpenFont(bitstreamPath, DEFAULT_TEXT_PT);
+        if (!bitstream) {
+          fprintf(stderr, "Could not load font Bitstream Vera Sans: %s\n", TTF_GetError());
+          quitGame(1);
+        }
+        break;
+
+      case 2: /* Bitstream Vera Mono Bold */
+        bitstreamMonoBold = TTF_OpenFont(bitstreamMonoBoldPath, DEFAULT_TEXT_PT);
+        if (!bitstreamMonoBold) {
+          fprintf(stderr, "Could not load font Bitstream Vera Mono Bold: %s\n", TTF_GetError());
+          quitGame(1);
+        }
+        break;
+
+      case 3: /* FreeSans */
+        freeSans = TTF_OpenFont(freeSansPath, DEFAULT_TEXT_PT);
+        if (!freeSans) {
+          fprintf(stderr, "Could not load font FreeSans: %s\n", TTF_GetError());
+          quitGame(1);
+        }
+        break;
+
+      case 4: /* FreeSans Bold */
+        freeSansBold = TTF_OpenFont(freeSansBoldPath, DEFAULT_TEXT_PT);
+        if (!freeSans) {
+          fprintf(stderr, "Could not load font FreeSans Bold: %s\n", TTF_GetError());
+          quitGame(1);
+        }
+        break;
+
+      default:
+        break;
+  }
+
   return;
 }
 

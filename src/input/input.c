@@ -9,7 +9,6 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
 
   Uint8 *keystates = SDL_GetKeyState(NULL);
   GLuint i;
-  nonGame = true;
   online = options = false;
   
   switch (keysym->sym) {
@@ -92,36 +91,17 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
       else {
 
         if (currentScreen.mainMenu) {
-
           handleMainMenu();
-
-          if (nonGame != true)
+          if (!nonGame)
             screenInstrumentsBuffer(nPlayers); /* Note: 1 player screen is significantly different from multiplayer */
           else
             fprintf(stdout, "Not implemented yet.\n");
-
         }
 
         else if (currentScreen.instruments) {
-          menuQuit = loading = true;
-          currentScreen.instruments = false;
-          clearScreen();
-          currentScreen.songs = true;
-          /* screenCharactersBuffer(nPlayers); someday */
+          handleInstrumentsMenu();
           screenSongsBuffer();
-#ifdef __DEBUG__
-          if (instrument.guitar)
-            fprintf(stdout, "Starting %d player guitar game.\n", nPlayers);
-          else if (instrument.bass)
-            fprintf(stdout, "Starting %d player bass game.\n", nPlayers);
-          else if (instrument.drums)
-            fprintf(stdout, "Starting %d player drums game.\n", nPlayers);
-          else
-            fprintf(stdout, "Starting %d player vocals game.\n", nPlayers);
-          fprintf(stdout, "Now at screenSongs().\n");
-#endif
-          screenSongs();
-          loading = menuQuit = false;
+          /* screenCharactersBuffer(nPlayers); someday */
         }
         else if (currentScreen.songs) {
           menuQuit = loading = true;
@@ -203,7 +183,7 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
 GLvoid gameKeys(SDL_keysym *keysym, SDL_Surface *surface, GLuint nPlayers) {
   
   Uint8 *keystates = SDL_GetKeyState(NULL);
-  
+
   if (keystates[SDLK_F1])
     button.g = true;
   else

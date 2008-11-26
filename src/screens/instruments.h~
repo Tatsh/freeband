@@ -9,7 +9,7 @@ extern GLfloat selectedGradientY[], selectedGradientY_reset[];
 extern GLuint instSelection;
 extern tInstrument instrument;
 
-GLvoid handleInstrumentsMenu();
+GLvoid handleInstrumentMenu();
 GLvoid setInstrumentsImages_1P();
 GLvoid setInstrument(GLuint instSelection);
 GLvoid setInstrumentsText_1P();

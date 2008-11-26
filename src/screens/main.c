@@ -37,12 +37,12 @@ GLfloat text_Online_hl[4];
 GLfloat text_Options_hl[4];
 GLfloat text_Quit_hl[4];
 
+GLuint single, multiplayer, onlineM, optionsM, quit; /* Menu options */
 GLuint menuSelection = 0;
 
 tMenuState menuState;
 
 GLvoid handleMainMenu() {
-
   switch (menuSelection) {
 
     case 0:
@@ -59,9 +59,13 @@ GLvoid handleMainMenu() {
       currentScreen.mainMenu = loading = menuQuit = false;
       nonGame = false; /* We are not going to online mode, options menu, or going to quit */
       currentScreen.instruments = instrument.guitar = true; /* We set guitar to default selection, does not affect highlight */
+      break;
 
     case 1:
+#ifdef __DEBUG__
       fprintf(stdout, "Starting multiplayer mode.\n");
+#endif
+      nonGame = true; /* Until multiplayer is implemented */
       break;
 
     case 2:
@@ -92,11 +96,9 @@ GLvoid setMainMenuState(GLuint selectID) {
 
   switch(selectID) {
     case 0: /* Single player */
+      menuState.quit = false;
       menuState.single = true;
       menuState.multiplayer = false;
-      menuState.online = false;
-      menuState.options = false;
-      menuState.quit = false;
       for ( i = 0; i < 4; i++ ) { /* Highlight */
         text_Quit_hl[i] = colour_blue_7CA4F6[i]; /* From down arrow */
         text_Multiplayer_hl[i] = colour_blue_7CA4F6[i]; /* From up arrow */
@@ -110,6 +112,7 @@ GLvoid setMainMenuState(GLuint selectID) {
     case 1:  /* Multiplayer */
       menuState.single = false;
       menuState.multiplayer = true;
+      menuState.online = false;
       for ( i = 0; i < 4; i++ ) {
         text_SinglePlayer_hl[i] = colour_blue_7CA4F6[i];
         text_Online_hl[i] = colour_blue_7CA4F6[i];
@@ -121,9 +124,9 @@ GLvoid setMainMenuState(GLuint selectID) {
       break;
 
     case 2: /* Online */
-      menuState.single = false;
       menuState.multiplayer = false;
       menuState.online = true;
+      menuState.options = false;
       for ( i = 0; i < 4; i++ ) {
         text_Multiplayer_hl[i] = colour_blue_7CA4F6[i];
         text_Options_hl[i] = colour_blue_7CA4F6[i];
@@ -137,6 +140,7 @@ GLvoid setMainMenuState(GLuint selectID) {
     case 3: /* Options */
       menuState.online = false;
       menuState.options = true;
+      menuState.quit = false;
       for ( i = 0; i < 4; i++ ) {
         text_Online_hl[i] = colour_blue_7CA4F6[i];
         text_Quit_hl[i] = colour_blue_7CA4F6[i];
@@ -150,6 +154,7 @@ GLvoid setMainMenuState(GLuint selectID) {
     case 4: /* Quit */
       menuState.options = false;
       menuState.quit = true;
+      menuState.single = false;
       for ( i = 0; i < 4; i++ ) {
         text_Options_hl[i] = colour_blue_7CA4F6[i];
         text_SinglePlayer_hl[i] = colour_blue_7CA4F6[i];
@@ -192,22 +197,14 @@ GLvoid setMainImages() {
 }
 
 GLvoid setMainText() {
-  TTF_Font *font;
-  font = TTF_OpenFont(defaultFont, 72); /* 72 seems to be the best size for this font */
-  if (!font)
-    fprintf(stderr, "SDL_ttf: TTF_OpenFont() response: %s\n", TTF_GetError());
-  else {
-    GLuint single, multiplayer, online, options, quit;
-    
-    single = loadText("SINGLE PLAYER", font, white, 0); /* We ALMOST ALWAYS load text as white to start */
-    multiplayer = loadText("MULTIPLAYER", font, white, 1);
-    online = loadText("ONLINE", font, white, 2);
-    options = loadText("OPTIONS", font, white, 3);
-    quit = loadText("QUIT", font, white, 4); /* Currently a nasty artifact to the right */
-  }
-
-  if (font)
-    TTF_CloseFont(font); /* Clean up */
+  getFont(crilleei);
+  single = loadText("SINGLE PLAYER", crillee, white, 0); /* We ALMOST ALWAYS load text as white to start */
+  multiplayer = loadText("MULTIPLAYER", crillee, white, 1);
+  onlineM = loadText("ONLINE", crillee, white, 2);
+  optionsM = loadText("OPTIONS", crillee, white, 3);
+  quit = loadText("QUIT", crillee, white, 4); /* Currently a nasty artifact to the right */
+  if (crillee)
+    TTF_CloseFont(crillee);
 
   return;
 }
@@ -227,23 +224,23 @@ GLvoid screenMain() {
   
   /* Text positions */
   glColor4f(text_SinglePlayer_hl[0], text_SinglePlayer_hl[1], text_SinglePlayer_hl[2], text_SinglePlayer_hl[3]);
-  glBindTexture( GL_TEXTURE_2D, text[0] );
+  glBindTexture( GL_TEXTURE_2D, single );
   positionTexture(text_SinglePlayerX, text_SinglePlayerY, defVertexZ);
 
   glColor4f(text_Multiplayer_hl[0], text_Multiplayer_hl[1], text_Multiplayer_hl[2], text_Multiplayer_hl[3]);
-  glBindTexture( GL_TEXTURE_2D, text[1] );
+  glBindTexture( GL_TEXTURE_2D, multiplayer );
   positionTexture(text_MultiplayerX, text_MultiplayerY, defVertexZ);
 
   glColor4f(text_Online_hl[0], text_Online_hl[1], text_Online_hl[2], text_Online_hl[3]); 
-  glBindTexture( GL_TEXTURE_2D, text[2] );
+  glBindTexture( GL_TEXTURE_2D, onlineM );
   positionTexture(text_OnlineX, text_OnlineY, defVertexZ);
 
   glColor4f(text_Options_hl[0], text_Options_hl[1], text_Options_hl[2], text_Options_hl[3]);
-  glBindTexture( GL_TEXTURE_2D, text[3] );
+  glBindTexture( GL_TEXTURE_2D, optionsM );
   positionTexture(text_OptionsX, text_OptionsY, defVertexZ);
   
   glColor4f(text_Quit_hl[0], text_Quit_hl[1], text_Quit_hl[2], text_Quit_hl[3]);
-  glBindTexture( GL_TEXTURE_2D, text[4] );
+  glBindTexture( GL_TEXTURE_2D, quit );
   positionTexture(text_QuitX, text_QuitY, defVertexZ);
 
   return;

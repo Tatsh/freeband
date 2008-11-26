@@ -28,6 +28,9 @@ GLfloat stringGreenX[] = { 0.0f, 0.2f, 0.2f, 0.0f };
 GLfloat stringGreenY[] = { -3.5f, -3.5f, 2.0f, 2.0f };
 GLfloat stringVertexZ[] = { -1.6f, 0.6f, 0.6f, -1.6f };
 
+GLuint combo0, combo1, combo2, combo3, combo4, combo5, combo6, combo7, combo8, combo9; /* Combo numbers */
+GLuint score0, score1, score2, score3, score4, score5, score6, score7, score8, score9; /* Score numbers */
+
 tButton button;
 
 GLvoid loadGameTextures() {
@@ -50,38 +53,37 @@ GLvoid loadGameTextures() {
 }
 
 GLvoid loadGameText() {
-  TTF_Font *combo, *score;
-  score = TTF_OpenFont(freeSansFont, DEFAULT_TEXT_PT);
-  combo = TTF_OpenFont(bitstreamMonoBoldFont, DEFAULT_TEXT_PT);
-  if (!combo || !score)
-    fprintf(stderr, "SDL_ttf: TTF_OpenFont() response: %s\n", TTF_GetError());
-  else {
+  /* Combo numbers */
+  getFont(bitstreamMonoBoldi);
+  combo0 = loadText("0", bitstreamMonoBold, white, 10);
+  combo1 = loadText("1", bitstreamMonoBold, white, 11);
+  combo2 = loadText("2", bitstreamMonoBold, white, 12);
+  combo3 = loadText("3", bitstreamMonoBold, white, 13);
+  combo4 = loadText("4", bitstreamMonoBold, white, 14);
+  combo5 = loadText("5", bitstreamMonoBold, white, 15);
+  combo6 = loadText("6", bitstreamMonoBold, white, 16);
+  combo7 = loadText("7", bitstreamMonoBold, white, 17);
+  combo8 = loadText("8", bitstreamMonoBold, white, 18);
+  combo9 = loadText("9", bitstreamMonoBold, white, 19);
+  if (bitstreamMonoBold)
+    TTF_CloseFont(bitstreamMonoBold);
   
-    /* Prepare score for score */
-    loadText("0", score, white, 0);
-    loadText("1", score, white, 1);
-    loadText("2", score, white, 2);
-    loadText("3", score, white, 3);
-    loadText("4", score, white, 4);
-    loadText("5", score, white, 5);
-    loadText("6", score, white, 6);
-    loadText("7", score, white, 7);
-    loadText("8", score, white, 8);
-    loadText("9", score, white, 9);
+  /* Prepare score numbers */
+  getFont(freeSansBoldi);
+  score0 = loadText("0", freeSansBold, white, 0);
+  score1 = loadText("1", freeSansBold, white, 1);
+  score2 = loadText("2", freeSansBold, white, 2);
+  score3 = loadText("3", freeSansBold, white, 3);
+  score4 = loadText("4", freeSansBold, white, 4);
+  score5 = loadText("5", freeSansBold, white, 5);
+  score6 = loadText("6", freeSansBold, white, 6);
+  score7 = loadText("7", freeSansBold, white, 7);
+  score8 = loadText("8", freeSansBold, white, 8);
+  score9 = loadText("9", freeSansBold, white, 9);
+  if (freeSansBold)
+    TTF_CloseFont(freeSansBold);
   
-    /* Combo numbers */
-    loadText("0", combo, white, 10);
-    loadText("1", combo, white, 11);
-    loadText("2", combo, white, 12);
-    loadText("3", combo, white, 13);
-    loadText("4", combo, white, 14);
-    loadText("5", combo, white, 15);
-    loadText("6", combo, white, 16);
-    loadText("7", combo, white, 17);
-    loadText("8", combo, white, 18);
-    loadText("9", combo, white, 19);
-
-  }
+  return;
 }
 
 GLvoid screenGameBuffer() {
@@ -94,6 +96,7 @@ GLvoid screenGameBuffer() {
 GLvoid screenGame() {
   /* Generate track */
   glPushMatrix();
+  glTranslatef( 0.0f, 0.0f, -2.0f );
   glRotatef( 90.0f, 0.0f, 0.5f, 0.0f );
   if (bringDownAngle > 0.0f)
     glRotatef( bringDownAngle, 0.0, 0.0f, -1.0f );
@@ -111,84 +114,83 @@ GLvoid screenGame() {
   glPushMatrix(); /* Left bumper */
   if (bringDownAngle > 0.0f)
     glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-  glTranslatef( -0.5f, 0.5f, -2.0f );
+  glTranslatef( -0.511f, 0.5f, -4.0f );
   glColor4f( 0.5f, 0.5f, 0.5f, 1.0f );
   glBindTexture( GL_TEXTURE_2D, 0 );
-  gluCylinder( quadratic, 0.01f, 0.01f, 5.0f, 32, 32 );
+  gluCylinder( quadratic, 0.01f, 0.01f, 6.0f, 32, 32 );
   glPopMatrix();
 
   glPushMatrix(); /* Right bumper */
   if (bringDownAngle > 0.0f)
     glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-  glTranslatef( 0.5f, 0.5f, -2.0f );
+  glTranslatef( 0.511f, 0.5f, -4.0f );
   glColor4f( 0.5f, 0.5f, 0.5f, 1.0f );
-  gluCylinder( quadratic, 0.01f, 0.01f, 5.0f, 32, 32 );
+  gluCylinder( quadratic, 0.01f, 0.01f, 6.0f, 32, 32 );
   glPopMatrix();
   
   /* Strings */
   glPushMatrix(); /* 1 */
   if (bringDownAngle > 0.0f)
     glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-  glTranslatef( 0.0f, 0.0f, 0.8f);
   glBindTexture( GL_TEXTURE_2D, texture[4] );
+  glTranslatef( 0.0f, 0.0f, 0.58f);
   glBegin(GL_QUADS);
-  glTexCoord2f( 1.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -0.345f, 0.5f, -2.0f );
+  glTexCoord2f( 1.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f( -0.345f, 0.5f, -4.9f );
   glTexCoord2f( 1.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -0.345f, 0.5f,  0.52f );
   glTexCoord2f( 0.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -0.315f, 0.5f,  0.52f );
-  glTexCoord2f( 0.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -0.315f, 0.5f, -2.0f );
+  glTexCoord2f( 0.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f( -0.315f, 0.5f, -4.9f );
   glEnd();
   glPopMatrix();
   
   glPushMatrix(); /* 2 */
   if (bringDownAngle > 0.0f)
     glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-  glTranslatef( 0.0f, 0.0f, 0.8f);
+  glTranslatef( 0.0f, 0.0f, 0.58f);
   glBegin(GL_QUADS);
-  glTexCoord2f( 1.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -0.18f, 0.5f, -2.0f );
-  glTexCoord2f( 1.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -0.18f, 0.5f,  0.52f );
-  glTexCoord2f( 0.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -0.15f, 0.5f,  0.52f );
-  glTexCoord2f( 0.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -0.15f, 0.5f, -2.0f );
+    glTexCoord2f( 1.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f( -0.18f, 0.5f, -4.9f );
+    glTexCoord2f( 1.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -0.18f, 0.5f,  0.52f );
+    glTexCoord2f( 0.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -0.15f, 0.5f,  0.52f );
+    glTexCoord2f( 0.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f( -0.15f, 0.5f, -4.9f );
   glEnd();
   glPopMatrix();
   
   glPushMatrix(); /* 3 */
   if (bringDownAngle > 0.0f)
     glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-  glTranslatef( 0.0f, 0.0f, 0.8f);
-  glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+  glTranslatef( 0.0f, 0.0f, 0.58f);
   glBegin(GL_QUADS);
-    glTexCoord2f( 1.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -0.015f, 0.5f, -2.0f );
+    glTexCoord2f( 1.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f( -0.015f, 0.5f, -4.5f );
     glTexCoord2f( 1.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -0.015f, 0.5f,  0.52f );
     glTexCoord2f( 0.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f(  0.015f, 0.5f,  0.52f );
-    glTexCoord2f( 0.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f(  0.015f, 0.5f, -2.0f );
+    glTexCoord2f( 0.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f(  0.015f, 0.5f, -4.5f );
   glEnd();
   glPopMatrix();
   
   glPushMatrix(); /* 4 */
   if (bringDownAngle > 0.0f)
     glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-  glTranslatef( 0.0f, 0.0f, 0.8f);
+  glTranslatef( 0.0f, 0.0f, 0.58f);
   glBegin(GL_QUADS);
-    glTexCoord2f( 1.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( 0.15f, 0.5f, -2.0f );
+    glTexCoord2f( 1.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f( 0.15f, 0.5f, -4.9f );
     glTexCoord2f( 1.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( 0.15f, 0.5f,  0.52f );
     glTexCoord2f( 0.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( 0.18f, 0.5f,  0.52f );
-    glTexCoord2f( 0.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( 0.18f, 0.5f, -2.0f );
+    glTexCoord2f( 0.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f( 0.18f, 0.5f, -4.9f );
   glEnd();
   glPopMatrix();
   
   glPushMatrix(); /* 5 */
   if (bringDownAngle > 0.0f)
     glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-  glTranslatef( 0.0f, 0.0f, 0.8f);
+  glTranslatef( 0.0f, 0.0f, 0.58f);
   glBegin(GL_QUADS);
-  glTexCoord2f( 1.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( 0.315f, 0.5f, -2.0f );
-  glTexCoord2f( 1.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( 0.315f, 0.5f,  0.52f );
-  glTexCoord2f( 0.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( 0.345f, 0.5f,  0.52f );
-  glTexCoord2f( 0.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( 0.345f, 0.5f, -2.0f );
+    glTexCoord2f( 1.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f( 0.315f, 0.5f, -4.9f );
+    glTexCoord2f( 1.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( 0.315f, 0.5f,  0.52f );
+    glTexCoord2f( 0.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( 0.345f, 0.5f,  0.52f );
+    glTexCoord2f( 0.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f( 0.345f, 0.5f, -4.9f );
   glEnd();
   glPopMatrix();
   
-  if (bringDownAngle < 0.0f) { /* Only load after track, etc has been placed down entirely */
+  if (bringDownAngle < 0.0f) { /* Only load buttons, etc after has been placed down entirely */
     /* Buttons */
     glPushMatrix(); /* Green */
     glTranslatef( -0.287, 0.35f, 1.64f );

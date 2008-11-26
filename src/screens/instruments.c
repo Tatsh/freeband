@@ -2,6 +2,7 @@
 #include "../graphics/graphics.h"
 #include "instruments.h"
 #include "main.h"
+#include "songs.h"
 
 char instCanvas[] = "GameData/themes/default/screenInstruments/canvas.png";
 char selectedGradient[] = "GameData/themes/default/screenInstruments/selectedgrad.png";
@@ -38,6 +39,48 @@ GLfloat degree = 0.0f;
 GLuint instSelection = 0; /* Guitar */
 
 tInstrument instrument;
+
+GLvoid handleInstrumentsMenu() {
+  switch(instSelection) {
+    case 0:
+#ifdef __DEBUG__
+      fprintf(stdout, "Starting %d player guitar game.\n", nPlayers);
+#endif
+      break;
+      
+    case 1:
+#ifdef __DEBUG__
+      fprintf(stdout, "Starting %d player bass game.\n", nPlayers);
+#endif      
+      break;
+      
+    case 2:
+#ifdef __DEBUG__
+      fprintf(stdout, "Starting %d player drums game.\n", nPlayers);
+#endif
+      break;
+      
+    case 3:
+#ifdef __DEBUG__
+      fprintf(stdout, "Starting %d player vocals game.\n", nPlayers);
+#endif
+      break;
+      
+    default:
+      break;
+  }
+
+  menuQuit = true;
+  loading = true;
+  clearScreen();
+#ifdef __DEBUG__
+  fprintf(stdout, "Deleted all screenInstruments elements.\nLoading screenSongs elements...\n");
+#endif
+  currentScreen.instruments = loading = menuQuit = false;
+  currentScreen.songs = true;
+
+  return;
+}
 
 GLvoid setInstrument(GLuint instSelection) {
   GLuint i;
@@ -125,27 +168,21 @@ GLvoid setInstrumentsImages_1P() {
 }
 
 GLvoid setInstrumentsText_1P() {
-  TTF_Font *font, *instFont;
-  font = TTF_OpenFont(defaultFont, DEFAULT_TEXT_PT); /* 72 seems to be the best size for this font */
-  instFont = TTF_OpenFont(bitstreamFont, DEFAULT_TEXT_PT);
-  if (!font)
-    fprintf(stderr, "SDL_ttf: TTF_OpenFont() response: %s\n", TTF_GetError());
-  else if (!instFont)
-    fprintf(stderr, "SDL_ttf: TTF_OpenFont() response: %s\n", TTF_GetError());
-  else {
-    GLuint guitar, bass, drums, vocals;
-    GLuint selectInstrument;
+  GLuint text_guitar, text_bass, text_drums, text_vocals;
+  GLuint text_selectInstrument;
     
-    guitar = loadText("GUITAR", instFont, white, 0);
-    bass = loadText("BASS", instFont, white, 1);
-    drums = loadText("DRUMS", instFont, white, 2);
-    vocals = loadText("VOCALS", instFont, white, 3);
+    getFont(bitstreami);
+    text_guitar = loadText("GUITAR", bitstream, white, 0);
+    text_bass = loadText("BASS", bitstream, white, 1);
+    text_drums = loadText("DRUMS", bitstream, white, 2);
+    text_vocals = loadText("VOCALS", bitstream, white, 3);
+    if (bitstream)
+      TTF_CloseFont(bitstream);
     
-    selectInstrument = loadText("SELECT INSTRUMENT", font, white, 4);
-  }
-    
-  if (font)
-    TTF_CloseFont(font); /* Clean up */
+    getFont(crilleei);
+    text_selectInstrument = loadText("SELECT INSTRUMENT", crillee, white, 4);
+    if (crillee)
+      TTF_CloseFont(crillee); /* Clean up */
   
   return;
 }

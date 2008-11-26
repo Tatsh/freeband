@@ -3,11 +3,11 @@
 extern bool menuQuit;
 extern bool loading; /* Whether or not we are buffering textures */
 
-extern char defaultFont[];
-extern char bitstreamFont[];
-extern char bitstreamMonoBoldFont[];
-extern char freeSansFont[];
-extern char freeSansBoldFont[];
+extern char crilleePath[];
+extern char bitstreamPath[];
+extern char bitstreamMonoBoldPath[];
+extern char freeSansPath[];
+extern char freeSansBoldPath[];
 
 extern GLfloat buttonColour_green[];
 extern GLfloat buttonColour_red[];
@@ -34,6 +34,7 @@ GLuint loadTexture(const char *filename, GLuint index);
 
 GLvoid clearScreen();
 GLvoid drawFreeband();
+GLvoid getFont(GLuint font);
 GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ);
 GLvoid setupColors();
 

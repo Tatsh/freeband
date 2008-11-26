@@ -20,12 +20,30 @@ GLuint nPlayers; /* Number of players */
 GLuint texture[MAX_IMAGES]; /* Normal images */
 GLuint text[MAX_TEXT]; /* Text only! */
 
+SDL_Event freeband;     /* Event collector */
 SDL_Surface *fbSurface; /* Main game surface */
+SDL_Joystick *joy;      /* Space for controllers */
 
 tCurrentScreen currentScreen; /* The current screen */
 
+GLuint crilleei = 0; /* Crillee */
+GLuint bitstreami = 1; /* Bitstream Vera Sans */
+GLuint bitstreamMonoBoldi = 2; /* Bitstream Vera Mono Bold */
+GLuint freeSansi = 3; /* FreeSans */
+GLuint freeSansBoldi = 4; /* FreeSans Bold */
+
+TTF_Font *crillee, *bitstream, *bitstreamMonoBold, *freeSans, *freeSansBold;
+
 GLvoid quitGame(GLint retnCode) {
+  GLuint i;
+
   glDeleteTextures( MAX_IMAGES, &texture[0] );
+
+  for ( i = 0; i < 3; i++ ) {
+    if(SDL_JoystickOpened(i))
+      SDL_JoystickClose(joy);
+  }
+
   TTF_Quit();
   SDL_Quit();     /* Clean window */
 #ifdef __DEBUG__
@@ -36,29 +54,45 @@ GLvoid quitGame(GLint retnCode) {
 
 GLint main(GLint argc, char *argv[]) {
   GLuint i;
-  for (i = 0; i < 10; i++)
-    texture[i] = -1;
-  
-  /* GLUT */
-  glutInit(&argc, argv);
+  for (i = 0; i < MAX_IMAGES; i++) texture[i] = -1;
+  for (i = 0; i < MAX_TEXT; i++) text[i] = -1;
+
+  alutInit(&argc, argv);  /* ALUT */
+  glutInit(&argc, argv);  /* GLUT */
   
   int videoFlags;                   /* Flags to send to SDL */
   bool hasQuit = false;             /* Main game loop variable */
-  SDL_Event freeband;               /* Event collector */
 
   const SDL_VideoInfo *videoInfo;   /* Holds info about current display */
-
+  
   /* Initialise SDL */
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     fprintf(stderr, "Video initialisation failed: %s.\n", SDL_GetError());
     quitGame(1);
   }
   
+  /* Initialise SDL joystick subsystem */
+  SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+  SDL_JoystickEventState(SDL_ENABLE);
+  if(SDL_NumJoysticks() > 0) { /* This only checks for 1 joystick */
+    joy=SDL_JoystickOpen(0);
+    if(joy) {
+      fprintf(stdout, "Found joystick at port %d\n", 0);
+      fprintf(stdout, "Name: %s\n", SDL_JoystickName(0));
+      fprintf(stdout, "# of Axes: %d\n", SDL_JoystickNumAxes(joy));
+      fprintf(stdout, "# of Buttons: %d\n", SDL_JoystickNumButtons(joy));
+      fprintf(stdout, "# of Balls: %d\n", SDL_JoystickNumBalls(joy));
+    }
+    else
+      printf("There is no joystick at port %d\n", 0);
+  }
+
+  /* Initialise SDL_ttf */
   if(TTF_Init() < 0) {
     fprintf(stderr, "Could not initialise SDL_ttf: %s.\n", TTF_GetError());
     quitGame(1);
   }
-  
+
   videoInfo = SDL_GetVideoInfo(); /* Get video information */
   if (!videoInfo) {
     fprintf(stderr, "Video query failed: %s.\n", SDL_GetError());
@@ -135,9 +169,26 @@ GLint main(GLint argc, char *argv[]) {
             gameKeys(&freeband.key.keysym, fbSurface, nPlayers);
           break;
 
-          case SDL_KEYUP: /* Handle key up event */
-            gameKeys(&freeband.key.keysym, fbSurface, nPlayers);
-            break;
+        case SDL_KEYUP:
+          gameKeys(&freeband.key.keysym, fbSurface, nPlayers);
+          break;
+
+#ifdef __XBOX360XPLORER__
+        case SDL_JOYBUTTONDOWN: /* Xbox 360 controller only; non-production code! */
+        case SDL_JOYBUTTONUP: /* This works ONLY if you have the xboxdrv-linux user-space driver running! */
+          if (currentScreen.game) {
+            button.g = SDL_JoystickGetButton(joy, 7);
+            button.r = SDL_JoystickGetButton(joy, 8);
+            button.y = SDL_JoystickGetButton(joy, 9);
+            button.b = SDL_JoystickGetButton(joy, 10);
+            button.o = SDL_JoystickGetButton(joy, 11);
+          }
+          break;
+
+        /*case SDL_JOYAXISMOTION:
+          printf("jaxis: which=%u axis=%u value=%d\n", freeband.jaxis.which, freeband.jaxis.axis, freeband.jaxis.value);
+          break;*/
+#endif
 
         case SDL_QUIT: /* Only allow to exit via ^C or close button if at main menu */
           if (currentScreen.mainMenu)

@@ -1,0 +1,46 @@
+<!-- Freeband song format DTD
+  NOTE: Changing parts of this, such as the note timings, will NOT affect Freeband functionality. This file is for validation purposes ONLY. -->
+
+<!ELEMENT freebandNotes (artist, title, album*, tier, bpm, gap, samplestart, samplelength, guitar*, bass*, drums*, vocals*, bgm*, notes*, lyrics)>
+
+<!-- Song information -->
+<!ELEMENT artist (#PCDATA)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT album (#PCDATA)>
+<!ELEMENT tier (#PCDATA)>
+<!ELEMENT bpm (#PCDATA)>
+<!ELEMENT gap (#PCDATA)>
+<!ATTLIST gap type (ms|s) "ms">
+<!ELEMENT samplestart (#PCDATA)>
+<!ATTLIST samplestart type (ms|s) "s">
+<!ELEMENT samplelength (#PCDATA)>
+<!ATTLIST samplelength type (ms|s) "s">
+
+<!-- Sound files -->
+<!ELEMENT guitar (#PCDATA)>
+<!ELEMENT bass (#PCDATA)>
+<!ELEMENT drums (#PCDATA)>
+<!ELEMENT vocals (#PCDATA)>
+<!ELEMENT bgm (#PCDATA)>
+
+<!-- Notes -->
+<!ELEMENT notes (#PCDATA|gr|fth|tfth|sth|tfrth|tsnd|sfth|tr|f|h|p|w)*>
+<!ATTLIST notes type (guitar|bass|drums|vocals) #REQUIRED>
+<!ATTLIST notes difficulty (easy|medium|hard|expert) #REQUIRED>
+<!ELEMENT gr (#PCDATA|fth|tfth|sth|tfrth|tsnd|sfth|tr|f|h|p|w)*> <!-- grouped notes -->
+<!ELEMENT fth (#PCDATA|gr|tfth|sth|tfrth|tsnd|sfth|tr|f|h|p|w)*> <!-- quarter notes -->
+<!ELEMENT tfth (#PCDATA|gr|fth|sth|tfrth|tsnd|sfth|tr|f|h|p|w)*> <!-- 12th notes -->
+<!ELEMENT sth (#PCDATA|gr|fth|tfth|tfrth|tsnd|sfth|tr|f|h|p|w)*> <!-- 16th notes -->
+<!ELEMENT tfrth (#PCDATA|gr|fth|tfth|sth|tsnd|sfth|tr|f|h|p|w)*> <!-- 24th notes -->
+<!ELEMENT tsnd (#PCDATA|gr|fth|tfth|sth|tfrth|sfth|tr|f|h|p|w)*> <!-- 32nd notes -->
+<!ELEMENT sfth (#PCDATA|gr|fth|tfth|sth|tfrth|tsnd|tr|f|h|p|w)*> <!-- 64th notes -->
+<!ELEMENT tr (#PCDATA|gr|fth|tfth|sth|tfrth|tsnd|sfth|f|h|p|w)*> <!-- triplets, which can be within any of the above -->
+<!ELEMENT f (#PCDATA|gr|fth|tfth|sth|tfrth|tsnd|sfth|tr|h|p|w)*> <!-- freeze notes -->
+<!ELEMENT h (#PCDATA|gr|fth|tfth|sth|tfrth|tsnd|sfth|tr|f|p|w)*> <!-- hammer on -->
+<!ELEMENT p (#PCDATA|gr|fth|tfth|sth|tfrth|tsnd|sfth|tr|f|h|w)*> <!-- energy/star power -->
+<!ELEMENT w (#PCDATA)> <!-- wail (from GFDM), which is always 1 note, so it may not have anything between -->
+
+<!-- Lyrics -->
+<!ELEMENT lyrics (tone*)>
+<!ELEMENT tone (#PCDATA)>
+<!ATTLIST tone note CDATA #REQUIRED>

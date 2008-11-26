@@ -3,11 +3,11 @@
 extern bool menuQuit;
 extern bool loading; /* Whether or not we are buffering textures */
 
-extern char defaultFont[];
-extern char bitstreamFont[];
-extern char bitstreamMonoBoldFont[];
-extern char freeSansFont[];
-extern char freeSansBoldFont[];
+extern char crilleePath[];
+extern char bitstreamPath[];
+extern char bitstreamMonoBoldPath[];
+extern char freeSansPath[];
+extern char freeSansBoldPath[];
 
 extern GLfloat buttonColour_green[];
 extern GLfloat buttonColour_red[];
@@ -26,6 +26,7 @@ extern GLUquadricObj *quadratic;
 extern SDL_Color yellow;
 extern SDL_Color white;
 
+bool getFont(GLuint font);
 bool initGL();
 bool resizeWindow(GLuint width, GLuint height);
 
