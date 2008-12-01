@@ -11,8 +11,6 @@ GLfloat NE_coord_neg = 0.0f;
 GLfloat NE_coord_pos = 1.0f;
 
 char buttonT[] = "GameData/themes/default/screenGame/button.png";
-char button_pressed[] = "GameData/themes/default/screenGame/button_pressed.png";
-char button_top[] = "GameData/themes/default/screenGame/button_top.png";
 char string[] = "GameData/themes/default/screenGame/string.png";
 char trackloop_a[] = "GameData/themes/default/screenGame/loop_a.png";
 
@@ -159,10 +157,10 @@ GLvoid screenGame() {
     glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
   glTranslatef( 0.0f, 0.0f, 0.58f);
   glBegin(GL_QUADS);
-    glTexCoord2f( 1.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f( -0.015f, 0.5f, -4.8f );
+    glTexCoord2f( 1.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f( -0.015f, 0.5f, -4.5f );
     glTexCoord2f( 1.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -0.015f, 0.5f,  0.52f );
     glTexCoord2f( 0.0f, 0.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f(  0.015f, 0.5f,  0.52f );
-    glTexCoord2f( 0.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f(  0.015f, 0.5f, -4.8f );
+    glTexCoord2f( 0.0f, 1.0f ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f(  0.015f, 0.5f, -4.5f );
   glEnd();
   glPopMatrix();
   

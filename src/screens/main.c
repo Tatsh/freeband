@@ -19,17 +19,15 @@ char mainSelector[] = "GameData/themes/default/screenStart/selector.png";
 GLfloat logoVertexX[] = { -1.25f, -1.25f, 1.26f, 1.26f }; /* Logo position */
 GLfloat logoVertexY[] = {  -1.0f,   0.0f,  0.0f, -1.0f };
 GLfloat mSelectorAlpha = 0.3f;
-GLfloat mSelectorVertexX[] = { 0.0f, 0.0f, 1.3f, 1.3f }; /* Main menu selector's default position */
+GLfloat mSelectorVertexX[4]; /* Main menu selector's default position */
 GLfloat mSelectorVertexY[] = {  0.18f, 0.0f, 0.0f, 0.18f };
 
-/* Text positions, all are false italic. These take FOREVER!
-   There is NO way to calculate these for now, all depends on mechanics of the font, specific to EVERY font */
-GLfloat text_SinglePlayerX[] = { 0.09f, 0.07f, 1.22f, 1.24f }; /* SINGLE PLAYER */
+GLfloat text_SinglePlayerX[4]; /* SINGLE PLAYER */
 GLfloat text_SinglePlayerY[4];
-GLfloat text_MultiplayerX[]  = { 0.11f, 0.09f, 1.18f, 1.2f }; /* MULTIPLAYER */
-GLfloat text_OnlineX[] = { 0.36f, 0.34f, 0.94f, 0.96f }; /* ONLINE */
-GLfloat text_OptionsX[] = { 0.28f, 0.26f, 0.98f, 1.0f };
-GLfloat text_QuitX[] = { 0.40f, 0.38f, 0.8f, 0.82f };
+GLfloat text_MultiplayerX[4]; /* MULTIPLAYER */
+GLfloat text_OnlineX[4]; /* ONLINE */
+GLfloat text_OptionsX[4]; /* OPTIONS */
+GLfloat text_QuitX[4]; /* QUIT */
 
 GLfloat text_SinglePlayer_hl[4];
 GLfloat text_Multiplayer_hl[4];
@@ -37,6 +35,7 @@ GLfloat text_Online_hl[4];
 GLfloat text_Options_hl[4];
 GLfloat text_Quit_hl[4];
 
+GLuint bg, logo, selectG; /* Textures; must be called selectG thanks to Gentoo defining select randomly elsewhere this links to */
 GLuint single, multiplayer, onlineM, optionsM, quit; /* Menu options */
 GLuint menuSelection = 0;
 
@@ -173,7 +172,7 @@ GLvoid setMainMenuState(GLuint selectID) {
 }
 
 GLvoid setMainImages() {
-  GLuint i = 0;
+  GLuint i;
 
   /* Set 'SINGLE PLAYER' to be highlighted */
   for ( i = 0; i < 4; i++ ) {
@@ -184,64 +183,90 @@ GLvoid setMainImages() {
     text_Quit_hl[i] = colour_blue_7CA4F6[i];
   }
   
-  if ((texture[0] = loadTexture(bgTexture, 0)) == -1)
+  if ((bg = loadTexture(bgTexture, 0)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
 
-  if ((texture[1] = loadTexture(logoTexture, 1)) == -1)
+  if ((logo = loadTexture(logoTexture, 1)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", logoTexture);
   
-  if ((texture[2] = loadTexture(mainSelector, 2)) == -1)
+  if ((selectG = loadTexture(mainSelector, 2)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", mainSelector);
+  for ( i = 0; i < 2; i++ ) mSelectorVertexX[i] = centreAt(0.6f, scaleTextureWidth(400, 52, 0.18f));
+  for ( i = 2; i < 4; i++ ) mSelectorVertexX[i] = mSelectorVertexX[i-2] + scaleTextureWidth(400, 52, 0.18f);
   
   return;
 }
 
 GLvoid setMainText() {
+  GLuint i;
+  GLfloat width;
+  
   getFont(crilleei);
-  single = loadText("SINGLE PLAYER", crillee, white, 0); /* We ALMOST ALWAYS load text as white to start */
+  single = loadText("SINGLE PLAYER", crillee, white, 0); /* Always load text as white; change using glColor4f */
+  width = scaleTextureWidth(545, 96, MENUITEMSHT); /* Get these values from stdout */
+  for ( i = 0; i < 2; i++ ) text_SinglePlayerX[i] = centreAt(0.6f, width);
+  for ( i = 2; i < 4; i++ ) text_SinglePlayerX[i] = text_SinglePlayerX[i-2] + width;
+  
   multiplayer = loadText("MULTIPLAYER", crillee, white, 1);
+  for ( i = 0; i < 2; i++ ) text_MultiplayerX[i] = centreAt(0.6f, scaleTextureWidth(489, 96, MENUITEMSHT));
+  for ( i = 2; i < 4; i++ ) text_MultiplayerX[i] = text_MultiplayerX[i-2] + scaleTextureWidth(489, 96, MENUITEMSHT);
+  
   onlineM = loadText("ONLINE", crillee, white, 2);
+  for ( i = 0; i < 2; i++ ) text_OnlineX[i] = centreAt(0.6f, scaleTextureWidth(266, 96, MENUITEMSHT));
+  for ( i = 2; i < 4; i++ ) text_OnlineX[i] = text_OnlineX[i-2] + scaleTextureWidth(266, 96, MENUITEMSHT);
+  
   optionsM = loadText("OPTIONS", crillee, white, 3);
-  quit = loadText("QUIT", crillee, white, 4); /* Currently a nasty artifact to the right */
+  for ( i = 0; i < 2; i++ ) text_OptionsX[i] = centreAt(0.6f, scaleTextureWidth(311, 96, MENUITEMSHT));
+  for ( i = 2; i < 4; i++ ) text_OptionsX[i] = text_OptionsX[i-2] + scaleTextureWidth(311, 96, MENUITEMSHT);
+  
+  quit = loadText("QUIT", crillee, white, 4);
+  for ( i = 0; i < 2; i++ ) text_QuitX[i] = centreAt(0.6f, scaleTextureWidth(168, 96, MENUITEMSHT));
+  for ( i = 2; i < 4; i++ ) text_QuitX[i] = text_QuitX[i-2] + scaleTextureWidth(168, 96, MENUITEMSHT);
+  
   if (crillee)
     TTF_CloseFont(crillee);
 
   return;
 }
 
-GLvoid screenMain() {
+GLvoid screenMain() {  
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-  glBindTexture( GL_TEXTURE_2D, texture[0] );
+  glBindTexture( GL_TEXTURE_2D, bg );
   positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
 
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-  glBindTexture( GL_TEXTURE_2D, texture[1] );
+  glBindTexture( GL_TEXTURE_2D, logo );
   positionTexture(logoVertexX, logoVertexY, defVertexZ);
 
   glColor4f(1.0, 1.0f, 1.0f, mSelectorAlpha);
-  glBindTexture( GL_TEXTURE_2D, texture[2] ); /* Use selector's default position */
+  glBindTexture( GL_TEXTURE_2D, selectG ); /* Use selector's default position */
   positionTexture(mSelectorVertexX, mSelectorVertexY, defVertexZ);
   
   /* Text positions */
-  glColor4f(text_SinglePlayer_hl[0], text_SinglePlayer_hl[1], text_SinglePlayer_hl[2], text_SinglePlayer_hl[3]);
-  glBindTexture( GL_TEXTURE_2D, single );
-  positionTexture(text_SinglePlayerX, text_SinglePlayerY, defVertexZ);
-
-  glColor4f(text_Multiplayer_hl[0], text_Multiplayer_hl[1], text_Multiplayer_hl[2], text_Multiplayer_hl[3]);
-  glBindTexture( GL_TEXTURE_2D, multiplayer );
-  positionTexture(text_MultiplayerX, text_MultiplayerY, defVertexZ);
-
-  glColor4f(text_Online_hl[0], text_Online_hl[1], text_Online_hl[2], text_Online_hl[3]); 
-  glBindTexture( GL_TEXTURE_2D, onlineM );
-  positionTexture(text_OnlineX, text_OnlineY, defVertexZ);
-
-  glColor4f(text_Options_hl[0], text_Options_hl[1], text_Options_hl[2], text_Options_hl[3]);
-  glBindTexture( GL_TEXTURE_2D, optionsM );
-  positionTexture(text_OptionsX, text_OptionsY, defVertexZ);
+  glPushMatrix(); {
+    glTranslatef(0.0f, -0.017f, 0.0f);
   
-  glColor4f(text_Quit_hl[0], text_Quit_hl[1], text_Quit_hl[2], text_Quit_hl[3]);
-  glBindTexture( GL_TEXTURE_2D, quit );
-  positionTexture(text_QuitX, text_QuitY, defVertexZ);
+    glColor4f(text_SinglePlayer_hl[0], text_SinglePlayer_hl[1], text_SinglePlayer_hl[2], text_SinglePlayer_hl[3]);
+    glBindTexture( GL_TEXTURE_2D, single );
+    positionTexture(text_SinglePlayerX, text_SinglePlayerY, defVertexZ);
+    
+    glColor4f(text_Multiplayer_hl[0], text_Multiplayer_hl[1], text_Multiplayer_hl[2], text_Multiplayer_hl[3]);
+    glBindTexture( GL_TEXTURE_2D, multiplayer );
+    positionTexture(text_MultiplayerX, text_MultiplayerY, defVertexZ);
+
+    glColor4f(text_Online_hl[0], text_Online_hl[1], text_Online_hl[2], text_Online_hl[3]); 
+    glBindTexture( GL_TEXTURE_2D, onlineM );
+    positionTexture(text_OnlineX, text_OnlineY, defVertexZ);
+
+    glColor4f(text_Options_hl[0], text_Options_hl[1], text_Options_hl[2], text_Options_hl[3]);
+    glBindTexture( GL_TEXTURE_2D, optionsM );
+    positionTexture(text_OptionsX, text_OptionsY, defVertexZ);
+  
+    glColor4f(text_Quit_hl[0], text_Quit_hl[1], text_Quit_hl[2], text_Quit_hl[3]);
+    glBindTexture( GL_TEXTURE_2D, quit );
+    positionTexture(text_QuitX, text_QuitY, defVertexZ);
+  }
+  glPopMatrix();
 
   return;
 }

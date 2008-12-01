@@ -66,7 +66,7 @@ bool initGL() {
 }
 
 bool resizeWindow(GLuint width, GLuint height) {
-  GLfloat ratio; /* Height/width ration */
+  GLfloat ratio; /* Height/width ratio */
 
   if (height == 0)  /* Protect against a divide by zero */
     height = 1;
@@ -80,6 +80,37 @@ bool resizeWindow(GLuint width, GLuint height) {
   glLoadIdentity(); /* Reset the view */
 
   return true;
+}
+
+GLfloat centreAt(GLfloat xyz, GLfloat width) {
+  GLfloat offset;
+
+  offset = (width / 2.0f) - xyz;
+
+  if ((offset < 0.0f && xyz > 0.0f) || (width >= (xyz * 2)))
+    return -offset;
+  else
+    return offset;
+}
+
+/* These scaling functions have nothing to do with below loading functions
+   Use only when you know the image's original dimensions; this helps with theming; more functionality later
+   This is also useful for text, specify any height or width (in pixels) and get the correct corresponding width or height for an
+     texture */
+GLfloat scaleTextureHeight(GLuint pWidth, GLuint pHeight, GLfloat destWidth) {
+  GLfloat destHeight;
+  
+  destHeight = ((GLfloat)pHeight / (GLfloat)pWidth) * destWidth;
+  
+  return destWidth;
+}
+
+GLfloat scaleTextureWidth(GLuint pWidth, GLuint pHeight, GLfloat destHeight) {
+  GLfloat destWidth;
+  
+  destWidth = ((GLfloat)pWidth / (GLfloat)pHeight) * destHeight;
+  
+  return destWidth;
 }
 
 GLuint loadText(char *input, TTF_Font *font, SDL_Color color, GLuint index) {
@@ -101,7 +132,7 @@ GLuint loadText(char *input, TTF_Font *font, SDL_Color color, GLuint index) {
   }
 
 #ifdef __DEBUG__
-  /* Print good AR */
+  /* Print good AR, for theming purposes only */
   GLfloat ar, arinv;
   ar = (GLfloat)textTexture->w / (GLfloat)textTexture->h;
   arinv = 1.000f / ar;
@@ -259,17 +290,17 @@ GLvoid drawFreeband() {
     screenInstruments(nPlayers);
   else if (currentScreen.songs && !menuQuit)
     screenSongs();
-  else if (currentScreen.game && gamePaused != true)
+  else if (currentScreen.game && !gamePaused)
     screenGame();
 
   SDL_GL_SwapBuffers();
 
-#ifdef __DEBUG__
   /* Gather our frames per second */
-  static GLint T0     = 0;
-  static GLint Frames = 0;
-  GLint t = SDL_GetTicks();
+  static GLuint Frames = 0;
   Frames++;
+#ifdef __DEBUG__
+  static GLuint T0     = 0;
+  GLuint t = SDL_GetTicks();
   if (t - T0 >= 5000) {
     GLfloat seconds = (t - T0) / 1000.0;
     GLfloat fps = Frames / seconds;

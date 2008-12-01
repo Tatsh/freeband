@@ -1,5 +1,7 @@
-#define SELECTSRC_ALPHA 0.3
-#define SELECTDST_ALPHA 0.6
+#define MENUITEMSHT 0.21f
+
+#define SELECTSRC_ALPHA 0.3f
+#define SELECTDST_ALPHA 0.6f
 
 typedef struct {
   bool single; /* This does NOT affect the initial position of the selector */

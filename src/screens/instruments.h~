@@ -1,3 +1,5 @@
+#define INSTITEMHT 0.2f
+
 typedef struct {
   bool guitar;
   bool bass;
@@ -9,7 +11,7 @@ extern GLfloat selectedGradientY[], selectedGradientY_reset[];
 extern GLuint instSelection;
 extern tInstrument instrument;
 
-GLvoid handleInstrumentMenu();
+GLvoid handleInstrumentsMenu();
 GLvoid setInstrumentsImages_1P();
 GLvoid setInstrument(GLuint instSelection);
 GLvoid setInstrumentsText_1P();

@@ -13,7 +13,8 @@ bool menuQuit;
 
 char windowTitle[] = "Freeband";
 
-GLfloat text_SinglePlayerY[] = { -0.035f, 0.20f, 0.20f, -0.035f }; /* 'Single Player' text's default position */
+/*GLfloat text_SinglePlayerY[] = { -0.035f, 0.20f, 0.20f, -0.035f };*/ /* 'Single Player' text's default position */
+GLfloat text_SinglePlayerY[] = { 0.0f, MENUITEMSHT, MENUITEMSHT, 0.0f };
 GLfloat text_MultiplayerY[4], text_OnlineY[4], text_OptionsY[4], text_QuitY[4];
 
 GLuint nPlayers; /* Number of players */
@@ -38,6 +39,8 @@ GLvoid quitGame(GLint retnCode) {
   GLuint i;
 
   glDeleteTextures( MAX_IMAGES, &texture[0] );
+  glDeleteTextures( MAX_TEXT, &text[0] );
+  gluDeleteQuadric( quadratic );
 
   for ( i = 0; i < 3; i++ ) {
     if(SDL_JoystickOpened(i))

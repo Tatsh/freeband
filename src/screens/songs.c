@@ -5,7 +5,9 @@
 
 /* Order of corners: top-left, bottom-left, bottom-right, top-right */
 GLfloat text_songsX[] = { 0.0f, 0.0f, 0.8f, 0.8f };
-GLfloat text_songsY[] = { 0.0f, 0.318f, 0.318f, 0.0f };
+GLfloat text_songsY[] = { 0.0f, SCREENHEADTEXTHT, SCREENHEADTEXTHT, 0.0f };
+GLfloat text_byTierX[] = { 0.0f, 0.0, 0.417f, 0.417f };
+GLfloat text_byTierY[] = { 0.0f, 0.2f, 0.2, 0.0f };
 
 GLuint bg;
 GLuint text_songs, text_byTier, text_titleAZ, text_artistAZ, text_byBPM;
@@ -44,6 +46,12 @@ GLvoid screenSongs() {
   glTranslatef(-0.4f, -1.05f, 0.0f);
   glBindTexture( GL_TEXTURE_2D, text_songs );
   positionTexture(text_songsX, text_songsY, defVertexZ);
+  glPopMatrix();
+  
+  glPushMatrix();
+  glColor4f(colour_blue_7CA4F6[0], colour_blue_7CA4F6[1], colour_blue_7CA4F6[2], 1.0f);
+  glBindTexture( GL_TEXTURE_2D, text_byTier );
+  positionTexture(text_byTierX, text_byTierY, defVertexZ);
   glPopMatrix();
   
   return;

@@ -21,6 +21,7 @@ extern GLfloat defVertexZ[];            /* All flat facing user textures use thi
 extern GLfloat fillBGVertexX[];         /* 'Fill entire background' position */
 extern GLfloat fillBGVertexY[];
 extern GLfloat offscreenVertexXY[];
+
 extern GLUquadricObj *quadratic;
 
 extern SDL_Color yellow;
@@ -28,6 +29,10 @@ extern SDL_Color white;
 
 bool initGL();
 bool resizeWindow(GLuint width, GLuint height);
+
+GLfloat centreAt(GLfloat xyz, GLfloat width);
+GLfloat scaleTextureHeight(GLuint pWidth, GLuint pHeight, GLfloat destWidth);
+GLfloat scaleTextureWidth(GLuint pWidth, GLuint pHeight, GLfloat destHeight);
 
 GLuint loadText(char *input, TTF_Font *font, SDL_Color color, GLuint index);
 GLuint loadTexture(const char *filename, GLuint index);

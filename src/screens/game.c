@@ -11,8 +11,6 @@ GLfloat NE_coord_neg = 0.0f;
 GLfloat NE_coord_pos = 1.0f;
 
 char buttonT[] = "GameData/themes/default/screenGame/button.png";
-char button_pressed[] = "GameData/themes/default/screenGame/button_pressed.png";
-char button_top[] = "GameData/themes/default/screenGame/button_top.png";
 char string[] = "GameData/themes/default/screenGame/string.png";
 char trackloop_a[] = "GameData/themes/default/screenGame/loop_a.png";
 
@@ -39,12 +37,6 @@ GLvoid loadGameTextures() {
   
   if ((texture[1] = loadTexture(buttonT, 1)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", buttonT);
-  
-  if ((texture[2] = loadTexture(button_pressed, 2)) == -1)
-    fprintf(stderr, "Unable to load texture: %s.\n", button_pressed);
-  
-  if ((texture[3] = loadTexture(button_top, 3)) == -1)
-    fprintf(stderr, "Unable to load texture: %s.\n", button_top);
   
   if ((texture[4] = loadTexture(string, 4)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", string);

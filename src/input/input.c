@@ -38,12 +38,10 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
           instSelection++;
           setInstrument(instSelection);
 
-          if ( instSelection < 4 )
-            for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY[i] + 0.23;
+          if ( instSelection < 4 );
           else {
             instSelection = 0;
             setInstrument(instSelection);
-            for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY_reset[i];
           }
         }
 
@@ -72,12 +70,10 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
           if (instSelection > 0) {
             instSelection--;
             setInstrument(instSelection);
-            for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY[i] - 0.23;
           }
           else if (instSelection < 1 ) {
             instSelection = 3; /* Vocals */
             setInstrument(instSelection);
-            for ( i = 0; i < 4; i++ ) selectedGradientY[i] = selectedGradientY[i] + 0.69;
           }
 
         }

@@ -8,6 +8,10 @@ typedef struct {
 
 extern tButton button;
 
+extern bool bar;
+extern bool beat;
+extern bool beat2;
+extern bool beat3;
 extern bool gamePaused;
 extern GLfloat bringDownAngle;
 

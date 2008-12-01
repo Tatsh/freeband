@@ -8,7 +8,6 @@
 #include <vorbis/vorbisfile.h>
 
 #include <GL/gl.h>
-#include <GL/glext.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
 
@@ -17,7 +16,9 @@
 #include <SDL/SDL_ttf.h>
 
 #define MAX_IMAGES 20
-#define MAX_TEXT 255
+#define MAX_TEXT 1000
+
+#define SCREENHEADTEXTHT 0.31f
 
 typedef struct {
   bool mainMenu;
