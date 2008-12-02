@@ -193,6 +193,19 @@ GLint main(GLint argc, char *argv[]) {
           break;*/
 #endif
 
+#ifdef __WIN32XBOX360XPLORER__
+        case SDL_JOYBUTTONDOWN: /* Xbox 360 controller only; non-production code! */
+        case SDL_JOYBUTTONUP: /* Do not define both of these! Windows only! */
+          if (currentScreen.game) {
+            button.g = SDL_JoystickGetButton(joy, 0);
+            button.r = SDL_JoystickGetButton(joy, 1);
+            button.y = SDL_JoystickGetButton(joy, 3);
+            button.b = SDL_JoystickGetButton(joy, 2);
+            button.o = SDL_JoystickGetButton(joy, 4);
+          }
+          break;
+#endif
+
         case SDL_QUIT: /* Only allow to exit via ^C or close button if at main menu */
           if (currentScreen.mainMenu)
             hasQuit = true;
