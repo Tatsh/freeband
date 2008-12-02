@@ -1,5 +1,6 @@
 #include "../freeband.h"
 #include "../graphics/graphics.h"
+#include "../screens/difficulty.h"
 #include "../screens/game.h"
 #include "../screens/instruments.h"
 #include "../screens/main.h"
@@ -24,10 +25,8 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
         else {
           menuSelection = 0;
           setMainMenuState(menuSelection);
-          mSelectorVertexY[0] = 0.18f;
-          mSelectorVertexY[1] = 0.0f;
-          mSelectorVertexY[2] = 0.0f;
-          mSelectorVertexY[3] = 0.18f;
+          mSelectorVertexY[0] = 0.18f; mSelectorVertexY[1] = 0.0f;
+          mSelectorVertexY[2] = 0.0f ; mSelectorVertexY[3] = 0.18f;
         }
 
       }
@@ -45,6 +44,29 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
           }
         }
 
+      }
+      else if (currentScreen.difficulty) {
+        if (diffEasy) {
+          diffMedium = true;
+          diffEasy = false;
+          for ( i = 0; i < 4; i++ ) diffSelectionY[i] = diffSelectionY[i] + DIFFHT;
+        }
+        else if (diffMedium) {
+          diffHard = true;
+          diffMedium = false;
+          for ( i = 0; i < 4; i++ ) diffSelectionY[i] = diffSelectionY[i] + DIFFHT;
+        }
+        else if (diffHard) {
+          diffExpert = true;
+          diffHard = false;
+          for ( i = 0; i < 4; i++ ) diffSelectionY[i] = diffSelectionY[i] + DIFFHT;
+        }
+        else if (diffExpert) {
+          diffEasy = true;
+          diffExpert = false;
+          diffSelectionY[0] = 0.0f; diffSelectionY[1] = DIFFHT;
+          diffSelectionY[2] = DIFFHT; diffSelectionY[3] = 0.0f;
+        }
       }
       break;
       
@@ -79,6 +101,29 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
         }
 
       }
+      
+      else if (currentScreen.difficulty) {
+        if (diffEasy) {
+          diffExpert = true;
+          diffEasy = false;
+          for ( i = 0; i < 4; i++ ) diffSelectionY[i] = diffSelectionY[i] + (3.0f * DIFFHT);
+        }
+        else if (diffExpert) {
+          diffHard = true;
+          diffExpert = false;
+          for ( i = 0; i < 4; i++ ) diffSelectionY[i] = diffSelectionY[i] - DIFFHT;
+        }
+        else if (diffHard) {
+          diffMedium = true;
+          diffHard = false;
+          for ( i = 0; i < 4; i++ ) diffSelectionY[i] = diffSelectionY[i] - DIFFHT;
+        }
+        else if (diffMedium) {
+          diffEasy = true;
+          diffMedium = false;
+          for ( i = 0; i < 4; i++ ) diffSelectionY[i] = diffSelectionY[i] - DIFFHT;
+        }
+      }
       break;
 
     case SDLK_RETURN:
@@ -103,27 +148,23 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
           menuQuit = loading = true;
           currentScreen.songs = false;
           clearScreen();
+          screenDifficultyBuffer();
           currentScreen.difficulty = true;
 #ifdef __DEBUG__
-          fprintf(stdout, "Would be at screenDifficulty() currently. Not implemented yet.\n");
+          fprintf(stdout, "Now in screenDifficulty().\n");
 #endif
-          /* screenDifficulty(); */
           loading = menuQuit = false;
         }
         else if (currentScreen.difficulty) {
           menuQuit = loading = true;
           currentScreen.difficulty = false;
           clearScreen();
-#ifdef __DEBUG__
-          fprintf(stdout, "Loading screenGame().\n");
-#endif
           screenGameBuffer();
           currentScreen.game = true;
-          screenGame();
+          loading = gamePaused = false;
 #ifdef __DEBUG__
           fprintf(stdout, "Now in screenGame() function.\n");
 #endif
-          loading = false;
         }
 
       }
@@ -152,6 +193,16 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
         setInstrumentsText_1P();
         currentScreen.instruments = loading = menuQuit = false;
         currentScreen.instruments = true;
+      }
+      else if (currentScreen.difficulty) {
+        menuQuit = loading = true;
+        clearScreen();
+        screenSongsBuffer();
+        currentScreen.difficulty = loading = menuQuit = false;
+        currentScreen.songs = true;
+#ifdef __DEBUG__
+        fprintf(stdout, "Switched back to screenSongs.\n");
+#endif
       }
       break;
       
@@ -210,6 +261,21 @@ GLvoid gameKeys(SDL_keysym *keysym, SDL_Surface *surface, GLuint nPlayers) {
     case SDLK_RETURN:
       if (keystates[SDLK_LALT] || keystates[SDLK_RALT]) /* Switch to full screen only if Alt+Enter is pressed */
         SDL_WM_ToggleFullScreen(surface);
+      break;
+      
+    case SDLK_ESCAPE:
+      bringDownAngle = 90.0f; /* Reset track */
+      NE_coord_neg = 0.0f;
+      NE_coord_pos = 1.0f;
+      loading = gamePaused = true;
+      currentScreen.game = menuQuit = false;
+      clearScreen();
+      screenSongsBuffer();
+      loading = false;
+      currentScreen.songs = true;
+#ifdef __DEBUG__
+      fprintf(stdout, "Switched back to screenSongs.\n");
+#endif
       break;
 
     default:

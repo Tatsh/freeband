@@ -1,4 +1,4 @@
-#define MENUITEMSHT 0.2f
+#define MENUITEMSHT 0.21f
 
 #define SELECTSRC_ALPHA 0.3f
 #define SELECTDST_ALPHA 0.6f

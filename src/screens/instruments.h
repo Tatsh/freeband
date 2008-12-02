@@ -1,3 +1,6 @@
+#ifndef INSTRUMENTS_H
+#define INSTRUMENTS_H
+
 typedef struct {
   bool guitar;
   bool bass;
@@ -15,3 +18,5 @@ GLvoid setInstrument(GLuint instSelection);
 GLvoid setInstrumentsText_1P();
 GLvoid screenInstrumentsBuffer(GLuint nPlayers);
 GLvoid screenInstruments(GLuint nPlayers);
+
+#endif

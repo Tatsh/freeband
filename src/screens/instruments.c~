@@ -249,9 +249,9 @@ GLvoid screenInstruments(GLuint nPlayers) {
   glBindTexture( GL_TEXTURE_2D, texture[1] );
   positionTexture(instCanvasX, instCanvasY, defVertexZ);*/
   
-  glColor4f(1.0f, 1.0f, 1.0f, 0.3f);
+/*  glColor4f(1.0f, 1.0f, 1.0f, 0.3f);
   glBindTexture( GL_TEXTURE_2D, texture[2] );
-  positionTexture(selectedGradientX, selectedGradientY, defVertexZ);
+  positionTexture(selectedGradientX, selectedGradientY, defVertexZ);*/
 
   /* Text elements */
   glPushMatrix(); {

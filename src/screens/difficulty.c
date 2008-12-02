@@ -1,0 +1,112 @@
+#include "../freeband.h"
+#include "../graphics/graphics.h"
+#include "difficulty.h"
+
+bool diffEasy = true; /* Read from user's last setting in preferences file later */
+bool diffMedium, diffHard, diffExpert;
+
+char pSelection[] = "GameData/themes/default/screenDifficulty/selection.png";
+
+GLfloat diffSelectionX[4];
+GLfloat diffSelectionY[4] = { 0.0f, DIFFHT, DIFFHT, 0.0f };
+
+GLfloat tEasyX[4];
+GLfloat tEasyY[] = { 0.0f, DIFFHT, DIFFHT, 0.0f };
+GLfloat tMediumX[4];
+GLfloat tMediumY[4];
+GLfloat tHardX[4];
+GLfloat tHardY[4];
+GLfloat tExpertX[4];
+GLfloat tExpertY[4];
+
+GLuint easy, medium, hard, expert;
+GLuint selection;
+
+GLvoid screenDifficultyText() {
+  GLfloat width;
+  GLuint i;
+  
+  getFont(bitstreami); {
+    easy = loadText("EASY", bitstream, white, 0);
+    width = scaleTextureWidth(210, 84, DIFFHT);
+    for ( i = 0; i < 2; i++ ) tEasyX[i] = centreAt(0.0f, width);
+    for ( i = 2; i < 4; i++ ) tEasyX[i] = tEasyX[i-2] + width;
+    
+    medium = loadText("MEDIUM", bitstream, white, 0);
+    width = scaleTextureWidth(338, 84, DIFFHT);
+    for ( i = 0; i < 2; i++ ) tMediumX[i] = centreAt(0.0f, width);
+    for ( i = 2; i < 4; i++ ) tMediumX[i] = tMediumX[i-2] + width;
+    for ( i = 0; i < 4; i++ ) tMediumY[i] = tEasyY[i] + DIFFHT;
+    
+    hard = loadText("HARD", bitstream, white, 0);
+    width = scaleTextureWidth(231, 84, DIFFHT);
+    for ( i = 0; i < 2; i++ ) tHardX[i] = centreAt(0.0f, width);
+    for ( i = 2; i < 4; i++ ) tHardX[i] = tHardX[i-2] + width;
+    for ( i = 0; i < 4; i++ ) tHardY[i] = tMediumY[i] + DIFFHT;
+    
+    expert = loadText("EXPERT", bitstream, white, 0);
+    width = scaleTextureWidth(308, 84, DIFFHT);
+    for ( i = 0; i < 2; i++ ) tExpertX[i] = centreAt(0.0f, width);
+    for ( i = 2; i < 4; i++ ) tExpertX[i] = tExpertX[i-2] + width;
+    for ( i = 0; i < 4; i++ ) tExpertY[i] = tHardY[i] + DIFFHT;
+  } if (bitstream) TTF_CloseFont(bitstream);
+  
+  return;
+}
+
+GLvoid screenDifficultyTextures() {
+  GLfloat width;
+  GLuint i;
+  
+  if ((selection = loadTexture(pSelection, 1)) == -1)
+    fprintf(stderr, "Unable to load texture: %s.\n", pSelection);
+  width = scaleTextureWidth(505, 85, 0.1);
+  for ( i = 0; i < 2; i++ ) diffSelectionX[i] = centreAt(0.0f, width);
+  for ( i = 2; i < 4; i++ ) diffSelectionX[i] = diffSelectionX[i-2] + width;
+
+  return;
+}
+
+GLvoid screenDifficultyBuffer() {
+  screenDifficultyText();
+  screenDifficultyTextures();
+  
+  return;
+}
+
+GLvoid screenDifficulty() {
+  if (diffEasy)
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+  else
+    glColor4f(0.5f, 0.5f, 0.5f, 1.0f);
+  glBindTexture( GL_TEXTURE_2D, easy );
+  positionTexture(tEasyX, tEasyY, defVertexZ);
+  
+  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+  if (diffMedium)
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+  else
+    glColor4f(0.5f, 0.5f, 0.5f, 1.0f);
+  glBindTexture( GL_TEXTURE_2D, medium );
+  positionTexture(tMediumX, tMediumY, defVertexZ);
+  
+  if (diffHard)
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+  else
+    glColor4f(0.5f, 0.5f, 0.5f, 1.0f);
+  glBindTexture( GL_TEXTURE_2D, hard );
+  positionTexture(tHardX, tHardY, defVertexZ);
+
+  if (diffExpert)
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+  else
+    glColor4f(0.5f, 0.5f, 0.5f, 1.0f);
+  glBindTexture( GL_TEXTURE_2D, expert );
+  positionTexture(tExpertX, tExpertY, defVertexZ);
+  
+  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+  glBindTexture( GL_TEXTURE_2D, selection );
+  positionTexture(diffSelectionX, diffSelectionY, defVertexZ);
+
+  return;
+}

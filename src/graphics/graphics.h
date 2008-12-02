@@ -1,3 +1,6 @@
+#ifndef GRAPHICS_H
+#define GRAPHICS_H
+
 #define DEFAULT_TEXT_PT 72
 
 extern bool menuQuit;
@@ -43,3 +46,4 @@ GLvoid getFont(GLuint font);
 GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ);
 GLvoid setupColors();
 
+#endif

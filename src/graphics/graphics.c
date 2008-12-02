@@ -1,4 +1,5 @@
 #include "../freeband.h"
+#include "../screens/difficulty.h"
 #include "../screens/game.h"
 #include "../screens/instruments.h"
 #include "../screens/main.h"
@@ -290,6 +291,8 @@ GLvoid drawFreeband() {
     screenInstruments(nPlayers);
   else if (currentScreen.songs && !menuQuit)
     screenSongs();
+  else if (currentScreen.difficulty && !menuQuit)
+    screenDifficulty();
   else if (currentScreen.game && !gamePaused)
     screenGame();
 

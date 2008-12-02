@@ -30,7 +30,7 @@ extern SDL_Color white;
 bool initGL();
 bool resizeWindow(GLuint width, GLuint height);
 
-GLfloat centreText(GLfloat xyz, GLfloat width);
+GLfloat centreAt(GLfloat xyz, GLfloat width);
 GLfloat scaleTextureHeight(GLuint pWidth, GLuint pHeight, GLfloat destWidth);
 GLfloat scaleTextureWidth(GLuint pWidth, GLuint pHeight, GLfloat destHeight);
 

@@ -173,38 +173,34 @@ GLvoid setInstrumentsText_1P() {
   GLuint text_guitar, text_bass, text_drums, text_vocals;
   GLuint text_selectInstrument;
 
-  getFont(bitstreami);
-  text_guitar = loadText("GUITAR", bitstream, white, 0);
-  width = scaleTextureWidth(298, 84, MENUITEMSHT);
-  for ( i = 0; i < 2; i++ ) text_GuitarX[i] = centreAt(0.6f, width);
-  for ( i = 2; i < 4; i++ ) text_GuitarX[i] = text_GuitarX[i-2] + width;
+  getFont(bitstreami); {
+    text_guitar = loadText("GUITAR", bitstream, white, 0);
+    width = scaleTextureWidth(298, 84, MENUITEMSHT);
+    for ( i = 0; i < 2; i++ ) text_GuitarX[i] = centreAt(0.6f, width);
+    for ( i = 2; i < 4; i++ ) text_GuitarX[i] = text_GuitarX[i-2] + width;
 
-  text_bass = loadText("BASS", bitstream, white, 1);
-  width = scaleTextureWidth(212, 84, MENUITEMSHT);
-  for ( i = 0; i < 2; i++ ) text_BassX[i] = centreAt(0.6f, width);
-  for ( i = 2; i < 4; i++ ) text_BassX[i] = text_BassX[i-2] + width;
+    text_bass = loadText("BASS", bitstream, white, 1);
+    width = scaleTextureWidth(212, 84, MENUITEMSHT);
+    for ( i = 0; i < 2; i++ ) text_BassX[i] = centreAt(0.6f, width);
+    for ( i = 2; i < 4; i++ ) text_BassX[i] = text_BassX[i-2] + width;
 
-  text_drums = loadText("DRUMS", bitstream, white, 2);
-  width = scaleTextureWidth(297, 84, MENUITEMSHT);
-  for ( i = 0; i < 2; i++ ) text_DrumsX[i] = centreAt(0.6f, width);
-  for ( i = 2; i < 4; i++ ) text_DrumsX[i] = text_DrumsX[i-2] + width;
+    text_drums = loadText("DRUMS", bitstream, white, 2);
+    width = scaleTextureWidth(297, 84, MENUITEMSHT);
+    for ( i = 0; i < 2; i++ ) text_DrumsX[i] = centreAt(0.6f, width);
+    for ( i = 2; i < 4; i++ ) text_DrumsX[i] = text_DrumsX[i-2] + width;
 
-  text_vocals = loadText("VOCALS", bitstream, white, 3);
-  width = scaleTextureWidth(323, 84, MENUITEMSHT);
-  for ( i = 0; i < 2; i++ ) text_VocalsX[i] = centreAt(0.6f, width);
-  for ( i = 2; i < 4; i++ ) text_VocalsX[i] = text_VocalsX[i-2] + width;
+    text_vocals = loadText("VOCALS", bitstream, white, 3);
+    width = scaleTextureWidth(323, 84, MENUITEMSHT);
+    for ( i = 0; i < 2; i++ ) text_VocalsX[i] = centreAt(0.6f, width);
+    for ( i = 2; i < 4; i++ ) text_VocalsX[i] = text_VocalsX[i-2] + width;
+  } if (bitstream) TTF_CloseFont(bitstream);
 
-  if (bitstream)
-    TTF_CloseFont(bitstream);
-
-  getFont(crilleei);
-  text_selectInstrument = loadText("SELECT INSTRUMENT", crillee, white, 4);
-  width = scaleTextureWidth(747, 96, SCREENHEADTEXTHT);
-  for ( i = 0; i < 2; i++ ) text_SelectInstrumentX[i] = centreAt(0.0f, width);
-  for ( i = 2; i < 4; i++ ) text_SelectInstrumentX[i] = text_SelectInstrumentX[i-2] + width;
-  
-  if (crillee)
-    TTF_CloseFont(crillee); /* Clean up */
+  getFont(crilleei); {
+    text_selectInstrument = loadText("SELECT INSTRUMENT", crillee, white, 4);
+    width = scaleTextureWidth(747, 96, SCREENHEADTEXTHT);
+    for ( i = 0; i < 2; i++ ) text_SelectInstrumentX[i] = centreAt(0.0f, width);
+    for ( i = 2; i < 4; i++ ) text_SelectInstrumentX[i] = text_SelectInstrumentX[i-2] + width;
+  } if (crillee) TTF_CloseFont(crillee); /* Clean up */
 
   return;
 }

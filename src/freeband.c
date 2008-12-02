@@ -173,7 +173,9 @@ GLint main(GLint argc, char *argv[]) {
           break;
 
         case SDL_KEYUP:
-          gameKeys(&freeband.key.keysym, fbSurface, nPlayers);
+          if (currentScreen.game) {
+            gameKeys(&freeband.key.keysym, fbSurface, nPlayers);
+          }
           break;
 
 #ifdef __XBOX360XPLORER__
@@ -217,7 +219,7 @@ GLint main(GLint argc, char *argv[]) {
             currentScreen.instruments = loading = menuQuit = false;
             currentScreen.mainMenu = true;
 #ifdef __DEBUG__
-            fprintf(stdout, "Successfully switched back to screenMain.\n");
+            fprintf(stdout, "Switched back to screenMain.\n");
 #endif
           }
           else if (currentScreen.songs) {
@@ -227,6 +229,19 @@ GLint main(GLint argc, char *argv[]) {
             setInstrumentsText_1P();
             currentScreen.instruments = loading = menuQuit = false;
             currentScreen.instruments = true;
+#ifdef __DEBUG__
+            fprintf(stdout, "Switched back to screenInstruments.\n");
+#endif
+          }
+          else if (currentScreen.difficulty) {
+            menuQuit = loading = true;
+            clearScreen();
+            screenSongsBuffer();
+            currentScreen.difficulty = loading = menuQuit = false;
+            currentScreen.songs = true;
+#ifdef __DEBUG__
+            fprintf(stdout, "Switched back to screenSongs.\n");
+#endif
           }
           else if (currentScreen.game)
             hasQuit = true;

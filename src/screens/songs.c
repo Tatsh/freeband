@@ -36,7 +36,6 @@ GLvoid screenSongsBuffer() {
 }
 
 GLvoid screenSongs() {
-  
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   glBindTexture( GL_TEXTURE_2D, bg );
   positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);

@@ -46,7 +46,7 @@ binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_freeband_OBJECTS = freeband.$(OBJEXT) graphics.$(OBJEXT) \
 	game.$(OBJEXT) main.$(OBJEXT) instruments.$(OBJEXT) \
-	songs.$(OBJEXT) input.$(OBJEXT)
+	songs.$(OBJEXT) difficulty.$(OBJEXT) input.$(OBJEXT)
 freeband_OBJECTS = $(am_freeband_OBJECTS)
 freeband_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -163,7 +163,7 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 DIST_SUBDIRS = GameData audio io
-freeband_SOURCES = freeband.c freeband.h graphics/graphics.c screens/game.c screens/main.c screens/instruments.c screens/songs.c input/input.c
+freeband_SOURCES = freeband.c graphics/graphics.c screens/game.c screens/main.c screens/instruments.c screens/songs.c screens/difficulty.c input/input.c
 all: all-recursive
 
 .SUFFIXES:
@@ -230,6 +230,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/difficulty.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/freeband.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/game.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/graphics.Po@am__quote@
@@ -321,6 +322,20 @@ songs.obj: screens/songs.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='screens/songs.c' object='songs.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o songs.obj `if test -f 'screens/songs.c'; then $(CYGPATH_W) 'screens/songs.c'; else $(CYGPATH_W) '$(srcdir)/screens/songs.c'; fi`
+
+difficulty.o: screens/difficulty.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT difficulty.o -MD -MP -MF $(DEPDIR)/difficulty.Tpo -c -o difficulty.o `test -f 'screens/difficulty.c' || echo '$(srcdir)/'`screens/difficulty.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/difficulty.Tpo $(DEPDIR)/difficulty.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='screens/difficulty.c' object='difficulty.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o difficulty.o `test -f 'screens/difficulty.c' || echo '$(srcdir)/'`screens/difficulty.c
+
+difficulty.obj: screens/difficulty.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT difficulty.obj -MD -MP -MF $(DEPDIR)/difficulty.Tpo -c -o difficulty.obj `if test -f 'screens/difficulty.c'; then $(CYGPATH_W) 'screens/difficulty.c'; else $(CYGPATH_W) '$(srcdir)/screens/difficulty.c'; fi`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/difficulty.Tpo $(DEPDIR)/difficulty.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='screens/difficulty.c' object='difficulty.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o difficulty.obj `if test -f 'screens/difficulty.c'; then $(CYGPATH_W) 'screens/difficulty.c'; else $(CYGPATH_W) '$(srcdir)/screens/difficulty.c'; fi`
 
 input.o: input/input.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT input.o -MD -MP -MF $(DEPDIR)/input.Tpo -c -o input.o `test -f 'input/input.c' || echo '$(srcdir)/'`input/input.c

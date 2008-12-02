@@ -5,7 +5,7 @@
 
 /* Order of corners: top-left, bottom-left, bottom-right, top-right */
 GLfloat text_songsX[] = { 0.0f, 0.0f, 0.8f, 0.8f };
-GLfloat text_songsY[] = { 0.0f, 0.318f, 0.318f, 0.0f };
+GLfloat text_songsY[] = { 0.0f, SCREENHEADTEXTHT, SCREENHEADTEXTHT, 0.0f };
 GLfloat text_byTierX[] = { 0.0f, 0.0, 0.417f, 0.417f };
 GLfloat text_byTierY[] = { 0.0f, 0.2f, 0.2, 0.0f };
 
