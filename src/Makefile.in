@@ -32,7 +32,6 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 bin_PROGRAMS = freeband$(EXEEXT)
 subdir = src
-SUBDIRS =
 DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -44,11 +43,8 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-am_freeband_OBJECTS = freeband.$(OBJEXT) graphics.$(OBJEXT) \
-	game.$(OBJEXT) main.$(OBJEXT) instruments.$(OBJEXT) \
-	songs.$(OBJEXT) difficulty.$(OBJEXT) input.$(OBJEXT)
+am_freeband_OBJECTS = freeband.$(OBJEXT)
 freeband_OBJECTS = $(am_freeband_OBJECTS)
-freeband_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -162,8 +158,11 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-DIST_SUBDIRS = GameData audio io
-freeband_SOURCES = freeband.c graphics/graphics.c screens/game.c screens/main.c screens/instruments.c screens/songs.c screens/difficulty.c input/input.c
+DIST_SUBDIRS = GameData io
+SUBDIRS = audio graphics input screens .
+freeband_SOURCES = freeband.c
+freeband_DEPENDENCIES = input/libFreebandInput.a audio/libFreebandAudio.a graphics/libFreebandGraphics.a screens/libFreebandScreens.a
+freeband_LDADD = input/libFreebandInput.a audio/libFreebandAudio.a graphics/libFreebandGraphics.a screens/libFreebandScreens.a
 all: all-recursive
 
 .SUFFIXES:
@@ -230,14 +229,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/difficulty.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/freeband.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/game.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/graphics.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/input.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/instruments.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/songs.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -252,104 +244,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
-
-graphics.o: graphics/graphics.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT graphics.o -MD -MP -MF $(DEPDIR)/graphics.Tpo -c -o graphics.o `test -f 'graphics/graphics.c' || echo '$(srcdir)/'`graphics/graphics.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/graphics.Tpo $(DEPDIR)/graphics.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='graphics/graphics.c' object='graphics.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o graphics.o `test -f 'graphics/graphics.c' || echo '$(srcdir)/'`graphics/graphics.c
-
-graphics.obj: graphics/graphics.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT graphics.obj -MD -MP -MF $(DEPDIR)/graphics.Tpo -c -o graphics.obj `if test -f 'graphics/graphics.c'; then $(CYGPATH_W) 'graphics/graphics.c'; else $(CYGPATH_W) '$(srcdir)/graphics/graphics.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/graphics.Tpo $(DEPDIR)/graphics.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='graphics/graphics.c' object='graphics.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o graphics.obj `if test -f 'graphics/graphics.c'; then $(CYGPATH_W) 'graphics/graphics.c'; else $(CYGPATH_W) '$(srcdir)/graphics/graphics.c'; fi`
-
-game.o: screens/game.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT game.o -MD -MP -MF $(DEPDIR)/game.Tpo -c -o game.o `test -f 'screens/game.c' || echo '$(srcdir)/'`screens/game.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/game.Tpo $(DEPDIR)/game.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='screens/game.c' object='game.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o game.o `test -f 'screens/game.c' || echo '$(srcdir)/'`screens/game.c
-
-game.obj: screens/game.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT game.obj -MD -MP -MF $(DEPDIR)/game.Tpo -c -o game.obj `if test -f 'screens/game.c'; then $(CYGPATH_W) 'screens/game.c'; else $(CYGPATH_W) '$(srcdir)/screens/game.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/game.Tpo $(DEPDIR)/game.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='screens/game.c' object='game.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o game.obj `if test -f 'screens/game.c'; then $(CYGPATH_W) 'screens/game.c'; else $(CYGPATH_W) '$(srcdir)/screens/game.c'; fi`
-
-main.o: screens/main.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT main.o -MD -MP -MF $(DEPDIR)/main.Tpo -c -o main.o `test -f 'screens/main.c' || echo '$(srcdir)/'`screens/main.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/main.Tpo $(DEPDIR)/main.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='screens/main.c' object='main.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o main.o `test -f 'screens/main.c' || echo '$(srcdir)/'`screens/main.c
-
-main.obj: screens/main.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT main.obj -MD -MP -MF $(DEPDIR)/main.Tpo -c -o main.obj `if test -f 'screens/main.c'; then $(CYGPATH_W) 'screens/main.c'; else $(CYGPATH_W) '$(srcdir)/screens/main.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/main.Tpo $(DEPDIR)/main.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='screens/main.c' object='main.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o main.obj `if test -f 'screens/main.c'; then $(CYGPATH_W) 'screens/main.c'; else $(CYGPATH_W) '$(srcdir)/screens/main.c'; fi`
-
-instruments.o: screens/instruments.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT instruments.o -MD -MP -MF $(DEPDIR)/instruments.Tpo -c -o instruments.o `test -f 'screens/instruments.c' || echo '$(srcdir)/'`screens/instruments.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/instruments.Tpo $(DEPDIR)/instruments.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='screens/instruments.c' object='instruments.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o instruments.o `test -f 'screens/instruments.c' || echo '$(srcdir)/'`screens/instruments.c
-
-instruments.obj: screens/instruments.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT instruments.obj -MD -MP -MF $(DEPDIR)/instruments.Tpo -c -o instruments.obj `if test -f 'screens/instruments.c'; then $(CYGPATH_W) 'screens/instruments.c'; else $(CYGPATH_W) '$(srcdir)/screens/instruments.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/instruments.Tpo $(DEPDIR)/instruments.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='screens/instruments.c' object='instruments.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o instruments.obj `if test -f 'screens/instruments.c'; then $(CYGPATH_W) 'screens/instruments.c'; else $(CYGPATH_W) '$(srcdir)/screens/instruments.c'; fi`
-
-songs.o: screens/songs.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT songs.o -MD -MP -MF $(DEPDIR)/songs.Tpo -c -o songs.o `test -f 'screens/songs.c' || echo '$(srcdir)/'`screens/songs.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/songs.Tpo $(DEPDIR)/songs.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='screens/songs.c' object='songs.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o songs.o `test -f 'screens/songs.c' || echo '$(srcdir)/'`screens/songs.c
-
-songs.obj: screens/songs.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT songs.obj -MD -MP -MF $(DEPDIR)/songs.Tpo -c -o songs.obj `if test -f 'screens/songs.c'; then $(CYGPATH_W) 'screens/songs.c'; else $(CYGPATH_W) '$(srcdir)/screens/songs.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/songs.Tpo $(DEPDIR)/songs.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='screens/songs.c' object='songs.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o songs.obj `if test -f 'screens/songs.c'; then $(CYGPATH_W) 'screens/songs.c'; else $(CYGPATH_W) '$(srcdir)/screens/songs.c'; fi`
-
-difficulty.o: screens/difficulty.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT difficulty.o -MD -MP -MF $(DEPDIR)/difficulty.Tpo -c -o difficulty.o `test -f 'screens/difficulty.c' || echo '$(srcdir)/'`screens/difficulty.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/difficulty.Tpo $(DEPDIR)/difficulty.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='screens/difficulty.c' object='difficulty.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o difficulty.o `test -f 'screens/difficulty.c' || echo '$(srcdir)/'`screens/difficulty.c
-
-difficulty.obj: screens/difficulty.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT difficulty.obj -MD -MP -MF $(DEPDIR)/difficulty.Tpo -c -o difficulty.obj `if test -f 'screens/difficulty.c'; then $(CYGPATH_W) 'screens/difficulty.c'; else $(CYGPATH_W) '$(srcdir)/screens/difficulty.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/difficulty.Tpo $(DEPDIR)/difficulty.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='screens/difficulty.c' object='difficulty.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o difficulty.obj `if test -f 'screens/difficulty.c'; then $(CYGPATH_W) 'screens/difficulty.c'; else $(CYGPATH_W) '$(srcdir)/screens/difficulty.c'; fi`
-
-input.o: input/input.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT input.o -MD -MP -MF $(DEPDIR)/input.Tpo -c -o input.o `test -f 'input/input.c' || echo '$(srcdir)/'`input/input.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/input.Tpo $(DEPDIR)/input.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='input/input.c' object='input.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o input.o `test -f 'input/input.c' || echo '$(srcdir)/'`input/input.c
-
-input.obj: input/input.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT input.obj -MD -MP -MF $(DEPDIR)/input.Tpo -c -o input.obj `if test -f 'input/input.c'; then $(CYGPATH_W) 'input/input.c'; else $(CYGPATH_W) '$(srcdir)/input/input.c'; fi`
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/input.Tpo $(DEPDIR)/input.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='input/input.c' object='input.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o input.obj `if test -f 'input/input.c'; then $(CYGPATH_W) 'input/input.c'; else $(CYGPATH_W) '$(srcdir)/input/input.c'; fi`
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.

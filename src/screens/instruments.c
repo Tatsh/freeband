@@ -36,6 +36,8 @@ GLfloat text_SelectInstrumentY[] = { 0.0f, SCREENHEADTEXTHT, SCREENHEADTEXTHT, 0
 
 GLfloat degree = 0.0f;
 
+GLuint bg;
+
 GLuint instSelection = 0; /* Guitar */
 
 tInstrument instrument;
@@ -155,7 +157,7 @@ GLvoid setInstrument(GLuint instSelection) {
 }
 
 GLvoid setInstrumentsImages_1P() {
-  if ((texture[0] = loadTexture(bgTexture, 0)) == -1)
+  if ((bg = loadTexture(bgTexture, 0)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
   
   if ((texture[1] = loadTexture(instCanvas, 1)) == -1)
@@ -238,7 +240,7 @@ GLvoid screenInstrumentsBuffer(GLuint nPlayers) {
 
 GLvoid screenInstruments(GLuint nPlayers) {
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-  glBindTexture( GL_TEXTURE_2D, texture[0] );
+  glBindTexture( GL_TEXTURE_2D, bg );
   positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
 
 /*  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);

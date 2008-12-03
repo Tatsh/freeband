@@ -1,4 +1,5 @@
 #include "../freeband.h"
+#include "../audio/audio.h"
 #include "../graphics/graphics.h"
 #include "instruments.h"
 #include "main.h"
@@ -35,7 +36,7 @@ GLfloat text_Online_hl[4];
 GLfloat text_Options_hl[4];
 GLfloat text_Quit_hl[4];
 
-GLuint bg, logo, selectG; /* Textures */
+GLuint bg, logo, selectG; /* Textures; must be called selectG thanks to Gentoo defining select randomly elsewhere this links to */
 GLuint single, multiplayer, onlineM, optionsM, quit; /* Menu options */
 GLuint menuSelection = 0;
 

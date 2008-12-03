@@ -1,9 +1,11 @@
 #include "freeband.h"
+#include "audio/audio.h"
 #include "graphics/graphics.h"
 #include "input/input.h"
 #include "screens/game.h"
 #include "screens/instruments.h"
 #include "screens/main.h"
+#include "screens/songs.h"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -49,6 +51,7 @@ GLvoid quitGame(GLint retnCode) {
 
   TTF_Quit();
   SDL_Quit();     /* Clean window */
+  alutExit();
 #ifdef __DEBUG__
   fprintf(stdout, "Quitting...\n");
 #endif
@@ -61,6 +64,7 @@ GLint main(GLint argc, char *argv[]) {
   for (i = 0; i < MAX_TEXT; i++) text[i] = -1;
 
   alutInit(&argc, argv);  /* ALUT */
+  
   glutInit(&argc, argv);  /* GLUT */
   
   int videoFlags;                   /* Flags to send to SDL */

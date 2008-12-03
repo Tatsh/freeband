@@ -1,3 +1,6 @@
+#ifndef MAIN_H
+#define MAIN_H
+
 #define MENUITEMSHT 0.21f
 
 #define SELECTSRC_ALPHA 0.3f
@@ -30,3 +33,5 @@ GLvoid setMainMenuState(GLuint selectID);
 GLvoid setMainImages();
 GLvoid setMainText();
 GLvoid screenMain();
+
+#endif

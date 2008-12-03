@@ -1,0 +1,8 @@
+#ifndef OGG_H
+#define OGG_H
+
+extern OggVorbis_File oggStream;
+
+ALvoid openOGG(char path[]);
+
+#endif

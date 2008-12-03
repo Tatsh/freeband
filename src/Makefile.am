@@ -1,3 +1,6 @@
-DIST_SUBDIRS = GameData audio io
+DIST_SUBDIRS = GameData io
 bin_PROGRAMS = freeband
-freeband_SOURCES = freeband.c graphics/graphics.c screens/game.c screens/main.c screens/instruments.c screens/songs.c screens/difficulty.c input/input.c
+SUBDIRS = audio graphics input screens .
+freeband_SOURCES = freeband.c
+freeband_DEPENDENCIES = input/libFreebandInput.a audio/libFreebandAudio.a graphics/libFreebandGraphics.a screens/libFreebandScreens.a
+freeband_LDADD = input/libFreebandInput.a audio/libFreebandAudio.a graphics/libFreebandGraphics.a screens/libFreebandScreens.a

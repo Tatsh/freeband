@@ -1,4 +1,5 @@
 #include "../freeband.h"
+#include "../audio/audio.h"
 #include "../graphics/graphics.h"
 #include "../screens/difficulty.h"
 #include "../screens/game.h"
@@ -133,6 +134,7 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
 
         if (currentScreen.mainMenu) {
           handleMainMenu();
+          playTrack();
           if (!nonGame)
             screenInstrumentsBuffer(nPlayers); /* Note: 1 player screen is significantly different from multiplayer */
           else

@@ -1,6 +1,7 @@
 #include "../freeband.h"
 #include "../graphics/graphics.h"
 #include "difficulty.h"
+#include "main.h"
 
 bool diffEasy = true; /* Read from user's last setting in preferences file later */
 bool diffMedium, diffHard, diffExpert;
@@ -57,13 +58,15 @@ GLvoid screenDifficultyText() {
 GLvoid screenDifficultyTextures() {
   GLfloat width;
   GLuint i;
+
+  if ((bg = loadTexture(bgTexture, 0)) < 0)
+    fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
   
   if ((selection = loadTexture(pSelection, 1)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", pSelection);
   width = scaleTextureWidth(505, 85, 0.1);
   for ( i = 0; i < 2; i++ ) diffSelectionX[i] = centreAt(0.0f, width);
   for ( i = 2; i < 4; i++ ) diffSelectionX[i] = diffSelectionX[i-2] + width;
-  for ( i = 0; i < 4; i++ ) diffSelectionY[i] = diffSelectionY[i] + 0.01f;
 
   return;
 }
@@ -76,6 +79,10 @@ GLvoid screenDifficultyBuffer() {
 }
 
 GLvoid screenDifficulty() {
+  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+  glBindTexture( GL_TEXTURE_2D, bg );
+  positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
+  
   if (diffEasy)
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   else
