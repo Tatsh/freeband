@@ -51,7 +51,6 @@ GLvoid quitGame(GLint retnCode) {
 
   TTF_Quit();
   SDL_Quit();     /* Clean window */
-  alutExit();
 #ifdef __DEBUG__
   fprintf(stdout, "Quitting...\n");
 #endif
@@ -63,8 +62,6 @@ GLint main(GLint argc, char *argv[]) {
   for (i = 0; i < MAX_IMAGES; i++) texture[i] = -1;
   for (i = 0; i < MAX_TEXT; i++) text[i] = -1;
 
-  alutInit(&argc, argv);  /* ALUT */
-  
   glutInit(&argc, argv);  /* GLUT */
   
   int videoFlags;                   /* Flags to send to SDL */
@@ -247,8 +244,16 @@ GLint main(GLint argc, char *argv[]) {
             fprintf(stdout, "Switched back to screenSongs.\n");
 #endif
           }
-          else if (currentScreen.game)
-            hasQuit = true;
+          else if (currentScreen.game) {
+            menuQuit = loading = true;
+            clearScreen();
+            screenSongsBuffer();
+            currentScreen.difficulty = loading = menuQuit = false;
+            currentScreen.songs = true;
+#ifdef __DEBUG__
+            fprintf(stdout, "Switched back to screenSongs.\n");
+#endif
+          }
           break;
 
         default:
@@ -259,7 +264,6 @@ GLint main(GLint argc, char *argv[]) {
     }
 
     drawFreeband();
-
   }
 
   quitGame(0);

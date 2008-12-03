@@ -1,4 +1,6 @@
 #include "../freeband.h"
+#include "../audio/audio.h"
+#include "../screens/difficulty.h"
 #include "../screens/game.h"
 #include "../screens/instruments.h"
 #include "../screens/main.h"
@@ -284,12 +286,15 @@ GLvoid drawFreeband() {
   glScalef(1, -1, 1); /* Flip framebuffer because of SDL's upside down issue */
 
   if (loading); /* Do nothing and wait till loading = false */
-  else if (currentScreen.mainMenu && !menuQuit)
+  else if (currentScreen.mainMenu && !menuQuit) {
     screenMain();
+  }
   else if (currentScreen.instruments && !menuQuit)
     screenInstruments(nPlayers);
   else if (currentScreen.songs && !menuQuit)
     screenSongs();
+  else if (currentScreen.difficulty && !menuQuit)
+    screenDifficulty();
   else if (currentScreen.game && !gamePaused)
     screenGame();
 

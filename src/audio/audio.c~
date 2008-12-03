@@ -37,7 +37,7 @@ ALvoid releaseAudio(ALuint source, ALuint buffer[], ALuint format) {
   fprintf(stdout, "Deleting sources.\n");
 #endif
   emptyQueued(source);
-  alDeleteBuffers(1, buffer);
+  alDeleteBuffers(NUM_BUFFERS, buffer);
 #ifdef __DEBUG__
   fprintf(stdout, "Deleting buffers.\n");
 #endif
@@ -64,8 +64,3 @@ ALvoid releaseAudio(ALuint source, ALuint buffer[], ALuint format) {
   return;
 }
 
-ALvoid playTrack() {
-  openTrack(testTrack, OGG, BGM);
-  
-  releaseAudio(source_bgm, buffer_bgm, OGG);
-}

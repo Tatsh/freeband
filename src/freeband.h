@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <AL/alut.h>
 #include <ogg/ogg.h>
 #include <vorbis/vorbisfile.h>
 

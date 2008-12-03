@@ -4200,13 +4200,14 @@ echo "$as_me: error: GLUT not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-{ echo "$as_me:$LINENO: checking for alutInit in -lopenal" >&5
-echo $ECHO_N "checking for alutInit in -lopenal... $ECHO_C" >&6; }
-if test "${ac_cv_lib_openal_alutInit+set}" = set; then
+
+{ echo "$as_me:$LINENO: checking for vorbis_comment_init in -lvorbis" >&5
+echo $ECHO_N "checking for vorbis_comment_init in -lvorbis... $ECHO_C" >&6; }
+if test "${ac_cv_lib_vorbis_vorbis_comment_init+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lopenal  $LIBS"
+LIBS="-lvorbis  $LIBS"
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -4220,11 +4221,11 @@ cat >>conftest.$ac_ext <<_ACEOF
 #ifdef __cplusplus
 extern "C"
 #endif
-char alutInit ();
+char vorbis_comment_init ();
 int
 main ()
 {
-return alutInit ();
+return vorbis_comment_init ();
   ;
   return 0;
 }
@@ -4247,34 +4248,41 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
 	 test ! -s conftest.err
        } && test -s conftest$ac_exeext &&
        $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_openal_alutInit=yes
+  ac_cv_lib_vorbis_vorbis_comment_init=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ac_cv_lib_openal_alutInit=no
+	ac_cv_lib_vorbis_vorbis_comment_init=no
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
       conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_openal_alutInit" >&5
-echo "${ECHO_T}$ac_cv_lib_openal_alutInit" >&6; }
-if test $ac_cv_lib_openal_alutInit = yes; then
-  { { echo "$as_me:$LINENO: error: ALUT not found" >&5
-echo "$as_me: error: ALUT not found" >&2;}
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_vorbis_vorbis_comment_init" >&5
+echo "${ECHO_T}$ac_cv_lib_vorbis_vorbis_comment_init" >&6; }
+if test $ac_cv_lib_vorbis_vorbis_comment_init = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBVORBIS 1
+_ACEOF
+
+  LIBS="-lvorbis $LIBS"
+
+else
+  { { echo "$as_me:$LINENO: error: Vorbis not found" >&5
+echo "$as_me: error: Vorbis not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
 
-{ echo "$as_me:$LINENO: checking for alBufferf in -lalut" >&5
-echo $ECHO_N "checking for alBufferf in -lalut... $ECHO_C" >&6; }
-if test "${ac_cv_lib_alut_alBufferf+set}" = set; then
+{ echo "$as_me:$LINENO: checking for ov_open in -lvorbisfile" >&5
+echo $ECHO_N "checking for ov_open in -lvorbisfile... $ECHO_C" >&6; }
+if test "${ac_cv_lib_vorbisfile_ov_open+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lalut  $LIBS"
+LIBS="-lvorbisfile  $LIBS"
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -4288,11 +4296,11 @@ cat >>conftest.$ac_ext <<_ACEOF
 #ifdef __cplusplus
 extern "C"
 #endif
-char alBufferf ();
+char ov_open ();
 int
 main ()
 {
-return alBufferf ();
+return ov_open ();
   ;
   return 0;
 }
@@ -4315,30 +4323,30 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
 	 test ! -s conftest.err
        } && test -s conftest$ac_exeext &&
        $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_alut_alBufferf=yes
+  ac_cv_lib_vorbisfile_ov_open=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ac_cv_lib_alut_alBufferf=no
+	ac_cv_lib_vorbisfile_ov_open=no
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
       conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_alut_alBufferf" >&5
-echo "${ECHO_T}$ac_cv_lib_alut_alBufferf" >&6; }
-if test $ac_cv_lib_alut_alBufferf = yes; then
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_vorbisfile_ov_open" >&5
+echo "${ECHO_T}$ac_cv_lib_vorbisfile_ov_open" >&6; }
+if test $ac_cv_lib_vorbisfile_ov_open = yes; then
   cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBALUT 1
+#define HAVE_LIBVORBISFILE 1
 _ACEOF
 
-  LIBS="-lalut $LIBS"
+  LIBS="-lvorbisfile $LIBS"
 
 else
-  { { echo "$as_me:$LINENO: error: ALUT not found" >&5
-echo "$as_me: error: ALUT not found" >&2;}
+  { { echo "$as_me:$LINENO: error: Vorbisfile not found" >&5
+echo "$as_me: error: Vorbisfile not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -4653,8 +4661,7 @@ echo "$as_me: error: *** SDL version $SDL_VERSION not found!" >&2;}
 
   rm -f conf.sdltest
 
-#   Enable a few more CFLAGS till later
-CFLAGS="$CFLAGS $SDL_CFLAGS -D__DEBUG__ -D__XBOX360XPLORER__"
+CFLAGS="$CFLAGS $SDL_CFLAGS"
 LIBS="$LIBS $SDL_LIBS"
 
 { echo "$as_me:$LINENO: checking for IMG_Load in -lSDL_image" >&5
@@ -5590,7 +5597,8 @@ fi
 done
 
 
-for ac_header in AL/alut.h
+
+for ac_header in ogg/ogg.h vorbis/vorbisfile.h
 do
 as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
 if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
@@ -6322,6 +6330,9 @@ _ACEOF
 
 fi
 
+
+# More CFLAGS we want
+CFLAGS="$CFLAGS  -D__DEBUG__ -D__XBOX360XPLORER__ -Wall -ansi"
 
 # Checks for library functions.
 
@@ -7684,5 +7695,4 @@ if test "$no_create" != yes; then
   # would make configure fail if this is the last instruction.
   $ac_cs_success || { (exit 1); exit 1; }
 fi
-
 

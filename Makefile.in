@@ -32,12 +32,9 @@ POST_UNINSTALL = :
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
-	$(top_srcdir)/configure $(top_srcdir)/src/audio/Makefile.in \
-	$(top_srcdir)/src/graphics/Makefile.in \
-	$(top_srcdir)/src/input/Makefile.in \
-	$(top_srcdir)/src/io/Makefile.in \
-	$(top_srcdir)/src/screens/Makefile.in AUTHORS COPYING \
-	ChangeLog INSTALL NEWS depcomp install-sh missing
+	$(top_srcdir)/configure $(top_srcdir)/src/io/Makefile.in \
+	AUTHORS COPYING ChangeLog INSTALL NEWS depcomp install-sh \
+	missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -46,8 +43,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h
-CONFIG_CLEAN_FILES = src/audio/Makefile src/graphics/Makefile \
-	src/input/Makefile src/io/Makefile src/screens/Makefile
+CONFIG_CLEAN_FILES = src/io/Makefile
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -221,15 +217,7 @@ $(srcdir)/config.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f config.h stamp-h1
-src/audio/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/audio/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-src/graphics/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/graphics/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-src/input/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/input/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 src/io/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/io/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-src/screens/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/screens/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 # This directory's subdirectories are mostly independent; you can cd

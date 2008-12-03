@@ -1,3 +1,6 @@
+#ifndef FREEBAND_H
+#define FREEBAND_H
+
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -44,3 +47,5 @@ GLvoid quitGame(GLint retnCode);
 
 /* Other screens */
 GLvoid screenDemo();
+
+#endif

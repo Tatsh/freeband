@@ -133,7 +133,6 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
       else {
 
         if (currentScreen.mainMenu) {
-          playTrack();
           handleMainMenu();
           if (!nonGame)
             screenInstrumentsBuffer(nPlayers); /* Note: 1 player screen is significantly different from multiplayer */
@@ -210,6 +209,7 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
       
     case SDLK_q: /* Can anyone say 'easter egg'? Maybe things like this will help themers */
       if (currentScreen.mainMenu) {
+        openTrack(testTrack, OGG, BGM);
         for ( i = 0; i < 4; i++ )
           logoVertexX[i] = logoVertexX[i] - 0.01;
       }

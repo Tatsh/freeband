@@ -1,6 +1,5 @@
 #include "../freeband.h"
 #include "audio.h"
-#include "ogg.h"
 
 OggVorbis_File oggStream;
 vorbis_info *vorbisInfo;

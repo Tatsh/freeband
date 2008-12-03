@@ -285,8 +285,9 @@ GLvoid drawFreeband() {
   glScalef(1, -1, 1); /* Flip framebuffer because of SDL's upside down issue */
 
   if (loading); /* Do nothing and wait till loading = false */
-  else if (currentScreen.mainMenu && !menuQuit)
+  else if (currentScreen.mainMenu && !menuQuit) {
     screenMain();
+  }
   else if (currentScreen.instruments && !menuQuit)
     screenInstruments(nPlayers);
   else if (currentScreen.songs && !menuQuit)

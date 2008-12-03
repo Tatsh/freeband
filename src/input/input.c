@@ -134,7 +134,6 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
 
         if (currentScreen.mainMenu) {
           handleMainMenu();
-          playTrack();
           if (!nonGame)
             screenInstrumentsBuffer(nPlayers); /* Note: 1 player screen is significantly different from multiplayer */
           else
