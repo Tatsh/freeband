@@ -43,6 +43,9 @@ GLvoid quitGame(GLint retnCode) {
   glDeleteTextures( MAX_IMAGES, &texture[0] );
   glDeleteTextures( MAX_TEXT, &text[0] );
   gluDeleteQuadric( quadratic );
+  glDisable(GL_TEXTURE_2D);
+  glDisable(GL_BLEND);
+  glDisable(GL_DEPTH_TEST);
 
   for ( i = 0; i < 3; i++ ) {
     if(SDL_JoystickOpened(i))
@@ -50,7 +53,7 @@ GLvoid quitGame(GLint retnCode) {
   }
 
   TTF_Quit();
-  SDL_Quit();     /* Clean window *//
+  SDL_Quit();     /* Clean window */
 #ifdef __DEBUG__
   fprintf(stdout, "Quitting...\n");
 #endif

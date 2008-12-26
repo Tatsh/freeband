@@ -83,6 +83,7 @@ bool resizeWindow(GLuint width, GLuint height) {
   return true;
 }
 
+/* Currently only working with x-axis */
 GLfloat centreAt(GLfloat xyz, GLfloat width) {
   GLfloat offset;
 

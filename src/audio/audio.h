@@ -5,13 +5,15 @@
 #include "sfx.h"
 #include "track.h"
 
-#define BUFFER_SIZE 65536
-
+/* 100% legal to distribute/link with */
 #define OGG 0 /* Supported/will-be supported audio formats */
-#define MP3 1
-#define WAV 2
-#define FLAC 3
+#define WAV 1
+#define FLAC 2
 
-extern char testTrack[];
+/* Questionable legality */
+#ifdef __AUDIOQL__
+#define MP3 10
+#define AAC 11
+#endif
 
 #endif

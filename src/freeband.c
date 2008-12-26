@@ -42,6 +42,9 @@ GLvoid quitGame(GLint retnCode) {
 
   glDeleteTextures( MAX_IMAGES, &texture[0] );
   glDeleteTextures( MAX_TEXT, &text[0] );
+  glDisable(GL_TEXTURE_2D);
+  glDisable(GL_BLEND);
+  glDisable(GL_DEPTH_TEST);
   gluDeleteQuadric( quadratic );
 
   for ( i = 0; i < 3; i++ ) {

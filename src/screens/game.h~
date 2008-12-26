@@ -19,10 +19,13 @@ typedef struct {
   bool o;
 } tButton;
 
-extern tButton button;
-
 extern bool gamePaused;
 extern GLfloat bringDownAngle;
+
+extern GLfloat NE_coord_neg;
+extern GLfloat NE_coord_pos;
+
+extern tButton button;
 
 GLvoid screenGameBuffer();
 GLvoid screenGame();

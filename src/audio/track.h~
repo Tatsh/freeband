@@ -1,0 +1,24 @@
+#ifndef TRACK_H
+#define TRACK_H
+
+#define BGM 0 /* Audio types that are not sound F/X */
+#define GUITAR 1
+#define BASS 2
+#define DRUMS 3
+#define VOCALS 4
+
+#define NUM_BUFFERS 3
+
+ALuint buffer_bgm[NUM_BUFFERS];
+ALuint buffer_guitar[NUM_BUFFERS], buffer_bass[NUM_BUFFERS], buffer_drums[NUM_BUFFERS], buffer_vocals[NUM_BUFFERS];
+
+ALuint source_bgm;
+ALuint source_guitar, source_bass, source_drums, source_vocals;
+
+ALvoid openTrack(char path[], ALuint format, ALuint type);
+bool playbackTrack(ALuint source, ALuint buffer[], ALuint format);
+bool playingTrack(ALuint source);
+bool streamTrack(ALuint buffer, ALuint format);
+bool updateTrack(ALuint source, ALuint format);
+
+#endif

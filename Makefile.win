@@ -5,9 +5,9 @@ CPP  = g++.exe
 CC   = gcc.exe
 WINDRES = windres.exe
 RES  = win32/Freeband_private.res
-OBJ  = win32/freeband.o win32/graphics.o win32/input.o win32/demo.o win32/game.o win32/instruments.o win32/main.o win32/online.o win32/options.o win32/songs.o win32/difficulty.o $(RES)
-LINKOBJ  = win32/freeband.o win32/graphics.o win32/input.o win32/demo.o win32/game.o win32/instruments.o win32/main.o win32/online.o win32/options.o win32/songs.o win32/difficulty.o $(RES)
-LIBS =  -L"C:/Dev-Cpp/lib" -mwindows -lglut32 -lopengl32 -lglu32 -lwinmm -lmingw32 -lSDLmain -lSDL -lSDL_image -lSDL_ttf -lALut -lOpenAL32  
+OBJ  = win32/freeband.o win32/graphics.o win32/input.o win32/demo.o win32/game.o win32/instruments.o win32/main.o win32/online.o win32/options.o win32/songs.o win32/difficulty.o win32/audio.o win32/ogg.o win32/sfx.o win32/track.o $(RES)
+LINKOBJ  = win32/freeband.o win32/graphics.o win32/input.o win32/demo.o win32/game.o win32/instruments.o win32/main.o win32/online.o win32/options.o win32/songs.o win32/difficulty.o win32/audio.o win32/ogg.o win32/sfx.o win32/track.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -mwindows -lglut32 -lopengl32 -lglu32 -lwinmm -lmingw32 -lSDLmain -lSDL -lSDL_image -lSDL_ttf  
 INCS =  -I"C:/Dev-Cpp/include" 
 CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include" 
 BIN  = win32/freeband.exe
@@ -58,6 +58,18 @@ win32/songs.o: src/screens/songs.c
 
 win32/difficulty.o: src/screens/difficulty.c
 	$(CC) -c src/screens/difficulty.c -o win32/difficulty.o $(CFLAGS)
+
+win32/audio.o: src/audio/audio.c
+	$(CC) -c src/audio/audio.c -o win32/audio.o $(CFLAGS)
+
+win32/ogg.o: src/audio/ogg.c
+	$(CC) -c src/audio/ogg.c -o win32/ogg.o $(CFLAGS)
+
+win32/sfx.o: src/audio/sfx.c
+	$(CC) -c src/audio/sfx.c -o win32/sfx.o $(CFLAGS)
+
+win32/track.o: src/audio/track.c
+	$(CC) -c src/audio/track.c -o win32/track.o $(CFLAGS)
 
 win32/Freeband_private.res: Freeband_private.rc 
 	$(WINDRES) -i Freeband_private.rc --input-format=rc -o win32/Freeband_private.res -O coff 

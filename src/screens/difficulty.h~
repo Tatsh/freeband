@@ -5,7 +5,7 @@
 
 extern bool diffEasy, diffMedium, diffHard, diffExpert;
 
-extern GLfloat pSelectionY[];
+extern GLfloat diffSelectionY[];
 
 GLvoid screenDifficultyText();
 GLvoid screenDifficultyTextures();

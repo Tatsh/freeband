@@ -4,6 +4,8 @@
 #include <windows.h> // include for version info constants
 
 
+A ICON MOVEABLE PURE LOADONCALL DISCARDABLE "Freeband.ico"
+
 //
 // SUPPORT FOR WINDOWS XP THEMES:
 // THIS WILL MAKE THE PROGRAM USE THE COMMON CONTROLS

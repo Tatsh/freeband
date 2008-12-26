@@ -20,6 +20,10 @@ AC_CHECK_LIB([glut], [glutInit], [], [AC_MSG_ERROR([GLUT not found])])
 AC_CHECK_LIB([vorbis], [vorbis_comment_init], [], [AC_MSG_ERROR([Vorbis not found])])
 AC_CHECK_LIB([vorbisfile], [ov_open], [], [AC_MSG_ERROR([Vorbisfile not found])])
 
+dnl Mingw AC_CHECK_LIB([opengl32], [glGetString], [], [AC_MSG_ERROR([OpenGL not found])])
+dnl Mingw AC_CHECK_LIB([glut32], [glutInit], [], [AC_MSG_ERROR([GLUT not found])])
+dnl Mingw AC_CHECK_LIB([glu32], [gluGetString], [], [AC_MSG_ERROR([GLU not found])])
+
 # Check for SDL
 SDL_VERSION=1.2.0
 AM_PATH_SDL($SDL_VERSION, :, AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!]))

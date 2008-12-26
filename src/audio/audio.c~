@@ -1,54 +1,16 @@
 #include "../freeband.h"
 #include "audio.h"
 
-ALenum channels;
+bool handleAudioThreads() {
 
-char testTrack[] = "music.ogg";
-
-ALvoid checkErrorState() {
-  ALint error = alGetError();
-  
-  if (error != AL_NO_ERROR)
-    fprintf(stderr, "OpenAL had an error: %d\n", error);
-  
-  return;
+  return true;
 }
 
-ALvoid emptyQueued(ALuint source) {
-  ALint queued;
+bool verifyFiletype(int filetype, char path[]) {
+  bool verified = false;
   
-  alGetSourcei(source, AL_BUFFERS_QUEUED, &queued);
-  
-  while (queued--) {
-    ALuint buffer;
-    
-    alSourceUnqueueBuffers(source, 1, &buffer);
-    checkErrorState();
-  }
-  
-  return;
-}
-
-ALvoid releaseAudio(ALuint source, ALuint buffer[], ALuint format) {
-  alSourceStop(source);
-  emptyQueued(source);
-  alDeleteSources(1, &source);
-#ifdef __DEBUG__
-  fprintf(stdout, "Deleting sources.\n");
-#endif
-  emptyQueued(source);
-  alDeleteBuffers(NUM_BUFFERS, buffer);
-#ifdef __DEBUG__
-  fprintf(stdout, "Deleting buffers.\n");
-#endif
-  emptyQueued(source);
-  
-  switch (format) {
+  switch (filetype) {
     case OGG:
-      ov_clear(&oggStream);
-      break;
-      
-    case MP3:
       break;
       
     case WAV:
@@ -57,10 +19,29 @@ ALvoid releaseAudio(ALuint source, ALuint buffer[], ALuint format) {
     case FLAC:
       break;
       
-    default:
+#ifdef __AUDIOQUL__
+    case MP3:
       break;
+#endif
   }
   
-  return;
+  return verified;
 }
 
+void playBGM() {
+}
+
+void playGuitar() {
+}
+
+void playBass() {
+}
+
+void playDrums() {
+}
+
+void playVocals() {
+}
+
+void sfxBuffer() {
+}

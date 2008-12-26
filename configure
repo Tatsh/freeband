@@ -4351,6 +4351,7 @@ echo "$as_me: error: Vorbisfile not found" >&2;}
 fi
 
 
+
 # Check for SDL
 SDL_VERSION=1.2.0
 
