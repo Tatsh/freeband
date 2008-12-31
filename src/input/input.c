@@ -7,7 +7,7 @@
 #include "../screens/main.h"
 #include "../screens/songs.h"
 
-GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
+GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
 
   Uint8 *keystates = SDL_GetKeyState(NULL);
   GLuint i;
@@ -16,113 +16,113 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
   switch (keysym->sym) {
     
     case SDLK_DOWN:
-      if (currentScreen.mainMenu) {
+      if (fb_screen.mainMenu) {
 
-        menuSelection++;
-        setMainMenuState(menuSelection);
+        screenMain_nSelection++;
+        screenMain_highlighted(screenMain_nSelection);
 
-        if ( menuSelection < 5 )
-          for ( i = 0; i < 4; i++ ) mSelectorVertexY[i] = mSelectorVertexY[i] + 0.2;
+        if ( screenMain_nSelection < 5 )
+          for ( i = 0; i < 4; i++ ) screenMain_selectionY[i] = screenMain_selectionY[i] + 0.2;
         else {
-          menuSelection = 0;
-          setMainMenuState(menuSelection);
-          mSelectorVertexY[0] = 0.18f; mSelectorVertexY[1] = 0.0f;
-          mSelectorVertexY[2] = 0.0f ; mSelectorVertexY[3] = 0.18f;
+          screenMain_nSelection = 0;
+          screenMain_highlighted(screenMain_nSelection);
+          screenMain_selectionY[0] = 0.18f; screenMain_selectionY[1] = 0.0f;
+          screenMain_selectionY[2] = 0.0f ; screenMain_selectionY[3] = 0.18f;
         }
 
       }
 
-      else if (currentScreen.instruments) {
+      else if (fb_screen.instruments) {
 
-        if (nPlayers < 2) {
-          instSelection++;
-          setInstrument(instSelection);
+        if (fb_nPlayers < 2) {
+          screenInstruments_nSelection++;
+          screenInstruments_highlighted(screenInstruments_nSelection);
 
-          if ( instSelection < 4 );
+          if ( screenInstruments_nSelection < 4 );
           else {
-            instSelection = 0;
-            setInstrument(instSelection);
+            screenInstruments_nSelection = 0;
+            screenInstruments_highlighted(screenInstruments_nSelection);
           }
         }
 
       }
-      else if (currentScreen.difficulty) {
+      else if (fb_screen.difficulty) {
         if (diffEasy) {
           diffMedium = true;
           diffEasy = false;
-          for ( i = 0; i < 4; i++ ) diffSelectionY[i] = diffSelectionY[i] + DIFFHT;
+          for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
         }
         else if (diffMedium) {
           diffHard = true;
           diffMedium = false;
-          for ( i = 0; i < 4; i++ ) diffSelectionY[i] = diffSelectionY[i] + DIFFHT;
+          for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
         }
         else if (diffHard) {
           diffExpert = true;
           diffHard = false;
-          for ( i = 0; i < 4; i++ ) diffSelectionY[i] = diffSelectionY[i] + DIFFHT;
+          for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
         }
         else if (diffExpert) {
           diffEasy = true;
           diffExpert = false;
-          diffSelectionY[0] = 0.0f; diffSelectionY[1] = DIFFHT;
-          diffSelectionY[2] = DIFFHT; diffSelectionY[3] = 0.0f;
+          screenDifficulty_selectionY[0] = 0.0f; screenDifficulty_selectionY[1] = DIFFHT;
+          screenDifficulty_selectionY[2] = DIFFHT; screenDifficulty_selectionY[3] = 0.0f;
         }
       }
       break;
       
     case SDLK_UP:
-      if (currentScreen.mainMenu) {
+      if (fb_screen.mainMenu) {
  
-        if (menuSelection > 0) {
-          menuSelection--;
-          setMainMenuState(menuSelection);
-          for ( i = 0; i < 4; i++ ) mSelectorVertexY[i] = mSelectorVertexY[i] - 0.2;
+        if (screenMain_nSelection > 0) {
+          screenMain_nSelection--;
+          screenMain_highlighted(screenMain_nSelection);
+          for ( i = 0; i < 4; i++ ) screenMain_selectionY[i] = screenMain_selectionY[i] - 0.2;
         }
-        else if (menuSelection < 1 ) {
-          menuSelection = 4;
-          setMainMenuState(menuSelection);
-          for ( i = 0; i < 4; i++ ) mSelectorVertexY[i] = mSelectorVertexY[i] + 0.8;
+        else if (screenMain_nSelection < 1 ) {
+          screenMain_nSelection = 4;
+          screenMain_highlighted(screenMain_nSelection);
+          for ( i = 0; i < 4; i++ ) screenMain_selectionY[i] = screenMain_selectionY[i] + 0.8;
         }
 
       }
 
-      else if (currentScreen.instruments) {
+      else if (fb_screen.instruments) {
 
-        if (nPlayers < 2) {
-          if (instSelection > 0) {
-            instSelection--;
-            setInstrument(instSelection);
+        if (fb_nPlayers < 2) {
+          if (screenInstruments_nSelection > 0) {
+            screenInstruments_nSelection--;
+            screenInstruments_highlighted(screenInstruments_nSelection);
           }
-          else if (instSelection < 1 ) {
-            instSelection = 3; /* Vocals */
-            setInstrument(instSelection);
+          else if (screenInstruments_nSelection < 1 ) {
+            screenInstruments_nSelection = 3; /* Vocals */
+            screenInstruments_highlighted(screenInstruments_nSelection);
           }
 
         }
 
       }
       
-      else if (currentScreen.difficulty) {
+      else if (fb_screen.difficulty) {
         if (diffEasy) {
           diffExpert = true;
           diffEasy = false;
-          for ( i = 0; i < 4; i++ ) diffSelectionY[i] = diffSelectionY[i] + (3.0f * DIFFHT);
+          for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + (3.0f * DIFFHT);
         }
         else if (diffExpert) {
           diffHard = true;
           diffExpert = false;
-          for ( i = 0; i < 4; i++ ) diffSelectionY[i] = diffSelectionY[i] - DIFFHT;
+          for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
         }
         else if (diffHard) {
           diffMedium = true;
           diffHard = false;
-          for ( i = 0; i < 4; i++ ) diffSelectionY[i] = diffSelectionY[i] - DIFFHT;
+          for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
         }
         else if (diffMedium) {
           diffEasy = true;
           diffMedium = false;
-          for ( i = 0; i < 4; i++ ) diffSelectionY[i] = diffSelectionY[i] - DIFFHT;
+          for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
         }
       }
       break;
@@ -132,37 +132,37 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
         SDL_WM_ToggleFullScreen(surface);
       else {
 
-        if (currentScreen.mainMenu) {
-          handleMainMenu();
+        if (fb_screen.mainMenu) {
+          screenMain_accept();
           if (!nonGame)
-            screenInstrumentsBuffer(nPlayers); /* Note: 1 player screen is significantly different from multiplayer */
+            screenInstruments_buffer(); /* Note: 1 player screen is significantly different from multiplayer */
           else
             fprintf(stdout, "Not implemented yet.\n");
         }
 
-        else if (currentScreen.instruments) {
-          handleInstrumentsMenu();
-          screenSongsBuffer();
+        else if (fb_screen.instruments) {
+          screenInstruments_accept();
+          screenSongs_buffer();
           /* screenCharactersBuffer(nPlayers); someday */
         }
-        else if (currentScreen.songs) {
-          menuQuit = loading = true;
-          currentScreen.songs = false;
-          clearScreen();
-          screenDifficultyBuffer();
-          currentScreen.difficulty = true;
+        else if (fb_screen.songs) {
+          menuQuit = graphics_loading = true;
+          fb_screen.songs = false;
+          graphics_clear();
+          screenDifficulty_buffer();
+          fb_screen.difficulty = true;
 #ifdef __DEBUG__
           fprintf(stdout, "Now in screenDifficulty().\n");
 #endif
-          loading = menuQuit = false;
+          graphics_loading = menuQuit = false;
         }
-        else if (currentScreen.difficulty) {
-          menuQuit = loading = true;
-          currentScreen.difficulty = false;
-          clearScreen();
-          screenGameBuffer();
-          currentScreen.game = true;
-          loading = gamePaused = false;
+        else if (fb_screen.difficulty) {
+          menuQuit = graphics_loading = true;
+          fb_screen.difficulty = false;
+          graphics_clear();
+          screenGame_buffer();
+          fb_screen.game = true;
+          graphics_loading = gamePaused = false;
 #ifdef __DEBUG__
           fprintf(stdout, "Now in screenGame() function.\n");
 #endif
@@ -172,52 +172,60 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
       break;
 
     case SDLK_ESCAPE:
-      if (currentScreen.mainMenu)
-        quitGame(0);
-      else if (currentScreen.instruments) {
-        menuQuit = loading = true;
-        clearScreen();
-        setMainImages();
-        setMainText();
-        currentScreen.instruments = loading = menuQuit = false;
-        currentScreen.mainMenu = true;
+      if (fb_screen.mainMenu)
+        fb_quit(0);
+      else if (fb_screen.instruments) {
+        menuQuit = graphics_loading = true;
+        graphics_clear();
+        screenMain_buffer();
+        fb_screen.instruments = graphics_loading = menuQuit = false;
+        fb_screen.mainMenu = true;
 #ifdef __DEBUG__
         fprintf(stdout, "Successfully switched back to screenMain.\n");
 #endif
-        instSelection = 0;
-        for (i = 0; i < 4; i++) selectedGradientY[i] = selectedGradientY_reset[i]; /* Reset gradient to guitar position */
+        screenInstruments_nSelection = 0;
+        for (i = 0; i < 4; i++) screenInstruments_selectionY[i] = screenInstruments_selectionReset[i]; /* Reset gradient to guitar position */
       }
-      else if (currentScreen.songs) {
-        menuQuit = loading = true;
-        clearScreen();
-        setInstrumentsImages_1P();
-        setInstrumentsText_1P();
-        currentScreen.instruments = loading = menuQuit = false;
-        currentScreen.instruments = true;
+      else if (fb_screen.songs) {
+        menuQuit = graphics_loading = true;
+        graphics_clear();
+        screenInstruments_buffer();
+        fb_screen.instruments = graphics_loading = menuQuit = false;
+        fb_screen.instruments = true;
       }
-      else if (currentScreen.difficulty) {
-        menuQuit = loading = true;
-        clearScreen();
-        screenSongsBuffer();
-        currentScreen.difficulty = loading = menuQuit = false;
-        currentScreen.songs = true;
+      else if (fb_screen.difficulty) {
+        menuQuit = graphics_loading = true;
+        graphics_clear();
+        screenSongs_buffer();
+        fb_screen.difficulty = graphics_loading = menuQuit = false;
+        fb_screen.songs = true;
 #ifdef __DEBUG__
         fprintf(stdout, "Switched back to screenSongs.\n");
 #endif
       }
       break;
       
+    case SDLK_KP_ENTER:
+      if (fb_screen.mainMenu || fb_screen.instruments || fb_screen.songs) {
+        if (fb_nPlayers < 4)
+          fb_nPlayers++;
+#ifdef __DEBUG__
+        fprintf(stdout, "Added another player. Number of players: %d.\n", fb_nPlayers);
+#endif
+      }
+      break;
+      
     case SDLK_q: /* Can anyone say 'easter egg'? Maybe things like this will help themers */
-      if (currentScreen.mainMenu) {
+      if (fb_screen.mainMenu) {
         for ( i = 0; i < 4; i++ )
-          logoVertexX[i] = logoVertexX[i] - 0.01;
+          screenMain_logoX[i] = screenMain_logoX[i] - 0.01;
       }
       break;
       
     case SDLK_w:
-      if (currentScreen.mainMenu) {
+      if (fb_screen.mainMenu) {
         for ( i = 0; i < 4; i++ )
-          logoVertexX[i] = logoVertexX[i] + 0.01;
+          screenMain_logoX[i] = screenMain_logoX[i] + 0.01;
       }
       break;
 
@@ -228,39 +236,38 @@ GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
   return;
 }
 
-GLvoid gameKeys(SDL_keysym *keysym, SDL_Surface *surface, GLuint nPlayers) {
-  
+GLvoid input_gameKeys(SDL_keysym *keysym, SDL_Surface *surface) {
   Uint8 *keystates = SDL_GetKeyState(NULL);
 
   if (keystates[SDLK_F1])
-    button.g = true;
+    screenGame_button.g = true;
   else
-    button.g = false;
+    screenGame_button.g = false;
   
   if (keystates[SDLK_F2])
-    button.r = true;
+    screenGame_button.r = true;
   else
-    button.r = false;
+    screenGame_button.r = false;
   
   if (keystates[SDLK_F3])
-    button.y = true;
+    screenGame_button.y = true;
   else
-    button.y = false;
+    screenGame_button.y = false;
   
   if (keystates[SDLK_F4])
-    button.b = true;
+    screenGame_button.b = true;
   else
-    button.b = false;
+    screenGame_button.b = false;
   
   if (keystates[SDLK_F5])
-    button.o = true;
+    screenGame_button.o = true;
   else
-    button.o = false;
+    screenGame_button.o = false;
   
   switch (keysym->sym) {
 
     case SDLK_RETURN:
-      if (keystates[SDLK_LALT] || keystates[SDLK_RALT]) /* Switch to full screen only if Alt+Enter is pressed */
+      if (keysym->mod & KMOD_ALT) /* Switch to full screen only if Alt+Enter is pressed */
         SDL_WM_ToggleFullScreen(surface);
       break;
       
@@ -268,12 +275,12 @@ GLvoid gameKeys(SDL_keysym *keysym, SDL_Surface *surface, GLuint nPlayers) {
       bringDownAngle = 90.0f; /* Reset track */
       NE_coord_neg = 0.0f;
       NE_coord_pos = 1.0f;
-      loading = gamePaused = true;
-      currentScreen.game = menuQuit = false;
-      clearScreen();
-      screenSongsBuffer();
-      loading = false;
-      currentScreen.songs = true;
+      graphics_loading = gamePaused = true;
+      fb_screen.game = menuQuit = false;
+      graphics_clear();
+      screenSongs_buffer();
+      graphics_loading = false;
+      fb_screen.songs = true;
 #ifdef __DEBUG__
       fprintf(stdout, "Switched back to screenSongs.\n");
 #endif

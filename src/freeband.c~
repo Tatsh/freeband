@@ -1,6 +1,7 @@
 #include "freeband.h"
 #include "audio/audio.h"
 #include "graphics/graphics.h"
+#include "graphics/text.h"
 #include "input/input.h"
 #include "screens/game.h"
 #include "screens/instruments.h"
@@ -19,33 +20,27 @@ char windowTitle[] = "Freeband";
 GLfloat text_SinglePlayerY[] = { 0.0f, MENUITEMSHT, MENUITEMSHT, 0.0f };
 GLfloat text_MultiplayerY[4], text_OnlineY[4], text_OptionsY[4], text_QuitY[4];
 
-GLuint nPlayers; /* Number of players */
+GLuint fb_nPlayers = 1; /* Number of players */
 GLuint texture[MAX_IMAGES]; /* Normal images */
 GLuint text[MAX_TEXT]; /* Text only! */
 
-SDL_Event freeband;     /* Event collector */
+SDL_Event freeband;     /* Main event collector */
 SDL_Surface *fbSurface; /* Main game surface */
 SDL_Joystick *joy;      /* Space for controllers */
 
-tCurrentScreen currentScreen; /* The current screen */
-
-GLuint crilleei = 0; /* Crillee */
-GLuint bitstreami = 1; /* Bitstream Vera Sans */
-GLuint bitstreamMonoBoldi = 2; /* Bitstream Vera Mono Bold */
-GLuint freeSansi = 3; /* FreeSans */
-GLuint freeSansBoldi = 4; /* FreeSans Bold */
+tCurrentScreen fb_screen; /* The current screen */
 
 TTF_Font *crillee, *bitstream, *bitstreamMonoBold, *freeSans, *freeSansBold;
 
-GLvoid quitGame(GLint retnCode) {
+GLvoid fb_quit(GLint retnCode) {
   GLuint i;
 
   glDeleteTextures( MAX_IMAGES, &texture[0] );
   glDeleteTextures( MAX_TEXT, &text[0] );
-  gluDeleteQuadric( quadratic );
   glDisable(GL_TEXTURE_2D);
   glDisable(GL_BLEND);
   glDisable(GL_DEPTH_TEST);
+  gluDeleteQuadric( quadratic );
 
   for ( i = 0; i < 3; i++ ) {
     if(SDL_JoystickOpened(i))
@@ -75,7 +70,7 @@ GLint main(GLint argc, char *argv[]) {
   /* Initialise SDL */
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     fprintf(stderr, "Video initialisation failed: %s.\n", SDL_GetError());
-    quitGame(1);
+    fb_quit(1);
   }
   
   /* Initialise SDL joystick subsystem */
@@ -97,13 +92,13 @@ GLint main(GLint argc, char *argv[]) {
   /* Initialise SDL_ttf */
   if(TTF_Init() < 0) {
     fprintf(stderr, "Could not initialise SDL_ttf: %s.\n", TTF_GetError());
-    quitGame(1);
+    fb_quit(1);
   }
 
   videoInfo = SDL_GetVideoInfo(); /* Get video information */
   if (!videoInfo) {
     fprintf(stderr, "Video query failed: %s.\n", SDL_GetError());
-    quitGame(1);
+    fb_quit(1);
   }
 
   videoFlags = SDL_OPENGL;            /* Enable OpenGL */
@@ -122,31 +117,29 @@ GLint main(GLint argc, char *argv[]) {
   fbSurface = SDL_SetVideoMode(WIDTH, HEIGHT, BPP, videoFlags); /* Get a SDL surface */
   if (!fbSurface) {
     fprintf(stderr,  "Video mode set failed: %s.\n", SDL_GetError());
-    quitGame(1);
+    fb_quit(1);
   }
   
   if ((SDL_EnableKeyRepeat(100, SDL_DEFAULT_REPEAT_INTERVAL))) { /* Enable key repeat */
     fprintf(stderr, "Setting keyboard repeat failed: %s\n", SDL_GetError());
-    quitGame(1);
+    fb_quit(1);
   }
 
-  if (initGL() != true) {
+  if (graphics_initGL() != true) {
     fprintf(stderr, "Unable to initialise OpenGL.\n");
-    quitGame(1);
+    fb_quit(1);
   }
   
   SDL_WM_SetCaption(windowTitle, windowTitle); /* Set window title */
 
-  resizeWindow(WIDTH, HEIGHT);
-  
-  setupColors(); /* Initialise colours */
-  
-  currentScreen.mainMenu = true; /* Set to main screen */
+  graphics_resizeWindow(WIDTH, HEIGHT);
+  graphics_initColours(); /* Initialise colours */
+
+  fb_screen.mainMenu = true; /* Set to main screen */
   menuQuit = false; /* Have we left a menu yet? */
   
-  /* Load main menu textures and text */
-  setMainImages();
-  setMainText();
+  /* Buffer main menu textures and text */
+  screenMain_buffer();
   
   /* Generate arrays of Y coordinates for each text, based upon initial position of Single Player */
   for ( i = 0; i < 4; i++ ) text_MultiplayerY[i] = text_SinglePlayerY[i] + 0.2;
@@ -158,39 +151,42 @@ GLint main(GLint argc, char *argv[]) {
     
     while (SDL_PollEvent(&freeband)) {
       
-      switch(freeband.type) {
+      switch (freeband.type) {
 
         case SDL_VIDEORESIZE: /* Handle resize event */
           fbSurface = SDL_SetVideoMode(freeband.resize.w, freeband.resize.h, 32, videoFlags);
           if (!fbSurface) {
             fprintf(stderr, "Could not get a surface after resize: %s.\n", SDL_GetError());
-            quitGame(1);
+            fb_quit(1);
           }
-          resizeWindow(freeband.resize.w, freeband.resize.h);
+          if (!(graphics_initGL(freeband.resize.w, freeband.resize.h))) {
+            fprintf(stderr, "Could not resize window.\n");
+            fb_quit(1);
+          }
           break;
           
         case SDL_KEYDOWN: /* Handle key down event */
           if (!menuQuit || gamePaused)
-            menuKeys(&freeband.key.keysym, fbSurface);
+            input_menuKeys(&freeband.key.keysym, fbSurface);
           else
-            gameKeys(&freeband.key.keysym, fbSurface, nPlayers);
+            input_gameKeys(&freeband.key.keysym, fbSurface);
           break;
 
         case SDL_KEYUP:
-          if (currentScreen.game) {
-            gameKeys(&freeband.key.keysym, fbSurface, nPlayers);
+          if (fb_screen.game) {
+            input_gameKeys(&freeband.key.keysym, fbSurface);
           }
           break;
 
 #ifdef __XBOX360XPLORER__
         case SDL_JOYBUTTONDOWN: /* Xbox 360 controller only; non-production code! */
         case SDL_JOYBUTTONUP: /* This works ONLY if you have the xboxdrv-linux user-space driver running! */
-          if (currentScreen.game) {
-            button.g = SDL_JoystickGetButton(joy, 7);
-            button.r = SDL_JoystickGetButton(joy, 8);
-            button.y = SDL_JoystickGetButton(joy, 9);
-            button.b = SDL_JoystickGetButton(joy, 10);
-            button.o = SDL_JoystickGetButton(joy, 11);
+          if (fb_screen.game) {
+            screenGame_button.g = SDL_JoystickGetButton(joy, 7);
+            screenGame_button.r = SDL_JoystickGetButton(joy, 8);
+            screenGame_button.y = SDL_JoystickGetButton(joy, 9);
+            screenGame_button.b = SDL_JoystickGetButton(joy, 10);
+            screenGame_button.o = SDL_JoystickGetButton(joy, 11);
           }
           break;
 
@@ -202,57 +198,55 @@ GLint main(GLint argc, char *argv[]) {
 #ifdef __WIN32XBOX360XPLORER__
         case SDL_JOYBUTTONDOWN: /* Xbox 360 controller only; non-production code! */
         case SDL_JOYBUTTONUP: /* Do not define both of these! Windows only! */
-          if (currentScreen.game) {
-            button.g = SDL_JoystickGetButton(joy, 0);
-            button.r = SDL_JoystickGetButton(joy, 1);
-            button.y = SDL_JoystickGetButton(joy, 3);
-            button.b = SDL_JoystickGetButton(joy, 2);
-            button.o = SDL_JoystickGetButton(joy, 4);
+          if (fb_screen.game) {
+            screenGame_button.g = SDL_JoystickGetButton(joy, 0);
+            screenGame_button.r = SDL_JoystickGetButton(joy, 1);
+            screenGame_button.y = SDL_JoystickGetButton(joy, 3);
+            screenGame_button.b = SDL_JoystickGetButton(joy, 2);
+            screenGame_button.o = SDL_JoystickGetButton(joy, 4);
           }
           break;
 #endif
 
         case SDL_QUIT: /* Only allow to exit via ^C or close button if at main menu */
-          if (currentScreen.mainMenu)
+          if (fb_screen.mainMenu)
             hasQuit = true;
-          else if (currentScreen.instruments) {
-            menuQuit = loading = true;
-            clearScreen();
-            setMainImages();
-            setMainText();
-            currentScreen.instruments = loading = menuQuit = false;
-            currentScreen.mainMenu = true;
+          else if (fb_screen.instruments) {
+            menuQuit = graphics_loading = true;
+            graphics_clear();
+            screenMain_buffer();
+            fb_screen.instruments = graphics_loading = menuQuit = false;
+            fb_screen.mainMenu = true;
 #ifdef __DEBUG__
             fprintf(stdout, "Switched back to screenMain.\n");
 #endif
           }
-          else if (currentScreen.songs) {
-            menuQuit = loading = true;
-            clearScreen();
-            setInstrumentsImages_1P();
-            setInstrumentsText_1P();
-            currentScreen.instruments = loading = menuQuit = false;
-            currentScreen.instruments = true;
+          else if (fb_screen.songs) {
+            menuQuit = graphics_loading = true;
+            graphics_clear();
+            screenInstruments_buffer();
+            fb_screen.instruments = graphics_loading = menuQuit = false;
+            fb_screen.instruments = true;
 #ifdef __DEBUG__
             fprintf(stdout, "Switched back to screenInstruments.\n");
 #endif
           }
-          else if (currentScreen.difficulty) {
-            menuQuit = loading = true;
-            clearScreen();
-            screenSongsBuffer();
-            currentScreen.difficulty = loading = menuQuit = false;
-            currentScreen.songs = true;
+          else if (fb_screen.difficulty) {
+            menuQuit = graphics_loading = true;
+            graphics_clear();
+            screenSongs_buffer();
+            fb_screen.difficulty = graphics_loading = menuQuit = false;
+            fb_screen.songs = true;
 #ifdef __DEBUG__
             fprintf(stdout, "Switched back to screenSongs.\n");
 #endif
           }
-          else if (currentScreen.game) {
-            menuQuit = loading = true;
-            clearScreen();
-            screenSongsBuffer();
-            currentScreen.difficulty = loading = menuQuit = false;
-            currentScreen.songs = true;
+          else if (fb_screen.game) {
+            menuQuit = graphics_loading = true;
+            graphics_clear();
+            screenSongs_buffer();
+            fb_screen.difficulty = graphics_loading = menuQuit = false;
+            fb_screen.songs = true;
 #ifdef __DEBUG__
             fprintf(stdout, "Switched back to screenSongs.\n");
 #endif
@@ -266,10 +260,8 @@ GLint main(GLint argc, char *argv[]) {
 
     }
 
-    drawFreeband();
+    graphics_draw();
   }
 
-  quitGame(0);
-  
-  return 0;
+  fb_quit(0);
 }

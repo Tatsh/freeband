@@ -1,5 +1,6 @@
 #include "../freeband.h"
 #include "../graphics/graphics.h"
+#include "../graphics/text.h"
 #include "main.h"
 #include "songs.h"
 
@@ -14,21 +15,23 @@ GLuint text_songs, text_byTier, text_titleAZ, text_artistAZ, text_byBPM;
 
 /* In the case of the songs screen, any character is possible; will be replaced with ? if there is no such texture */
 
-GLvoid screenSongsBuffer() {
+GLvoid screenSongs_buffer() {
   
-  if ( (bg = loadTexture(bgTexture, 0)) == -1)
+  if ((bg = graphics_loadTexture(bgTexture, 0)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
   
-  getFont(crilleei);
-  text_songs = loadText("SONGS", crillee, white, 0);
-  if (bitstream)
+  TTF_Font *crillee;
+  crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT);
+  text_songs = text_load("SONGS", crillee, white, 0);
+  if (crillee)
     TTF_CloseFont(crillee);
 
-  getFont(freeSansi);
-  text_byTier = loadText("by tier", freeSans, white, 1);
-  text_titleAZ = loadText("title A-Z", freeSans, white, 2);
-  text_artistAZ = loadText("artist A-Z", freeSans, white, 3);
-  text_byBPM = loadText("by BPM", freeSans, white, 4);
+  TTF_Font *freeSans;
+  freeSans = TTF_OpenFont(path_regular_freeSans, DEFAULT_TEXT_PT);
+  text_byTier = text_load("by tier", freeSans, white, 1);
+  text_titleAZ = text_load("title A-Z", freeSans, white, 2);
+  text_artistAZ = text_load("artist A-Z", freeSans, white, 3);
+  text_byBPM = text_load("by BPM", freeSans, white, 4);
   if (freeSans)
     TTF_CloseFont(freeSans);
   
@@ -38,19 +41,19 @@ GLvoid screenSongsBuffer() {
 GLvoid screenSongs() {
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   glBindTexture( GL_TEXTURE_2D, bg );
-  positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
+  graphics_positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
   
   glPushMatrix();
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   glTranslatef(-0.4f, -1.05f, 0.0f);
   glBindTexture( GL_TEXTURE_2D, text_songs );
-  positionTexture(text_songsX, text_songsY, defVertexZ);
+  graphics_positionTexture(text_songsX, text_songsY, defVertexZ);
   glPopMatrix();
   
   glPushMatrix();
   glColor4f(colour_blue_7CA4F6[0], colour_blue_7CA4F6[1], colour_blue_7CA4F6[2], 1.0f);
   glBindTexture( GL_TEXTURE_2D, text_byTier );
-  positionTexture(text_byTierX, text_byTierY, defVertexZ);
+  graphics_positionTexture(text_byTierX, text_byTierY, defVertexZ);
   glPopMatrix();
   
   return;

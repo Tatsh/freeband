@@ -20,18 +20,17 @@ extern bool options;
 extern char bgTexture[];
 extern char logoTexture[];
 extern char mainSelector[];
-extern GLfloat logoVertexX[];
-extern GLfloat logoVertexY[];
-extern GLfloat mSelectorVertexX[]; /* Main menu selector's default position */
-extern GLfloat mSelectorVertexY[];
+extern GLfloat screenMain_logoX[];
+extern GLfloat screenMain_logoY[];
+extern GLfloat screenMain_selectionX[]; /* Main menu selector's default position */
+extern GLfloat screenMain_selectionY[];
 extern GLfloat text_MultiplayerY[], text_OnlineY[], text_OptionsY[], text_QuitY[];
-extern GLuint menuSelection;
-extern tMenuState menuState;
+extern GLuint screenMain_nSelection;
+extern tMenuState screenMain_selection;
 
-GLvoid handleMainMenu();
-GLvoid setMainMenuState(GLuint selectID);
-GLvoid setMainImages();
-GLvoid setMainText();
+GLvoid screenMain_buffer();
+GLvoid screenMain_highlighted(GLuint nSelection);
+GLvoid screenMain_accept();
 GLvoid screenMain();
 
 #endif

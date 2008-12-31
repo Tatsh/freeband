@@ -1,7 +1,7 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-GLvoid gameKeys(SDL_keysym *keysym, SDL_Surface *surface, GLuint nPlayers);
-GLvoid menuKeys(SDL_keysym *keysym, SDL_Surface *surface);
+GLvoid input_gameKeys(SDL_keysym *keysym, SDL_Surface *surface);
+GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface);
 
 #endif

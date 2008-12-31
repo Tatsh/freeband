@@ -1,5 +1,6 @@
 #include "../freeband.h"
 #include "../graphics/graphics.h"
+#include "../graphics/text.h"
 #include "instruments.h"
 #include "main.h"
 #include "songs.h"
@@ -13,9 +14,9 @@ char selectedGradient[] = "GameData/themes/default/screenInstruments/selectedgra
    Order of corners: top-left, bottom-left, bottom-right, top-right */
 GLfloat instCanvasX[] = { 0.1f, 0.1f, 1.2f, 1.2f };
 GLfloat instCanvasY[] = { -0.4f, 0.6f, 0.6f, -0.4 };
-GLfloat selectedGradientX[] = { 0.12f, 0.12f, 1.18f, 1.18f }; /* This places it underneath 'GUITAR' */
-GLfloat selectedGradientY[] = { -0.35f, -0.15f, -0.15f, -0.35f };
-GLfloat selectedGradientY_reset[] = { -0.35f, -0.15f, -0.15f, -0.35f };
+GLfloat screenInstruments_selectionX[] = { 0.12f, 0.12f, 1.18f, 1.18f }; /* This places it underneath 'GUITAR' */
+GLfloat screenInstruments_selectionY[] = { -0.35f, -0.15f, -0.15f, -0.35f };
+GLfloat screenInstruments_selectionReset[] = { -0.35f, -0.15f, -0.15f, -0.35f };
 
 GLfloat text_GuitarX[4];
 GLfloat text_GuitarY[] = { 0.0f, MENUITEMSHT, MENUITEMSHT, 0.0f };
@@ -36,33 +37,37 @@ GLfloat text_SelectInstrumentY[] = { 0.0f, SCREENHEADTEXTHT, SCREENHEADTEXTHT, 0
 
 GLfloat degree = 0.0f;
 
-GLuint instSelection = 0; /* Guitar */
+GLuint bg;
+GLuint text_guitar, text_bass, text_drums, text_vocals;
+GLuint text_selectInstrument;
 
-tInstrument instrument;
+GLuint screenInstruments_nSelection = 0; /* Guitar */
 
-GLvoid handleInstrumentsMenu() {
-  switch(instSelection) {
+tInstrument instrument_P1;
+
+GLvoid screenInstruments_accept() {
+  switch(screenInstruments_nSelection) {
     case 0:
 #ifdef __DEBUG__
-      fprintf(stdout, "Starting %d player guitar game.\n", nPlayers);
+      fprintf(stdout, "Starting %d player guitar game.\n", fb_nPlayers);
 #endif
       break;
       
     case 1:
 #ifdef __DEBUG__
-      fprintf(stdout, "Starting %d player bass game.\n", nPlayers);
+      fprintf(stdout, "Starting %d player bass game.\n", fb_nPlayers);
 #endif      
       break;
       
     case 2:
 #ifdef __DEBUG__
-      fprintf(stdout, "Starting %d player drums game.\n", nPlayers);
+      fprintf(stdout, "Starting %d player drums game.\n", fb_nPlayers);
 #endif
       break;
       
     case 3:
 #ifdef __DEBUG__
-      fprintf(stdout, "Starting %d player vocals game.\n", nPlayers);
+      fprintf(stdout, "Starting %d player vocals game.\n", fb_nPlayers);
 #endif
       break;
       
@@ -71,13 +76,13 @@ GLvoid handleInstrumentsMenu() {
   }
 
   menuQuit = true;
-  loading = true;
-  clearScreen();
+  graphics_loading = true;
+  graphics_clear();
 #ifdef __DEBUG__
   fprintf(stdout, "Deleted all screenInstruments elements.\nLoading screenSongs elements...\n");
 #endif
-  currentScreen.instruments = loading = menuQuit = false;
-  currentScreen.songs = true;
+  fb_screen.instruments = graphics_loading = menuQuit = false;
+  fb_screen.songs = true;
 
   return;
 }
@@ -87,10 +92,10 @@ GLvoid setInstrument(GLuint instSelection) {
   
   switch(instSelection) {
     case 0:  /* Guitar */
-      instrument.guitar = true;
-      instrument.bass = false;
-      instrument.drums = false;
-      instrument.vocals = false;
+      instrument_P1.guitar = true;
+      instrument_P1.bass = false;
+      instrument_P1.drums = false;
+      instrument_P1.vocals = false;
       for ( i = 0; i < 4; i++ ) { /* Highlight */
         text_Vocals_hl[i] = 1.0f; /* From down arrow */
         text_Bass_hl[i] = 1.0f; /* From up arrow */
@@ -102,10 +107,10 @@ GLvoid setInstrument(GLuint instSelection) {
       break;
 
     case 1: /* Bass */
-      instrument.guitar = false;
-      instrument.bass = true;
-      instrument.drums = false;
-      instrument.vocals = false;
+      instrument_P1.guitar = false;
+      instrument_P1.bass = true;
+      instrument_P1.drums = false;
+      instrument_P1.vocals = false;
       for ( i = 0; i < 4; i++ ) {
         text_Guitar_hl[i] = 1.0f;
         text_Drums_hl[i] = 1.0f;
@@ -117,10 +122,10 @@ GLvoid setInstrument(GLuint instSelection) {
       break;
 
     case 2: /* Drums */
-      instrument.guitar = false;
-      instrument.bass = false;
-      instrument.drums = true;
-      instrument.vocals = false;
+      instrument_P1.guitar = false;
+      instrument_P1.bass = false;
+      instrument_P1.drums = true;
+      instrument_P1.vocals = false;
       for ( i = 0; i < 4; i++ ) {
         text_Bass_hl[i] = 1.0f;
         text_Vocals_hl[i] = 1.0f;
@@ -132,10 +137,10 @@ GLvoid setInstrument(GLuint instSelection) {
       break;
 
     case 3: /* Vocals */
-      instrument.guitar = false;
-      instrument.bass = false;
-      instrument.drums = false;
-      instrument.vocals = true;
+      instrument_P1.guitar = false;
+      instrument_P1.bass = false;
+      instrument_P1.drums = false;
+      instrument_P1.vocals = true;
       for ( i = 0; i < 4; i++ ) {
         text_Drums_hl[i] = 1.0f;
         text_Guitar_hl[i] = 1.0f;
@@ -154,62 +159,11 @@ GLvoid setInstrument(GLuint instSelection) {
   return;
 }
 
-GLvoid setInstrumentsImages_1P() {
-  if ((bg = loadTexture(bgTexture, 0)) == -1)
-    fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
-  
-  if ((texture[1] = loadTexture(instCanvas, 1)) == -1)
-    fprintf(stderr, "Unable to load texture: %s.\n", instCanvas);
-  
-  if ((texture[2] = loadTexture(selectedGradient, 2)) == -1)
-    fprintf(stderr, "Unable to load texture: %s.\n", selectedGradient);
-  
-  return;
-}
-
-GLvoid setInstrumentsText_1P() {
+GLvoid screenInstruments_buffer() {
   GLfloat width;
   GLuint i;
-  GLuint text_guitar, text_bass, text_drums, text_vocals;
-  GLuint text_selectInstrument;
-
-  getFont(bitstreami); {
-    text_guitar = loadText("GUITAR", bitstream, white, 0);
-    width = scaleTextureWidth(298, 84, MENUITEMSHT);
-    for ( i = 0; i < 2; i++ ) text_GuitarX[i] = centreAt(0.6f, width);
-    for ( i = 2; i < 4; i++ ) text_GuitarX[i] = text_GuitarX[i-2] + width;
-
-    text_bass = loadText("BASS", bitstream, white, 1);
-    width = scaleTextureWidth(212, 84, MENUITEMSHT);
-    for ( i = 0; i < 2; i++ ) text_BassX[i] = centreAt(0.6f, width);
-    for ( i = 2; i < 4; i++ ) text_BassX[i] = text_BassX[i-2] + width;
-
-    text_drums = loadText("DRUMS", bitstream, white, 2);
-    width = scaleTextureWidth(297, 84, MENUITEMSHT);
-    for ( i = 0; i < 2; i++ ) text_DrumsX[i] = centreAt(0.6f, width);
-    for ( i = 2; i < 4; i++ ) text_DrumsX[i] = text_DrumsX[i-2] + width;
-
-    text_vocals = loadText("VOCALS", bitstream, white, 3);
-    width = scaleTextureWidth(323, 84, MENUITEMSHT);
-    for ( i = 0; i < 2; i++ ) text_VocalsX[i] = centreAt(0.6f, width);
-    for ( i = 2; i < 4; i++ ) text_VocalsX[i] = text_VocalsX[i-2] + width;
-  } if (bitstream) TTF_CloseFont(bitstream);
-
-  getFont(crilleei); {
-    text_selectInstrument = loadText("SELECT INSTRUMENT", crillee, white, 4);
-    width = scaleTextureWidth(747, 96, SCREENHEADTEXTHT);
-    for ( i = 0; i < 2; i++ ) text_SelectInstrumentX[i] = centreAt(0.0f, width);
-    for ( i = 2; i < 4; i++ ) text_SelectInstrumentX[i] = text_SelectInstrumentX[i-2] + width;
-  } if (crillee) TTF_CloseFont(crillee); /* Clean up */
-
-  return;
-}
-
-GLvoid screenInstrumentsBuffer(GLuint nPlayers) {
-  GLuint i;
   
-  if (nPlayers < 2) {
-    
+  if (fb_nPlayers == 1) {
     /* Generate Y coordinates for text */
     for ( i = 0; i < 4; i++ ) text_BassY[i] = text_GuitarY[i] + 0.2;
     for ( i = 0; i < 4; i++ ) text_DrumsY[i] = text_BassY[i] + 0.2;
@@ -222,10 +176,49 @@ GLvoid screenInstrumentsBuffer(GLuint nPlayers) {
       text_Drums_hl[i] = 1.0f;
       text_Vocals_hl[i] = 1.0f;
     }
+    
+    if ((bg = graphics_loadTexture(bgTexture, 0)) == -1)
+      fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
+  
+    if ((texture[1] = graphics_loadTexture(instCanvas, 1)) == -1)
+      fprintf(stderr, "Unable to load texture: %s.\n", instCanvas);
+  
+    if ((texture[2] = graphics_loadTexture(selectedGradient, 2)) == -1)
+      fprintf(stderr, "Unable to load texture: %s.\n", selectedGradient);
 
-    setInstrumentsImages_1P();
-    setInstrumentsText_1P();
- 
+    TTF_Font *bitstream;
+    bitstream = TTF_OpenFont(path_bold_bitstreamVeraSans, DEFAULT_TEXT_PT);
+    text_guitar = text_load("GUITAR", bitstream, white, 0);
+    width = graphics_scaleTextureWidth(298, 84, MENUITEMSHT);
+    for ( i = 0; i < 2; i++ ) text_GuitarX[i] = graphics_centreAtX(0.6f, width);
+    for ( i = 2; i < 4; i++ ) text_GuitarX[i] = text_GuitarX[i-2] + width;
+
+    text_bass = text_load("BASS", bitstream, white, 1);
+    width = graphics_scaleTextureWidth(212, 84, MENUITEMSHT);
+    for ( i = 0; i < 2; i++ ) text_BassX[i] = graphics_centreAtX(0.6f, width);
+    for ( i = 2; i < 4; i++ ) text_BassX[i] = text_BassX[i-2] + width;
+
+    text_drums = text_load("DRUMS", bitstream, white, 2);
+    width = graphics_scaleTextureWidth(297, 84, MENUITEMSHT);
+    for ( i = 0; i < 2; i++ ) text_DrumsX[i] = graphics_centreAtX(0.6f, width);
+    for ( i = 2; i < 4; i++ ) text_DrumsX[i] = text_DrumsX[i-2] + width;
+
+    text_vocals = text_load("VOCALS", bitstream, white, 3);
+    width = graphics_scaleTextureWidth(323, 84, MENUITEMSHT);
+    for ( i = 0; i < 2; i++ ) text_VocalsX[i] = graphics_centreAtX(0.6f, width);
+    for ( i = 2; i < 4; i++ ) text_VocalsX[i] = text_VocalsX[i-2] + width;
+    if (bitstream)
+      TTF_CloseFont(bitstream);
+
+    TTF_Font *crillee;
+    crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT);
+    text_selectInstrument = text_load("SELECT INSTRUMENT", crillee, white, 4);
+    width = graphics_scaleTextureWidth(747, 96, SCREENHEADTEXTHT);
+    for ( i = 0; i < 2; i++ ) text_SelectInstrumentX[i] = graphics_centreAtX(0.0f, width);
+    for ( i = 2; i < 4; i++ ) text_SelectInstrumentX[i] = text_SelectInstrumentX[i-2] + width;
+
+    if (crillee)
+      TTF_CloseFont(crillee);
   }
   else
     fprintf(stdout, "Multiplayer not implemented yet.\n");
@@ -236,48 +229,48 @@ GLvoid screenInstrumentsBuffer(GLuint nPlayers) {
   return;
 }
 
-GLvoid screenInstruments(GLuint nPlayers) {
+GLvoid screenInstruments() {
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   glBindTexture( GL_TEXTURE_2D, bg );
-  positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
+  graphics_positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
 
 /*  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   glBindTexture( GL_TEXTURE_2D, texture[1] );
-  positionTexture(instCanvasX, instCanvasY, defVertexZ);*/
+  graphics_positionTexture(instCanvasX, instCanvasY, defVertexZ);*/
   
 /*  glColor4f(1.0f, 1.0f, 1.0f, 0.3f);
   glBindTexture( GL_TEXTURE_2D, texture[2] );
-  positionTexture(selectedGradientX, selectedGradientY, defVertexZ);*/
+  graphics_positionTexture(selectedGradientX, selectedGradientY, defVertexZ);*/
 
   /* Text elements */
   glPushMatrix(); {
     glTranslatef(0.0f, -0.35f, 0.0f);
     glColor4f(text_Guitar_hl[0], text_Guitar_hl[1], text_Guitar_hl[2], text_Guitar_hl[3]);
-    glBindTexture( GL_TEXTURE_2D, text[0] );
-    positionTexture(text_GuitarX, text_GuitarY, defVertexZ);
+    glBindTexture( GL_TEXTURE_2D, text_guitar );
+    graphics_positionTexture(text_GuitarX, text_GuitarY, defVertexZ);
 
     glColor4f(text_Bass_hl[0], text_Bass_hl[1], text_Bass_hl[2], text_Bass_hl[3]);
-    glBindTexture( GL_TEXTURE_2D, text[1] );
-    positionTexture(text_BassX, text_BassY, defVertexZ);
+    glBindTexture( GL_TEXTURE_2D, text_bass );
+    graphics_positionTexture(text_BassX, text_BassY, defVertexZ);
 
     glColor4f(text_Drums_hl[0], text_Drums_hl[1], text_Drums_hl[2], text_Drums_hl[3]);
-    glBindTexture( GL_TEXTURE_2D, text[2] );
-    positionTexture(text_DrumsX, text_DrumsY, defVertexZ);
+    glBindTexture( GL_TEXTURE_2D, text_drums );
+    graphics_positionTexture(text_DrumsX, text_DrumsY, defVertexZ);
 
     glColor4f(text_Vocals_hl[0], text_Vocals_hl[1], text_Vocals_hl[2], text_Vocals_hl[3]);
-    glBindTexture( GL_TEXTURE_2D, text[3] );
-    positionTexture(text_VocalsX, text_VocalsY, defVertexZ);
+    glBindTexture( GL_TEXTURE_2D, text_vocals );
+    graphics_positionTexture(text_VocalsX, text_VocalsY, defVertexZ);
   } glPopMatrix();
 
   glPushMatrix(); {
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glTranslatef(0.0f, -1.05f, 0.0f);
     glBindTexture( GL_TEXTURE_2D, text[4] ); /* Top screen title */
-    positionTexture(text_SelectInstrumentX, text_SelectInstrumentY, defVertexZ);
+    graphics_positionTexture(text_SelectInstrumentX, text_SelectInstrumentY, defVertexZ);
   } glPopMatrix();
 
 
-  switch (instSelection) {
+  switch (screenInstruments_nSelection) {
     case 0:
       glTranslatef(-0.15f, -0.05f, 2.0f);
       glRotatef( 110.0f, -0.05f, 0.0f, 0.0f );

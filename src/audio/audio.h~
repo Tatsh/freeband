@@ -1,6 +1,8 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
+#include <portaudio.h>
+
 #include "ogg.h"
 #include "sfx.h"
 #include "track.h"
@@ -13,6 +15,7 @@
 /* Questionable legality */
 #ifdef __AUDIOQL__
 #define MP3 10
+#define AAC 11
 #endif
 
 #endif

@@ -1,13 +1,8 @@
 #include "../freeband.h"
 #include "audio.h"
 
-bool handleAudioThreads() {
-
-  return true;
-}
-
-bool verifyFiletype(int filetype, char path[]) {
-  bool verified = false;
+bool audio_verifyFiletype(int filetype, char path[]) {
+  bool ok = false;
   
   switch (filetype) {
     case OGG:
@@ -31,23 +26,28 @@ bool verifyFiletype(int filetype, char path[]) {
       break;
   }
   
-  return verified;
+  return ok;
 }
 
-void playBGM() {
+bool audio_buffer() {
+  return true;
 }
 
-void playGuitar() {
+bool audio_sfx_buffer() {
+  return true;
 }
 
-void playBass() {
+void audio_playBGM() {
 }
 
-void playDrums() {
+void audio_playGuitar() {
 }
 
-void playVocals() {
+void audio_playBass() {
 }
 
-void sfxBuffer() {
+void audio_playDrums() {
+}
+
+void audio_playVocals() {
 }

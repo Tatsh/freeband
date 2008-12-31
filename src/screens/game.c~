@@ -1,10 +1,10 @@
 #include "../freeband.h"
 #include "../graphics/graphics.h"
+#include "../graphics/text.h"
 #include "game.h"
 #include "main.h"
 
-bool gamePaused = false;
-bool songEnded = false;
+bool gamePaused, songEnded;
 
 GLfloat bringDownAngle = 90.0f;
 GLfloat NE_coord_neg = 0.0f;
@@ -32,57 +32,57 @@ GLuint trackloop_a_T, button_T, string_T;
 
 tButton button;
 
-GLvoid loadGameTextures() {
-  if ((trackloop_a_T = loadTexture(trackloop_a, 0)) == -1)
+GLvoid screenGame_buffer() {
+  if ((trackloop_a_T = graphics_loadTexture(trackloop_a, 0)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", trackloop_a);
   
-  if ((button_T = loadTexture(buttonT, 1)) == -1)
+  if ((button_T = graphics_loadTexture(buttonT, 1)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", buttonT);
   
-  if ((string_T = loadTexture(string, 4)) == -1)
+  if ((string_T = graphics_loadTexture(string, 4)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", string);
-  
-  return;
-}
 
-GLvoid loadGameText() {
   /* Combo numbers */
-  getFont(bitstreamMonoBoldi);
-  combo0 = loadText("0", bitstreamMonoBold, white, 10);
-  combo1 = loadText("1", bitstreamMonoBold, white, 11);
-  combo2 = loadText("2", bitstreamMonoBold, white, 12);
-  combo3 = loadText("3", bitstreamMonoBold, white, 13);
-  combo4 = loadText("4", bitstreamMonoBold, white, 14);
-  combo5 = loadText("5", bitstreamMonoBold, white, 15);
-  combo6 = loadText("6", bitstreamMonoBold, white, 16);
-  combo7 = loadText("7", bitstreamMonoBold, white, 17);
-  combo8 = loadText("8", bitstreamMonoBold, white, 18);
-  combo9 = loadText("9", bitstreamMonoBold, white, 19);
+  TTF_Font *bitstreamMonoBold;
+  bitstreamMonoBold = TTF_OpenFont(path_bold_bitstreamVeraSansMono, DEFAULT_TEXT_PT);
+  combo0 = text_load("0", bitstreamMonoBold, white, 10);
+  combo1 = text_load("1", bitstreamMonoBold, white, 11);
+  combo2 = text_load("2", bitstreamMonoBold, white, 12);
+  combo3 = text_load("3", bitstreamMonoBold, white, 13);
+  combo4 = text_load("4", bitstreamMonoBold, white, 14);
+  combo5 = text_load("5", bitstreamMonoBold, white, 15);
+  combo6 = text_load("6", bitstreamMonoBold, white, 16);
+  combo7 = text_load("7", bitstreamMonoBold, white, 17);
+  combo8 = text_load("8", bitstreamMonoBold, white, 18);
+  combo9 = text_load("9", bitstreamMonoBold, white, 19);
   if (bitstreamMonoBold)
     TTF_CloseFont(bitstreamMonoBold);
   
   /* Prepare score numbers */
-  getFont(freeSansBoldi);
-  score0 = loadText("0", freeSansBold, white, 0);
-  score1 = loadText("1", freeSansBold, white, 1);
-  score2 = loadText("2", freeSansBold, white, 2);
-  score3 = loadText("3", freeSansBold, white, 3);
-  score4 = loadText("4", freeSansBold, white, 4);
-  score5 = loadText("5", freeSansBold, white, 5);
-  score6 = loadText("6", freeSansBold, white, 6);
-  score7 = loadText("7", freeSansBold, white, 7);
-  score8 = loadText("8", freeSansBold, white, 8);
-  score9 = loadText("9", freeSansBold, white, 9);
+  TTF_Font *freeSansBold;
+  freeSansBold = TTF_OpenFont(path_bold_freeSans, DEFAULT_TEXT_PT);
+  score0 = text_load("0", freeSansBold, white, 0);
+  score1 = text_load("1", freeSansBold, white, 1);
+  score2 = text_load("2", freeSansBold, white, 2);
+  score3 = text_load("3", freeSansBold, white, 3);
+  score4 = text_load("4", freeSansBold, white, 4);
+  score5 = text_load("5", freeSansBold, white, 5);
+  score6 = text_load("6", freeSansBold, white, 6);
+  score7 = text_load("7", freeSansBold, white, 7);
+  score8 = text_load("8", freeSansBold, white, 8);
+  score9 = text_load("9", freeSansBold, white, 9);
   if (freeSansBold)
     TTF_CloseFont(freeSansBold);
-  
+
   return;
 }
 
-GLvoid screenGameBuffer() {
-  loadGameTextures();
-  loadGameText();
+GLfloat screenGame_failed() {
+  GLfloat percent = 0.0f;
+  return percent;
+}
 
+GLvoid screenGame_completed() {
   return;
 }
 
@@ -243,52 +243,52 @@ GLvoid screenGame() {
     glPushMatrix(); /* Green */
     glTranslatef( GREENNOTE, 0.35f, 1.64f );
     glRotatef( 90.0f, button_rotationX, 0.0f, 0.0 ); /* Flatten against track */
-    if (button.g)
+    if (screenGame_button.g)
       glColor4f( 0.373f, 1.0f, 0.35f, 1.0f);
     else
       glColor4f( buttonColour_green[0], buttonColour_green[1], buttonColour_green[2], buttonColour_green[3] );
     glBindTexture(GL_TEXTURE_2D, texture[1]);
-    positionTexture(button_sizeX, button_sizeY, defVertexZ);
+    graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
     glPopMatrix();
     
     glPushMatrix(); /* Red */
     glTranslatef( GREENNOTE + NOTEDIFF, 0.35f, 1.64f );
     glRotatef( 90.0f, button_rotationX, 0.0f, 0.0 ); /* Flatten against track */
-    if (button.r)
+    if (screenGame_button.r)
       glColor4f( 1.0f, 0.541f, 0.541f, 1.0f);
     else
       glColor4f( buttonColour_red[0], buttonColour_red[1], buttonColour_red[2], buttonColour_red[3] );
-    positionTexture(button_sizeX, button_sizeY, defVertexZ);
+    graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
     glPopMatrix();
     
     glPushMatrix(); /* Yellow */
     glTranslatef( GREENNOTE + (2.0f * NOTEDIFF), 0.35f, 1.64f );
     glRotatef( 90.0f, button_rotationX, 0.0f, 0.0 ); /* Flatten against track */
-    if (button.y)
+    if (screenGame_button.y)
       glColor4f( 1.0f, 1.0f, 1.0f, 1.0f);
     else
       glColor4f( buttonColour_yellow[0], buttonColour_yellow[1], buttonColour_yellow[2], buttonColour_yellow[3] );
-    positionTexture(button_sizeX, button_sizeY, defVertexZ);
+    graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
     glPopMatrix();
     
     glPushMatrix(); /* Blue */
     glTranslatef( GREENNOTE + (3.0f * NOTEDIFF), 0.35f, 1.64f );
     glRotatef( 90.0f, button_rotationX, 0.0f, 0.0 ); /* Flatten against track */
-    if (button.b)
+    if (screenGame_button.b)
       glColor4f( 0.282f, 0.918, 1.0f, 1.0f );
     else
       glColor4f( buttonColour_blue[0], buttonColour_blue[1], buttonColour_blue[2], buttonColour_blue[3] );
-    positionTexture(button_sizeX, button_sizeY, defVertexZ);
+    graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
     glPopMatrix();
     
     glPushMatrix(); /* Orange */
     glTranslatef( GREENNOTE + (4.0f * NOTEDIFF), 0.35f, 1.64f );
     glRotatef( 90.0f, button_rotationX, 0.0f, 0.0 ); /* Flatten against track */
-    if (button.o)
+    if (screenGame_button.o)
       glColor4f( 1.0f, 0.867f, 0.506f, 1.0f );
     else
       glColor4f( buttonColour_orange[0], buttonColour_orange[1], buttonColour_orange[2], buttonColour_orange[3] );
-    positionTexture(button_sizeX, button_sizeY, defVertexZ);
+    graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
     glPopMatrix();
     
     /* Score */
@@ -296,7 +296,7 @@ GLvoid screenGame() {
     glTranslatef( -0.5f, 0.0f, 0.0f );
     glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
     glBindTexture( GL_TEXTURE_2D, text[0] );
-    positionTexture(score_digit1X, score_digit1Y, defVertexZ);
+    graphics_positionTexture(score_digit1X, score_digit1Y, defVertexZ);
     glPopMatrix();
     
     NE_coord_neg -= 0.005f;

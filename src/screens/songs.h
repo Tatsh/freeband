@@ -3,7 +3,7 @@
 
 extern bool gamePaused;
 
-GLvoid screenSongsBuffer();
+GLvoid screenSongs_buffer();
 GLvoid screenSongs();
 
 #endif

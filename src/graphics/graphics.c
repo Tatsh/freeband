@@ -5,14 +5,9 @@
 #include "../screens/main.h"
 #include "../screens/songs.h"
 #include "graphics.h"
+#include "text.h"
 
-bool loading;
-
-char crilleePath[] = "GameData/themes/default/global/crillee.ttf";
-char bitstreamPath[] = "GameData/themes/default/global/bitstream-vera-sans-bold.ttf";
-char bitstreamMonoBoldPath[] = "GameData/themes/default/global/bitstream-vera-mono-bold.ttf";
-char freeSansPath[] = "GameData/themes/default/global/freesans.ttf";
-char freeSansBoldPath[] = "GameData/themes/default/global/freesans-bold.ttf";
+bool graphics_loading;
 
 GLfloat buttonColour_green[] = { 0.137f, 0.585, 0.0f, 1.0f };
 GLfloat buttonColour_red[] = { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -39,7 +34,7 @@ SDL_Color blue_7CA4F6;
 SDL_Color yellow;
 SDL_Color white;
 
-bool initGL() {
+bool graphics_initGL() {
   /* OpenGL functions */
   glEnable(GL_TEXTURE_2D);                /* Enable texture mapping */
   glShadeModel(GL_SMOOTH);                /* Enable smooth shading */
@@ -66,7 +61,7 @@ bool initGL() {
   return true;
 }
 
-bool resizeWindow(GLuint width, GLuint height) {
+bool graphics_resizeWindow(GLuint width, GLuint height) {
   GLfloat ratio; /* Height/width ratio */
 
   if (height == 0)  /* Protect against a divide by zero */
@@ -84,12 +79,12 @@ bool resizeWindow(GLuint width, GLuint height) {
 }
 
 /* Currently only working with x-axis */
-GLfloat centreAt(GLfloat xyz, GLfloat width) {
+GLfloat graphics_centreAtX(GLfloat x, GLfloat width) {
   GLfloat offset;
 
-  offset = (width / 2.0f) - xyz;
+  offset = (width / 2.0f) - x;
 
-  if ((offset < 0.0f && xyz > 0.0f) || (width >= (xyz * 2)))
+  if ((offset < 0.0f && x > 0.0f) || (width >= (x * 2)))
     return -offset;
   else
     return offset;
@@ -99,7 +94,7 @@ GLfloat centreAt(GLfloat xyz, GLfloat width) {
    Use only when you know the image's original dimensions; this helps with theming; more functionality later
    This is also useful for text, specify any height or width (in pixels) and get the correct corresponding width or height for an
      texture */
-GLfloat scaleTextureHeight(GLuint pWidth, GLuint pHeight, GLfloat destWidth) {
+GLfloat graphics_scaleTextureHeight(GLuint pWidth, GLuint pHeight, GLfloat destWidth) {
   GLfloat destHeight;
   
   destHeight = ((GLfloat)pHeight / (GLfloat)pWidth) * destWidth;
@@ -107,7 +102,7 @@ GLfloat scaleTextureHeight(GLuint pWidth, GLuint pHeight, GLfloat destWidth) {
   return destWidth;
 }
 
-GLfloat scaleTextureWidth(GLuint pWidth, GLuint pHeight, GLfloat destHeight) {
+GLfloat graphics_scaleTextureWidth(GLuint pWidth, GLuint pHeight, GLfloat destHeight) {
   GLfloat destWidth;
   
   destWidth = ((GLfloat)pWidth / (GLfloat)pHeight) * destHeight;
@@ -115,44 +110,7 @@ GLfloat scaleTextureWidth(GLuint pWidth, GLuint pHeight, GLfloat destHeight) {
   return destWidth;
 }
 
-GLuint loadText(char *input, TTF_Font *font, SDL_Color color, GLuint index) {
-  SDL_Surface *textTexture;
-  
-  /* Use SDL_ttf to render text */
-  if ( (textTexture = TTF_RenderUTF8_Blended(font, input, color)) ) {
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-    glGenTextures(1, &text[index]);
-    glBindTexture(GL_TEXTURE_2D, text[index]);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    gluBuild2DMipmaps(GL_TEXTURE_2D, 4, textTexture->w, textTexture->h, GL_RGBA, GL_UNSIGNED_BYTE, textTexture->pixels);
-  }
-  else {
-    fprintf(stderr, "SDL_ttf could render %s.\n%s\n", input, TTF_GetError());
-    quitGame(1);
-  }
-
-#ifdef __DEBUG__
-  /* Print good AR, for theming purposes only */
-  GLfloat ar, arinv;
-  ar = (GLfloat)textTexture->w / (GLfloat)textTexture->h;
-  arinv = 1.000f / ar;
-  fprintf(stdout,
-          "Aspect ratios for text '%s': %dx%d pixels, %.3f:1.000, 1.000:%.3f\n",
-          input, textTexture->w, textTexture->h, ar, arinv);
-#endif
-  
-  /* Clean up */
-  if (textTexture)
-    SDL_FreeSurface(textTexture);
-  else
-    return -1;
-  
-  return text[index];
-}
-
-GLuint loadTexture(const char *filename, GLuint index) {
+GLint graphics_loadTexture(const char *filename, GLuint index) {
   SDL_Surface *surface; /* Store information here, size, etc */
   
   if ((surface = IMG_Load(filename))) {
@@ -182,7 +140,7 @@ GLuint loadTexture(const char *filename, GLuint index) {
   }
   else {
     fprintf(stderr, "SDL could not load %s.\n%s\n", filename, SDL_GetError());
-    quitGame(1);
+    fb_quit(1);
   }
  
   /* Free the SDL_Surface only if it was successfully created */
@@ -194,65 +152,15 @@ GLuint loadTexture(const char *filename, GLuint index) {
   return texture[index];
 }
 
-GLvoid clearScreen() {
+GLvoid graphics_clear() {
   glDeleteTextures(MAX_IMAGES, &texture[0]); /* Clean up old screen */
   glDeleteTextures(MAX_TEXT, &text[0]);
   return;
 }
 
-GLvoid getFont(GLuint font) {
+GLvoid graphics_positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ) {
 
-  switch (font) {
-    case 0: /* Crillee */
-      crillee = TTF_OpenFont(crilleePath, DEFAULT_TEXT_PT);
-      if (!crillee) {
-        fprintf(stderr, "Could not load font Crillee: %s\n", TTF_GetError());
-        quitGame(1);
-      }
-      break;
-
-      case 1: /* Bitstream Vera Sans */
-        bitstream = TTF_OpenFont(bitstreamPath, DEFAULT_TEXT_PT);
-        if (!bitstream) {
-          fprintf(stderr, "Could not load font Bitstream Vera Sans: %s\n", TTF_GetError());
-          quitGame(1);
-        }
-        break;
-
-      case 2: /* Bitstream Vera Mono Bold */
-        bitstreamMonoBold = TTF_OpenFont(bitstreamMonoBoldPath, DEFAULT_TEXT_PT);
-        if (!bitstreamMonoBold) {
-          fprintf(stderr, "Could not load font Bitstream Vera Mono Bold: %s\n", TTF_GetError());
-          quitGame(1);
-        }
-        break;
-
-      case 3: /* FreeSans */
-        freeSans = TTF_OpenFont(freeSansPath, DEFAULT_TEXT_PT);
-        if (!freeSans) {
-          fprintf(stderr, "Could not load font FreeSans: %s\n", TTF_GetError());
-          quitGame(1);
-        }
-        break;
-
-      case 4: /* FreeSans Bold */
-        freeSansBold = TTF_OpenFont(freeSansBoldPath, DEFAULT_TEXT_PT);
-        if (!freeSans) {
-          fprintf(stderr, "Could not load font FreeSans Bold: %s\n", TTF_GetError());
-          quitGame(1);
-        }
-        break;
-
-      default:
-        break;
-  }
-
-  return;
-}
-
-GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ) {
-
-  glBegin(GL_QUADS);
+  glBegin(GL_QUADS); /* Do not change this order */
     glTexCoord2f( 0.0f, 0.0f ); glVertex3f( vertexX[0], vertexY[0], vertexZ[0] ); /* Top left corner */
     glTexCoord2f( 0.0f, 1.0f ); glVertex3f( vertexX[1], vertexY[1], vertexZ[1] ); /* Bottom left corner */
     glTexCoord2f( 1.0f, 1.0f ); glVertex3f( vertexX[2], vertexY[2], vertexZ[2] ); /* Bottom right corner */
@@ -262,7 +170,7 @@ GLvoid positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ) {
   return;
 }
 
-GLvoid setupColors() {
+GLvoid graphics_initColours() {
   blue_7CA4F6.r = 253;
   blue_7CA4F6.g = 166;
   blue_7CA4F6.b = 118;
@@ -278,24 +186,23 @@ GLvoid setupColors() {
   return;
 }
 
-GLvoid drawFreeband() {
+GLvoid graphics_draw() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* Clear the screen and the depth buffer */
   glLoadIdentity();
   glTranslatef(0.0f, 0.0f, z);
   
   glScalef(1, -1, 1); /* Flip framebuffer because of SDL's upside down issue */
 
-  if (loading); /* Do nothing and wait till loading = false */
-  else if (currentScreen.mainMenu && !menuQuit) {
+  if (graphics_loading); /* Do nothing and wait till loading = false */
+  else if (fb_screen.mainMenu && !menuQuit)
     screenMain();
-  }
-  else if (currentScreen.instruments && !menuQuit)
-    screenInstruments(nPlayers);
-  else if (currentScreen.songs && !menuQuit)
+  else if (fb_screen.instruments && !menuQuit)
+    screenInstruments(fb_nPlayers);
+  else if (fb_screen.songs && !menuQuit)
     screenSongs();
-  else if (currentScreen.difficulty && !menuQuit)
-    screenDifficulty();
-  else if (currentScreen.game && !gamePaused)
+  else if (fb_screen.difficulty && !menuQuit)
+    screenDifficulty(fb_nPlayers);
+  else if (fb_screen.game && !gamePaused)
     screenGame();
 
   SDL_GL_SwapBuffers();

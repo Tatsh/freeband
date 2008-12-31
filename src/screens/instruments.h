@@ -8,15 +8,20 @@ typedef struct {
   bool vocals;
 } tInstrument;
 
-extern GLfloat selectedGradientY[], selectedGradientY_reset[];
-extern GLuint instSelection;
-extern tInstrument instrument;
+extern GLfloat screenInstruments_selectionX[];
+extern GLfloat screenInstruments_selectionY[];
+extern GLfloat screenInstruments_selectionReset[];
 
-GLvoid handleInstrumentsMenu();
-GLvoid setInstrumentsImages_1P();
-GLvoid setInstrument(GLuint instSelection);
-GLvoid setInstrumentsText_1P();
-GLvoid screenInstrumentsBuffer(GLuint nPlayers);
-GLvoid screenInstruments(GLuint nPlayers);
+extern GLuint screenInstruments_nSelection;
+
+extern tInstrument instrument_P1;
+extern tInstrument instrument_P2;
+extern tInstrument instrument_P3;
+extern tInstrument instrument_P4;
+
+GLvoid screenInstruments_highlighted(GLuint instSelection);
+GLvoid screenInstruments_accept();
+GLvoid screenInstruments_buffer();
+GLvoid screenInstruments();
 
 #endif

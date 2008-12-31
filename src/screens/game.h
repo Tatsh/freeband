@@ -25,9 +25,9 @@ extern GLfloat bringDownAngle;
 extern GLfloat NE_coord_neg;
 extern GLfloat NE_coord_pos;
 
-extern tButton button;
+extern tButton screenGame_button;
 
-GLvoid screenGameBuffer();
+GLvoid screenGame_buffer();
 GLvoid screenGame();
 
 #endif
