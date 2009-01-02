@@ -15,7 +15,7 @@ char path_italic_crillee[] = "GameData/themes/default/fonts/italic-crillee.ttf";
 char path_regular_freeSans[] = "GameData/themes/default/fonts/regular-freesans.ttf";
 /* End font paths */
 
-GLint text_getHeight(char text[], TTF_Font *font, GLuint ptsize) {
+GLint text_getHeight(const char text[], TTF_Font *font, GLuint ptsize) {
   SDL_Surface *temp;
   int height;
   
@@ -30,7 +30,7 @@ GLint text_getHeight(char text[], TTF_Font *font, GLuint ptsize) {
   return height;
 }
 
-GLint text_getWidth(char text[], TTF_Font *font, GLuint ptsize) {
+GLint text_getWidth(const char text[], TTF_Font *font, GLuint ptsize) {
   SDL_Surface *temp;
   int width;
 
@@ -45,7 +45,7 @@ GLint text_getWidth(char text[], TTF_Font *font, GLuint ptsize) {
   return width;
 }
 
-GLint text_load(char input[], TTF_Font *font, SDL_Color color, GLuint index) {
+GLint text_load(const char input[], TTF_Font *font, SDL_Color color, GLuint index) {
   SDL_Surface *textTexture;
   
   /* Use SDL_ttf to render text */
@@ -63,18 +63,7 @@ GLint text_load(char input[], TTF_Font *font, SDL_Color color, GLuint index) {
     fb_quit(1);
   }
 
-#ifdef __DEBUG__
-  /* Print good AR, for theming purposes only */
-  GLfloat ar, arinv;
-  ar = (GLfloat)textTexture->w / (GLfloat)textTexture->h;
-  arinv = 1.000f / ar;
-  fprintf(stdout,
-          "Aspect ratios for text '%s': %dx%d pixels, %.3f:1.000, 1.000:%.3f\n",
-          input, textTexture->w, textTexture->h, ar, arinv);
-#endif
-  
-  /* Clean up */
-  if (textTexture)
+  if (textTexture) /* Clean up */
     SDL_FreeSurface(textTexture);
   else
     return -1;

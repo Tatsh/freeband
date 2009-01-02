@@ -1,7 +1,7 @@
 #include "../freeband.h"
 #include "audio.h"
 
-bool audio_verifyFiletype(int filetype, char path[]) {
+bool audio_verifyFiletype(GLuint filetype, char path[]) {
   bool ok = false;
   
   switch (filetype) {

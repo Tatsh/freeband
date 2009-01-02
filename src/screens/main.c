@@ -9,8 +9,8 @@ bool online;
 bool options;
 
 char bgTexture[] = "GameData/themes/default/global/bg.png";
-char logoTexture[] = "GameData/themes/default/screenStart/banner.png";
-char mainSelector[] = "GameData/themes/default/screenStart/selector.png";
+char logoTexture[] = "GameData/themes/default/screenMain/banner.png";
+char mainSelector[] = "GameData/themes/default/screenMain/selector.png";
 
 /* Note:
    Negative is to the left, positive is to the right when horizontal (x)
@@ -198,26 +198,52 @@ GLvoid screenMain_buffer() {
   
   /* Text */
   if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
-    single = text_load("SINGLE PLAYER", crillee, white, 0); /* Always load text as white; change using glColor4f */
-    width = graphics_scaleTextureWidth(545, 96, MENUITEMSHT); /* Get these values from stdout */
+    single = text_load(EN_SINGLE_PLAYER, crillee, white, 0); /* Always load text as white; change using glColor4f
+    Calling graphics_scaleTextureWidth with text_getWidth and text_getHeight allows for perfect scaling on any text */
+    width = graphics_scaleTextureWidth(text_getWidth(EN_SINGLE_PLAYER, crillee, DEFAULT_TEXT_PT),
+                                       text_getHeight(EN_SINGLE_PLAYER, crillee, DEFAULT_TEXT_PT), MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_SinglePlayerX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_SinglePlayerX[i] = text_SinglePlayerX[i-2] + width;
   
-    multiplayer = text_load("MULTIPLAYER", crillee, white, 1);
-    for ( i = 0; i < 2; i++ ) text_MultiplayerX[i] = graphics_centreAtX(0.6f, graphics_scaleTextureWidth(489, 96, MENUITEMSHT));
-    for ( i = 2; i < 4; i++ ) text_MultiplayerX[i] = text_MultiplayerX[i-2] + graphics_scaleTextureWidth(489, 96, MENUITEMSHT);
+    multiplayer = text_load(EN_MULTIPLAYER, crillee, white, 1);
+    for ( i = 0; i < 2; i++ ) text_MultiplayerX[i] = graphics_centreAtX(0.6f,
+                                graphics_scaleTextureWidth(text_getWidth(EN_MULTIPLAYER, crillee,
+                                DEFAULT_TEXT_PT), text_getHeight(EN_MULTIPLAYER, crillee,
+                                DEFAULT_TEXT_PT), MENUITEMSHT));
+    for ( i = 2; i < 4; i++ ) text_MultiplayerX[i] = text_MultiplayerX[i-2] +
+                                graphics_scaleTextureWidth(text_getWidth(EN_MULTIPLAYER, crillee,
+                                DEFAULT_TEXT_PT), text_getHeight(EN_MULTIPLAYER, crillee,
+                                DEFAULT_TEXT_PT), MENUITEMSHT);
   
-    onlineM = text_load("ONLINE", crillee, white, 2);
-    for ( i = 0; i < 2; i++ ) text_OnlineX[i] = graphics_centreAtX(0.6f, graphics_scaleTextureWidth(266, 96, MENUITEMSHT));
-    for ( i = 2; i < 4; i++ ) text_OnlineX[i] = text_OnlineX[i-2] + graphics_scaleTextureWidth(266, 96, MENUITEMSHT);
+    onlineM = text_load(EN_ONLINE, crillee, white, 2);
+    for ( i = 0; i < 2; i++ ) text_OnlineX[i] = graphics_centreAtX(0.6f,
+                                graphics_scaleTextureWidth(text_getWidth(EN_ONLINE, crillee,
+                                DEFAULT_TEXT_PT), text_getHeight(EN_ONLINE, crillee,
+                                DEFAULT_TEXT_PT), MENUITEMSHT));
+    for ( i = 2; i < 4; i++ ) text_OnlineX[i] = text_OnlineX[i-2] +
+                                graphics_scaleTextureWidth(text_getWidth(EN_ONLINE, crillee,
+                                DEFAULT_TEXT_PT), text_getHeight(EN_ONLINE, crillee,
+                                DEFAULT_TEXT_PT), MENUITEMSHT);
   
-    optionsM = text_load("OPTIONS", crillee, white, 3);
-    for ( i = 0; i < 2; i++ ) text_OptionsX[i] = graphics_centreAtX(0.6f, graphics_scaleTextureWidth(311, 96, MENUITEMSHT));
-    for ( i = 2; i < 4; i++ ) text_OptionsX[i] = text_OptionsX[i-2] + graphics_scaleTextureWidth(311, 96, MENUITEMSHT);
+    optionsM = text_load(EN_OPTIONS, crillee, white, 3);
+    for ( i = 0; i < 2; i++ ) text_OptionsX[i] = graphics_centreAtX(0.6f,
+                                graphics_scaleTextureWidth(text_getWidth(EN_OPTIONS, crillee,
+                                DEFAULT_TEXT_PT), text_getHeight(EN_OPTIONS, crillee,
+                                DEFAULT_TEXT_PT), MENUITEMSHT));
+    for ( i = 2; i < 4; i++ ) text_OptionsX[i] = text_OptionsX[i-2] +
+                                graphics_scaleTextureWidth(text_getWidth(EN_OPTIONS, crillee,
+                                DEFAULT_TEXT_PT), text_getHeight(EN_OPTIONS, crillee,
+                                DEFAULT_TEXT_PT), MENUITEMSHT);
   
-    quit = text_load("QUIT", crillee, white, 4);
-    for ( i = 0; i < 2; i++ ) text_QuitX[i] = graphics_centreAtX(0.6f, graphics_scaleTextureWidth(168, 96, MENUITEMSHT));
-    for ( i = 2; i < 4; i++ ) text_QuitX[i] = text_QuitX[i-2] + graphics_scaleTextureWidth(168, 96, MENUITEMSHT);
+    quit = text_load(EN_QUIT, crillee, white, 4);
+    for ( i = 0; i < 2; i++ ) text_QuitX[i] = graphics_centreAtX(0.6f,
+                                graphics_scaleTextureWidth(text_getWidth(EN_QUIT, crillee,
+                                DEFAULT_TEXT_PT), text_getHeight(EN_QUIT, crillee,
+                                DEFAULT_TEXT_PT), MENUITEMSHT));
+    for ( i = 2; i < 4; i++ ) text_QuitX[i] = text_QuitX[i-2] +
+                                graphics_scaleTextureWidth(text_getWidth(EN_QUIT, crillee,
+                                DEFAULT_TEXT_PT), text_getHeight(EN_QUIT, crillee,
+                                DEFAULT_TEXT_PT), MENUITEMSHT);
   }
   else
     fprintf(stderr, "Error opening font for screenMain: %s\n", TTF_GetError());
