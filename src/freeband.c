@@ -125,12 +125,17 @@ GLint main(GLint argc, char *argv[]) {
     fb_quit(1);
   }
 
-  if (graphics_initGL() != true) {
+  if (!graphics_initGL()) {
     fprintf(stderr, "Unable to initialise OpenGL.\n");
     fb_quit(1);
   }
   
   SDL_WM_SetCaption(windowTitle, windowTitle); /* Set window title */
+
+#ifdef __WIN32__
+  SDL_Surface *icon = IMG_Load("freeband.png");
+  SDL_WM_SetIcon(icon, NULL);
+#endif
 
   graphics_resizeWindow(WIDTH, HEIGHT);
   graphics_initColours(); /* Initialise colours */
@@ -262,6 +267,10 @@ GLint main(GLint argc, char *argv[]) {
 
     graphics_draw();
   }
+
+#ifdef __WIN32__
+  SDL_FreeSurface(icon);
+#endif
 
   fb_quit(0);
   

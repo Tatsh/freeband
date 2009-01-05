@@ -1,7 +1,7 @@
 [Project]
 FileName=Freeband.dev
 Name=Freeband
-UnitCount=27
+UnitCount=29
 Type=0
 Ver=1
 ObjFiles=
@@ -10,7 +10,7 @@ Libs=
 PrivateResource=Freeband_private.rc
 ResourceIncludes=
 MakeIncludes=
-Compiler=-Dmain=SDLmain_@@_-D__WIN32XBOX360XPLORER___@@_
+Compiler=-Dmain=SDLmain_@@_-D__WIN32___@@_-D__WIN32XBOX360XPLORER___@@_
 CppCompiler=
 Linker=-lglut32_@@_-lopengl32_@@_-lglu32_@@_-lwinmm_@@_-lmingw32_@@_-lSDLmain_@@_-lSDL_@@_-lSDL_image_@@_-lSDL_ttf_@@_
 IsCpp=0
@@ -309,6 +309,26 @@ BuildCmd=
 
 [Unit27]
 FileName=src\audio\track.h
+CompileCpp=0
+Folder=Freeband
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit28]
+FileName=src\graphics\text.c
+CompileCpp=0
+Folder=Freeband
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit29]
+FileName=src\graphics\text.h
 CompileCpp=0
 Folder=Freeband
 Compile=1
