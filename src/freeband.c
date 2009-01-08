@@ -132,10 +132,8 @@ GLint main(GLint argc, char *argv[]) {
   
   SDL_WM_SetCaption(windowTitle, windowTitle); /* Set window title */
 
-#ifdef __WIN32__
-  SDL_Surface *icon = IMG_Load("freeband.png");
+  SDL_Surface *icon = IMG_Load("freeband.png"); /* Creates icon for window and task bar on Linux, but only task bar on Windows */
   SDL_WM_SetIcon(icon, NULL);
-#endif
 
   graphics_resizeWindow(WIDTH, HEIGHT);
   graphics_initColours(); /* Initialise colours */
