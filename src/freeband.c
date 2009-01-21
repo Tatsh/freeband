@@ -3,6 +3,7 @@
 #include "graphics/graphics.h"
 #include "graphics/text.h"
 #include "input/input.h"
+#include "io/prefs.h"
 #include "screens/game.h"
 #include "screens/instruments.h"
 #include "screens/main.h"
@@ -57,6 +58,17 @@ GLvoid fb_quit(GLint retnCode) {
 
 GLint main(GLint argc, char *argv[]) {
   GLuint i;
+  
+  /* Find home directory, copy files if non-existant */
+#ifdef __WIN32__
+#else
+  if (!prefs_nixPrefsDirExists()) {
+    if (!prefs_nixPrefsDirCreate())
+      exit(ERROR_CANNOT_CREATE_PREFS_DIRECTORY);
+  }
+  
+#endif
+
   for (i = 0; i < MAX_IMAGES; i++) texture[i] = -1;
   for (i = 0; i < MAX_TEXT; i++) text[i] = -1;
 

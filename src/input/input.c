@@ -188,7 +188,6 @@ GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
         fprintf(stdout, "Successfully switched back to screenMain.\n");
 #endif
         screenInstruments_nSelection = 0;
-        for (i = 0; i < 4; i++) screenInstruments_selectionY[i] = screenInstruments_selectionReset[i]; /* Reset gradient to guitar position */
       }
       else if (fb_screen.songs) {
         menuQuit = graphics_loading = true;

@@ -5,9 +5,14 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #ifdef __WIN32__
 #include <windows.h>
+#else
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #endif
 
 #include <ogg/ogg.h>
@@ -21,7 +26,10 @@
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
 
+#define ERROR_CANNOT_CREATE_PREFS_DIRECTORY 10
+
 #define SCREENHEADTEXTHT 0.31f
+#define SCREENHEADTEXTOFFSET -1.05f
 
 typedef unsigned int score_t;
 typedef unsigned int combo_t;

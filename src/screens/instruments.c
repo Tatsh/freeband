@@ -5,19 +5,6 @@
 #include "main.h"
 #include "songs.h"
 
-texture_p instCanvas[] = "GameData/themes/default/screenInstruments/canvas.png";
-texture_p selectedGradient[] = "GameData/themes/default/screenInstruments/selectedgrad.png";
-
-/* Negative is to the left, positive is to the right when horizontal (x)
-   Negative is to the top, positive is to the bottom when vertical (y)
-   Negative is to the outside, positive is going inside (z)
-   Order of corners: top-left, bottom-left, bottom-right, top-right */
-GLcoordsX instCanvasX[] = { 0.1f, 0.1f, 1.2f, 1.2f };
-GLcoordsY instCanvasY[] = { -0.4f, 0.6f, 0.6f, -0.4 };
-GLcoordsX screenInstruments_selectionX[] = { 0.12f, 0.12f, 1.18f, 1.18f }; /* This places it underneath 'GUITAR' */
-GLcoordsY screenInstruments_selectionY[] = { -0.35f, -0.15f, -0.15f, -0.35f };
-GLcoordsX screenInstruments_selectionReset[] = { -0.35f, -0.15f, -0.15f, -0.35f };
-
 GLcoordsX text_GuitarX[4];
 GLcoordsY text_GuitarY[] = { 0.0f, MENUITEMSHT, MENUITEMSHT, 0.0f };
 GLcoordsX text_BassX[4];
@@ -162,6 +149,7 @@ GLvoid screenInstruments_highlighted(GLuint instSelection) {
 bool screenInstruments_buffer() {
   GLfloat width;
   GLuint i;
+  TTF_Font *bitstream;
   
   if (fb_nPlayers == 1) {
     /* Generate Y coordinates for text */
@@ -179,14 +167,7 @@ bool screenInstruments_buffer() {
     
     if ((bg = graphics_loadTexture(bgTexture, 0)) == -1)
       fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
-  
-    if ((texture[1] = graphics_loadTexture(instCanvas, 1)) == -1)
-      fprintf(stderr, "Unable to load texture: %s.\n", instCanvas);
-  
-    if ((texture[2] = graphics_loadTexture(selectedGradient, 2)) == -1)
-      fprintf(stderr, "Unable to load texture: %s.\n", selectedGradient);
-
-    TTF_Font *bitstream;
+    
     if ((bitstream = TTF_OpenFont(path_bold_bitstreamVeraSans, DEFAULT_TEXT_PT))) {
       text_guitar = text_load(en_guitar, bitstream, white, 0);
       /* GLint text_scaleWidth(const char text[], TTF_Font *font, GLuint ptsize, GLfloat textureHeight); */
@@ -271,7 +252,7 @@ GLvoid screenInstruments() {
 
   glPushMatrix(); {
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glTranslatef(0.0f, -1.05f, 0.0f);
+    glTranslatef(0.0f, SCREENHEADTEXTOFFSET, 0.0f);
     glBindTexture( GL_TEXTURE_2D, text[4] ); /* Top screen title */
     graphics_positionTexture(text_SelectInstrumentX, text_SelectInstrumentY, defVertexZ);
   } glPopMatrix();

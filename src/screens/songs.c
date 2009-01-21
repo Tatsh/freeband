@@ -6,17 +6,18 @@
 
 /* Order of corners: top-left, bottom-left, bottom-right, top-right */
 GLcoordsX text_songsX[4];
-GLcoordsY text_songsY[4] = { 0.0f, SCREENHEADTEXTHT, SCREENHEADTEXTHT, 0.0f };
+GLcoordsY text_songsY[4] = { 0.0f, SCREENHEADTEXTHT, SCREENHEADTEXTHT, 0.0f  };
 GLcoordsX text_byTierX[4];
 GLcoordsY text_byTierY[4];
 
 texture_i bg;
 text_i text_songs, text_byTier, text_titleAZ, text_artistAZ, text_byBPM;
 
-/* In the case of the songs screen, any character is possible; will be replaced with ? if there is no such texture */
+/* In the case of the songs screen, any character is possible (this should be multilingual as possible using Unicode)
+  Unknown characters (ones not in the font being used) will be replaced with ' ' */
 
 bool screenSongs_buffer() {
-  GLint width;
+  GLfloat width;
   GLuint i;
   TTF_Font *crillee;
   
@@ -30,7 +31,7 @@ bool screenSongs_buffer() {
     for ( i = 2; i < 4; i++ ) text_songsX[i] = text_songsX[i-2] + width;
   }
   else {
-    fprintf(stderr, "Could not open font %s: %s\n", path_italic_crillee, TTF_GetError());
+    fprintf(stderr, "instruments.c: screenInstrumentsBuffer(): Could not open font %s: %s\n", path_italic_crillee, TTF_GetError());
     return false;
   }
   if (crillee)
@@ -46,7 +47,7 @@ GLvoid screenSongs() {
   
   glPushMatrix(); {
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glTranslatef(0.0f, -1.05f, 5.0f);
+    glTranslatef(0.0f, SCREENHEADTEXTOFFSET, 0.0f);
     glBindTexture( GL_TEXTURE_2D, text_songs ); /* Top screen title */
     graphics_positionTexture(text_songsX, text_songsY, defVertexZ);
   } glPopMatrix();

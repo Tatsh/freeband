@@ -1,0 +1,143 @@
+#ifndef PREFS_H
+#define PREFS_H
+
+typedef char prefs_directory;
+typedef bool prefs_bool;
+typedef unsigned char prefs_uchar;
+typedef char prefs_char;
+typedef unsigned int prefs_uint;
+typedef int prefs_int;
+
+extern prefs_directory prefs_root[];
+extern prefs_directory prefs_songs[];
+extern prefs_directory prefs_themes[];
+
+extern prefs_bool prefs_appearance_audience;
+extern prefs_bool prefs_appearance_band;
+extern prefs_char prefs_appearance_theme[];
+
+extern prefs_uint prefs_game_difficulty_judge;
+
+extern prefs_bool prefs_prefs_input_controller_kb_1;
+extern prefs_uint prefs_input_controller_kb_1_green;
+extern prefs_uint prefs_input_controller_kb_1_red;
+extern prefs_uint prefs_input_controller_kb_1_yellow;
+extern prefs_uint prefs_input_controller_kb_1_blue;
+extern prefs_uint prefs_input_controller_kb_1_orange;
+extern prefs_uint prefs_input_controller_kb_1_start;
+extern prefs_uint prefs_input_controller_kb_1_select;
+extern prefs_uint prefs_input_controller_kb_1_energy;
+extern prefs_uint prefs_input_controller_kb_1_whammy_down;
+extern prefs_uint prefs_input_controller_kb_1_whammy_up;
+extern prefs_uint prefs_input_controller_kb_1_pick_up;
+extern prefs_uint prefs_input_controller_kb_1_pick_down;
+extern prefs_uint prefs_input_controller_kb_1_direction_down;
+extern prefs_uint prefs_input_controller_kb_1_direction_up;
+extern prefs_uint prefs_input_controller_kb_1_direction_left;
+extern prefs_uint prefs_input_controller_kb_1_direction_right;
+extern prefs_bool prefs_input_controller_kb_2;
+extern prefs_uint prefs_input_controller_kb_2_green;
+extern prefs_uint prefs_input_controller_kb_2_red;
+extern prefs_uint prefs_input_controller_kb_2_yellow;
+extern prefs_uint prefs_input_controller_kb_2_blue;
+extern prefs_uint prefs_input_controller_kb_2_orange;
+extern prefs_uint prefs_input_controller_kb_2_start;
+extern prefs_uint prefs_input_controller_kb_2_select;
+extern prefs_uint prefs_input_controller_kb_2_energy;
+extern prefs_uint prefs_input_controller_kb_2_whammy_down;
+extern prefs_uint prefs_input_controller_kb_2_whammy_up;
+extern prefs_uint prefs_input_controller_kb_2_pick_up;
+extern prefs_uint prefs_input_controller_kb_2_pick_down;
+extern prefs_uint prefs_input_controller_kb_2_direction_down;
+extern prefs_uint prefs_input_controller_kb_2_direction_up;
+extern prefs_uint prefs_input_controller_kb_2_direction_left;
+extern prefs_uint prefs_input_controller_kb_2_direction_right;
+extern prefs_bool prefs_input_controller_kb_3;
+extern prefs_uint prefs_input_controller_kb_3_green;
+extern prefs_uint prefs_input_controller_kb_3_red;
+extern prefs_uint prefs_input_controller_kb_3_yellow;
+extern prefs_uint prefs_input_controller_kb_3_blue;
+extern prefs_uint prefs_input_controller_kb_3_orange;
+extern prefs_uint prefs_input_controller_kb_3_start;
+extern prefs_uint prefs_input_controller_kb_3_select;
+extern prefs_uint prefs_input_controller_kb_3_energy; /* On keyboard, buttons but on joystick, axes */
+extern prefs_uint prefs_input_controller_kb_3_whammy_down;
+extern prefs_uint prefs_input_controller_kb_3_whammy_up;
+extern prefs_uint prefs_input_controller_kb_3_pick_up;
+extern prefs_uint prefs_input_controller_kb_3_pick_down;
+extern prefs_uint prefs_input_controller_kb_3_direction_down;
+extern prefs_uint prefs_input_controller_kb_3_direction_up;
+extern prefs_uint prefs_input_controller_kb_3_direction_left;
+extern prefs_uint prefs_input_controller_kb_3_direction_right;
+extern prefs_bool prefs_input_controller_js_1;
+extern prefs_uint prefs_input_controller_js_1_green;
+extern prefs_uint prefs_input_controller_js_1_red;
+extern prefs_uint prefs_input_controller_js_1_yellow;
+extern prefs_uint prefs_input_controller_js_1_blue;
+extern prefs_uint prefs_input_controller_js_1_orange;
+extern prefs_uint prefs_input_controller_js_1_start;
+extern prefs_uint prefs_input_controller_js_1_select;
+extern prefs_uint prefs_input_controller_js_1_pick_up;
+extern prefs_uint prefs_input_controller_js_1_pick_down;
+extern prefs_uint prefs_input_controller_js_1_direction_down;
+extern prefs_uint prefs_input_controller_js_1_direction_up;
+extern prefs_uint prefs_input_controller_js_1_direction_left;
+extern prefs_uint prefs_input_controller_js_1_direction_right;
+extern prefs_bool prefs_input_controller_js_1_axis_energy;
+extern prefs_bool prefs_input_controller_js_1_axis_whammy;
+extern prefs_uint prefs_input_controller_js_1_energy; /* Axes */
+extern prefs_uint prefs_input_controller_js_1_whammy;
+extern prefs_bool prefs_input_controller_js_2;
+extern prefs_uint prefs_input_controller_js_2_green;
+extern prefs_uint prefs_input_controller_js_2_red;
+extern prefs_uint prefs_input_controller_js_2_yellow;
+extern prefs_uint prefs_input_controller_js_2_blue;
+extern prefs_uint prefs_input_controller_js_2_orange;
+extern prefs_uint prefs_input_controller_js_2_start;
+extern prefs_uint prefs_input_controller_js_2_select;
+extern prefs_uint prefs_input_controller_js_2_pick_up;
+extern prefs_uint prefs_input_controller_js_2_pick_down;
+extern prefs_uint prefs_input_controller_js_2_direction_down;
+extern prefs_uint prefs_input_controller_js_2_direction_up;
+extern prefs_uint prefs_input_controller_js_2_direction_left;
+extern prefs_uint prefs_input_controller_js_2_direction_right;
+extern prefs_bool prefs_input_controller_js_2_axis_energy;
+extern prefs_bool prefs_input_controller_js_2_axis_whammy;
+extern prefs_uint prefs_input_controller_js_2_energy; /* Axes */
+extern prefs_uint prefs_input_controller_js_2_whammy;
+extern prefs_bool prefs_input_controller_js_3;
+extern prefs_uint prefs_input_controller_js_3_green;
+extern prefs_uint prefs_input_controller_js_3_red;
+extern prefs_uint prefs_input_controller_js_3_yellow;
+extern prefs_uint prefs_input_controller_js_3_blue;
+extern prefs_uint prefs_input_controller_js_3_orange;
+extern prefs_uint prefs_input_controller_js_3_start;
+extern prefs_uint prefs_input_controller_js_3_select;
+extern prefs_uint prefs_input_controller_js_3_pick_up;
+extern prefs_uint prefs_input_controller_js_3_pick_down;
+extern prefs_uint prefs_input_controller_js_3_direction_down;
+extern prefs_uint prefs_input_controller_js_3_direction_up;
+extern prefs_uint prefs_input_controller_js_3_direction_left;
+extern prefs_uint prefs_input_controller_js_3_direction_right;
+extern prefs_bool prefs_input_controller_js_3_axis_energy;
+extern prefs_bool prefs_input_controller_js_3_axis_whammy;
+extern prefs_uint prefs_input_controller_js_3_energy; /* Axes */
+extern prefs_uint prefs_input_controller_js_3_whammy;
+extern prefs_bool prefs_input_controller_mic_4;
+
+extern prefs_uint prefs_graphics_width;
+extern prefs_uint prefs_graphics_height;
+extern prefs_uint prefs_graphics_colour_bitdepth;
+
+extern prefs_bool prefs_online_time_limit;
+extern prefs_uint prefs_online_time_limit_time;
+
+extern prefs_bool prefs_songs_options_menu;
+extern prefs_uint prefs_songs_options_menu_button;
+extern prefs_bool prefs_speed_per_title;
+extern prefs_uint prefs_default_speed_mod;
+
+bool prefs_nixPrefsDirExists();
+bool prefs_nixPrefsDirCreate();
+
+#endif
