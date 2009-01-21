@@ -1,7 +1,7 @@
 [Project]
 FileName=Freeband.dev
 Name=Freeband
-UnitCount=29
+UnitCount=31
 Type=0
 Ver=1
 ObjFiles=
@@ -329,6 +329,26 @@ BuildCmd=
 
 [Unit29]
 FileName=src\graphics\text.h
+CompileCpp=0
+Folder=Freeband
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit30]
+FileName=src\screens\pause.c
+CompileCpp=0
+Folder=Freeband
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit31]
+FileName=src\screens\pause.h
 CompileCpp=0
 Folder=Freeband
 Compile=1

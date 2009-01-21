@@ -1,6 +1,11 @@
 #ifndef GAME_H
 #define GAME_H
 
+#define en_player_1 "PLAYER 1"
+#define en_player_2 "PLAYER_2"
+#define en_player_3 "PLAYER 3"
+#define en_player_4 "PLAYER 4"
+
 #define TRACKWIDTH       0.4f
 #define STRINGOFFSET     0.51f
 #define STRINGLENGTH    -5.0f

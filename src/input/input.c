@@ -134,8 +134,12 @@ GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
 
         if (fb_screen.mainMenu) {
           screenMain_accept();
-          if (!nonGame)
-            screenInstruments_buffer(); /* Note: 1 player screen is significantly different from multiplayer */
+          if (!nonGame) {
+            if (!(screenInstruments_buffer())) /* Note: 1 player screen is significantly different from multiplayer */
+              fprintf(stderr, "Failed to buffer screenInstruments.\n");
+            else
+              fprintf(stdout, "Buffering screenInstruments.\n");
+          }
           else
             fprintf(stdout, "Not implemented yet.\n");
         }

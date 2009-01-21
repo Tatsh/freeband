@@ -6,6 +6,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef __WIN32__
+#include <windows.h>
+#endif
+
 #include <ogg/ogg.h>
 #include <vorbis/vorbisfile.h>
 
@@ -19,6 +23,11 @@
 
 #define SCREENHEADTEXTHT 0.31f
 
+typedef unsigned int score_t;
+typedef unsigned int combo_t;
+typedef unsigned int stars_t;
+typedef unsigned int multiplier_t;
+
 typedef struct {
   bool mainMenu;
   bool multiPlayer;
@@ -29,13 +38,13 @@ typedef struct {
   bool difficulty;
   bool game;
   bool pause;
-} tCurrentScreen;
+} screen_s;
 
 extern bool menuQuit;
 
 extern GLuint fb_nPlayers;
 
-extern tCurrentScreen fb_screen;
+extern screen_s fb_screen;
 
 /* General functions only */
 GLvoid fb_quit(GLint retnCode);

@@ -7,22 +7,22 @@
 bool diffEasy = true; /* Read from user's last setting in preferences file later */
 bool diffMedium, diffHard, diffExpert;
 
-char pSelection[] = "GameData/themes/default/screenDifficulty/selection.png";
+texture_p pSelection[] = "GameData/themes/default/screenDifficulty/selection.png";
 
-GLfloat screenDifficulty_selectionX[4];
-GLfloat screenDifficulty_selectionY[4] = { 0.0f, DIFFHT, DIFFHT, 0.0f };
+GLcoordsX screenDifficulty_selectionX[4];
+GLcoordsY screenDifficulty_selectionY[4] = { 0.0f, DIFFHT, DIFFHT, 0.0f };
 
-GLfloat tEasyX[4];
-GLfloat tEasyY[] = { 0.0f, DIFFHT, DIFFHT, 0.0f };
-GLfloat tMediumX[4];
-GLfloat tMediumY[4];
-GLfloat tHardX[4];
-GLfloat tHardY[4];
-GLfloat tExpertX[4];
-GLfloat tExpertY[4];
+GLcoordsX tEasyX[4];
+GLcoordsY tEasyY[] = { 0.0f, DIFFHT, DIFFHT, 0.0f };
+GLcoordsX tMediumX[4];
+GLcoordsY tMediumY[4];
+GLcoordsX tHardX[4];
+GLcoordsY tHardY[4];
+GLcoordsX tExpertX[4];
+GLcoordsY tExpertY[4];
 
-GLuint easy, medium, hard, expert;
-GLuint bg, selection;
+texture_i easy, medium, hard, expert;
+texture_i bg, selection;
 
 GLvoid screenDifficulty_buffer() {
   GLfloat width;

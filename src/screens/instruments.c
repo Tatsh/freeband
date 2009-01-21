@@ -5,41 +5,41 @@
 #include "main.h"
 #include "songs.h"
 
-char instCanvas[] = "GameData/themes/default/screenInstruments/canvas.png";
-char selectedGradient[] = "GameData/themes/default/screenInstruments/selectedgrad.png";
+texture_p instCanvas[] = "GameData/themes/default/screenInstruments/canvas.png";
+texture_p selectedGradient[] = "GameData/themes/default/screenInstruments/selectedgrad.png";
 
 /* Negative is to the left, positive is to the right when horizontal (x)
    Negative is to the top, positive is to the bottom when vertical (y)
    Negative is to the outside, positive is going inside (z)
    Order of corners: top-left, bottom-left, bottom-right, top-right */
-GLfloat instCanvasX[] = { 0.1f, 0.1f, 1.2f, 1.2f };
-GLfloat instCanvasY[] = { -0.4f, 0.6f, 0.6f, -0.4 };
-GLfloat screenInstruments_selectionX[] = { 0.12f, 0.12f, 1.18f, 1.18f }; /* This places it underneath 'GUITAR' */
-GLfloat screenInstruments_selectionY[] = { -0.35f, -0.15f, -0.15f, -0.35f };
-GLfloat screenInstruments_selectionReset[] = { -0.35f, -0.15f, -0.15f, -0.35f };
+GLcoordsX instCanvasX[] = { 0.1f, 0.1f, 1.2f, 1.2f };
+GLcoordsY instCanvasY[] = { -0.4f, 0.6f, 0.6f, -0.4 };
+GLcoordsX screenInstruments_selectionX[] = { 0.12f, 0.12f, 1.18f, 1.18f }; /* This places it underneath 'GUITAR' */
+GLcoordsY screenInstruments_selectionY[] = { -0.35f, -0.15f, -0.15f, -0.35f };
+GLcoordsX screenInstruments_selectionReset[] = { -0.35f, -0.15f, -0.15f, -0.35f };
 
-GLfloat text_GuitarX[4];
-GLfloat text_GuitarY[] = { 0.0f, MENUITEMSHT, MENUITEMSHT, 0.0f };
-GLfloat text_BassX[4];
-GLfloat text_BassY[4];
-GLfloat text_DrumsX[4];
-GLfloat text_DrumsY[4];
-GLfloat text_VocalsX[4];
-GLfloat text_VocalsY[4];
+GLcoordsX text_GuitarX[4];
+GLcoordsY text_GuitarY[] = { 0.0f, MENUITEMSHT, MENUITEMSHT, 0.0f };
+GLcoordsX text_BassX[4];
+GLcoordsY text_BassY[4];
+GLcoordsX text_DrumsX[4];
+GLcoordsY text_DrumsY[4];
+GLcoordsX text_VocalsX[4];
+GLcoordsY text_VocalsY[4];
 
-GLfloat text_Guitar_hl[4];
-GLfloat text_Bass_hl[4];
-GLfloat text_Drums_hl[4];
-GLfloat text_Vocals_hl[4];
+GLcoordsX text_Guitar_hl[4];
+GLcoordsX text_Bass_hl[4];
+GLcoordsX text_Drums_hl[4];
+GLcoordsX text_Vocals_hl[4];
 
-GLfloat text_SelectInstrumentX[4]; /* Crillee is italic on its own, this makes it appear not italic */
-GLfloat text_SelectInstrumentY[] = { 0.0f, SCREENHEADTEXTHT, SCREENHEADTEXTHT, 0.0f };
+GLcoordsX text_SelectInstrumentX[4]; /* Crillee is italic on its own, this makes it appear not italic */
+GLcoordsY text_SelectInstrumentY[] = { 0.0f, SCREENHEADTEXTHT, SCREENHEADTEXTHT, 0.0f };
 
 GLfloat degree = 0.0f;
 
-GLuint bg;
-GLuint text_guitar, text_bass, text_drums, text_vocals;
-GLuint text_selectInstrument;
+texture_i bg;
+texture_i text_guitar, text_bass, text_drums, text_vocals;
+texture_i text_selectInstrument;
 
 GLuint screenInstruments_nSelection = 0; /* Guitar */
 
@@ -159,7 +159,7 @@ GLvoid screenInstruments_highlighted(GLuint instSelection) {
   return;
 }
 
-GLvoid screenInstruments_buffer() {
+bool screenInstruments_buffer() {
   GLfloat width;
   GLuint i;
   
@@ -187,46 +187,53 @@ GLvoid screenInstruments_buffer() {
       fprintf(stderr, "Unable to load texture: %s.\n", selectedGradient);
 
     TTF_Font *bitstream;
-    bitstream = TTF_OpenFont(path_bold_bitstreamVeraSans, DEFAULT_TEXT_PT);
-    text_guitar = text_load("GUITAR", bitstream, white, 0);
-    width = graphics_scaleTextureWidth(298, 84, MENUITEMSHT);
-    for ( i = 0; i < 2; i++ ) text_GuitarX[i] = graphics_centreAtX(0.6f, width);
-    for ( i = 2; i < 4; i++ ) text_GuitarX[i] = text_GuitarX[i-2] + width;
+    if ((bitstream = TTF_OpenFont(path_bold_bitstreamVeraSans, DEFAULT_TEXT_PT))) {
+      text_guitar = text_load(en_guitar, bitstream, white, 0);
+      /* GLint text_scaleWidth(const char text[], TTF_Font *font, GLuint ptsize, GLfloat textureHeight); */
+      width = text_scaleWidth(en_guitar, bitstream, DEFAULT_TEXT_PT, MENUITEMSHT);
+      for ( i = 0; i < 2; i++ ) text_GuitarX[i] = graphics_centreAtX(0.6f, width);
+      for ( i = 2; i < 4; i++ ) text_GuitarX[i] = text_GuitarX[i-2] + width;
 
-    text_bass = text_load("BASS", bitstream, white, 1);
-    width = graphics_scaleTextureWidth(212, 84, MENUITEMSHT);
-    for ( i = 0; i < 2; i++ ) text_BassX[i] = graphics_centreAtX(0.6f, width);
-    for ( i = 2; i < 4; i++ ) text_BassX[i] = text_BassX[i-2] + width;
+      text_bass = text_load(en_bass, bitstream, white, 1);
+      width = text_scaleWidth(en_bass, bitstream, DEFAULT_TEXT_PT, MENUITEMSHT);
+      for ( i = 0; i < 2; i++ ) text_BassX[i] = graphics_centreAtX(0.6f, width);
+      for ( i = 2; i < 4; i++ ) text_BassX[i] = text_BassX[i-2] + width;
 
-    text_drums = text_load("DRUMS", bitstream, white, 2);
-    width = graphics_scaleTextureWidth(297, 84, MENUITEMSHT);
-    for ( i = 0; i < 2; i++ ) text_DrumsX[i] = graphics_centreAtX(0.6f, width);
-    for ( i = 2; i < 4; i++ ) text_DrumsX[i] = text_DrumsX[i-2] + width;
+      text_drums = text_load(en_drums, bitstream, white, 2);
+      width = text_scaleWidth(en_drums, bitstream, DEFAULT_TEXT_PT, MENUITEMSHT);
+      for ( i = 0; i < 2; i++ ) text_DrumsX[i] = graphics_centreAtX(0.6f, width);
+      for ( i = 2; i < 4; i++ ) text_DrumsX[i] = text_DrumsX[i-2] + width;
 
-    text_vocals = text_load("VOCALS", bitstream, white, 3);
-    width = graphics_scaleTextureWidth(323, 84, MENUITEMSHT);
-    for ( i = 0; i < 2; i++ ) text_VocalsX[i] = graphics_centreAtX(0.6f, width);
-    for ( i = 2; i < 4; i++ ) text_VocalsX[i] = text_VocalsX[i-2] + width;
+      text_vocals = text_load(en_vocals, bitstream, white, 3);
+      width = text_scaleWidth(en_vocals, bitstream, DEFAULT_TEXT_PT, MENUITEMSHT);
+      for ( i = 0; i < 2; i++ ) text_VocalsX[i] = graphics_centreAtX(0.6f, width);
+      for ( i = 2; i < 4; i++ ) text_VocalsX[i] = text_VocalsX[i-2] + width;
+    }
+    else {
+      fprintf(stderr, "instruments.c: screenInstrumentsBuffer(): Could not open font %s: %s\n", path_bold_bitstreamVeraSans, TTF_GetError());
+      return false;
+    }
     if (bitstream)
       TTF_CloseFont(bitstream);
 
     TTF_Font *crillee;
-    crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT);
-    text_selectInstrument = text_load("SELECT INSTRUMENT", crillee, white, 4);
-    width = graphics_scaleTextureWidth(747, 96, SCREENHEADTEXTHT);
-    for ( i = 0; i < 2; i++ ) text_SelectInstrumentX[i] = graphics_centreAtX(0.0f, width);
-    for ( i = 2; i < 4; i++ ) text_SelectInstrumentX[i] = text_SelectInstrumentX[i-2] + width;
-
+    if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
+      text_selectInstrument = text_load(en_select_instrument, crillee, white, 4);
+      width = text_scaleWidth(en_select_instrument, crillee, DEFAULT_TEXT_PT, MENUITEMSHT);
+      for ( i = 0; i < 2; i++ ) text_SelectInstrumentX[i] = graphics_centreAtX(0.0f, width);
+      for ( i = 2; i < 4; i++ ) text_SelectInstrumentX[i] = text_SelectInstrumentX[i-2] + width;
+    }
+    else {
+      fprintf(stderr, "instruments.c: screenInstrumentsBuffer(): Could not open font %s: %s\n", path_italic_crillee, TTF_GetError());
+      return false;
+    }
     if (crillee)
       TTF_CloseFont(crillee);
   }
   else
     fprintf(stdout, "Multiplayer not implemented yet.\n");
-#ifdef __DEBUG__
-  fprintf(stdout, "Loading textures of screenInstruments complete.\n");
-#endif
   
-  return;
+  return true;
 }
 
 GLvoid screenInstruments() {

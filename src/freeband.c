@@ -17,8 +17,8 @@ bool menuQuit;
 char windowTitle[] = "Freeband";
 
 /*GLfloat text_SinglePlayerY[] = { -0.035f, 0.20f, 0.20f, -0.035f };*/ /* 'Single Player' text's default position */
-GLfloat text_SinglePlayerY[] = { 0.0f, MENUITEMSHT, MENUITEMSHT, 0.0f };
-GLfloat text_MultiplayerY[4], text_OnlineY[4], text_OptionsY[4], text_QuitY[4];
+GLcoordsY text_SinglePlayerY[] = { 0.0f, MENUITEMSHT, MENUITEMSHT, 0.0f };
+GLcoordsY text_MultiplayerY[4], text_OnlineY[4], text_OptionsY[4], text_QuitY[4];
 
 GLuint fb_nPlayers = 1; /* Number of players */
 GLuint texture[MAX_IMAGES]; /* Normal images */
@@ -28,7 +28,7 @@ SDL_Event freeband;     /* Main event collector */
 SDL_Surface *fbSurface; /* Main game surface */
 SDL_Joystick *joy;      /* Space for controllers */
 
-tCurrentScreen fb_screen; /* The current screen */
+screen_s fb_screen; /* The current screen */
 
 TTF_Font *crillee, *bitstream, *bitstreamMonoBold, *freeSans, *freeSansBold;
 
@@ -142,7 +142,10 @@ GLint main(GLint argc, char *argv[]) {
   menuQuit = false; /* Have we left a menu yet? */
   
   /* Buffer main menu textures and text */
-  screenMain_buffer();
+  if (!(screenMain_buffer())) {
+    fprintf(stderr, "Unable to buffer screenMain.\n");
+    fb_quit(1);
+  }
   
   /* Generate arrays of Y coordinates for each text, based upon initial position of Single Player */
   for ( i = 0; i < 4; i++ ) text_MultiplayerY[i] = text_SinglePlayerY[i] + 0.2;
@@ -196,9 +199,7 @@ GLint main(GLint argc, char *argv[]) {
         /*case SDL_JOYAXISMOTION:
           printf("jaxis: which=%u axis=%u value=%d\n", freeband.jaxis.which, freeband.jaxis.axis, freeband.jaxis.value);
           break;*/
-#endif
-
-#ifdef __WIN32XBOX360XPLORER__
+#elif defined(__WIN32XBOX360XPLORER__)
         case SDL_JOYBUTTONDOWN: /* Xbox 360 controller only; non-production code! */
         case SDL_JOYBUTTONUP: /* Do not define both of these! Windows only! */
           if (fb_screen.game) {
@@ -266,9 +267,7 @@ GLint main(GLint argc, char *argv[]) {
     graphics_draw();
   }
 
-#ifdef __WIN32__
   SDL_FreeSurface(icon);
-#endif
 
   fb_quit(0);
   

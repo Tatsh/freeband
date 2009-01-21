@@ -5,7 +5,7 @@
 
 extern bool diffEasy, diffMedium, diffHard, diffExpert;
 
-extern GLfloat screenDifficulty_selectionY[];
+extern GLcoordsY screenDifficulty_selectionY[];
 
 GLvoid screenDifficulty_buffer();
 GLvoid screenDifficulty();

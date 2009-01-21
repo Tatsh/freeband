@@ -3,20 +3,30 @@
 
 #define MAX_IMAGES 20
 
+typedef char texture_p;
+typedef GLfloat GLalpha;
+typedef GLfloat GLcolour;
+typedef GLfloat GLcoordsX;
+typedef GLfloat GLcoordsY;
+typedef GLfloat GLcoordsZ;
+typedef GLuint texture_i;
+
 extern bool graphics_loading; /* Whether or not we are buffering textures */
 
-extern GLfloat buttonColour_green[];
-extern GLfloat buttonColour_red[];
-extern GLfloat buttonColour_yellow[];
-extern GLfloat buttonColour_blue[];
-extern GLfloat buttonColour_orange[];
-extern GLfloat colour_blue_7CA4F6[];
-extern GLfloat colour_yellow_F0FF07[];
-extern GLfloat defaultAlpha[];
-extern GLfloat defVertexZ[];            /* All flat facing user textures use these z values */
-extern GLfloat fillBGVertexX[];         /* 'Fill entire background' positions */
-extern GLfloat fillBGVertexY[];
-extern GLfloat offscreenVertexXY[]; /* Offscreen coordinates */
+extern GLalpha defaultAlpha[];
+
+extern GLcolour buttonColour_green[];
+extern GLcolour buttonColour_red[];
+extern GLcolour buttonColour_yellow[];
+extern GLcolour buttonColour_blue[];
+extern GLcolour buttonColour_orange[];
+extern GLcolour colour_blue_7CA4F6[];
+extern GLcolour colour_yellow_F0FF07[];
+
+extern GLcoordsX offscreenVertexXY[]; /* Offscreen coordinates */
+extern GLcoordsX fillBGVertexX[];     /* 'Fill entire background' positions */
+extern GLcoordsY fillBGVertexY[];
+extern GLcoordsZ defVertexZ[];        /* All flat facing user textures use these z values */
 
 extern GLUquadricObj *quadratic;
 

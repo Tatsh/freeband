@@ -6,18 +6,18 @@
    Name variables as such:
    char path_<fontStyle>_<fontName>[];
    fontStyles: regular, bold, italic, boldItalic */
-char path_bold_bitstreamVeraSans[] = "GameData/themes/default/fonts/bold-bitstream-vera-sans-mono.ttf";
-char path_bold_bitstreamVeraSansMono[] = "GameData/themes/default/fonts/bold-bitstream-vera-sans.ttf";
-char path_bold_freeSans[] = "GameData/themes/default/fonts/bold-freesans.ttf";
+font_p path_bold_bitstreamVeraSans[] = "GameData/themes/default/fonts/bold-bitstream-vera-sans-mono.ttf";
+font_p path_bold_bitstreamVeraSansMono[] = "GameData/themes/default/fonts/bold-bitstream-vera-sans.ttf";
+font_p path_bold_freeSans[] = "GameData/themes/default/fonts/bold-freesans.ttf";
 
-char path_italic_crillee[] = "GameData/themes/default/fonts/italic-crillee.ttf";
+font_p path_italic_crillee[] = "GameData/themes/default/fonts/italic-crillee.ttf";
 
-char path_regular_freeSans[] = "GameData/themes/default/fonts/regular-freesans.ttf";
+font_p path_regular_freeSans[] = "GameData/themes/default/fonts/regular-freesans.ttf";
 /* End font paths */
 
 GLint text_getHeight(const char text[], TTF_Font *font, GLuint ptsize) {
   SDL_Surface *temp;
-  int height;
+  GLuint height;
   
   if ((temp = TTF_RenderUTF8_Blended(font, text, white)))
     height = temp->h;
@@ -32,7 +32,7 @@ GLint text_getHeight(const char text[], TTF_Font *font, GLuint ptsize) {
 
 GLint text_getWidth(const char text[], TTF_Font *font, GLuint ptsize) {
   SDL_Surface *temp;
-  int width;
+  GLuint width;
 
   if ((temp = TTF_RenderUTF8_Blended(font, text, white)))
     width = temp->w;
@@ -43,6 +43,10 @@ GLint text_getWidth(const char text[], TTF_Font *font, GLuint ptsize) {
     SDL_FreeSurface(temp);
   
   return width;
+}
+
+GLfloat text_scaleWidth(const char text[], TTF_Font *font, GLuint ptsize, GLfloat textureHeight) {
+  return graphics_scaleTextureWidth(text_getWidth(text, font, ptsize), text_getHeight(text, font, ptsize), textureHeight);
 }
 
 GLint text_load(const char input[], TTF_Font *font, SDL_Color color, GLuint index) {
@@ -59,7 +63,7 @@ GLint text_load(const char input[], TTF_Font *font, SDL_Color color, GLuint inde
     gluBuild2DMipmaps(GL_TEXTURE_2D, 4, textTexture->w, textTexture->h, GL_RGBA, GL_UNSIGNED_BYTE, textTexture->pixels);
   }
   else {
-    fprintf(stderr, "SDL_ttf could render '%s': %s\n", input, TTF_GetError());
+    fprintf(stderr, "text.c: text_load(): SDL_ttf could render '%s': %s\n", input, TTF_GetError());
     fb_quit(1);
   }
 

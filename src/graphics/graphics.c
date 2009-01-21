@@ -1,31 +1,32 @@
 #include "../freeband.h"
+#include "graphics.h"
+#include "text.h"
 #include "../screens/difficulty.h"
 #include "../screens/game.h"
 #include "../screens/instruments.h"
 #include "../screens/main.h"
+#include "../screens/pause.h"
 #include "../screens/songs.h"
-#include "graphics.h"
-#include "text.h"
 
 bool graphics_loading;
 
-GLfloat buttonColour_green[] = { 0.137f, 0.585, 0.0f, 1.0f };
-GLfloat buttonColour_red[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-GLfloat buttonColour_yellow[] = { 1.0f, 1.0f, 0.0, 1.0f };
-GLfloat buttonColour_blue[] = { 0.059f, 0.0f, 0.71f, 1.0f};
-GLfloat buttonColour_orange[] = { 1.0f, 0.647, 0.114, 1.0f };
+GLcolour buttonColour_green[] = { 0.137f, 0.585, 0.0f, 1.0f };
+GLcolour buttonColour_red[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+GLcolour buttonColour_yellow[] = { 1.0f, 1.0f, 0.0, 1.0f };
+GLcolour buttonColour_blue[] = { 0.059f, 0.0f, 0.71f, 1.0f};
+GLcolour buttonColour_orange[] = { 1.0f, 0.647, 0.114, 1.0f };
 
-GLfloat colour_blue_7CA4F6[] = { 0.484f, 0.643f, 0.964f, 1.0f }; /* approximations */
-GLfloat colour_yellow_F0FF07[] = { 0.941, 1.0f, 0.027f, 1.0f };
+GLcolour colour_blue_7CA4F6[] = { 0.484f, 0.643f, 0.964f, 1.0f }; /* approximations */
+GLcolour colour_yellow_F0FF07[] = { 0.941, 1.0f, 0.027f, 1.0f };
 
 /* Negative is to the left, positive is to the right when horizontal (x)
    Negative is to the top, positive is to the bottom when vertical (y)
    Negative is to the outside, positive is going inside (z)
    Order of corners: top-left, bottom-left, bottom-right, top-right */
-GLfloat defVertexZ[] = { 0.0f, 0.0f, 0.0f, 0.0f };    /* All flat facing user textures use this z value */
-GLfloat fillBGVertexX[] = {  -1.4f, -1.4f,  1.4f,   1.4f }; /* Fill entire background position */
-GLfloat fillBGVertexY[] = { -1.04f, 1.04f, 1.04f, -1.04f };
-GLfloat offscreenVertexXY[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+GLcoordsZ defVertexZ[] = { 0.0f, 0.0f, 0.0f, 0.0f };    /* All flat facing user textures use this z value */
+GLcoordsX fillBGVertexX[] = {  -1.4f, -1.4f,  1.4f,   1.4f }; /* Fill entire background position */
+GLcoordsY fillBGVertexY[] = { -1.04f, 1.04f, 1.04f, -1.04f };
+GLcoordsX offscreenVertexXY[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 GLfloat z = -2.5f;
 
 GLUquadricObj *quadratic;
@@ -110,7 +111,7 @@ GLfloat graphics_scaleTextureWidth(GLuint pWidth, GLuint pHeight, GLfloat destHe
   return destWidth;
 }
 
-GLint graphics_loadTexture(const char *filename, GLuint index) {
+GLint graphics_loadTexture(const char filename[], GLuint index) {
   SDL_Surface *surface; /* Store information here, size, etc */
   
   if ((surface = IMG_Load(filename))) {
@@ -204,6 +205,8 @@ GLvoid graphics_draw() {
     screenDifficulty(fb_nPlayers);
   else if (fb_screen.game && !gamePaused)
     screenGame();
+  else if (fb_screen.game && gamePaused)
+    screenPause();
 
   SDL_GL_SwapBuffers();
 

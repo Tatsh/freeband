@@ -10,25 +10,25 @@ GLfloat bringDownAngle = 90.0f;
 GLfloat NE_coord_neg = 0.0f;
 GLfloat NE_coord_pos = 1.0f;
 
-char buttonT[] = "GameData/themes/default/screenGame/button.png";
-char string[] = "GameData/themes/default/screenGame/string.png";
-char trackloop_a[] = "GameData/themes/default/screenGame/loop_a.png";
+texture_p buttonT[] = "GameData/themes/default/screenGame/button.png";
+texture_p string[] = "GameData/themes/default/screenGame/string.png";
+texture_p trackloop_a[] = "GameData/themes/default/screenGame/loop_a.png";
 
 /* Order of corners: top-left, bottom-left, bottom-right, top-right */
-GLfloat button_sizeX[] = { 0.0f, 0.0f, 0.11f, 0.11f };
-GLfloat button_sizeY[] = { 0.0f, 0.11f, 0.11f, 0.0f };
+GLcoordsX button_sizeX[] = { 0.0f, 0.0f, 0.11f, 0.11f };
+GLcoordsY button_sizeY[] = { 0.0f, 0.11f, 0.11f, 0.0f };
 GLfloat button_rotationX = -0.055f;
 
-GLfloat score_digit1X[] = { 0.0f, 0.0f, 0.05f, 0.05f };
-GLfloat score_digit1Y[] = { 0.0f, 0.1f, 0.1f, 0.0f };
+GLcoordsX score_digit1X[] = { 0.0f, 0.0f, 0.05f, 0.05f };
+GLcoordsY score_digit1Y[] = { 0.0f, 0.1f, 0.1f, 0.0f };
 
-GLfloat stringGreenX[] = { 0.0f, 0.2f, 0.2f, 0.0f };
-GLfloat stringGreenY[] = { -3.5f, -3.5f, 2.0f, 2.0f };
-GLfloat stringVertexZ[] = { -1.6f, 0.6f, 0.6f, -1.6f };
+GLcoordsX stringGreenX[] = { 0.0f, 0.2f, 0.2f, 0.0f };
+GLcoordsY stringGreenY[] = { -3.5f, -3.5f, 2.0f, 2.0f };
+GLcoordsZ stringVertexZ[] = { -1.6f, 0.6f, 0.6f, -1.6f };
 
-GLuint combo0, combo1, combo2, combo3, combo4, combo5, combo6, combo7, combo8, combo9; /* Combo numbers */
-GLuint score0, score1, score2, score3, score4, score5, score6, score7, score8, score9; /* Score numbers */
-GLuint trackloop_a_T, button_T, string_T;
+text_i combo0, combo1, combo2, combo3, combo4, combo5, combo6, combo7, combo8, combo9; /* Combo numbers */
+text_i score0, score1, score2, score3, score4, score5, score6, score7, score8, score9; /* Score numbers */
+texture_i trackloop_a_T, button_T, string_T;
 
 tButton screenGame_button;
 

@@ -5,9 +5,9 @@
 
 #define EN_SINGLE_PLAYER  "SINGLE PLAYER"
 #define EN_MULTIPLAYER    "MULTIPLAYER"
-#define EN_ONLINE         "ONLINE"
-#define EN_OPTIONS        "OPTIONS"
-#define EN_QUIT           "QUIT"
+#define en_online         "ONLINE"
+#define en_options        "OPTIONS"
+#define en_quit           "QUIT"
 
 /* For later; I have no plans on building separate language builds
    Non-translated are commented out */
@@ -63,7 +63,7 @@ typedef struct {
   bool online;
   bool options;
   bool quit;
-} tMenuState;
+} mainMenu_s;
 
 extern bool nonGame;
 extern bool online;
@@ -77,9 +77,9 @@ extern GLfloat screenMain_selectionX[]; /* Main menu selector's default position
 extern GLfloat screenMain_selectionY[];
 extern GLfloat text_MultiplayerY[], text_OnlineY[], text_OptionsY[], text_QuitY[];
 extern GLuint screenMain_nSelection;
-extern tMenuState screenMain_selection;
+extern mainMenu_s screenMain_selection;
 
-GLvoid screenMain_buffer();
+bool screenMain_buffer();
 GLvoid screenMain_highlighted(GLuint nSelection);
 GLvoid screenMain_accept();
 GLvoid screenMain();

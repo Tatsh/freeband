@@ -32,11 +32,25 @@ LIBS="$LIBS $SDL_LIBS"
 AC_CHECK_LIB([SDL_image], [IMG_Load], [], [AC_MSG_ERROR([SDL_image not found])])
 AC_CHECK_LIB([SDL_ttf], [TTF_RenderUTF8_Blended], [], [AC_MSG_ERROR([SDL_ttf not found])])
 
+# Check for OpenGL headers
+AC_CHECK_HEADERS([GL/gl.h OpenGL/gl.h], [gl_found_header=yes])
+AC_CHECK_HEADERS([GL/glu.h OpenGL/glu.h], [glu_found_header=yes])
+AC_CHECK_HEADERS([GL/glut.h OpenGL/glut.h], [glu_found_header=yes])
+CPPFLAGS="$fp_save_cppflags"
+if test x"$gl_found_header" = xno || test x"$glu_found_header" = xno; then
+  AC_MSG_FAILURE([No OpenGL headers found.])
+fi
+
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([math.h])
 AC_CHECK_HEADERS(ogg/ogg.h vorbis/vorbisfile.h)
-AC_CHECK_HEADERS(GL/gl.h GL/glu.h GL/glut.h)
+# check for OpenGL include files
+gl_found_header=no
+glu_found_header=no
+glut_found_header=no
+fp_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS $X_CFLAGS"
 AC_CHECK_HEADERS(SDL/SDL.h SDL/SDL_image.h SDL/SDL_ttf.h)
 
 # Checks for typedefs, structures, and compiler characteristics.
