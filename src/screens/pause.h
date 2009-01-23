@@ -1,6 +1,8 @@
 #ifndef PAUSE_H
 #define PAUSE_H
 
+#define en_paused             "PAUSED"
+
 #define en_resume             "RESUME"
 #define en_restart            "RESTART"
 #define en_lefty_mode         "LEFTY MODE"

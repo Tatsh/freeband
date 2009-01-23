@@ -12,7 +12,6 @@
 #define en_quit_freeband      "QUIT FREEBAND"
 
 bool screenPause_buffer();
-
 GLvoid screenPause();
 
 #endif

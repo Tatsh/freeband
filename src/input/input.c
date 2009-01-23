@@ -5,18 +5,19 @@
 #include "../screens/difficulty.h"
 #include "../screens/game.h"
 #include "../screens/instruments.h"
+#include "../screens/pause.h"
 #include "../screens/songs.h"
 #include "input.h"
 #include "screenDifficulty.h"
+#include "screenGame.h"
 #include "screenInstruments.h"
 #include "screenMain.h"
 #include "screenSongs.h"
 
 GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
-  Uint8 *keystates = SDL_GetKeyState(NULL);
   GLuint i;
   online = options = false;
-  
+
   switch (keysym->sym) {
     
     case SDLK_DOWN:
@@ -38,7 +39,7 @@ GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
       break;
 
     case SDLK_RETURN:
-      if (keystates[SDLK_LALT] || keystates[SDLK_RALT]) /* Switch to full screen only if Alt+Enter is pressed */
+      if (keysym->mod & KMOD_ALT) /* Switch to full screen only if Alt+Enter is pressed */
         SDL_WM_ToggleFullScreen(surface);
       else {
         if (fb_screen.mainMenu)
@@ -61,9 +62,22 @@ GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
         input_screenSongs(ESC);
       else if (fb_screen.difficulty)
         input_screenDifficulty(ESC);
+      else if (fb_screen.game)
+        input_screenGamePause();
+      else if (fb_screen.pause) {
+        menuQuit = graphics_loading = true;
+        fb_screen.difficulty = false;
+        graphics_clear();
+        screenGame_buffer();
+        fb_screen.game = true;
+        graphics_loading = gamePaused = false;
+#ifdef __DEBUG__
+        fprintf(stdout, "Now in screenGame() function.\n");
+#endif
+      }
       break;
       
-    case SDLK_F8:
+    case SDLK_SPACE:
       if (fb_screen.songs)
         input_screenSongs(SONG_SORT);
       break;
@@ -79,12 +93,12 @@ GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
       }
       break;
       
-    case SDLK_q: /* Easter egg. Maybe things like this will help themers in the future */
-      if (fb_screen.mainMenu) {
-        for ( i = 0; i < 4; i++ )
-          screenMain_logoX[i] = screenMain_logoX[i] - 0.01;
-      }
-      break;
+      case SDLK_q: /* Easter egg. Maybe things like this will help themers in the future */
+        if (fb_screen.mainMenu) {
+          for ( i = 0; i < 4; i++ )
+            screenMain_logoX[i] = screenMain_logoX[i] - 0.01;
+        }
+        break;
       
     case SDLK_w:
       if (fb_screen.mainMenu) {
@@ -100,60 +114,3 @@ GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
   return;
 }
 
-GLvoid input_gameKeys(SDL_keysym *keysym, SDL_Surface *surface) {
-  Uint8 *keystates = SDL_GetKeyState(NULL);
-
-  if (keystates[SDLK_F1])
-    screenGame_button.g = true;
-  else
-    screenGame_button.g = false;
-  
-  if (keystates[SDLK_F2])
-    screenGame_button.r = true;
-  else
-    screenGame_button.r = false;
-  
-  if (keystates[SDLK_F3])
-    screenGame_button.y = true;
-  else
-    screenGame_button.y = false;
-  
-  if (keystates[SDLK_F4])
-    screenGame_button.b = true;
-  else
-    screenGame_button.b = false;
-  
-  if (keystates[SDLK_F5])
-    screenGame_button.o = true;
-  else
-    screenGame_button.o = false;
-  
-  switch (keysym->sym) {
-
-    case SDLK_RETURN:
-      if (keysym->mod & KMOD_ALT) /* Switch to full screen only if Alt+Enter is pressed */
-        SDL_WM_ToggleFullScreen(surface);
-      break;
-      
-    case SDLK_ESCAPE:
-      bringDownAngle = 90.0f; /* Reset track */
-      NE_coord_neg = 0.0f;
-      NE_coord_pos = 1.0f;
-      graphics_loading = gamePaused = true;
-      fb_screen.game = menuQuit = false;
-      graphics_clear();
-      screenSongs_buffer();
-      graphics_loading = false;
-      fb_screen.songs = true;
-#ifdef __DEBUG__
-      fprintf(stdout, "Switched back to screenSongs.\n");
-#endif
-      break;
-
-    default:
-      break;
-
-  }
-  
-  return;
-}

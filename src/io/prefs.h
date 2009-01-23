@@ -5,8 +5,8 @@ typedef char prefs_directory;
 typedef bool prefs_bool;
 typedef unsigned char prefs_uchar;
 typedef char prefs_char;
-typedef unsigned int prefs_uint;
-typedef int prefs_int;
+typedef GLuint prefs_uint;
+typedef GLint prefs_int;
 
 extern prefs_directory prefs_root[];
 extern prefs_directory prefs_songs[];

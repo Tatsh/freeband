@@ -237,7 +237,7 @@ GLvoid graphics_draw() {
     screenDifficulty(fb_nPlayers);
   else if (fb_screen.game && !gamePaused)
     screenGame();
-  else if (fb_screen.game && gamePaused)
+  else if (fb_screen.pause && gamePaused)
     screenPause();
 
   SDL_GL_SwapBuffers();

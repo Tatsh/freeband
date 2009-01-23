@@ -47,8 +47,7 @@ am_freeband_OBJECTS = freeband.$(OBJEXT)
 freeband_OBJECTS = $(am_freeband_OBJECTS)
 freeband_DEPENDENCIES = input/libFreebandInput.a \
 	audio/libFreebandAudio.a screens/libFreebandScreens.a \
-	graphics/libFreebandGraphics.a screens/pause.o \
-	io/libFreebandIO.a
+	graphics/libFreebandGraphics.a io/libFreebandIO.a
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -166,7 +165,7 @@ top_srcdir = @top_srcdir@
 DIST_SUBDIRS = GameData
 SUBDIRS = audio graphics input io screens .
 freeband_SOURCES = freeband.c
-freeband_LDADD = input/libFreebandInput.a audio/libFreebandAudio.a screens/libFreebandScreens.a graphics/libFreebandGraphics.a screens/pause.o io/libFreebandIO.a
+freeband_LDADD = input/libFreebandInput.a audio/libFreebandAudio.a screens/libFreebandScreens.a graphics/libFreebandGraphics.a io/libFreebandIO.a
 all: all-recursive
 
 .SUFFIXES:

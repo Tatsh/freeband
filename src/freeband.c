@@ -3,6 +3,7 @@
 #include "graphics/graphics.h"
 #include "graphics/text.h"
 #include "input/input.h"
+#include "input/screenGame.h"
 #include "io/prefs.h"
 #include "screens/game.h"
 #include "screens/instruments.h"
@@ -180,16 +181,17 @@ GLint main(GLint argc, char *argv[]) {
           break;
           
         case SDL_KEYDOWN: /* Handle key down event */
-          if (!menuQuit || gamePaused)
+          if (!fb_screen.game)
             input_menuKeys(&freeband.key.keysym, fbSurface);
-          else
-            input_gameKeys(&freeband.key.keysym, fbSurface);
+          else {
+            input_menuKeys(&freeband.key.keysym, fbSurface);
+            input_screenGame();
+          }
           break;
 
         case SDL_KEYUP:
-          if (fb_screen.game) {
-            input_gameKeys(&freeband.key.keysym, fbSurface);
-          }
+          if (fb_screen.game)
+            input_screenGame();
           break;
 
 #ifdef __XBOX360XPLORER__
@@ -261,6 +263,16 @@ GLint main(GLint argc, char *argv[]) {
             fb_screen.songs = true;
 #ifdef __DEBUG__
             fprintf(stdout, "Switched back to screenSongs.\n");
+#endif
+          }
+          else if (fb_screen.pause) {
+            menuQuit = graphics_loading = true;
+            graphics_clear();
+            screenMain_buffer();
+            fb_screen.instruments = graphics_loading = menuQuit = false;
+            fb_screen.mainMenu = true;
+#ifdef __DEBUG__
+            fprintf(stdout, "Switched back to screenMain.\n");
 #endif
           }
           break;
