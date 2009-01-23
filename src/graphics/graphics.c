@@ -91,6 +91,38 @@ GLfloat graphics_centreAtX(GLfloat x, GLfloat width) {
     return offset;
 }
 
+GLint graphics_getTextureHeight(const char filename[]) {
+  GLint height;
+  SDL_Surface *temp;
+  
+  if ((temp = IMG_Load(filename))) {
+    height = temp->h;
+  }
+  else
+    return -1.0;
+  
+  if (temp)
+    SDL_FreeSurface(temp);
+  
+  return height;
+}
+
+GLint graphics_getTextureWidth(const char filename[]) {
+  GLint width;
+  SDL_Surface *temp;
+  
+  if ((temp = IMG_Load(filename))) {
+    width = temp->w;
+  }
+  else
+    return -1.0;
+  
+  if (temp)
+    SDL_FreeSurface(temp);
+  
+  return width;
+}
+
 /* These scaling functions have nothing to do with below loading functions
    Use only when you know the image's original dimensions; this helps with theming; more functionality later
    This is also useful for text, specify any height or width (in pixels) and get the correct corresponding width or height for an

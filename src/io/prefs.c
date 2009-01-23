@@ -5,8 +5,6 @@ prefs_directory prefs_root[255];
 prefs_directory prefs_songs[255];
 prefs_directory prefs_themes[255];
 
-#ifdef __WIN32__
-#else
 bool prefs_nixPrefsDirExists() {
   int exists;
   struct stat buffer;
@@ -51,4 +49,4 @@ bool prefs_nixPrefsDirCreate() {
   
   return true;
 }
-#endif
+

@@ -44,7 +44,9 @@ AR = ar
 ARFLAGS = cru
 libFreebandInput_a_AR = $(AR) $(ARFLAGS)
 libFreebandInput_a_LIBADD =
-am_libFreebandInput_a_OBJECTS = input.$(OBJEXT)
+am_libFreebandInput_a_OBJECTS = input.$(OBJEXT) screenMain.$(OBJEXT) \
+	screenInstruments.$(OBJEXT) screenDifficulty.$(OBJEXT) \
+	screenSongs.$(OBJEXT)
 libFreebandInput_a_OBJECTS = $(am_libFreebandInput_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -152,7 +154,7 @@ top_build_prefix = ../../
 top_builddir = ../..
 top_srcdir = ../..
 noinst_LIBRARIES = libFreebandInput.a
-libFreebandInput_a_SOURCES = input.c
+libFreebandInput_a_SOURCES = input.c screenMain.c screenInstruments.c screenDifficulty.c screenSongs.c
 all: all-am
 
 .SUFFIXES:
@@ -201,6 +203,10 @@ distclean-compile:
 	-rm -f *.tab.c
 
 include ./$(DEPDIR)/input.Po
+include ./$(DEPDIR)/screenDifficulty.Po
+include ./$(DEPDIR)/screenInstruments.Po
+include ./$(DEPDIR)/screenMain.Po
+include ./$(DEPDIR)/screenSongs.Po
 
 .c.o:
 	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

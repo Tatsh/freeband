@@ -1,0 +1,68 @@
+#include "../freeband.h"
+#include "../graphics/graphics.h"
+#include "../screens/difficulty.h"
+#include "../screens/instruments.h"
+#include "../screens/songs.h"
+#include "input.h"
+#include "screenSongs.h"
+
+GLvoid input_screenSongs(GLuint direction) {
+  switch(direction) {
+    case SONG_SORT:
+      if (byTier_s) {
+        byTier_s = false;
+        /* screenSongs_sortAZ(TITLE); */
+        titleAZ_s = true;
+#ifdef __DEBUG__
+        fprintf(stdout, "Songs sorted alphabetically by title.\n");
+#endif
+      }
+      else if (titleAZ_s) {
+        titleAZ_s = false;
+        artistAZ_s = true;
+#ifdef __DEBUG__
+        fprintf(stdout, "Songs sorted alphabetically by artist.\n");
+#endif
+      }
+      else if (artistAZ_s) {
+        artistAZ_s = false;
+        byBPM_s = true;
+#ifdef __DEBUG__
+        fprintf(stdout, "Songs sorted ascendingly by BPM.\n");
+#endif
+      }
+      else {
+        byBPM_s = false;
+        byTier_s = true;
+#ifdef __DEBUG__
+        fprintf(stdout, "Songs sorted by Tier.\n");
+#endif
+      }
+      break;
+    
+    case RETURN:
+      menuQuit = graphics_loading = true;
+      fb_screen.songs = false;
+      graphics_clear();
+      screenDifficulty_buffer();
+      fb_screen.difficulty = true;
+#ifdef __DEBUG__
+      fprintf(stdout, "Now in screenDifficulty().\n");
+#endif
+      graphics_loading = menuQuit = false;
+      break;
+    
+    case ESC:
+      menuQuit = graphics_loading = true;
+      graphics_clear();
+      screenInstruments_buffer();
+      fb_screen.songs = graphics_loading = menuQuit = false;
+      fb_screen.instruments = true;
+      break;
+      
+    default:
+      break;
+  }
+  
+  return;
+}

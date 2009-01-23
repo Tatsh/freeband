@@ -7,13 +7,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef __WIN32__
-#include <windows.h>
-#else
+/* Mingw only */
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#endif
 
 #include <ogg/ogg.h>
 #include <vorbis/vorbisfile.h>

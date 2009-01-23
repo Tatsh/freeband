@@ -1,0 +1,61 @@
+#include "../freeband.h"
+#include "../graphics/graphics.h"
+#include "../screens/instruments.h"
+#include "../screens/main.h"
+#include "../screens/songs.h"
+#include "input.h"
+#include "screenInstruments.h"
+
+GLvoid input_screenInstruments(GLuint direction) {
+  switch (direction) {
+    case DOWN:
+      if (fb_nPlayers < 2) {
+        screenInstruments_nSelection++;
+        screenInstruments_highlighted(screenInstruments_nSelection);
+
+        if ( screenInstruments_nSelection < 4 );
+        else {
+          screenInstruments_nSelection = 0;
+          screenInstruments_highlighted(screenInstruments_nSelection);
+        }
+      }
+      break;
+      
+    case UP:
+      if (fb_nPlayers < 2) {
+        if (screenInstruments_nSelection > 0) {
+          screenInstruments_nSelection--;
+          screenInstruments_highlighted(screenInstruments_nSelection);
+        }
+        else if (screenInstruments_nSelection < 1 ) {
+          screenInstruments_nSelection = 3; /* Vocals */
+          screenInstruments_highlighted(screenInstruments_nSelection);
+        }
+
+      }
+      break;
+      
+    case RETURN:
+      screenInstruments_accept();
+      screenSongs_buffer();
+      /* screenCharactersBuffer(nPlayers); someday */
+      break;
+      
+    case ESC:
+      menuQuit = graphics_loading = true;
+      graphics_clear();
+      screenMain_buffer();
+      fb_screen.instruments = graphics_loading = menuQuit = false;
+      fb_screen.mainMenu = true;
+#ifdef __DEBUG__
+      fprintf(stdout, "Successfully switched back to screenMain.\n");
+#endif
+      screenInstruments_nSelection = 0;
+      break;
+      
+    default:
+      break;
+  }
+
+  return;
+}
