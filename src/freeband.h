@@ -12,6 +12,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include <portaudio.h>
+
+#include <sndfile.h>
 #include <ogg/ogg.h>
 #include <vorbis/vorbisfile.h>
 

@@ -39,6 +39,8 @@ bool graphics_initGL();
 bool graphics_resizeWindow(GLuint width, GLuint height);
 
 GLfloat graphics_centreAtX(GLfloat xyz, GLfloat width);
+GLint graphics_getTextureHeight(const char filename[]);
+GLint graphics_getTextureWidth(const char filename[]);
 GLfloat graphics_scaleTextureHeight(GLuint pWidth, GLuint pHeight, GLfloat destWidth);
 GLfloat graphics_scaleTextureWidth(GLuint pWidth, GLuint pHeight, GLfloat destHeight);
 

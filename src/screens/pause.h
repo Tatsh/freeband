@@ -13,6 +13,8 @@
 #define en_main_menu          "MAIN MENU"
 #define en_quit_freeband      "QUIT FREEBAND"
 
+extern bool screenPause_resumeHl;
+
 bool screenPause_buffer();
 GLvoid screenPause();
 

@@ -36,6 +36,15 @@ TTF_Font *crillee, *bitstream, *bitstreamMonoBold, *freeSans, *freeSansBold;
 
 GLvoid fb_quit(GLint retnCode) {
   GLuint i;
+  PaError err;
+  
+  err = Pa_Terminate();
+  if( err != paNoError )
+    fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText(err));
+#ifdef __DEBUG__
+  else
+    fprintf(stdout, "PortAudio terminated successfully.\n");
+#endif
 
   glDeleteTextures( MAX_IMAGES, &texture[0] );
   glDeleteTextures( MAX_TEXT, &text[0] );
@@ -150,8 +159,14 @@ GLint main(GLint argc, char *argv[]) {
   fb_screen.mainMenu = true; /* Set to main screen */
   menuQuit = false; /* Have we left a menu yet? */
   
+  /* Buffer audio */
+  if (!audio_buffer()) {
+    fprintf(stderr, "Unable to initialise audio.\n");
+    fb_quit(1);
+  }
+  
   /* Buffer main menu textures and text */
-  if (!(screenMain_buffer())) {
+  if (!screenMain_buffer()) {
     fprintf(stderr, "Unable to buffer screenMain.\n");
     fb_quit(1);
   }

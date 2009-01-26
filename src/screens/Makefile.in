@@ -46,7 +46,7 @@ libFreebandScreens_a_AR = $(AR) $(ARFLAGS)
 libFreebandScreens_a_LIBADD =
 am_libFreebandScreens_a_OBJECTS = main.$(OBJEXT) instruments.$(OBJEXT) \
 	songs.$(OBJEXT) difficulty.$(OBJEXT) game.$(OBJEXT) \
-	pause.$(OBJEXT)
+	pause.$(OBJEXT) songlist.$(OBJEXT)
 libFreebandScreens_a_OBJECTS = $(am_libFreebandScreens_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -154,7 +154,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LIBRARIES = libFreebandScreens.a
-libFreebandScreens_a_SOURCES = main.c instruments.c songs.c difficulty.c game.c pause.c
+libFreebandScreens_a_SOURCES = main.c instruments.c songs.c difficulty.c game.c pause.c songlist.c
 all: all-am
 
 .SUFFIXES:
@@ -207,6 +207,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/instruments.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pause.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/songlist.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/songs.Po@am__quote@
 
 .c.o:

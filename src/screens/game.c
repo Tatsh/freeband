@@ -12,6 +12,7 @@ GLfloat NE_coord_pos = 1.0f;
 
 texture_p buttonT[] = "GameData/themes/default/screenGame/button.png";
 texture_p string[] = "GameData/themes/default/screenGame/string.png";
+texture_p stringEndG[] = "GameData/themes/default/screenGame/button_top.png"; /* Green string */
 texture_p trackloop_a[] = "GameData/themes/default/screenGame/loop_a.png";
 
 /* Order of corners: top-left, bottom-left, bottom-right, top-right */
@@ -26,18 +27,33 @@ GLcoordsX stringGreenX[] = { 0.0f, 0.2f, 0.2f, 0.0f };
 GLcoordsY stringGreenY[] = { -3.5f, -3.5f, 2.0f, 2.0f };
 GLcoordsZ stringVertexZ[] = { -1.6f, 0.6f, 0.6f, -1.6f };
 
+GLcoordsX stringEndG_X[] = { 0.0f, 1.0f, 1.0f, 0.0f };
+GLcoordsX stringEndG_Y[] = { 1.0f, -0.2f, -0.2f, -1.0f };
+GLcoordsZ stringEndG_Z[] = { -1.6f, 0.6f, 0.6f, -1.6f };
+
 text_i combo0, combo1, combo2, combo3, combo4, combo5, combo6, combo7, combo8, combo9; /* Combo numbers */
 text_i score0, score1, score2, score3, score4, score5, score6, score7, score8, score9; /* Score numbers */
-texture_i trackloop_a_T, button_T, string_T;
+texture_i trackloop_a_T, button_T, string_T, stringEndG_t;
 
 tButton screenGame_button;
 
 GLvoid screenGame_buffer() {
+  /*GLfloat f_width;
+  GLuint u_width, u_height, i;*/
+  
   if ((trackloop_a_T = graphics_loadTexture(trackloop_a, 0)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", trackloop_a);
   
   if ((button_T = graphics_loadTexture(buttonT, 1)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", buttonT);
+  
+  if ((stringEndG_t = graphics_loadTexture(stringEndG, 0)) == -1)
+    fprintf(stderr, "Unable to load texture: %s.\n", stringEndG);
+  /*u_width = graphics_getTextureWidth(stringEndG);
+  u_height = graphics_getTextureHeight(stringEndG);
+  f_width = graphics_scaleTextureWidth(u_width, u_height, 0.2f);
+  for ( i = 0; i < 2; i++ ) stringEndG_X[i] = graphics_centreAtX(0.2, f_width);
+  for ( i = 2; i < 4; i++ ) stringEndG_X[i] = stringEndG_X[i-2] + f_width;*/
   
   if ((string_T = graphics_loadTexture(string, 4)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", string);
@@ -145,6 +161,14 @@ GLvoid screenGame() {
     glVertex3f( GREENSTRCOORD + STRINGWIDTH, 0.5f, STRINGLENGTH );
   } glEnd();
   glPopMatrix();
+  
+/*  glPushMatrix(); {
+    if (bringDownAngle > 0.0f)
+      glRotatef( bringDownAngle, -1.0f, 0.0f, 0.0f );
+    glBindTexture( GL_TEXTURE_2D, stringEndG_t );
+    glTranslatef( 0.0f, 0.0f, STRINGSTRANS);
+    graphics_positionTexture(stringEndG_X, stringEndG_Y, stringEndG_Z);
+  } glPopMatrix();*/
   
   glPushMatrix(); /* 2 */
   if (bringDownAngle > 0.0f)

@@ -3,6 +3,7 @@
 #include "../graphics/text.h"
 #include "main.h"
 #include "songs.h"
+#include "songlist.h"
 
 /* Order of corners: top-left, bottom-left, bottom-right, top-right */
 GLcoordsX text_songsX[4];
