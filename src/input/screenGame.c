@@ -10,16 +10,10 @@
 #include "screenGame.h"
 
 GLvoid input_screenGamePause() {
-  graphics_loading = true;
-  menuQuit = fb_screen.game = false;
-  graphics_clear();
-  screenPause_buffer();
-  fb_screen.pause = gamePaused = true;
-  graphics_loading = false;
+  gamePaused = true;
 #ifdef __DEBUG__
-  fprintf(stdout, "Now in screenGame() function.\n");
+  fprintf(stdout, "Now in screenPause() function.\n");
 #endif
-  
   return;
 }
 

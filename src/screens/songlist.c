@@ -104,7 +104,7 @@ songNode_s *songs_deleteSongNode(songList_s *list, songNode_s *position) {
   return node;
 }
 
-/* These functions are not ready yet :)
+/* These functions are not ready yet :),
 songNode_s *songs_insertSongSortedTier(file_p *notes,
                                    songStrings_s *songStrings,
                                    songDiffs_s *songDifficulties,

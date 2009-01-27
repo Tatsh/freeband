@@ -4,6 +4,8 @@
 audio_deviceInfo_s audio_deviceInfoSupported[MAX_AUDIO_DEVICES];
 audio_deviceInfo_s audio_deviceInfoUnsupported[MAX_AUDIO_DEVICES];
 
+audio_deviceInfo_s audio_deviceInfoTemplate;
+
 bool audio_verifyFiletype(GLuint filetype, char path[]) {
   bool ok = false;
   
@@ -60,22 +62,34 @@ bool audio_buffer() {
 #ifdef __DEBUG__
     fprintf(stdout, "PortAudio found %d devices.\n", numDevices);
 #endif
-
+    
+    /* Initialise template struct for arrays */
+    audio_deviceInfoTemplate.maxInputChannels = 0;
+    audio_deviceInfoTemplate.maxOutputChannels = 0;
+    audio_deviceInfoTemplate.defaultHighOutputLatency = 0.0f;
+    audio_deviceInfoTemplate.defaultLowOutputLatency = 0.0f;
+    audio_deviceInfoTemplate.defaultHighInputLatency = 0.0f;
+    audio_deviceInfoTemplate.defaultLowInputLatency = 0.0f;
+    audio_deviceInfoTemplate.defaultSampleRate = 0.0f;
+    for (i = 0; i < MAX_AUDIO_DEVICES; i++) audio_deviceInfoSupported[i] = audio_deviceInfoTemplate;
+    for (i = 0; i < MAX_AUDIO_DEVICES; i++) audio_deviceInfoUnsupported[i] = audio_deviceInfoTemplate;
+    
+    /* Query devices for options screen */
     for (i = 0; i < numDevices; i++) {
       deviceInfo = Pa_GetDeviceInfo(i);
       
       /* We only care that the device supports sample rates 44100 or higher
          Negative latency values are not usable
          Devices must support at least 1 or more channels for input
-         Must support at least 2 output channel */
+         Must support at least 1 output channel (mono) */
       if (deviceInfo->defaultSampleRate >= 44100.0f &&
-          deviceInfo->maxInputChannels >= 1 &&
-          deviceInfo->maxOutputChannels >= 2 &&
+          deviceInfo->maxInputChannels >= 1 && /* Without at least 1 input, microphone (vocals) mode cannot be utilised */
+          deviceInfo->maxOutputChannels >= 1 &&
           deviceInfo->defaultLowInputLatency >= 0.0f &&
           deviceInfo->defaultLowOutputLatency >= 0.0f &&
           deviceInfo->defaultHighInputLatency >= 0.0f &&
           deviceInfo->defaultLowInputLatency >= 0.0f) {
-        fprintf(stdout, "%s is a usable audio device.\n", deviceInfo->name);
+        fprintf(stdout, "%s is a 100%% compatible audio device.\n", deviceInfo->name);
         fprintf(stdout, "  Max input channels:  %d\n", deviceInfo->maxInputChannels);
         fprintf(stdout, "  Max output channels: %d\n", deviceInfo->maxOutputChannels);
         fprintf(stdout, "  High output latency: %f\n", deviceInfo->defaultHighOutputLatency);
@@ -95,7 +109,18 @@ bool audio_buffer() {
         }
       }
       else {
-        if (i < MAX_AUDIO_DEVICES) { /* We add to non-working list */
+        fprintf(stdout, "%s is not a 100%% compatible audio device.\n", deviceInfo->name);
+#ifdef __DEBUG__
+        fprintf(stdout, "  Max input channels:  %d\n", deviceInfo->maxInputChannels);
+        fprintf(stdout, "  Max output channels: %d\n", deviceInfo->maxOutputChannels);
+        fprintf(stdout, "  High output latency: %f\n", deviceInfo->defaultHighOutputLatency);
+        fprintf(stdout, "  Low output latency:  %f\n", deviceInfo->defaultLowOutputLatency);
+        fprintf(stdout, "  High input latency:  %f\n", deviceInfo->defaultHighInputLatency);
+        fprintf(stdout, "  Low input latency:   %f\n", deviceInfo->defaultLowInputLatency);
+        fprintf(stdout, "  Best sample rate:    %f\n", deviceInfo->defaultSampleRate);
+#endif
+
+        if (i < MAX_AUDIO_DEVICES) { /* We add to non-working list, allow user to force these in options? */
           audio_deviceInfoUnsupported[i].maxInputChannels = deviceInfo->maxInputChannels;
           audio_deviceInfoUnsupported[i].maxOutputChannels = deviceInfo->maxOutputChannels;
           audio_deviceInfoUnsupported[i].defaultHighOutputLatency = deviceInfo->defaultHighOutputLatency;
@@ -107,6 +132,33 @@ bool audio_buffer() {
       }
     }
   }
+
+  if (!audio_findSupportedDevices()) {
+    fprintf(stderr, "Could not find a usable audio device.\n");
+    return false;
+  }
+  else { /* Get default devices until settings file has been established */
+    i = Pa_GetDefaultInputDevice();
+    deviceInfo = Pa_GetDeviceInfo(i);
+    fprintf(stdout, "Default input device: %s\n", deviceInfo->name);
+    i = Pa_GetDefaultOutputDevice();
+    deviceInfo = Pa_GetDeviceInfo(i);
+    fprintf(stdout, "Default output device: %s\n", deviceInfo->name);
+  }
+  
+  return true;
+}
+
+bool audio_findSupportedDevices() {
+  unsigned int i, supported = 0;
+  
+  for ( i = 0; i < MAX_AUDIO_DEVICES; i++ ) { /* Must support at least 1 output channel */
+    if (audio_deviceInfoSupported[i].maxOutputChannels != 0)
+      supported++; 
+  }
+  
+  if (supported == 0)
+    return false;
   
   return true;
 }

@@ -200,8 +200,10 @@ bool screenMain_buffer() {
     fprintf(stderr, "Unable to load texture: %s.\n", mainSelector);
     return false;
   }
-  for ( i = 0; i < 2; i++ ) screenMain_selectionX[i] = graphics_centreAtX(0.6f, graphics_scaleTextureWidth(400, 52, 0.18f));
-  for ( i = 2; i < 4; i++ ) screenMain_selectionX[i] = screenMain_selectionX[i-2] + graphics_scaleTextureWidth(400, 52, 0.18f);
+  for ( i = 0; i < 2; i++ ) screenMain_selectionX[i] = graphics_centreAtX(0.6f,
+        graphics_scaleTextureWidth(graphics_getTextureWidth(mainSelector), graphics_getTextureHeight(mainSelector), 0.18f));
+  for ( i = 2; i < 4; i++ ) screenMain_selectionX[i] = screenMain_selectionX[i-2] +
+        graphics_scaleTextureWidth(graphics_getTextureWidth(mainSelector), graphics_getTextureHeight(mainSelector), 0.18f);
   
   /* Text */
   if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {

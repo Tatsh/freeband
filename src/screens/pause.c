@@ -6,57 +6,108 @@
 #include "main.h"
 #include "pause.h"
 
-bool screenPause_resumeHl;
+bool gamePaused;
+
+pause_fMenuState_s pause_menuState;
 
 /* Pause header */
 GLcoordsX text_pausedX[4];
-GLcoordsY text_pausedY[] = { 0.0f, 0.2f, 0.2f, 0.0f };
+GLcoordsY text_pausedY[] = { 0.0f, SCREENHEADTEXTHT, SCREENHEADTEXTHT, 0.0f };
 
 GLcoordsX text_resumeX[4];
-GLcoordsY text_resumeY[] = { 0.0f, 0.15f, 0.15f, 0.0f };
+GLcoordsY text_resumeY[] = { 0.0f, PAUSE_MENU_ITEMS_HT, PAUSE_MENU_ITEMS_HT, 0.0f };
 
-text_i text_paused, text_resume;
+GLcoordsX text_restartX[4];
+GLcoordsY text_restartY[] = { 0.0f, PAUSE_MENU_ITEMS_HT, PAUSE_MENU_ITEMS_HT, 0.0f };
+
+GLcoordsX text_leftyModeX[4];
+GLcoordsY text_leftyModeY[] = { 0.0f, PAUSE_MENU_ITEMS_HT, PAUSE_MENU_ITEMS_HT, 0.0f };
+
+GLcoordsX text_quitX[4];
+GLcoordsY text_quitY[] =  { 0.0f, PAUSE_MENU_ITEMS_HT, PAUSE_MENU_ITEMS_HT, 0.0f };
+
+text_i text_paused, text_resume, text_restart, text_leftyMode, text_quit;
 
 bool screenPause_buffer() {
   GLuint i;
   GLfloat width;
-  TTF_Font *bitstream;
+  TTF_Font *crillee, *freeSans;
   
-  screenPause_resumeHl = true;
+  pause_menuState.resume = true;
   
-  if ((bitstream = TTF_OpenFont(path_bold_bitstreamVeraSans, DEFAULT_TEXT_PT))) {
-    text_paused = text_load(en_paused, bitstream, white, 0);
-    width = text_scaleWidth(en_paused, bitstream, DEFAULT_TEXT_PT, 0.2f);
+  if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
+    text_paused = text_load(en_paused, crillee, white, 0);
+    width = text_scaleWidth(en_paused, crillee, DEFAULT_TEXT_PT, SCREENHEADTEXTHT);
     for ( i = 0; i < 2; i++ ) text_pausedX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_pausedX[i] = text_pausedX[i-2] + width;
-    
-    text_resume = text_load(en_resume, bitstream, white, 1);
-    width = text_scaleWidth(en_resume, bitstream, DEFAULT_TEXT_PT, 0.15f);
+  }
+  if (crillee)
+    TTF_CloseFont(crillee);
+  
+  if ((freeSans = TTF_OpenFont(path_bold_freeSans, DEFAULT_TEXT_PT))) {
+    text_resume = text_load(en_resume, freeSans, white, 1);
+    width = text_scaleWidth(en_resume, freeSans, DEFAULT_TEXT_PT, PAUSE_MENU_ITEMS_HT);
     for ( i = 0; i < 2; i++ ) text_resumeX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_resumeX[i] = text_resumeX[i-2] + width;
+    
+    text_restart = text_load(en_restart, freeSans, white, 1);
+    width = text_scaleWidth(en_restart, freeSans, DEFAULT_TEXT_PT, PAUSE_MENU_ITEMS_HT);
+    for ( i = 0; i < 2; i++ ) text_restartX[i] = graphics_centreAtX(0.0f, width);
+    for ( i = 2; i < 4; i++ ) text_restartX[i] = text_restartX[i-2] + width;
+    
+    text_leftyMode = text_load(en_lefty_mode, freeSans, white, 1);
+    width = text_scaleWidth(en_lefty_mode, freeSans, DEFAULT_TEXT_PT, PAUSE_MENU_ITEMS_HT);
+    for ( i = 0; i < 2; i++ ) text_leftyModeX[i] = graphics_centreAtX(0.0f, width);
+    for ( i = 2; i < 4; i++ ) text_leftyModeX[i] = text_leftyModeX[i-2] + width;
+    
+    text_quit = text_load(en_quit, freeSans, white, 1);
+    width = text_scaleWidth(en_quit, freeSans, DEFAULT_TEXT_PT, PAUSE_MENU_ITEMS_HT);
+    for ( i = 0; i < 2; i++ ) text_quitX[i] = graphics_centreAtX(0.0f, width);
+    for ( i = 2; i < 4; i++ ) text_quitX[i] = text_quitX[i-2] + width;
   }
-  if (bitstream)
-    TTF_CloseFont(bitstream);
+  if (freeSans)
+    TTF_CloseFont(freeSans);
   
   return true;
 }
 
 GLvoid screenPause() {
   glPushMatrix(); {
-    glTranslatef(0.0f, -0.5f, 0.0f);
+    glTranslatef(0.0f, -0.55f, 0.0f);
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glBindTexture( GL_TEXTURE_2D, text_paused );
-    graphics_positionTexture(text_pausedX, text_pausedY, defVertexZ);
+    text_position(text_pausedX, text_pausedY, defVertexZ);
   } glPopMatrix();
   
   glPushMatrix(); {
-    glTranslatef(0.0f, -0.3f, 0.0f);
-    if (screenPause_resumeHl)
+    glTranslatef(0.0f, PAUSE_MENU_ITEMS_OFFSET, 0.0f);
+    if (pause_menuState.resume)
       glColor4f( buttonColour_yellow[0], buttonColour_yellow[1], buttonColour_yellow[2], buttonColour_yellow[3] );
     else
       glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glBindTexture( GL_TEXTURE_2D, text_resume );
-    graphics_positionTexture(text_resumeX, text_pausedY, defVertexZ);
+    text_position(text_resumeX, text_resumeY, defVertexZ);
+  } glPopMatrix();
+  
+  glPushMatrix(); {
+    glTranslatef(0.0f, PAUSE_MENU_ITEMS_OFFSET + PAUSE_MENU_ITEMS_DIFF, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glBindTexture( GL_TEXTURE_2D, text_restart );
+    text_position(text_restartX, text_restartY, defVertexZ);
+  } glPopMatrix();
+  
+  glPushMatrix(); {
+    glTranslatef(0.0f, PAUSE_MENU_ITEMS_OFFSET + (PAUSE_MENU_ITEMS_DIFF * 2), 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glBindTexture( GL_TEXTURE_2D, text_leftyMode );
+    text_position(text_leftyModeX, text_leftyModeY, defVertexZ);
+  } glPopMatrix();
+  
+  glPushMatrix(); {
+    glTranslatef(0.0f, PAUSE_MENU_ITEMS_OFFSET + (PAUSE_MENU_ITEMS_DIFF * 5), 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glBindTexture( GL_TEXTURE_2D, text_quit );
+    text_position(text_quitX, text_quitY, defVertexZ);
   } glPopMatrix();
   
   return;

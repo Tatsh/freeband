@@ -62,15 +62,11 @@ GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
         input_screenSongs(ESC);
       else if (fb_screen.difficulty)
         input_screenDifficulty(ESC);
-      else if (fb_screen.game)
+      else if (fb_screen.game && !gamePaused)
         input_screenGamePause();
-      else if (fb_screen.pause) {
-        menuQuit = graphics_loading = true;
-        fb_screen.difficulty = false;
-        graphics_clear();
-        screenGame_buffer();
+      else if (fb_screen.game && gamePaused) {
+        gamePaused = false;
         fb_screen.game = true;
-        graphics_loading = gamePaused = false;
 #ifdef __DEBUG__
         fprintf(stdout, "Now in screenGame() function.\n");
 #endif

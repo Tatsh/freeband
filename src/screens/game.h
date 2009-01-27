@@ -24,7 +24,6 @@ typedef struct {
   bool o;
 } tButton;
 
-extern bool gamePaused;
 extern GLfloat bringDownAngle;
 
 extern GLfloat NE_coord_neg;

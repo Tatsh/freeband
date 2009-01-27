@@ -3,8 +3,9 @@
 #include "../graphics/text.h"
 #include "game.h"
 #include "main.h"
+#include "pause.h"
 
-bool gamePaused, songEnded;
+bool songEnded;
 
 GLfloat bringDownAngle = 90.0f;
 GLfloat NE_coord_neg = 0.0f;
@@ -40,6 +41,9 @@ tButton screenGame_button;
 GLvoid screenGame_buffer() {
   /*GLfloat f_width;
   GLuint u_width, u_height, i;*/
+  
+  gamePaused = false;
+  screenPause_buffer(); /* Buffer the pause screen in advance */
   
   if ((trackloop_a_T = graphics_loadTexture(trackloop_a, 0)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", trackloop_a);
@@ -103,232 +107,228 @@ GLvoid screenGame_completed() {
 }
 
 GLvoid screenGame() {
-  /* Generate track */
-  glPushMatrix();
-  glTranslatef( 0.0f, 0.0f, -2.0f );
-  glRotatef( 90.0f, 0.0f, 0.5f, 0.0f );
-  if (bringDownAngle > 0.0f)
-    glRotatef( bringDownAngle, 0.0, 0.0f, -1.0f );
-  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-  glBindTexture( GL_TEXTURE_2D, trackloop_a_T );
-  glBegin( GL_QUADS );
+  if (!gamePaused) {
+    /* Generate track */
+    glPushMatrix();
+    glTranslatef( 0.0f, 0.0f, -2.0f );
+    glRotatef( 90.0f, 0.0f, 0.5f, 0.0f );
+    if (bringDownAngle > 0.0f)
+      glRotatef( bringDownAngle, 0.0, 0.0f, -1.0f );
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glBindTexture( GL_TEXTURE_2D, trackloop_a_T );
+    glBegin( GL_QUADS );
     glNormal3f( 0.0f, 0.5f, 0.0f );
     glTexCoord2f( NE_coord_pos, 1.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -3.5f, 0.5f, -TRACKWIDTH );
     glTexCoord2f( NE_coord_pos, 0.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -3.5f, 0.5f,  TRACKWIDTH );
     glTexCoord2f( NE_coord_neg, 0.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f(  2.0f, 0.5f,  TRACKWIDTH );
     glTexCoord2f( NE_coord_neg, 1.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f(  2.0f, 0.5f, -TRACKWIDTH );
-  glEnd();
-  glPopMatrix();
+    glEnd();
+    glPopMatrix();
 
-  glPushMatrix(); /* Left bumper */
-  if (bringDownAngle > 0.0f)
-    glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-  glTranslatef( -TRACKWIDTH - 0.012f, 0.5f, -4.0f );
-  glColor4f( 0.5f, 0.5f, 0.5f, 1.0f );
-  glBindTexture( GL_TEXTURE_2D, 0 );
-  gluCylinder( quadratic, 0.01f, 0.01f, 6.0f, 32, 32 );
-  glPopMatrix();
-
-  glPushMatrix(); /* Right bumper */
-  if (bringDownAngle > 0.0f)
-    glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-  glTranslatef( TRACKWIDTH + 0.012f, 0.5f, -4.0f );
-  glColor4f( 0.5f, 0.5f, 0.5f, 1.0f );
-  gluCylinder( quadratic, 0.01f, 0.01f, 6.0f, 32, 32 );
-  glPopMatrix();
-  
-  /* Strings */
-  glPushMatrix(); /* 1 */
-  if (bringDownAngle > 0.0f)
-    glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-  glBindTexture( GL_TEXTURE_2D, texture[4] );
-  glTranslatef( 0.0f, 0.0f, STRINGSTRANS);
-  glBegin(GL_QUADS); {
-    glTexCoord2f( 1.0f, 1.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
-    glVertex3f( GREENSTRCOORD, 0.5f, STRINGLENGTH );
-  
-    glTexCoord2f( 1.0f, 0.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-    glVertex3f( GREENSTRCOORD, 0.5f, STRINGOFFSET );
-  
-    glTexCoord2f( 0.0f, 0.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-    glVertex3f( GREENSTRCOORD + STRINGWIDTH, 0.5f, STRINGOFFSET );
-  
-    glTexCoord2f( 0.0f, 1.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
-    glVertex3f( GREENSTRCOORD + STRINGWIDTH, 0.5f, STRINGLENGTH );
-  } glEnd();
-  glPopMatrix();
-  
-/*  glPushMatrix(); {
+    glPushMatrix(); /* Left bumper */
     if (bringDownAngle > 0.0f)
-      glRotatef( bringDownAngle, -1.0f, 0.0f, 0.0f );
-    glBindTexture( GL_TEXTURE_2D, stringEndG_t );
+      glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
+    glTranslatef( -TRACKWIDTH - 0.012f, 0.5f, -4.0f );
+    glColor4f( 0.5f, 0.5f, 0.5f, 1.0f );
+    glBindTexture( GL_TEXTURE_2D, 0 );
+    gluCylinder( quadratic, 0.01f, 0.01f, 6.0f, 32, 32 );
+    glPopMatrix();
+
+    glPushMatrix(); /* Right bumper */
+    if (bringDownAngle > 0.0f)
+      glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
+    glTranslatef( TRACKWIDTH + 0.012f, 0.5f, -4.0f );
+    glColor4f( 0.5f, 0.5f, 0.5f, 1.0f );
+    gluCylinder( quadratic, 0.01f, 0.01f, 6.0f, 32, 32 );
+    glPopMatrix();
+  
+    /* Strings */
+    glPushMatrix(); /* 1 */
+    if (bringDownAngle > 0.0f)
+      glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
+    glBindTexture( GL_TEXTURE_2D, texture[4] );
     glTranslatef( 0.0f, 0.0f, STRINGSTRANS);
-    graphics_positionTexture(stringEndG_X, stringEndG_Y, stringEndG_Z);
-  } glPopMatrix();*/
+    glBegin(GL_QUADS); {
+      glTexCoord2f( 1.0f, 1.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
+      glVertex3f( GREENSTRCOORD, 0.5f, STRINGLENGTH );
   
-  glPushMatrix(); /* 2 */
-  if (bringDownAngle > 0.0f)
-    glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-  glTranslatef( 0.0f, 0.0f, STRINGSTRANS);
-  glBegin(GL_QUADS); {
-    glTexCoord2f( 1.0f, 1.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
-    glVertex3f( GREENSTRCOORD + STRINGSPACE, 0.5f, STRINGLENGTH );
-    
-    glTexCoord2f( 1.0f, 0.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-    glVertex3f( GREENSTRCOORD + STRINGSPACE, 0.5f, STRINGOFFSET );
-    
-    glTexCoord2f( 0.0f, 0.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-    glVertex3f( (GREENSTRCOORD + STRINGSPACE) + STRINGWIDTH, 0.5f, STRINGOFFSET );
-    
-    glTexCoord2f( 0.0f, 1.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
-    glVertex3f( (GREENSTRCOORD + STRINGSPACE) + STRINGWIDTH, 0.5f, STRINGLENGTH );
-  } glEnd();
-  glPopMatrix();
+      glTexCoord2f( 1.0f, 0.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+      glVertex3f( GREENSTRCOORD, 0.5f, STRINGOFFSET );
   
-  glPushMatrix(); /* 3 */
-  if (bringDownAngle > 0.0f)
-    glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-  glTranslatef( 0.0f, 0.0f, STRINGSTRANS);
-  glBegin(GL_QUADS); {
-    glTexCoord2f( 1.0f, 1.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
-    glVertex3f( (GREENSTRCOORD + (2.0f * STRINGSPACE)), 0.5f, -4.5f ); /* For appearance reasons */
-    
-    glTexCoord2f( 1.0f, 0.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-    glVertex3f( (GREENSTRCOORD + (2.0f * STRINGSPACE)), 0.5f, STRINGOFFSET );
-    
-    glTexCoord2f( 0.0f, 0.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-    glVertex3f( (GREENSTRCOORD + (2.0f * STRINGSPACE)) + STRINGWIDTH, 0.5f, STRINGOFFSET );
-    
-    glTexCoord2f( 0.0f, 1.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
-    glVertex3f( (GREENSTRCOORD + (2.0f * STRINGSPACE)) + STRINGWIDTH, 0.5f, -4.5f );
-  } glEnd();
-  glPopMatrix();
+      glTexCoord2f( 0.0f, 0.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+      glVertex3f( GREENSTRCOORD + STRINGWIDTH, 0.5f, STRINGOFFSET );
   
-  glPushMatrix(); /* 4 */
-  if (bringDownAngle > 0.0f)
-    glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-  glTranslatef( 0.0f, 0.0f, STRINGSTRANS);
-  glBegin(GL_QUADS); {
-    glTexCoord2f( 1.0f, 1.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
-    glVertex3f( (GREENSTRCOORD + (3.0f * STRINGSPACE)), 0.5f, STRINGLENGTH );
-    
-    glTexCoord2f( 1.0f, 0.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-    glVertex3f( (GREENSTRCOORD + (3.0f * STRINGSPACE)), 0.5f, STRINGOFFSET );
-    
-    glTexCoord2f( 0.0f, 0.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-    glVertex3f( (GREENSTRCOORD + (3.0f * STRINGSPACE)) + STRINGWIDTH, 0.5f, STRINGOFFSET );
-    
-    glTexCoord2f( 0.0f, 1.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
-    glVertex3f( (GREENSTRCOORD + (3.0f * STRINGSPACE)) + STRINGWIDTH, 0.5f, STRINGLENGTH );
-  } glEnd();
-  glPopMatrix();
+      glTexCoord2f( 0.0f, 1.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
+      glVertex3f( GREENSTRCOORD + STRINGWIDTH, 0.5f, STRINGLENGTH );
+    } glEnd();
+    glPopMatrix();
   
-  glPushMatrix(); /* 5 */
-  if (bringDownAngle > 0.0f)
-    glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-  glTranslatef( 0.0f, 0.0f, STRINGSTRANS);
-  glBegin(GL_QUADS); {
-    glTexCoord2f( 1.0f, 1.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
-    glVertex3f( (GREENSTRCOORD + (4.0f * STRINGSPACE)), 0.5f, STRINGLENGTH );
+    glPushMatrix(); /* 2 */
+    if (bringDownAngle > 0.0f)
+      glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
+    glTranslatef( 0.0f, 0.0f, STRINGSTRANS);
+    glBegin(GL_QUADS); {
+      glTexCoord2f( 1.0f, 1.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
+      glVertex3f( GREENSTRCOORD + STRINGSPACE, 0.5f, STRINGLENGTH );
     
-    glTexCoord2f( 1.0f, 0.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-    glVertex3f( (GREENSTRCOORD + (4.0f * STRINGSPACE)), 0.5f, STRINGOFFSET );
+      glTexCoord2f( 1.0f, 0.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+      glVertex3f( GREENSTRCOORD + STRINGSPACE, 0.5f, STRINGOFFSET );
     
-    glTexCoord2f( 0.0f, 0.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-    glVertex3f( (GREENSTRCOORD + (4.0f * STRINGSPACE)) + STRINGWIDTH, 0.5f, STRINGOFFSET );
+      glTexCoord2f( 0.0f, 0.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+      glVertex3f( (GREENSTRCOORD + STRINGSPACE) + STRINGWIDTH, 0.5f, STRINGOFFSET );
     
-    glTexCoord2f( 0.0f, 1.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
-    glVertex3f( (GREENSTRCOORD + (4.0f * STRINGSPACE)) + STRINGWIDTH, 0.5f, STRINGLENGTH );
-  } glEnd();
-  glPopMatrix();
+      glTexCoord2f( 0.0f, 1.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
+      glVertex3f( (GREENSTRCOORD + STRINGSPACE) + STRINGWIDTH, 0.5f, STRINGLENGTH );
+    } glEnd();
+    glPopMatrix();
   
-  if (bringDownAngle < 0.0f) { /* Only load buttons, etc after has been placed down entirely */
-    /* Buttons */
-    glPushMatrix(); /* Green */
-    glTranslatef( GREENNOTE, 0.35f, 1.64f );
-    glRotatef( 90.0f, button_rotationX, 0.0f, 0.0 ); /* Flatten against track */
-    if (screenGame_button.g)
-      glColor4f( 0.373f, 1.0f, 0.35f, 1.0f);
-    else
-      glColor4f( buttonColour_green[0], buttonColour_green[1], buttonColour_green[2], buttonColour_green[3] );
-    glBindTexture(GL_TEXTURE_2D, texture[1]);
-    graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
-    glPopMatrix();
+    glPushMatrix(); /* 3 */
+    if (bringDownAngle > 0.0f)
+      glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
+    glTranslatef( 0.0f, 0.0f, STRINGSTRANS);
+    glBegin(GL_QUADS); {
+      glTexCoord2f( 1.0f, 1.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
+      glVertex3f( (GREENSTRCOORD + (2.0f * STRINGSPACE)), 0.5f, -4.5f ); /* For appearance reasons */
     
-    glPushMatrix(); /* Red */
-    glTranslatef( GREENNOTE + NOTEDIFF, 0.35f, 1.64f );
-    glRotatef( 90.0f, button_rotationX, 0.0f, 0.0 ); /* Flatten against track */
-    if (screenGame_button.r)
-      glColor4f( 1.0f, 0.541f, 0.541f, 1.0f);
-    else
-      glColor4f( buttonColour_red[0], buttonColour_red[1], buttonColour_red[2], buttonColour_red[3] );
-    graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
-    glPopMatrix();
+      glTexCoord2f( 1.0f, 0.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+      glVertex3f( (GREENSTRCOORD + (2.0f * STRINGSPACE)), 0.5f, STRINGOFFSET );
     
-    glPushMatrix(); /* Yellow */
-    glTranslatef( GREENNOTE + (2.0f * NOTEDIFF), 0.35f, 1.64f );
-    glRotatef( 90.0f, button_rotationX, 0.0f, 0.0 ); /* Flatten against track */
-    if (screenGame_button.y)
-      glColor4f( 1.0f, 1.0f, 1.0f, 1.0f);
-    else
-      glColor4f( buttonColour_yellow[0], buttonColour_yellow[1], buttonColour_yellow[2], buttonColour_yellow[3] );
-    graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
-    glPopMatrix();
+      glTexCoord2f( 0.0f, 0.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+      glVertex3f( (GREENSTRCOORD + (2.0f * STRINGSPACE)) + STRINGWIDTH, 0.5f, STRINGOFFSET );
     
-    glPushMatrix(); /* Blue */
-    glTranslatef( GREENNOTE + (3.0f * NOTEDIFF), 0.35f, 1.64f );
-    glRotatef( 90.0f, button_rotationX, 0.0f, 0.0 ); /* Flatten against track */
-    if (screenGame_button.b)
-      glColor4f( 0.282f, 0.918, 1.0f, 1.0f );
-    else
-      glColor4f( buttonColour_blue[0], buttonColour_blue[1], buttonColour_blue[2], buttonColour_blue[3] );
-    graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
+      glTexCoord2f( 0.0f, 1.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
+      glVertex3f( (GREENSTRCOORD + (2.0f * STRINGSPACE)) + STRINGWIDTH, 0.5f, -4.5f );
+    } glEnd();
     glPopMatrix();
+  
+    glPushMatrix(); /* 4 */
+    if (bringDownAngle > 0.0f)
+      glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
+    glTranslatef( 0.0f, 0.0f, STRINGSTRANS);
+    glBegin(GL_QUADS); {
+      glTexCoord2f( 1.0f, 1.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
+      glVertex3f( (GREENSTRCOORD + (3.0f * STRINGSPACE)), 0.5f, STRINGLENGTH );
     
-    glPushMatrix(); /* Orange */
-    glTranslatef( GREENNOTE + (4.0f * NOTEDIFF), 0.35f, 1.64f );
-    glRotatef( 90.0f, button_rotationX, 0.0f, 0.0 ); /* Flatten against track */
-    if (screenGame_button.o)
-      glColor4f( 1.0f, 0.867f, 0.506f, 1.0f );
-    else
-      glColor4f( buttonColour_orange[0], buttonColour_orange[1], buttonColour_orange[2], buttonColour_orange[3] );
-    graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
+      glTexCoord2f( 1.0f, 0.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+      glVertex3f( (GREENSTRCOORD + (3.0f * STRINGSPACE)), 0.5f, STRINGOFFSET );
+    
+      glTexCoord2f( 0.0f, 0.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+      glVertex3f( (GREENSTRCOORD + (3.0f * STRINGSPACE)) + STRINGWIDTH, 0.5f, STRINGOFFSET );
+    
+      glTexCoord2f( 0.0f, 1.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
+      glVertex3f( (GREENSTRCOORD + (3.0f * STRINGSPACE)) + STRINGWIDTH, 0.5f, STRINGLENGTH );
+    } glEnd();
     glPopMatrix();
+  
+    glPushMatrix(); /* 5 */
+    if (bringDownAngle > 0.0f)
+      glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
+    glTranslatef( 0.0f, 0.0f, STRINGSTRANS);
+    glBegin(GL_QUADS); {
+      glTexCoord2f( 1.0f, 1.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
+      glVertex3f( (GREENSTRCOORD + (4.0f * STRINGSPACE)), 0.5f, STRINGLENGTH );
     
-    /* Score */
-    glPushMatrix();
-    glTranslatef( -0.5f, 0.0f, 0.0f );
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-    glBindTexture( GL_TEXTURE_2D, text[0] );
-    graphics_positionTexture(score_digit1X, score_digit1Y, defVertexZ);
+      glTexCoord2f( 1.0f, 0.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+      glVertex3f( (GREENSTRCOORD + (4.0f * STRINGSPACE)), 0.5f, STRINGOFFSET );
+    
+      glTexCoord2f( 0.0f, 0.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+      glVertex3f( (GREENSTRCOORD + (4.0f * STRINGSPACE)) + STRINGWIDTH, 0.5f, STRINGOFFSET );
+    
+      glTexCoord2f( 0.0f, 1.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 0.0f );
+      glVertex3f( (GREENSTRCOORD + (4.0f * STRINGSPACE)) + STRINGWIDTH, 0.5f, STRINGLENGTH );
+    } glEnd();
     glPopMatrix();
+  
+    if (bringDownAngle < 0.0f) { /* Only load buttons, etc after has been placed down entirely */
+      /* Buttons */
+      glPushMatrix(); /* Green */
+      glTranslatef( GREENNOTE, 0.35f, 1.64f );
+      glRotatef( 90.0f, button_rotationX, 0.0f, 0.0 ); /* Flatten against track */
+      if (screenGame_button.g)
+        glColor4f( 0.373f, 1.0f, 0.35f, 1.0f);
+      else
+        glColor4f( buttonColour_green[0], buttonColour_green[1], buttonColour_green[2], buttonColour_green[3] );
+      glBindTexture(GL_TEXTURE_2D, texture[1]);
+      graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
+      glPopMatrix();
     
-    NE_coord_neg -= 0.005f;
-    NE_coord_pos -= 0.005f;
+      glPushMatrix(); /* Red */
+      glTranslatef( GREENNOTE + NOTEDIFF, 0.35f, 1.64f );
+      glRotatef( 90.0f, button_rotationX, 0.0f, 0.0 ); /* Flatten against track */
+      if (screenGame_button.r)
+        glColor4f( 1.0f, 0.541f, 0.541f, 1.0f);
+      else
+        glColor4f( buttonColour_red[0], buttonColour_red[1], buttonColour_red[2], buttonColour_red[3] );
+      graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
+      glPopMatrix();
+    
+      glPushMatrix(); /* Yellow */
+      glTranslatef( GREENNOTE + (2.0f * NOTEDIFF), 0.35f, 1.64f );
+      glRotatef( 90.0f, button_rotationX, 0.0f, 0.0 ); /* Flatten against track */
+      if (screenGame_button.y)
+        glColor4f( 1.0f, 1.0f, 1.0f, 1.0f);
+      else
+        glColor4f( buttonColour_yellow[0], buttonColour_yellow[1], buttonColour_yellow[2], buttonColour_yellow[3] );
+      graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
+      glPopMatrix();
+    
+      glPushMatrix(); /* Blue */
+      glTranslatef( GREENNOTE + (3.0f * NOTEDIFF), 0.35f, 1.64f );
+      glRotatef( 90.0f, button_rotationX, 0.0f, 0.0 ); /* Flatten against track */
+      if (screenGame_button.b)
+        glColor4f( 0.282f, 0.918, 1.0f, 1.0f );
+      else
+        glColor4f( buttonColour_blue[0], buttonColour_blue[1], buttonColour_blue[2], buttonColour_blue[3] );
+      graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
+      glPopMatrix();
+    
+      glPushMatrix(); /* Orange */
+      glTranslatef( GREENNOTE + (4.0f * NOTEDIFF), 0.35f, 1.64f );
+      glRotatef( 90.0f, button_rotationX, 0.0f, 0.0 ); /* Flatten against track */
+      if (screenGame_button.o)
+        glColor4f( 1.0f, 0.867f, 0.506f, 1.0f );
+      else
+        glColor4f( buttonColour_orange[0], buttonColour_orange[1], buttonColour_orange[2], buttonColour_orange[3] );
+      graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
+      glPopMatrix();
+    
+      /* Score */
+      glPushMatrix();
+      glTranslatef( -0.5f, 0.0f, 0.0f );
+      glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+      glBindTexture( GL_TEXTURE_2D, text[0] );
+      graphics_positionTexture(score_digit1X, score_digit1Y, defVertexZ);
+      glPopMatrix();
+    
+      NE_coord_neg -= 0.005f;
+      NE_coord_pos -= 0.005f;
+    }
+  
+    if (bringDownAngle > 0.0f)
+      bringDownAngle -= 0.2f;
   }
-  
-  if (bringDownAngle > 0.0f)
-    bringDownAngle -= 0.2f;
+  else
+    screenPause();
   
   return;
 }

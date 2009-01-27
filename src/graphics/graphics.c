@@ -160,16 +160,6 @@ GLint graphics_loadTexture(const char filename[], GLuint index) {
       gluBuild2DMipmaps(GL_TEXTURE_2D, 4, surface->w, surface->h, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
     else
       gluBuild2DMipmaps(GL_TEXTURE_2D, 3, surface->w, surface->h, GL_RGB, GL_UNSIGNED_BYTE, surface->pixels);
-
-#ifdef __DEBUG__
-    /* Print good AR */
-    GLfloat ar, arinv;
-    ar = (GLfloat)surface->w / (GLfloat)surface->h;
-    arinv = 1.000f / ar;
-    fprintf(stdout,
-            "Aspect ratios for image '%s': %dx%d pixels, %.3f:1.000, 1.000:%.3f\n",
-            filename, surface->w, surface->h, ar, arinv);
-#endif
   }
   else {
     fprintf(stderr, "SDL could not load %s.\n%s\n", filename, SDL_GetError());
@@ -235,10 +225,8 @@ GLvoid graphics_draw() {
     screenSongs();
   else if (fb_screen.difficulty && !menuQuit)
     screenDifficulty(fb_nPlayers);
-  else if (fb_screen.game && !gamePaused)
+  else if (fb_screen.game)
     screenGame();
-  else if (fb_screen.pause && gamePaused)
-    screenPause();
 
   SDL_GL_SwapBuffers();
 

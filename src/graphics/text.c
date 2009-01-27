@@ -49,6 +49,11 @@ GLfloat text_scaleWidth(const char text[], TTF_Font *font, GLuint ptsize, GLfloa
   return graphics_scaleTextureWidth(text_getWidth(text, font, ptsize), text_getHeight(text, font, ptsize), textureHeight);
 }
 
+GLvoid text_position(GLfloat vertexX[], GLfloat vertexY[], GLfloat vertexZ[]) { /* Wrapper */
+  graphics_positionTexture(vertexX, vertexY, vertexZ);
+  return;
+}
+
 GLint text_load(const char input[], TTF_Font *font, SDL_Color color, GLuint index) {
   SDL_Surface *textTexture;
   

@@ -45,7 +45,6 @@ typedef struct {
   bool songs;
   bool difficulty;
   bool game;
-  bool pause;
 } screen_s;
 
 extern bool menuQuit;

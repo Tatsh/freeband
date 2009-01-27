@@ -270,24 +270,16 @@ GLint main(GLint argc, char *argv[]) {
             fprintf(stdout, "Switched back to screenSongs.\n");
 #endif
           }
-          else if (fb_screen.game) {
-            menuQuit = graphics_loading = true;
-            graphics_clear();
-            screenSongs_buffer();
-            fb_screen.difficulty = graphics_loading = menuQuit = false;
-            fb_screen.songs = true;
+          else if (fb_screen.game && gamePaused) {
+            gamePaused = false;
 #ifdef __DEBUG__
-            fprintf(stdout, "Switched back to screenSongs.\n");
+            fprintf(stdout, "Game resumed.\n");
 #endif
           }
-          else if (fb_screen.pause) {
-            menuQuit = graphics_loading = true;
-            graphics_clear();
-            screenMain_buffer();
-            fb_screen.instruments = graphics_loading = menuQuit = false;
-            fb_screen.mainMenu = true;
+          else if (fb_screen.game && !gamePaused) {
+            gamePaused = true;
 #ifdef __DEBUG__
-            fprintf(stdout, "Switched back to screenMain.\n");
+            fprintf(stdout, "Game paused.\n");
 #endif
           }
           break;
