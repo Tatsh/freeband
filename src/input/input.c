@@ -12,6 +12,7 @@
 #include "screenGame.h"
 #include "screenInstruments.h"
 #include "screenMain.h"
+#include "screenPause.h"
 #include "screenSongs.h"
 
 GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
@@ -27,6 +28,8 @@ GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
         input_screenInstruments(DOWN);
       else if (fb_screen.difficulty)
         input_screenDifficulty(DOWN);
+      else if (fb_screen.game && gamePaused)
+        input_screenPause(DOWN);
       break;
       
     case SDLK_UP:
@@ -36,6 +39,8 @@ GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
         input_screenInstruments(UP);
       else if (fb_screen.difficulty)
         input_screenDifficulty(UP);
+      else if (fb_screen.game && gamePaused)
+        input_screenPause(UP);
       break;
 
     case SDLK_RETURN:
@@ -50,6 +55,8 @@ GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
           input_screenSongs(RETURN);
         else if (fb_screen.difficulty)
           input_screenDifficulty(RETURN);
+        else if (fb_screen.game && gamePaused)
+          input_screenPause(RETURN);
       }
       break;
 
@@ -64,13 +71,8 @@ GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
         input_screenDifficulty(ESC);
       else if (fb_screen.game && !gamePaused)
         input_screenGamePause();
-      else if (fb_screen.game && gamePaused) {
-        gamePaused = false;
-        fb_screen.game = true;
-#ifdef __DEBUG__
-        fprintf(stdout, "Now in screenGame() function.\n");
-#endif
-      }
+      else if (fb_screen.game && gamePaused)
+        input_screenPause(ESC);
       break;
       
     case SDLK_SPACE:

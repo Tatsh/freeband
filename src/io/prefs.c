@@ -5,6 +5,8 @@ prefs_directory prefs_root[255];
 prefs_directory prefs_songs[255];
 prefs_directory prefs_themes[255];
 
+prefs_ushort prefs_audio_mic_volume; /* Ranges from 0-100 */
+
 bool prefs_nixPrefsDirExists() {
   GLint exists, ret;
   struct stat buffer;

@@ -6,6 +6,7 @@ typedef bool prefs_bool;
 typedef unsigned char prefs_uchar;
 typedef char prefs_char;
 typedef GLuint prefs_uint;
+typedef GLushort prefs_ushort;
 typedef GLint prefs_int;
 
 extern prefs_directory prefs_root[];
@@ -16,7 +17,9 @@ extern prefs_bool prefs_appearance_audience;
 extern prefs_bool prefs_appearance_band;
 extern prefs_char prefs_appearance_theme[];
 
-extern prefs_uint prefs_game_difficulty_judge;
+extern prefs_ushort prefs_audio_mic_volume;
+
+extern prefs_ushort prefs_game_difficulty_judge;
 
 extern prefs_bool prefs_prefs_input_controller_kb_1;
 extern prefs_uint prefs_input_controller_kb_1_green;

@@ -17,6 +17,8 @@ AC_PROG_RANLIB
 AC_CHECK_LIB([GL], [glGetString], [], [AC_MSG_ERROR([OpenGL not found])])
 AC_CHECK_LIB([GLU], [gluGetString], [], [AC_MSG_ERROR([GLU not found])])
 AC_CHECK_LIB([glut], [glutInit], [], [AC_MSG_ERROR([GLUT not found])])
+AC_CHECK_LIB([portaudio], [Pa_Initialize], [], [AC_MSG_ERROR([PortAudio not found])])
+AC_CHECK_LIB([sndfile], [sf_open], [], [AC_MSG_ERROR([libsndfile not found])])
 AC_CHECK_LIB([vorbis], [vorbis_comment_init], [], [AC_MSG_ERROR([Vorbis not found])])
 AC_CHECK_LIB([vorbisfile], [ov_open], [], [AC_MSG_ERROR([Vorbisfile not found])])
 
@@ -58,7 +60,7 @@ AC_HEADER_STDBOOL
 AC_C_CONST
 
 # More CFLAGS we want
-CFLAGS="$CFLAGS  -D__DEBUG__ -D__XBOX360XPLORER__ -Wall -ansi"
+CFLAGS="$CFLAGS  -D__DEBUG__ -D__XBOX360XPLORER__ -Wall -ansi -std=c99 -pedantic -O2 -pipe"
 
 # Checks for library functions.
 

@@ -1,9 +1,9 @@
 #ifndef PAUSE_H
 #define PAUSE_H
 
-#define PAUSE_MENU_ITEMS_HT   0.18f
-#define PAUSE_MENU_ITEMS_OFFSET -0.25
-#define PAUSE_MENU_ITEMS_DIFF 0.15
+#define PAUSE_MENU_ITEMS_HT   0.14f
+#define PAUSE_MENU_ITEMS_OFFSET -0.26 /* How far away from 'PAUSED' text this starts at */
+#define PAUSE_MENU_ITEMS_DIFF 0.11 /* How close the menu items are */
 
 #define en_paused             "PAUSED"
 
@@ -11,15 +11,20 @@
 #define en_restart            "RESTART"
 #define en_lefty_mode         "LEFTY MODE"
 #define en_change_difficulty  "CHANGE DIFFICULTY"
-#define en_change_mic_volume  "CHANGE MIC VOLUME"
+#define en_adjust_mic_volume  "ADJUST MIC VOLUME"
 #define en_quit               "QUIT"
+
+/* User selects restart or changes difficulty */
+#define en_game_will_resume   "SONG WILL RESUME IN..."
+
+/* User selects CHANGE DIFFICULTY */
+#define en_change_difficulty_easy   "EASY"
+#define en_change_difficulty_medium "MEDIUM"
+#define en_change_difficulty_hard   "HARD"
+#define en_change_difficulty_expert "EXPERT"
 
 #define en_new_song           "NEW SONG"
 #define en_main_menu          "MAIN MENU"
-
-typedef struct changeMicVolume {
-  GLuint value;
-} pause_micVolume_s;
 
 typedef struct changeDifficulty {
   bool easy;
@@ -48,11 +53,11 @@ typedef struct pauseItem {
   bool lefty_mode;
   bool change_difficulty;
   bool change_mic_volume;
+  bool quit;
   
   pause_difficultyState_s difficultyState;
   pause_restartState_s restartState;
   pause_leftyMode_s leftyModeChecked;
-  pause_micVolume_s micVolumeValue;
   pause_quitState_s quitState;
 } pause_fMenuState_s;
 

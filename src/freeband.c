@@ -74,6 +74,8 @@ GLint main(GLint argc, char *argv[]) {
     if (!prefs_nixPrefsDirCreate())
       exit(ERROR_CANNOT_CREATE_PREFS_DIRECTORY);
   }
+  
+  prefs_audio_mic_volume = 10; /* Default for now */
 
   for (i = 0; i < MAX_IMAGES; i++) texture[i] = -1;
   for (i = 0; i < MAX_TEXT; i++) text[i] = -1;

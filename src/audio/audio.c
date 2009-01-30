@@ -1,4 +1,5 @@
 #include "../freeband.h"
+#include "../io/prefs.h"
 #include "audio.h"
 
 audio_deviceInfo_s audio_deviceInfoSupported[MAX_AUDIO_DEVICES];

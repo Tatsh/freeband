@@ -1,6 +1,7 @@
 #include "../freeband.h"
 #include "../graphics/graphics.h"
 #include "../graphics/text.h"
+#include "../io/prefs.h"
 #include "game.h"
 #include "main.h"
 #include "pause.h"

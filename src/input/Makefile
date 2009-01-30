@@ -46,7 +46,8 @@ libFreebandInput_a_AR = $(AR) $(ARFLAGS)
 libFreebandInput_a_LIBADD =
 am_libFreebandInput_a_OBJECTS = input.$(OBJEXT) screenMain.$(OBJEXT) \
 	screenInstruments.$(OBJEXT) screenDifficulty.$(OBJEXT) \
-	screenSongs.$(OBJEXT) screenGame.$(OBJEXT)
+	screenSongs.$(OBJEXT) screenGame.$(OBJEXT) \
+	screenPause.$(OBJEXT)
 libFreebandInput_a_OBJECTS = $(am_libFreebandInput_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -68,7 +69,7 @@ AUTOMAKE = ${SHELL} /home/tatsh/dev/freeband/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT  -D__DEBUG__ -D__XBOX360XPLORER__ -Wall -ansi
+CFLAGS = -g -O2 -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT  -D__DEBUG__ -D__XBOX360XPLORER__ -Wall -ansi -std=c99 -pedantic -O2 -pipe
 CPP = gcc -E
 CPPFLAGS =  
 CXX = g++
@@ -154,7 +155,7 @@ top_build_prefix = ../../
 top_builddir = ../..
 top_srcdir = ../..
 noinst_LIBRARIES = libFreebandInput.a
-libFreebandInput_a_SOURCES = input.c screenMain.c screenInstruments.c screenDifficulty.c screenSongs.c screenGame.c
+libFreebandInput_a_SOURCES = input.c screenMain.c screenInstruments.c screenDifficulty.c screenSongs.c screenGame.c screenPause.c
 all: all-am
 
 .SUFFIXES:
@@ -207,6 +208,7 @@ include ./$(DEPDIR)/screenDifficulty.Po
 include ./$(DEPDIR)/screenGame.Po
 include ./$(DEPDIR)/screenInstruments.Po
 include ./$(DEPDIR)/screenMain.Po
+include ./$(DEPDIR)/screenPause.Po
 include ./$(DEPDIR)/screenSongs.Po
 
 .c.o:
