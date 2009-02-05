@@ -75,11 +75,23 @@ bool audio_buffer() {
     for (i = 0; i < MAX_AUDIO_DEVICES; i++) audio_deviceInfoSupported[i] = audio_deviceInfoTemplate;
     for (i = 0; i < MAX_AUDIO_DEVICES; i++) audio_deviceInfoUnsupported[i] = audio_deviceInfoTemplate;
     
-    /* Query devices for options screen */
+    /* Query devices for options screen
+       On this screen there should be AUDIO INPUT and AUDIO OUTPUT; we will have devices with just output in AUDIO OUTPUT and 
+       devices with just input in AUDIO INPUT; if a device has both, it will be listed in both */
     for (i = 0; i < numDevices; i++) {
       deviceInfo = Pa_GetDeviceInfo(i);
-      
-      /* We only care that the device supports sample rates 44100 or higher
+      /* Windows is different in that it will have 2 devices of the same name but 1 with input channels and 1 with output channels
+         Since we are using the default device by default, we will not worry about this yet
+         It may confusing to the Windows user in the options menu since devices have the same name, so maybe we should add (input) and (output) to the 
+         strings? */
+#ifdef __WIN32__
+      if (deviceInfo->defaultSampleRate >= 44100.0f &&
+          deviceInfo->defaultLowInputLatency >= 0.0f &&
+          deviceInfo->defaultLowOutputLatency >= 0.0f &&
+          deviceInfo->defaultHighInputLatency >= 0.0f &&
+          deviceInfo->defaultLowInputLatency >= 0.0f) {
+#else
+      /* All other OS: We only care that the device supports sample rates 44100 or higher
          Negative latency values are not usable
          Devices must support at least 1 or more channels for input
          Must support at least 1 output channel (mono) */
@@ -155,7 +167,7 @@ bool audio_findSupportedDevices() {
   
   for ( i = 0; i < MAX_AUDIO_DEVICES; i++ ) { /* Must support at least 1 output channel */
     if (audio_deviceInfoSupported[i].maxOutputChannels != 0)
-      supported++; 
+      supported++;
   }
   
   if (supported == 0)

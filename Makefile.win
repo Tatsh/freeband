@@ -5,14 +5,14 @@ CPP  = g++.exe
 CC   = gcc.exe
 WINDRES = windres.exe
 RES  = win32/Freeband_private.res
-OBJ  = win32/freeband.o win32/graphics.o win32/input.o win32/demo.o win32/game.o win32/instruments.o win32/main.o win32/online.o win32/options.o win32/songs.o win32/difficulty.o win32/audio.o win32/ogg.o win32/sfx.o win32/track.o win32/text.o win32/pause.o $(RES)
-LINKOBJ  = win32/freeband.o win32/graphics.o win32/input.o win32/demo.o win32/game.o win32/instruments.o win32/main.o win32/online.o win32/options.o win32/songs.o win32/difficulty.o win32/audio.o win32/ogg.o win32/sfx.o win32/track.o win32/text.o win32/pause.o $(RES)
-LIBS =  -L"C:/Dev-Cpp/lib" -mwindows -lglut32 -lopengl32 -lglu32 -lwinmm -lmingw32 -lSDLmain -lSDL -lSDL_image -lSDL_ttf  
+OBJ  = win32/freeband.o win32/graphics.o win32/input.o win32/demo.o win32/game.o win32/instruments.o win32/main.o win32/online.o win32/options.o win32/songs.o win32/difficulty.o win32/audio.o win32/ogg.o win32/sfx.o win32/track.o win32/text.o win32/pause.o win32/screenDifficulty.o win32/screenGame.o win32/screenInstruments.o win32/screenMain.o win32/screenPause.o win32/screenSongs.o win32/prefs.o win32/songlist.o $(RES)
+LINKOBJ  = win32/freeband.o win32/graphics.o win32/input.o win32/demo.o win32/game.o win32/instruments.o win32/main.o win32/online.o win32/options.o win32/songs.o win32/difficulty.o win32/audio.o win32/ogg.o win32/sfx.o win32/track.o win32/text.o win32/pause.o win32/screenDifficulty.o win32/screenGame.o win32/screenInstruments.o win32/screenMain.o win32/screenPause.o win32/screenSongs.o win32/prefs.o win32/songlist.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -mwindows -lglut32 -lopengl32 -lglu32 -lwinmm -lmingw32 -lSDLmain -lSDL -lSDL_image -lSDL_ttf -lportaudio -lsndfile  
 INCS =  -I"C:/Dev-Cpp/include" 
 CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include" 
 BIN  = win32/freeband.exe
 CXXFLAGS = $(CXXINCS)   -fexpensive-optimizations -O3
-CFLAGS = $(INCS) -Dmain=SDLmain -D__WIN32__ -D__WIN32XBOX360XPLORER__   -fexpensive-optimizations -O3
+CFLAGS = $(INCS) -g -Wall -ansi -O2 -Dmain=SDLmain -D__DEBUG__ -D__WIN32__ -D__WIN32XBOX360XPLORER__   -fexpensive-optimizations -O3
 RM = rm -f
 
 .PHONY: all all-before all-after clean clean-custom
@@ -76,6 +76,30 @@ win32/text.o: src/graphics/text.c
 
 win32/pause.o: src/screens/pause.c
 	$(CC) -c src/screens/pause.c -o win32/pause.o $(CFLAGS)
+
+win32/screenDifficulty.o: src/input/screenDifficulty.c
+	$(CC) -c src/input/screenDifficulty.c -o win32/screenDifficulty.o $(CFLAGS)
+
+win32/screenGame.o: src/input/screenGame.c
+	$(CC) -c src/input/screenGame.c -o win32/screenGame.o $(CFLAGS)
+
+win32/screenInstruments.o: src/input/screenInstruments.c
+	$(CC) -c src/input/screenInstruments.c -o win32/screenInstruments.o $(CFLAGS)
+
+win32/screenMain.o: src/input/screenMain.c
+	$(CC) -c src/input/screenMain.c -o win32/screenMain.o $(CFLAGS)
+
+win32/screenPause.o: src/input/screenPause.c
+	$(CC) -c src/input/screenPause.c -o win32/screenPause.o $(CFLAGS)
+
+win32/screenSongs.o: src/input/screenSongs.c
+	$(CC) -c src/input/screenSongs.c -o win32/screenSongs.o $(CFLAGS)
+
+win32/prefs.o: src/io/prefs.c
+	$(CC) -c src/io/prefs.c -o win32/prefs.o $(CFLAGS)
+
+win32/songlist.o: src/screens/songlist.c
+	$(CC) -c src/screens/songlist.c -o win32/songlist.o $(CFLAGS)
 
 win32/Freeband_private.res: Freeband_private.rc 
 	$(WINDRES) -i Freeband_private.rc --input-format=rc -o win32/Freeband_private.res -O coff 

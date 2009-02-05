@@ -70,10 +70,13 @@ GLint main(GLint argc, char *argv[]) {
   GLuint i;
   
   /* Find home directory, copy files if non-existant */
+#ifdef __WIN32__
+#else
   if (!prefs_nixPrefsDirExists()) {
     if (!prefs_nixPrefsDirCreate())
       exit(ERROR_CANNOT_CREATE_PREFS_DIRECTORY);
   }
+#endif
   
   prefs_audio_mic_volume = 10; /* Default for now */
 

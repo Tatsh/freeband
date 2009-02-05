@@ -6,6 +6,9 @@ prefs_directory prefs_songs[255];
 prefs_directory prefs_themes[255];
 
 prefs_ushort prefs_audio_mic_volume; /* Ranges from 0-100 */
+#ifdef __WIN32__
+
+#else
 
 bool prefs_nixPrefsDirExists() {
   GLint exists, ret;
@@ -72,3 +75,4 @@ bool prefs_nixPrefsDirCreate() {
   
   return true;
 }
+#endif
