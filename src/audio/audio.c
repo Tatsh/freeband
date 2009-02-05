@@ -102,6 +102,7 @@ bool audio_buffer() {
           deviceInfo->defaultLowOutputLatency >= 0.0f &&
           deviceInfo->defaultHighInputLatency >= 0.0f &&
           deviceInfo->defaultLowInputLatency >= 0.0f) {
+#endif
         fprintf(stdout, "%s is a 100%% compatible audio device.\n", deviceInfo->name);
         fprintf(stdout, "  Max input channels:  %d\n", deviceInfo->maxInputChannels);
         fprintf(stdout, "  Max output channels: %d\n", deviceInfo->maxOutputChannels);

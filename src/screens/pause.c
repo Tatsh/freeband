@@ -105,6 +105,12 @@ GLvoid screenPause() {
     glBindTexture( GL_TEXTURE_2D, text_resume );
     text_position(text_resumeX, text_resumeY, defVertexZ);
   } glPopMatrix();
+  glPushMatrix(); { /* Add a drop shadow */
+    glTranslatef(0.01f, PAUSE_MENU_ITEMS_OFFSET + 0.01f, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 0.25f);
+    glBindTexture( GL_TEXTURE_2D, text_resume );
+    text_position(text_resumeX, text_resumeY, defVertexZ);
+  } glPopMatrix();
   
   glPushMatrix(); {
     glTranslatef(0.0f, PAUSE_MENU_ITEMS_OFFSET + PAUSE_MENU_ITEMS_DIFF, 0.0f);
@@ -112,6 +118,12 @@ GLvoid screenPause() {
       glColor4f( buttonColour_yellow[0], buttonColour_yellow[1], buttonColour_yellow[2], buttonColour_yellow[3] );
     else
       glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glBindTexture( GL_TEXTURE_2D, text_restart );
+    text_position(text_restartX, text_restartY, defVertexZ);
+  } glPopMatrix();
+  glPushMatrix(); { /* Add a drop shadow */
+    glTranslatef(0.01f, PAUSE_MENU_ITEMS_OFFSET + PAUSE_MENU_ITEMS_DIFF + 0.01f, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 0.25f);
     glBindTexture( GL_TEXTURE_2D, text_restart );
     text_position(text_restartX, text_restartY, defVertexZ);
   } glPopMatrix();
@@ -125,6 +137,12 @@ GLvoid screenPause() {
     glBindTexture( GL_TEXTURE_2D, text_changeDifficulty );
     text_position(text_changeDifficultyX, text_changeDifficultyY, defVertexZ);
   } glPopMatrix();
+  glPushMatrix(); { /* Add a drop shadow */
+    glTranslatef(0.01f, PAUSE_MENU_ITEMS_OFFSET + (PAUSE_MENU_ITEMS_DIFF * 2.0f) + 0.01f, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 0.25f);
+    glBindTexture( GL_TEXTURE_2D, text_changeDifficulty );
+    text_position(text_changeDifficultyX, text_changeDifficultyY, defVertexZ);
+  } glPopMatrix();
   
   glPushMatrix(); {
     glTranslatef(0.0f, PAUSE_MENU_ITEMS_OFFSET + (PAUSE_MENU_ITEMS_DIFF * 3.0f), 0.0f);
@@ -133,7 +151,13 @@ GLvoid screenPause() {
     else
       glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glBindTexture( GL_TEXTURE_2D, text_adjustMicVolume );
-    text_position(text_changeDifficultyX, text_changeDifficultyY, defVertexZ);
+    text_position(text_adjustMicVolumeX, text_adjustMicVolumeY, defVertexZ);
+  } glPopMatrix();
+  glPushMatrix(); { /* Add a drop shadow */
+    glTranslatef(0.01f, PAUSE_MENU_ITEMS_OFFSET + (PAUSE_MENU_ITEMS_DIFF * 3.0f) + 0.01f, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 0.25f);
+    glBindTexture( GL_TEXTURE_2D, text_adjustMicVolume );
+    text_position(text_adjustMicVolumeX, text_adjustMicVolumeY, defVertexZ);
   } glPopMatrix();
   
   glPushMatrix(); {
@@ -145,6 +169,12 @@ GLvoid screenPause() {
     glBindTexture( GL_TEXTURE_2D, text_leftyMode );
     text_position(text_leftyModeX, text_leftyModeY, defVertexZ);
   } glPopMatrix();
+  glPushMatrix(); { /* Add a drop shadow */
+    glTranslatef(0.01f, PAUSE_MENU_ITEMS_OFFSET + (PAUSE_MENU_ITEMS_DIFF * 4.0f) + 0.01f, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 0.25f);
+    glBindTexture( GL_TEXTURE_2D, text_leftyMode );
+    text_position(text_leftyModeX, text_leftyModeY, defVertexZ);
+  } glPopMatrix();
   
   glPushMatrix(); {
     glTranslatef(0.0f, PAUSE_MENU_ITEMS_OFFSET + (PAUSE_MENU_ITEMS_DIFF * 5.0f), 0.0f);
@@ -152,6 +182,12 @@ GLvoid screenPause() {
       glColor4f( buttonColour_yellow[0], buttonColour_yellow[1], buttonColour_yellow[2], buttonColour_yellow[3] );
     else
       glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glBindTexture( GL_TEXTURE_2D, text_quit );
+    text_position(text_quitX, text_quitY, defVertexZ);
+  } glPopMatrix();
+  glPushMatrix(); { /* Add a drop shadow */
+    glTranslatef(0.01f, PAUSE_MENU_ITEMS_OFFSET + (PAUSE_MENU_ITEMS_DIFF * 5.0f) + 0.01f, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 0.25f);
     glBindTexture( GL_TEXTURE_2D, text_quit );
     text_position(text_quitX, text_quitY, defVertexZ);
   } glPopMatrix();
