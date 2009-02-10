@@ -208,27 +208,27 @@ bool screenMain_buffer() {
   /* Text */
   if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
     single = text_load(EN_SINGLE_PLAYER, crillee, white, 0); /* Always load text as white; change using glColor4f */
-    width = text_scaleWidth(EN_SINGLE_PLAYER, crillee, DEFAULT_TEXT_PT, MENUITEMSHT);
+    width = text_scaleWidth(EN_SINGLE_PLAYER, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_SinglePlayerX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_SinglePlayerX[i] = text_SinglePlayerX[i-2] + width;
 
     multiplayer = text_load(EN_MULTIPLAYER, crillee, white, 1);
-    width = text_scaleWidth(EN_MULTIPLAYER, crillee, DEFAULT_TEXT_PT, MENUITEMSHT);
+    width = text_scaleWidth(EN_MULTIPLAYER, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_MultiplayerX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_MultiplayerX[i] = text_MultiplayerX[i-2] + width;
   
     onlineM = text_load(en_online, crillee, white, 2);
-    width = text_scaleWidth(en_online, crillee, DEFAULT_TEXT_PT, MENUITEMSHT);
+    width = text_scaleWidth(en_online, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_OnlineX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_OnlineX[i] = text_OnlineX[i-2] + width;
   
     optionsM = text_load(en_options, crillee, white, 3);
-    width = text_scaleWidth(en_options, crillee, DEFAULT_TEXT_PT, MENUITEMSHT);
+    width = text_scaleWidth(en_options, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_OptionsX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_OptionsX[i] = text_OptionsX[i-2] + width;
   
     quit = text_load(en_quit, crillee, white, 4);
-    width = text_scaleWidth(en_quit, crillee, DEFAULT_TEXT_PT, MENUITEMSHT);
+    width = text_scaleWidth(en_quit, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_QuitX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_QuitX[i] = text_QuitX[i-2] + width;
   }

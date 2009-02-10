@@ -67,11 +67,11 @@ bool prefs_nixPrefsDirCreate() {
   /* We can assume it will work from this point on */
   strcat(prefs_songs, prefs_root);
   strcat(prefs_songs, "/songs");
-  if ((ret = mkdir(prefs_songs, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)) != 0);
+  mkdir(prefs_songs, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   
   strcat(prefs_themes, prefs_root);
   strcat(prefs_themes, "/themes");
-  if ((ret = mkdir(prefs_themes, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)) != 0);
+  mkdir(prefs_themes, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   
   return true;
 }

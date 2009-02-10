@@ -37,7 +37,7 @@ bool screenDifficulty_buffer() {
   
   if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
     text_selectDifficulty = text_load(en_select_difficulty, crillee, white, 4);
-    width = text_scaleWidth(en_select_difficulty, crillee, DEFAULT_TEXT_PT, MENUITEMSHT);
+    width = text_scaleWidth(en_select_difficulty, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_selectDifficultyX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_selectDifficultyX[i] = text_selectDifficultyX[i-2] + width;
   }
@@ -50,24 +50,24 @@ bool screenDifficulty_buffer() {
   
   if ((bitstream = TTF_OpenFont(path_bold_bitstreamVeraSans, DEFAULT_TEXT_PT))) {
     text_easy = text_load(en_easy, bitstream, white, 0);
-    width = text_scaleWidth(en_easy, bitstream, DEFAULT_TEXT_PT, DIFFHT);
+    width = text_scaleWidth(en_easy, bitstream, DIFFHT);
     for ( i = 0; i < 2; i++ ) text_easyX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_easyX[i] = text_easyX[i-2] + width;
     
     text_medium = text_load(en_medium, bitstream, white, 1);
-    width = text_scaleWidth(en_medium, bitstream, DEFAULT_TEXT_PT, DIFFHT);
+    width = text_scaleWidth(en_medium, bitstream, DIFFHT);
     for ( i = 0; i < 2; i++ ) text_mediumX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_mediumX[i] = text_mediumX[i-2] + width;
     for ( i = 0; i < 4; i++ ) text_mediumY[i] = text_easyY[i] + DIFFHT;
 
     text_hard = text_load(en_hard, bitstream, white, 1);
-    width = text_scaleWidth(en_hard, bitstream, DEFAULT_TEXT_PT, DIFFHT);
+    width = text_scaleWidth(en_hard, bitstream, DIFFHT);
     for ( i = 0; i < 2; i++ ) text_hardX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_hardX[i] = text_hardX[i-2] + width;
     for ( i = 0; i < 4; i++ ) text_hardY[i] = text_mediumY[i] + DIFFHT;
     
     text_expert = text_load(en_expert, bitstream, white, 1);
-    width = text_scaleWidth(en_expert, bitstream, DEFAULT_TEXT_PT, DIFFHT);
+    width = text_scaleWidth(en_expert, bitstream, DIFFHT);
     for ( i = 0; i < 2; i++ ) text_expertX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_expertX[i] = text_expertX[i-2] + width;
     for ( i = 0; i < 4; i++ ) text_expertY[i] = text_hardY[i] + DIFFHT;

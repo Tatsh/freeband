@@ -35,7 +35,7 @@ bool screenSongs_buffer() {
   
   if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
     text_songs = text_load(en_songs, crillee, white, 0);
-    width = text_scaleWidth(en_songs, crillee, DEFAULT_TEXT_PT, SCREENHEADTEXTHT);
+    width = text_scaleWidth(en_songs, crillee, SCREENHEADTEXTHT);
     for ( i = 0; i < 2; i++ ) text_songsX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_songsX[i] = text_songsX[i-2] + width;
   }
@@ -48,22 +48,22 @@ bool screenSongs_buffer() {
   
   if ((freeSans = TTF_OpenFont(path_regular_freeSans, DEFAULT_TEXT_PT))) {
     text_byTier = text_load(en_songs_by_tier, freeSans, white, 0);
-    width = text_scaleWidth(en_songs_by_tier, freeSans, DEFAULT_TEXT_PT, SORT_TEXT_HT);
+    width = text_scaleWidth(en_songs_by_tier, freeSans, SORT_TEXT_HT);
     for ( i = 0; i < 2; i++ ) text_byTierX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_byTierX[i] = text_byTierX[i-2] + width;
     
     text_titleAZ = text_load(en_songs_az, freeSans, white, 0); /* Why won't this load?! */
-    width = text_scaleWidth(en_songs_az, freeSans, DEFAULT_TEXT_PT, SORT_TEXT_HT);
+    width = text_scaleWidth(en_songs_az, freeSans, SORT_TEXT_HT);
     for ( i = 0; i < 2; i++ ) text_titleAZX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_titleAZX[i] = text_titleAZX[i-2] + width;
     
     text_artistAZ = text_load(en_songs_alpha_artist, freeSans, white, 0);
-    width = text_scaleWidth(en_songs_alpha_artist, freeSans, DEFAULT_TEXT_PT, SORT_TEXT_HT);
+    width = text_scaleWidth(en_songs_alpha_artist, freeSans, SORT_TEXT_HT);
     for ( i = 0; i < 2; i++ ) text_artistAZX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_artistAZX[i] = text_artistAZX[i-2] + width;
     
     text_byBPM = text_load(en_songs_by_bpm, freeSans, white, 0);
-    width = text_scaleWidth(en_songs_by_bpm, freeSans, DEFAULT_TEXT_PT, SORT_TEXT_HT);
+    width = text_scaleWidth(en_songs_by_bpm, freeSans, SORT_TEXT_HT);
     for ( i = 0; i < 2; i++ ) text_byBPMX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_byBPMX[i] = text_byBPMX[i-2] + width;
   }

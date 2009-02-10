@@ -135,7 +135,7 @@ songNode_s *songs_insertSongSortedArtist(file_p *notes,
                                    songAudioProps_s *songAudioProperties,
                                    songList_s *list); */
 
-void songs_destroySongList(songList_s *list) {
+GLvoid songs_destroySongList(songList_s *list) {
   while (list->size > 0) {
     list->head = songs_deleteSongNode(list, list->head);
     --list->size;

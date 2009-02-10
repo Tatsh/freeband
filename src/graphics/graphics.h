@@ -9,7 +9,7 @@ typedef GLfloat GLcolour;
 typedef GLfloat GLcoordsX;
 typedef GLfloat GLcoordsY;
 typedef GLfloat GLcoordsZ;
-typedef GLuint texture_i;
+typedef GLint texture_i;
 
 extern bool graphics_loading; /* Whether or not we are buffering textures */
 

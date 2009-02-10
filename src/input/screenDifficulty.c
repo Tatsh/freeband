@@ -7,7 +7,7 @@
 #include "screenDifficulty.h"
 
 GLvoid input_screenDifficulty(GLuint direction) {
-  GLuint i;
+  GLushort i;
   
   switch (direction) {
     case DOWN:

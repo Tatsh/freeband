@@ -7,7 +7,7 @@
 #include "screenDifficulty.h"
 
 GLvoid input_screenDifficulty(GLuint direction) {
-  GLuint i;
+  GLshort i;
   
   switch (direction) {
     case DOWN:
@@ -70,6 +70,14 @@ GLvoid input_screenDifficulty(GLuint direction) {
       break;
       
     case ESC:
+      menuQuit = graphics_loading = true;
+      graphics_clear();
+      screenSongs_buffer();
+      fb_screen.difficulty = graphics_loading = menuQuit = false;
+      fb_screen.songs = true;
+#ifdef __DEBUG__
+      fprintf(stdout, "Switched back to screenSongs.\n");
+#endif
       break;
       
     default:

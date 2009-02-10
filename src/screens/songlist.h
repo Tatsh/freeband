@@ -2,6 +2,7 @@
 #define SONGLIST_H
 
 typedef unsigned int difficulty; /* Difficulty out of 5 */
+typedef float bpm_f;
 typedef char file_p; /* File path */
 typedef char sndfile_p; /* Sound file path */
 typedef char sample_p; /* Sound sample file path */
@@ -19,7 +20,7 @@ typedef struct songDiffs {
 } songDiffs_s;
 
 typedef struct songAudioProps {
-  float bpm;
+  bpm_f bpm;
   float samplestart;
   float samplelength;
   

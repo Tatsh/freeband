@@ -117,6 +117,10 @@ GLvoid input_screenPause(GLuint direction) {
     case ESC:
       gamePaused = false;
       fb_screen.game = true;
+      pause_menuState.resume = true; /* Reset default option */
+      pause_menuState.restart = false;
+      pause_menuState.change_difficulty = pause_menuState.change_mic_volume = false;
+      pause_menuState.lefty_mode = pause_menuState.quit = false;
 #ifdef __DEBUG__
       fprintf(stdout, "Now in screenGame() function.\n");
 #endif

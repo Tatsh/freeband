@@ -15,7 +15,7 @@ font_p path_italic_crillee[] = "GameData/themes/default/fonts/italic-crillee.ttf
 font_p path_regular_freeSans[] = "GameData/themes/default/fonts/regular-freesans.ttf";
 /* End font paths */
 
-GLint text_getHeight(const char text[], TTF_Font *font, GLuint ptsize) {
+GLint text_getHeight(const char text[], TTF_Font *font) {
   SDL_Surface *temp;
   GLuint height;
   
@@ -30,7 +30,7 @@ GLint text_getHeight(const char text[], TTF_Font *font, GLuint ptsize) {
   return height;
 }
 
-GLint text_getWidth(const char text[], TTF_Font *font, GLuint ptsize) {
+GLint text_getWidth(const char text[], TTF_Font *font) {
   SDL_Surface *temp;
   GLuint width;
 
@@ -45,8 +45,8 @@ GLint text_getWidth(const char text[], TTF_Font *font, GLuint ptsize) {
   return width;
 }
 
-GLfloat text_scaleWidth(const char text[], TTF_Font *font, GLuint ptsize, GLfloat textureHeight) {
-  return graphics_scaleTextureWidth(text_getWidth(text, font, ptsize), text_getHeight(text, font, ptsize), textureHeight);
+GLfloat text_scaleWidth(const char text[], TTF_Font *font, GLfloat textureHeight) {
+  return graphics_scaleTextureWidth(text_getWidth(text, font), text_getHeight(text, font), textureHeight);
 }
 
 GLvoid text_position(GLfloat vertexX[], GLfloat vertexY[], GLfloat vertexZ[]) { /* Wrapper */
