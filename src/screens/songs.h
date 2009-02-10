@@ -29,7 +29,7 @@ extern song_sort artistAZ_s;
 extern song_sort byBPM_s;
 
 bool screenSongs_buffer();
-GLvoid screenSongs_sort(GLuint type);
+void screenSongs_sort(ushort type);
 GLvoid screenSongs();
 
 #endif

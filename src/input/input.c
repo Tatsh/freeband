@@ -16,7 +16,7 @@
 #include "screenSongs.h"
 
 GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
-  GLuint i;
+  ushort i;
   online = options = false;
 
   switch (keysym->sym) {

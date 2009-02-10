@@ -3,6 +3,6 @@
 
 #define SONG_SORT 10
 
-GLvoid input_screenSongs(GLuint direction);
+void input_screenSongs(ushort direction);
 
 #endif

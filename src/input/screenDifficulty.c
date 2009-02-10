@@ -6,8 +6,8 @@
 #include "input.h"
 #include "screenDifficulty.h"
 
-GLvoid input_screenDifficulty(GLuint direction) {
-  GLushort i;
+void input_screenDifficulty(ushort direction) {
+  ushort i;
   
   switch (direction) {
     case DOWN:

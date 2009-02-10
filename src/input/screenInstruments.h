@@ -1,6 +1,6 @@
 #ifndef SCREENINSTRUMENTS_H
 #define SCREENINSTRUMENTS_H
 
-GLvoid input_screenInstruments(GLuint direction);
+void input_screenInstruments(ushort direction);
 
 #endif

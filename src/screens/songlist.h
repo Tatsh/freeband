@@ -1,7 +1,7 @@
 #ifndef SONGLIST_H
 #define SONGLIST_H
 
-typedef unsigned int difficulty; /* Difficulty out of 5 */
+typedef uint difficulty_i; /* Difficulty out of 5 */
 typedef float bpm_f;
 typedef char file_p; /* File path */
 typedef char sndfile_p; /* Sound file path */
@@ -13,10 +13,10 @@ typedef struct songDiffs {
   bool hard;
   bool expert;
   
-  difficulty guitar; /* These are set in Rock Band 2; other games do not feature difficulty levels */
-  difficulty bass;
-  difficulty drums;
-  difficulty vocals;
+  difficulty_i guitar; /* These are set in Rock Band 2; other games do not feature difficulty levels */
+  difficulty_i bass;
+  difficulty_i drums;
+  difficulty_i vocals;
 } songDiffs_s;
 
 typedef struct songAudioProps {

@@ -1,6 +1,6 @@
 #ifndef SCREENPAUSE_H
 #define SCREENPAUSE_H
 
-GLvoid input_screenPause(GLuint direction);
+void input_screenPause(ushort direction);
 
 #endif

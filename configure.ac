@@ -60,7 +60,7 @@ AC_HEADER_STDBOOL
 AC_C_CONST
 
 # More CFLAGS we want
-CFLAGS="$CFLAGS  -D__DEBUG__ -D__XBOX360XPLORER__ -Wall -Wextra -Wfatal-errors -ansi -std=c99 -pedantic -O2 -pipe"
+CFLAGS="$CFLAGS -D__DEBUG__ -D__XBOX360XPLORER__ -Wall -Wextra -Wfatal-errors -ansi -std=c99 -pedantic -pipe"
 
 # Checks for library functions.
 

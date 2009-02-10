@@ -9,7 +9,7 @@
 #include "input.h"
 #include "screenGame.h"
 
-GLvoid input_screenGamePause() {
+void input_screenGamePause() {
   gamePaused = true;
 #ifdef __DEBUG__
   fprintf(stdout, "Now in screenPause() function.\n");
@@ -17,7 +17,7 @@ GLvoid input_screenGamePause() {
   return;
 }
 
-GLvoid input_screenGame() {
+void input_screenGame() {
   Uint8 *keystates = SDL_GetKeyState(NULL);
 
   if (keystates[SDLK_F1])

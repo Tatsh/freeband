@@ -31,10 +31,14 @@
 #define SCREENHEADTEXTHT 0.31f
 #define SCREENHEADTEXTOFFSET -1.05f
 
-typedef unsigned int score_t;
-typedef unsigned int combo_t;
-typedef unsigned int stars_t;
-typedef unsigned int multiplier_t;
+#define WIDTH 800
+#define HEIGHT 600
+#define BPP 32
+
+typedef ushort score_t;
+typedef ushort combo_t;
+typedef ushort stars_t;
+typedef ushort multiplier_t;
 
 typedef struct {
   bool mainMenu;
@@ -49,7 +53,7 @@ typedef struct {
 
 extern bool menuQuit;
 
-extern GLuint fb_nPlayers;
+extern ushort fb_nPlayers;
 
 extern screen_s fb_screen;
 

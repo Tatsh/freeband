@@ -11,7 +11,7 @@ prefs_ushort prefs_audio_mic_volume; /* Ranges from 0-100 */
 #else
 
 bool prefs_nixPrefsDirExists() {
-  GLint exists, ret;
+  short exists, ret;
   struct stat buffer;
 
   strcat(prefs_root, getenv("HOME"));
@@ -55,7 +55,7 @@ bool prefs_nixPrefsDirExists() {
 }
 
 bool prefs_nixPrefsDirCreate() {
-  GLint ret;
+  unsigned short ret;
   
   if (prefs_root == NULL) {
     fprintf(stderr, "Could not find home directory.\nTry setting $HOME to a path.");

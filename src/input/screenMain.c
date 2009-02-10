@@ -5,8 +5,8 @@
 #include "input.h"
 #include "screenMain.h"
 
-GLvoid input_screenMain(GLuint direction) {
-  GLuint i;
+void input_screenMain(ushort direction) {
+  ushort i;
   
   switch (direction) {
     case DOWN:

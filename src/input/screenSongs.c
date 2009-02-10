@@ -6,7 +6,7 @@
 #include "input.h"
 #include "screenSongs.h"
 
-GLvoid input_screenSongs(GLuint direction) {
+void input_screenSongs(ushort direction) {
   switch(direction) {
     case SONG_SORT:
       if (byTier_s) {

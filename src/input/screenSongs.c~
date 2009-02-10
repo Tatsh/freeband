@@ -11,7 +11,7 @@ GLvoid input_screenSongs(GLuint direction) {
     case SONG_SORT:
       if (byTier_s) {
         byTier_s = false;
-        /* screenSongs_sortAZ(TITLE); */
+        /* screenSongs_sort(SORT_AZ_TITLE); */
         titleAZ_s = true;
 #ifdef __DEBUG__
         fprintf(stdout, "Songs sorted alphabetically by title.\n");
@@ -19,6 +19,7 @@ GLvoid input_screenSongs(GLuint direction) {
       }
       else if (titleAZ_s) {
         titleAZ_s = false;
+        /* screenSongs_sort(SORT_AZ_ARTIST); */
         artistAZ_s = true;
 #ifdef __DEBUG__
         fprintf(stdout, "Songs sorted alphabetically by artist.\n");
@@ -26,6 +27,7 @@ GLvoid input_screenSongs(GLuint direction) {
       }
       else if (artistAZ_s) {
         artistAZ_s = false;
+        /* screenSongs_sort(SORT_BPM); */
         byBPM_s = true;
 #ifdef __DEBUG__
         fprintf(stdout, "Songs sorted ascendingly by BPM.\n");
@@ -33,6 +35,7 @@ GLvoid input_screenSongs(GLuint direction) {
       }
       else {
         byBPM_s = false;
+        /* screenSongs_sort(SORT_BY_TIER); */
         byTier_s = true;
 #ifdef __DEBUG__
         fprintf(stdout, "Songs sorted by Tier.\n");

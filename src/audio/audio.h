@@ -19,8 +19,8 @@
 #endif
 
 typedef struct audio_devInfo {
-  unsigned int maxInputChannels;
-  unsigned int maxOutputChannels;
+  unsigned short maxInputChannels;
+  unsigned short maxOutputChannels;
   double defaultHighOutputLatency;
   double defaultLowOutputLatency;
   double defaultHighInputLatency;
@@ -32,6 +32,7 @@ extern audio_deviceInfo_s audio_deviceInfoSupported[];
 extern audio_deviceInfo_s audio_deviceInfoUnsupported[];
 
 bool audio_buffer();
+bool audio_verifyFiletype(unsigned short filetype, char path[]);
 bool audio_findSupportedDevices();
 int paCallback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags, void *userData);
 

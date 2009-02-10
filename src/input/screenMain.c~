@@ -49,6 +49,8 @@ GLvoid input_screenMain(GLuint direction) {
       break;
       
     /* Escape key is handled in input.c */
+    /*case ESC:
+      break;*/
       
     default:
       break;

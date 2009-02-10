@@ -10,7 +10,7 @@
 #include "input.h"
 #include "screenPause.h"
 
-GLvoid input_screenPause(GLuint direction) {
+void input_screenPause(ushort direction) {
   switch (direction) {
     case DOWN:
       if (pause_menuState.resume) {

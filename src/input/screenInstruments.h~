@@ -1,6 +1,6 @@
 #ifndef SCREENINSTRUMENTS_H
 #define SCREENINSTRUMENTS_H
 
-GLvoid input_screenInstruments(GLuint direction, SDL_keysym *keysym);
+GLvoid input_screenInstruments(GLuint direction);
 
 #endif

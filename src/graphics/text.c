@@ -17,7 +17,7 @@ font_p path_regular_freeSans[] = "GameData/themes/default/fonts/regular-freesans
 
 GLint text_getHeight(const char text[], TTF_Font *font) {
   SDL_Surface *temp;
-  GLuint height;
+  GLint height;
   
   if ((temp = TTF_RenderUTF8_Blended(font, text, white)))
     height = temp->h;
@@ -32,7 +32,7 @@ GLint text_getHeight(const char text[], TTF_Font *font) {
 
 GLint text_getWidth(const char text[], TTF_Font *font) {
   SDL_Surface *temp;
-  GLuint width;
+  GLint width;
 
   if ((temp = TTF_RenderUTF8_Blended(font, text, white)))
     width = temp->w;
@@ -54,14 +54,15 @@ GLvoid text_position(GLfloat vertexX[], GLfloat vertexY[], GLfloat vertexZ[]) { 
   return;
 }
 
-GLint text_load(const char input[], TTF_Font *font, SDL_Color color, GLuint index) {
+GLint text_load(const char input[], TTF_Font *font, SDL_Color color) {
   SDL_Surface *textTexture;
+  GLuint index;
   
   /* Use SDL_ttf to render text */
   if ( (textTexture = TTF_RenderUTF8_Blended(font, input, color)) ) {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-    glGenTextures(1, &text[index]);
-    glBindTexture(GL_TEXTURE_2D, text[index]);
+    glGenTextures(1, &index);
+    glBindTexture(GL_TEXTURE_2D, index);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -77,5 +78,5 @@ GLint text_load(const char input[], TTF_Font *font, SDL_Color color, GLuint inde
   else
     return -1;
   
-  return text[index];
+  return index;
 }

@@ -10,10 +10,6 @@
 #include "screens/main.h"
 #include "screens/songs.h"
 
-#define WIDTH 800
-#define HEIGHT 600
-#define BPP 32
-
 bool menuQuit;
 
 char windowTitle[] = "Freeband";
@@ -22,7 +18,7 @@ char windowTitle[] = "Freeband";
 GLcoordsY text_SinglePlayerY[] = { 0.0f, MENUITEMSHT, MENUITEMSHT, 0.0f };
 GLcoordsY text_MultiplayerY[4], text_OnlineY[4], text_OptionsY[4], text_QuitY[4];
 
-GLuint fb_nPlayers = 1; /* Number of players */
+ushort fb_nPlayers = 1; /* Number of players */
 GLuint texture[MAX_IMAGES]; /* Normal images */
 GLuint text[MAX_TEXT]; /* Text only! */
 
@@ -35,7 +31,7 @@ screen_s fb_screen; /* The current screen */
 TTF_Font *crillee, *bitstream, *bitstreamMonoBold, *freeSans, *freeSansBold;
 
 GLvoid fb_quit(GLint retnCode) {
-  GLuint i;
+  ushort i;
   PaError err;
   
   err = Pa_Terminate();
@@ -66,8 +62,8 @@ GLvoid fb_quit(GLint retnCode) {
   exit(retnCode);
 }
 
-GLint main(GLint argc, char *argv[]) {
-  GLuint i;
+int main(GLint argc, char *argv[]) {
+  ushort i;
   
   /* Find home directory, copy files if non-existant */
 #ifdef __WIN32__

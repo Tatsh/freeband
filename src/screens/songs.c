@@ -25,16 +25,16 @@ song_sort byTier_s, titleAZ_s, artistAZ_s, byBPM_s;
 
 bool screenSongs_buffer() {
   GLfloat width;
-  GLuint i;
+  ushort i;
   TTF_Font *crillee, *freeSans;
   
   byTier_s = true; /* Set default sort */
   
-  if ((bg = graphics_loadTexture(bgTexture, 0)) == -1)
+  if ((bg = graphics_loadTexture(bgTexture)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
   
   if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
-    text_songs = text_load(en_songs, crillee, white, 0);
+    text_songs = text_load(en_songs, crillee, white);
     width = text_scaleWidth(en_songs, crillee, SCREENHEADTEXTHT);
     for ( i = 0; i < 2; i++ ) text_songsX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_songsX[i] = text_songsX[i-2] + width;
@@ -47,22 +47,22 @@ bool screenSongs_buffer() {
     TTF_CloseFont(crillee);
   
   if ((freeSans = TTF_OpenFont(path_regular_freeSans, DEFAULT_TEXT_PT))) {
-    text_byTier = text_load(en_songs_by_tier, freeSans, white, 0);
+    text_byTier = text_load(en_songs_by_tier, freeSans, white);
     width = text_scaleWidth(en_songs_by_tier, freeSans, SORT_TEXT_HT);
     for ( i = 0; i < 2; i++ ) text_byTierX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_byTierX[i] = text_byTierX[i-2] + width;
     
-    text_titleAZ = text_load(en_songs_az, freeSans, white, 0); /* Why won't this load?! */
+    text_titleAZ = text_load(en_songs_az, freeSans, white); /* Why won't this load?! */
     width = text_scaleWidth(en_songs_az, freeSans, SORT_TEXT_HT);
     for ( i = 0; i < 2; i++ ) text_titleAZX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_titleAZX[i] = text_titleAZX[i-2] + width;
     
-    text_artistAZ = text_load(en_songs_alpha_artist, freeSans, white, 0);
+    text_artistAZ = text_load(en_songs_alpha_artist, freeSans, white);
     width = text_scaleWidth(en_songs_alpha_artist, freeSans, SORT_TEXT_HT);
     for ( i = 0; i < 2; i++ ) text_artistAZX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_artistAZX[i] = text_artistAZX[i-2] + width;
     
-    text_byBPM = text_load(en_songs_by_bpm, freeSans, white, 0);
+    text_byBPM = text_load(en_songs_by_bpm, freeSans, white);
     width = text_scaleWidth(en_songs_by_bpm, freeSans, SORT_TEXT_HT);
     for ( i = 0; i < 2; i++ ) text_byBPMX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_byBPMX[i] = text_byBPMX[i-2] + width;

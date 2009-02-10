@@ -6,7 +6,7 @@
 #include "input.h"
 #include "screenInstruments.h"
 
-GLvoid input_screenInstruments(GLuint direction) {
+void input_screenInstruments(ushort direction) {
   switch (direction) {
     case DOWN:
       if (fb_nPlayers < 2) {

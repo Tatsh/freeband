@@ -5,7 +5,7 @@
 #define MAX_TEXT 1000
 
 typedef char font_p;
-typedef GLuint text_i;
+typedef GLint text_i;
 
 /* Please keep these on separate lines */
 extern font_p path_bold_bitstreamVeraSans[];
@@ -23,6 +23,6 @@ GLfloat text_scaleWidth(const char text[], TTF_Font *font, GLfloat textureHeight
 GLvoid text_position(GLfloat vertexX[], GLfloat vertexY[], GLfloat vertexZ[]);
 GLint text_getHeight(const char text[], TTF_Font *font);
 GLint text_getWidth(const char text[], TTF_Font *font);
-GLint text_load(const char input[], TTF_Font *font, SDL_Color color, GLuint index);
+GLint text_load(const char input[], TTF_Font *font, SDL_Color color);
 
 #endif

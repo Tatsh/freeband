@@ -46,13 +46,13 @@ GLvoid screenGame_buffer() {
   gamePaused = false;
   screenPause_buffer(); /* Buffer the pause screen in advance */
   
-  if ((trackloop_a_T = graphics_loadTexture(trackloop_a, 0)) == -1)
+  if ((trackloop_a_T = graphics_loadTexture(trackloop_a)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", trackloop_a);
   
-  if ((button_T = graphics_loadTexture(buttonT, 1)) == -1)
+  if ((button_T = graphics_loadTexture(buttonT)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", buttonT);
   
-  if ((stringEndG_t = graphics_loadTexture(stringEndG, 0)) == -1)
+  if ((stringEndG_t = graphics_loadTexture(stringEndG)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", stringEndG);
   /*u_width = graphics_getTextureWidth(stringEndG);
   u_height = graphics_getTextureHeight(stringEndG);
@@ -60,38 +60,38 @@ GLvoid screenGame_buffer() {
   for ( i = 0; i < 2; i++ ) stringEndG_X[i] = graphics_centreAtX(0.2, f_width);
   for ( i = 2; i < 4; i++ ) stringEndG_X[i] = stringEndG_X[i-2] + f_width;*/
   
-  if ((string_T = graphics_loadTexture(string, 4)) == -1)
+  if ((string_T = graphics_loadTexture(string)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", string);
 
   /* Combo numbers */
   TTF_Font *bitstreamMonoBold;
   bitstreamMonoBold = TTF_OpenFont(path_bold_bitstreamVeraSansMono, DEFAULT_TEXT_PT);
-  combo0 = text_load("0", bitstreamMonoBold, white, 10);
-  combo1 = text_load("1", bitstreamMonoBold, white, 11);
-  combo2 = text_load("2", bitstreamMonoBold, white, 12);
-  combo3 = text_load("3", bitstreamMonoBold, white, 13);
-  combo4 = text_load("4", bitstreamMonoBold, white, 14);
-  combo5 = text_load("5", bitstreamMonoBold, white, 15);
-  combo6 = text_load("6", bitstreamMonoBold, white, 16);
-  combo7 = text_load("7", bitstreamMonoBold, white, 17);
-  combo8 = text_load("8", bitstreamMonoBold, white, 18);
-  combo9 = text_load("9", bitstreamMonoBold, white, 19);
+  combo0 = text_load("0", bitstreamMonoBold, white);
+  combo1 = text_load("1", bitstreamMonoBold, white);
+  combo2 = text_load("2", bitstreamMonoBold, white);
+  combo3 = text_load("3", bitstreamMonoBold, white);
+  combo4 = text_load("4", bitstreamMonoBold, white);
+  combo5 = text_load("5", bitstreamMonoBold, white);
+  combo6 = text_load("6", bitstreamMonoBold, white);
+  combo7 = text_load("7", bitstreamMonoBold, white);
+  combo8 = text_load("8", bitstreamMonoBold, white);
+  combo9 = text_load("9", bitstreamMonoBold, white);
   if (bitstreamMonoBold)
     TTF_CloseFont(bitstreamMonoBold);
   
   /* Prepare score numbers */
   TTF_Font *freeSansBold;
   freeSansBold = TTF_OpenFont(path_bold_freeSans, DEFAULT_TEXT_PT);
-  score0 = text_load("0", freeSansBold, white, 0);
-  score1 = text_load("1", freeSansBold, white, 1);
-  score2 = text_load("2", freeSansBold, white, 2);
-  score3 = text_load("3", freeSansBold, white, 3);
-  score4 = text_load("4", freeSansBold, white, 4);
-  score5 = text_load("5", freeSansBold, white, 5);
-  score6 = text_load("6", freeSansBold, white, 6);
-  score7 = text_load("7", freeSansBold, white, 7);
-  score8 = text_load("8", freeSansBold, white, 8);
-  score9 = text_load("9", freeSansBold, white, 9);
+  score0 = text_load("0", freeSansBold, white);
+  score1 = text_load("1", freeSansBold, white);
+  score2 = text_load("2", freeSansBold, white);
+  score3 = text_load("3", freeSansBold, white);
+  score4 = text_load("4", freeSansBold, white);
+  score5 = text_load("5", freeSansBold, white);
+  score6 = text_load("6", freeSansBold, white);
+  score7 = text_load("7", freeSansBold, white);
+  score8 = text_load("8", freeSansBold, white);
+  score9 = text_load("9", freeSansBold, white);
   if (freeSansBold)
     TTF_CloseFont(freeSansBold);
 

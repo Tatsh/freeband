@@ -186,17 +186,17 @@ bool screenMain_buffer() {
     text_Quit_hl[i] = colour_blue_7CA4F6[i];
   }
   
-  if ((bg = graphics_loadTexture(bgTexture, 0)) == -1) {
+  if ((bg = graphics_loadTexture(bgTexture)) == -1) {
     fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
     return false;
   }
 
-  if ((logo = graphics_loadTexture(logoTexture, 1)) == -1) {
+  if ((logo = graphics_loadTexture(logoTexture)) == -1) {
     fprintf(stderr, "Unable to load texture: %s.\n", logoTexture);
     return false;
   }
   
-  if ((selectG = graphics_loadTexture(mainSelector, 2)) == -1) {
+  if ((selectG = graphics_loadTexture(mainSelector)) == -1) {
     fprintf(stderr, "Unable to load texture: %s.\n", mainSelector);
     return false;
   }
@@ -207,27 +207,27 @@ bool screenMain_buffer() {
   
   /* Text */
   if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
-    single = text_load(EN_SINGLE_PLAYER, crillee, white, 0); /* Always load text as white; change using glColor4f */
+    single = text_load(EN_SINGLE_PLAYER, crillee, white); /* Always load text as white; change using glColor4f */
     width = text_scaleWidth(EN_SINGLE_PLAYER, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_SinglePlayerX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_SinglePlayerX[i] = text_SinglePlayerX[i-2] + width;
 
-    multiplayer = text_load(EN_MULTIPLAYER, crillee, white, 1);
+    multiplayer = text_load(EN_MULTIPLAYER, crillee, white);
     width = text_scaleWidth(EN_MULTIPLAYER, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_MultiplayerX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_MultiplayerX[i] = text_MultiplayerX[i-2] + width;
   
-    onlineM = text_load(en_online, crillee, white, 2);
+    onlineM = text_load(en_online, crillee, white);
     width = text_scaleWidth(en_online, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_OnlineX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_OnlineX[i] = text_OnlineX[i-2] + width;
   
-    optionsM = text_load(en_options, crillee, white, 3);
+    optionsM = text_load(en_options, crillee, white);
     width = text_scaleWidth(en_options, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_OptionsX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_OptionsX[i] = text_OptionsX[i-2] + width;
   
-    quit = text_load(en_quit, crillee, white, 4);
+    quit = text_load(en_quit, crillee, white);
     width = text_scaleWidth(en_quit, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_QuitX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_QuitX[i] = text_QuitX[i-2] + width;

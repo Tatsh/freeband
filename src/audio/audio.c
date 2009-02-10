@@ -7,7 +7,7 @@ audio_deviceInfo_s audio_deviceInfoUnsupported[MAX_AUDIO_DEVICES];
 
 audio_deviceInfo_s audio_deviceInfoTemplate;
 
-bool audio_verifyFiletype(GLuint filetype, char path[]) {
+bool audio_verifyFiletype(unsigned short filetype, char path[]) {
   bool ok = false;
   
   switch (filetype) {
@@ -44,7 +44,7 @@ int paCallback(const void *inputBuffer, void *outputBuffer, unsigned long frames
 bool audio_buffer() {
   const PaDeviceInfo *deviceInfo;
   PaError err;
-  int i, numDevices;
+  ushort i, numDevices;
 
   if ((err = Pa_Initialize()) != paNoError) {
     fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText( err ));
@@ -164,7 +164,7 @@ bool audio_buffer() {
 }
 
 bool audio_findSupportedDevices() {
-  unsigned int i, supported = 0;
+  ushort i, supported = 0;
   
   for ( i = 0; i < MAX_AUDIO_DEVICES; i++ ) { /* Must support at least 1 output channel */
     if (audio_deviceInfoSupported[i].maxOutputChannels != 0)

@@ -29,14 +29,14 @@ text_i text_selectDifficulty, text_easy, text_medium, text_hard, text_expert;
 
 bool screenDifficulty_buffer() {
   GLfloat width;
-  GLuint i;
+  ushort i;
   TTF_Font *bitstream, *crillee;
   
-  if ((bg = graphics_loadTexture(bgTexture, 0)) < 0)
+  if ((bg = graphics_loadTexture(bgTexture)) < 0)
     fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
   
   if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
-    text_selectDifficulty = text_load(en_select_difficulty, crillee, white, 4);
+    text_selectDifficulty = text_load(en_select_difficulty, crillee, white);
     width = text_scaleWidth(en_select_difficulty, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_selectDifficultyX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_selectDifficultyX[i] = text_selectDifficultyX[i-2] + width;
@@ -49,24 +49,24 @@ bool screenDifficulty_buffer() {
     TTF_CloseFont(crillee);
   
   if ((bitstream = TTF_OpenFont(path_bold_bitstreamVeraSans, DEFAULT_TEXT_PT))) {
-    text_easy = text_load(en_easy, bitstream, white, 0);
+    text_easy = text_load(en_easy, bitstream, white);
     width = text_scaleWidth(en_easy, bitstream, DIFFHT);
     for ( i = 0; i < 2; i++ ) text_easyX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_easyX[i] = text_easyX[i-2] + width;
     
-    text_medium = text_load(en_medium, bitstream, white, 1);
+    text_medium = text_load(en_medium, bitstream, white);
     width = text_scaleWidth(en_medium, bitstream, DIFFHT);
     for ( i = 0; i < 2; i++ ) text_mediumX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_mediumX[i] = text_mediumX[i-2] + width;
     for ( i = 0; i < 4; i++ ) text_mediumY[i] = text_easyY[i] + DIFFHT;
 
-    text_hard = text_load(en_hard, bitstream, white, 1);
+    text_hard = text_load(en_hard, bitstream, white);
     width = text_scaleWidth(en_hard, bitstream, DIFFHT);
     for ( i = 0; i < 2; i++ ) text_hardX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_hardX[i] = text_hardX[i-2] + width;
     for ( i = 0; i < 4; i++ ) text_hardY[i] = text_mediumY[i] + DIFFHT;
     
-    text_expert = text_load(en_expert, bitstream, white, 1);
+    text_expert = text_load(en_expert, bitstream, white);
     width = text_scaleWidth(en_expert, bitstream, DIFFHT);
     for ( i = 0; i < 2; i++ ) text_expertX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_expertX[i] = text_expertX[i-2] + width;
@@ -79,7 +79,7 @@ bool screenDifficulty_buffer() {
   if (bitstream)
     TTF_CloseFont(bitstream);
   
-  if ((selection = graphics_loadTexture(pSelection, 1)) == -1)
+  if ((selection = graphics_loadTexture(pSelection)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", pSelection);
   width = graphics_scaleTextureWidth(505, 85, 0.1);
   for ( i = 0; i < 2; i++ ) screenDifficulty_selectionX[i] = graphics_centreAtX(0.0f, width);

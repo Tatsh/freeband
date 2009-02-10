@@ -1,6 +1,6 @@
 #ifndef SCREENDIFFICULTY_H
 #define SCREENDIFFICULTY_H
 
-GLvoid input_screenDifficulty(GLuint direction);
+void input_screenDifficulty(ushort direction);
 
 #endif

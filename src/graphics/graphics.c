@@ -41,11 +41,11 @@ bool graphics_initGL() {
   glShadeModel(GL_SMOOTH);                /* Enable smooth shading */
   glEnable(GL_BLEND);                     /* Enable Alpha channel mapping */
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);   /* Black background */
-  glViewport(0, 0, 800, 600);
+  glViewport(0, 0, WIDTH, HEIGHT);
   glClear(GL_COLOR_BUFFER_BIT);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();                       /* Reset the current matrix */
-  glOrtho(0.0f, 800, 600, 0.0f, -1.0f, 1.0f);
+  glOrtho(0.0f, WIDTH, HEIGHT, 0.0f, -1.0f, 1.0f);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -99,7 +99,7 @@ GLint graphics_getTextureHeight(const char filename[]) {
     height = temp->h;
   }
   else
-    return -1.0;
+    return -1.0f;
   
   if (temp)
     SDL_FreeSurface(temp);
@@ -115,7 +115,7 @@ GLint graphics_getTextureWidth(const char filename[]) {
     width = temp->w;
   }
   else
-    return -1.0;
+    return -1.0f;
   
   if (temp)
     SDL_FreeSurface(temp);
@@ -143,14 +143,15 @@ GLfloat graphics_scaleTextureWidth(GLuint pWidth, GLuint pHeight, GLfloat destHe
   return destWidth;
 }
 
-GLint graphics_loadTexture(const char filename[], GLuint index) {
+GLint graphics_loadTexture(const char filename[]) {
   SDL_Surface *surface; /* Store information here, size, etc */
+  GLint index;
   
   if ((surface = IMG_Load(filename))) {
     /* GLU will convert textures to POT before sending to GL */
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-    glGenTextures(1, &texture[index]);
-    glBindTexture(GL_TEXTURE_2D, texture[index]);
+    glGenTextures(1, &index);
+    glBindTexture(GL_TEXTURE_2D, index);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR);
@@ -172,7 +173,7 @@ GLint graphics_loadTexture(const char filename[], GLuint index) {
   else
     return -1;
 
-  return texture[index];
+  return index;
 }
 
 GLvoid graphics_clear() {

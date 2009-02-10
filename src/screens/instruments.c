@@ -165,27 +165,27 @@ bool screenInstruments_buffer() {
       text_Vocals_hl[i] = 1.0f;
     }
     
-    if ((bg = graphics_loadTexture(bgTexture, 0)) == -1)
+    if ((bg = graphics_loadTexture(bgTexture)) == -1)
       fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
     
     if ((bitstream = TTF_OpenFont(path_bold_bitstreamVeraSans, DEFAULT_TEXT_PT))) {
-      text_guitar = text_load(en_guitar, bitstream, white, 0);
+      text_guitar = text_load(en_guitar, bitstream, white);
       /* GLint text_scaleWidth(const char text[], TTF_Font *font, GLuint ptsize, GLfloat textureHeight); */
       width = text_scaleWidth(en_guitar, bitstream, MENUITEMSHT);
       for ( i = 0; i < 2; i++ ) text_GuitarX[i] = graphics_centreAtX(0.6f, width);
       for ( i = 2; i < 4; i++ ) text_GuitarX[i] = text_GuitarX[i-2] + width;
 
-      text_bass = text_load(en_bass, bitstream, white, 1);
+      text_bass = text_load(en_bass, bitstream, white);
       width = text_scaleWidth(en_bass, bitstream, MENUITEMSHT);
       for ( i = 0; i < 2; i++ ) text_BassX[i] = graphics_centreAtX(0.6f, width);
       for ( i = 2; i < 4; i++ ) text_BassX[i] = text_BassX[i-2] + width;
 
-      text_drums = text_load(en_drums, bitstream, white, 2);
+      text_drums = text_load(en_drums, bitstream, white);
       width = text_scaleWidth(en_drums, bitstream, MENUITEMSHT);
       for ( i = 0; i < 2; i++ ) text_DrumsX[i] = graphics_centreAtX(0.6f, width);
       for ( i = 2; i < 4; i++ ) text_DrumsX[i] = text_DrumsX[i-2] + width;
 
-      text_vocals = text_load(en_vocals, bitstream, white, 3);
+      text_vocals = text_load(en_vocals, bitstream, white);
       width = text_scaleWidth(en_vocals, bitstream, MENUITEMSHT);
       for ( i = 0; i < 2; i++ ) text_VocalsX[i] = graphics_centreAtX(0.6f, width);
       for ( i = 2; i < 4; i++ ) text_VocalsX[i] = text_VocalsX[i-2] + width;
@@ -199,7 +199,7 @@ bool screenInstruments_buffer() {
 
     TTF_Font *crillee;
     if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
-      text_selectInstrument = text_load(en_select_instrument, crillee, white, 4);
+      text_selectInstrument = text_load(en_select_instrument, crillee, white);
       width = text_scaleWidth(en_select_instrument, crillee, MENUITEMSHT);
       for ( i = 0; i < 2; i++ ) text_SelectInstrumentX[i] = graphics_centreAtX(0.0f, width);
       for ( i = 2; i < 4; i++ ) text_SelectInstrumentX[i] = text_SelectInstrumentX[i-2] + width;
