@@ -56,13 +56,13 @@ GLvoid text_position(GLfloat vertexX[], GLfloat vertexY[], GLfloat vertexZ[]) { 
 
 GLint text_load(const char input[], TTF_Font *font, SDL_Color color) {
   SDL_Surface *textTexture;
-  GLuint index;
+  GLuint i = 0;
   
   /* Use SDL_ttf to render text */
   if ( (textTexture = TTF_RenderUTF8_Blended(font, input, color)) ) {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-    glGenTextures(1, &index);
-    glBindTexture(GL_TEXTURE_2D, index);
+    glGenTextures(1, &text[i]);
+    glBindTexture(GL_TEXTURE_2D, text[i]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -78,5 +78,5 @@ GLint text_load(const char input[], TTF_Font *font, SDL_Color color) {
   else
     return -1;
   
-  return index;
+  return text[i];
 }

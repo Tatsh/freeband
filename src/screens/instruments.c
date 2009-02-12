@@ -148,8 +148,8 @@ GLvoid screenInstruments_highlighted(GLuint instSelection) {
 
 bool screenInstruments_buffer() {
   GLfloat width;
-  GLuint i;
-  TTF_Font *bitstream;
+  ushort i;
+  TTF_Font *bitstream, *crillee;
   
   if (fb_nPlayers == 1) {
     /* Generate Y coordinates for text */
@@ -165,7 +165,7 @@ bool screenInstruments_buffer() {
       text_Vocals_hl[i] = 1.0f;
     }
     
-    if ((bg = graphics_loadTexture(bgTexture)) == -1)
+    if ((bg = graphics_loadTexture(bgTexture, 0)) == -1)
       fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
     
     if ((bitstream = TTF_OpenFont(path_bold_bitstreamVeraSans, DEFAULT_TEXT_PT))) {
@@ -197,7 +197,6 @@ bool screenInstruments_buffer() {
     if (bitstream)
       TTF_CloseFont(bitstream);
 
-    TTF_Font *crillee;
     if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
       text_selectInstrument = text_load(en_select_instrument, crillee, white);
       width = text_scaleWidth(en_select_instrument, crillee, MENUITEMSHT);
@@ -222,14 +221,6 @@ GLvoid screenInstruments() {
   glBindTexture( GL_TEXTURE_2D, bg );
   graphics_positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
 
-/*  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-  glBindTexture( GL_TEXTURE_2D, texture[1] );
-  graphics_positionTexture(instCanvasX, instCanvasY, defVertexZ);*/
-  
-/*  glColor4f(1.0f, 1.0f, 1.0f, 0.3f);
-  glBindTexture( GL_TEXTURE_2D, texture[2] );
-  graphics_positionTexture(selectedGradientX, selectedGradientY, defVertexZ);*/
-
   /* Text elements */
   glPushMatrix(); {
     glTranslatef(0.0f, -0.35f, 0.0f);
@@ -253,7 +244,7 @@ GLvoid screenInstruments() {
   glPushMatrix(); {
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glTranslatef(0.0f, SCREENHEADTEXTOFFSET, 0.0f);
-    glBindTexture( GL_TEXTURE_2D, text[4] ); /* Top screen title */
+    glBindTexture( GL_TEXTURE_2D, text_selectInstrument ); /* Top screen title */
     graphics_positionTexture(text_SelectInstrumentX, text_SelectInstrumentY, defVertexZ);
   } glPopMatrix();
 

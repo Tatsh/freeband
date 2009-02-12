@@ -32,8 +32,14 @@ bool screenDifficulty_buffer() {
   ushort i;
   TTF_Font *bitstream, *crillee;
   
-  if ((bg = graphics_loadTexture(bgTexture)) < 0)
+  if ((bg = graphics_loadTexture(bgTexture, 0)) < 0)
     fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
+  
+  if ((selection = graphics_loadTexture(pSelection, 1)) == -1)
+    fprintf(stderr, "Unable to load texture: %s.\n", pSelection);
+  width = graphics_scaleTextureWidth(505, 85, 0.1);
+  for ( i = 0; i < 2; i++ ) screenDifficulty_selectionX[i] = graphics_centreAtX(0.0f, width);
+  for ( i = 2; i < 4; i++ ) screenDifficulty_selectionX[i] = screenDifficulty_selectionX[i-2] + width;
   
   if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
     text_selectDifficulty = text_load(en_select_difficulty, crillee, white);
@@ -78,12 +84,6 @@ bool screenDifficulty_buffer() {
   }
   if (bitstream)
     TTF_CloseFont(bitstream);
-  
-  if ((selection = graphics_loadTexture(pSelection)) == -1)
-    fprintf(stderr, "Unable to load texture: %s.\n", pSelection);
-  width = graphics_scaleTextureWidth(505, 85, 0.1);
-  for ( i = 0; i < 2; i++ ) screenDifficulty_selectionX[i] = graphics_centreAtX(0.0f, width);
-  for ( i = 2; i < 4; i++ ) screenDifficulty_selectionX[i] = screenDifficulty_selectionX[i-2] + width;
   
   return true;
 }

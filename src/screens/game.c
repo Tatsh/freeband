@@ -46,13 +46,13 @@ GLvoid screenGame_buffer() {
   gamePaused = false;
   screenPause_buffer(); /* Buffer the pause screen in advance */
   
-  if ((trackloop_a_T = graphics_loadTexture(trackloop_a)) == -1)
+  if ((trackloop_a_T = graphics_loadTexture(trackloop_a, 0)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", trackloop_a);
   
-  if ((button_T = graphics_loadTexture(buttonT)) == -1)
+  if ((button_T = graphics_loadTexture(buttonT, 1)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", buttonT);
   
-  if ((stringEndG_t = graphics_loadTexture(stringEndG)) == -1)
+  if ((stringEndG_t = graphics_loadTexture(stringEndG, 2)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", stringEndG);
   /*u_width = graphics_getTextureWidth(stringEndG);
   u_height = graphics_getTextureHeight(stringEndG);
@@ -60,7 +60,7 @@ GLvoid screenGame_buffer() {
   for ( i = 0; i < 2; i++ ) stringEndG_X[i] = graphics_centreAtX(0.2, f_width);
   for ( i = 2; i < 4; i++ ) stringEndG_X[i] = stringEndG_X[i-2] + f_width;*/
   
-  if ((string_T = graphics_loadTexture(string)) == -1)
+  if ((string_T = graphics_loadTexture(string, 3)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", string);
 
   /* Combo numbers */
@@ -108,32 +108,32 @@ GLvoid screenGame_completed() {
 }
 
 GLvoid screenGame() {
-  if (!gamePaused) {
+  if (!gamePaused) { 
     /* Generate track */
-    glPushMatrix();
-    glTranslatef( 0.0f, 0.0f, -2.0f );
-    glRotatef( 90.0f, 0.0f, 0.5f, 0.0f );
-    if (bringDownAngle > 0.0f)
-      glRotatef( bringDownAngle, 0.0, 0.0f, -1.0f );
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glBindTexture( GL_TEXTURE_2D, trackloop_a_T );
-    glBegin( GL_QUADS );
-    glNormal3f( 0.0f, 0.5f, 0.0f );
-    glTexCoord2f( NE_coord_pos, 1.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -3.5f, 0.5f, -TRACKWIDTH );
-    glTexCoord2f( NE_coord_pos, 0.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -3.5f, 0.5f,  TRACKWIDTH );
-    glTexCoord2f( NE_coord_neg, 0.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f(  2.0f, 0.5f,  TRACKWIDTH );
-    glTexCoord2f( NE_coord_neg, 1.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f(  2.0f, 0.5f, -TRACKWIDTH );
-    glEnd();
-    glPopMatrix();
+    glPushMatrix(); {
+      glTranslatef( 0.0f, 0.0f, -2.0f );
+      glRotatef( 90.0f, 0.0f, 0.5f, 0.0f );
+      if (bringDownAngle > 0.0f)
+        glRotatef( bringDownAngle, 0.0, 0.0f, -1.0f );
+      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+      glBindTexture( GL_TEXTURE_2D, trackloop_a_T );
+      glBegin( GL_QUADS );
+      glNormal3f( 0.0f, 0.5f, 0.0f );
+      glTexCoord2f( NE_coord_pos, 1.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -3.5f, 0.5f, -TRACKWIDTH );
+      glTexCoord2f( NE_coord_pos, 0.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -3.5f, 0.5f,  TRACKWIDTH );
+      glTexCoord2f( NE_coord_neg, 0.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f(  2.0f, 0.5f,  TRACKWIDTH );
+      glTexCoord2f( NE_coord_neg, 1.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f(  2.0f, 0.5f, -TRACKWIDTH );
+      glEnd();
+    } glPopMatrix();
 
-    glPushMatrix(); /* Left bumper */
-    if (bringDownAngle > 0.0f)
-      glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-    glTranslatef( -TRACKWIDTH - 0.012f, 0.5f, -4.0f );
-    glColor4f( 0.5f, 0.5f, 0.5f, 1.0f );
-    glBindTexture( GL_TEXTURE_2D, 0 );
-    gluCylinder( quadratic, 0.01f, 0.01f, 6.0f, 32, 32 );
-    glPopMatrix();
+    glPushMatrix(); { /* Left bumper */
+      if (bringDownAngle > 0.0f)
+        glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
+      glTranslatef( -TRACKWIDTH - 0.012f, 0.5f, -4.0f );
+      glColor4f( 0.5f, 0.5f, 0.5f, 1.0f );
+      glBindTexture( GL_TEXTURE_2D, 0 );
+      gluCylinder( quadratic, 0.01f, 0.01f, 6.0f, 32, 32 );
+    } glPopMatrix();
 
     glPushMatrix(); /* Right bumper */
     if (bringDownAngle > 0.0f)
@@ -147,7 +147,7 @@ GLvoid screenGame() {
     glPushMatrix(); /* 1 */
     if (bringDownAngle > 0.0f)
       glRotatef( bringDownAngle, -1.0, 0.0f, 0.0f );
-    glBindTexture( GL_TEXTURE_2D, texture[4] );
+    glBindTexture( GL_TEXTURE_2D, string_T );
     glTranslatef( 0.0f, 0.0f, STRINGSTRANS);
     glBegin(GL_QUADS); {
       glTexCoord2f( 1.0f, 1.0f );
@@ -315,9 +315,9 @@ GLvoid screenGame() {
     
       /* Score */
       glPushMatrix();
-      glTranslatef( -0.5f, 0.0f, 0.0f );
+      glTranslatef( 0.5f, 0.0f, 0.0f );
       glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-      glBindTexture( GL_TEXTURE_2D, text[0] );
+      glBindTexture( GL_TEXTURE_2D, score0 );
       graphics_positionTexture(score_digit1X, score_digit1Y, defVertexZ);
       glPopMatrix();
     

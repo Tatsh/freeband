@@ -1,6 +1,7 @@
 #include "../freeband.h"
 #include "graphics.h"
 #include "text.h"
+#include "../io/prefs.h"
 #include "../screens/difficulty.h"
 #include "../screens/game.h"
 #include "../screens/instruments.h"
@@ -41,11 +42,11 @@ bool graphics_initGL() {
   glShadeModel(GL_SMOOTH);                /* Enable smooth shading */
   glEnable(GL_BLEND);                     /* Enable Alpha channel mapping */
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);   /* Black background */
-  glViewport(0, 0, WIDTH, HEIGHT);
+  glViewport(0, 0, graphics_width, graphics_height);
   glClear(GL_COLOR_BUFFER_BIT);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();                       /* Reset the current matrix */
-  glOrtho(0.0f, WIDTH, HEIGHT, 0.0f, -1.0f, 1.0f);
+  glOrtho(0.0f, graphics_width, graphics_height, 0.0f, -1.0f, 1.0f);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -143,15 +144,14 @@ GLfloat graphics_scaleTextureWidth(GLuint pWidth, GLuint pHeight, GLfloat destHe
   return destWidth;
 }
 
-GLint graphics_loadTexture(const char filename[]) {
+GLint graphics_loadTexture(const char filename[], GLuint i) {
   SDL_Surface *surface; /* Store information here, size, etc */
-  GLint index;
   
   if ((surface = IMG_Load(filename))) {
     /* GLU will convert textures to POT before sending to GL */
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-    glGenTextures(1, &index);
-    glBindTexture(GL_TEXTURE_2D, index);
+    glGenTextures(1, &texture[i]);
+    glBindTexture(GL_TEXTURE_2D, texture[i]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR);
@@ -173,7 +173,7 @@ GLint graphics_loadTexture(const char filename[]) {
   else
     return -1;
 
-  return index;
+  return texture[i];
 }
 
 GLvoid graphics_clear() {

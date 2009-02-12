@@ -5,9 +5,9 @@ CPP  = g++.exe
 CC   = gcc.exe
 WINDRES = windres.exe
 RES  = win32/Freeband_private.res
-OBJ  = win32/freeband.o win32/graphics.o win32/input.o win32/demo.o win32/game.o win32/instruments.o win32/main.o win32/online.o win32/options.o win32/songs.o win32/difficulty.o win32/audio.o win32/ogg.o win32/sfx.o win32/track.o win32/text.o win32/pause.o win32/screenDifficulty.o win32/screenGame.o win32/screenInstruments.o win32/screenMain.o win32/screenPause.o win32/screenSongs.o win32/prefs.o win32/songlist.o $(RES)
-LINKOBJ  = win32/freeband.o win32/graphics.o win32/input.o win32/demo.o win32/game.o win32/instruments.o win32/main.o win32/online.o win32/options.o win32/songs.o win32/difficulty.o win32/audio.o win32/ogg.o win32/sfx.o win32/track.o win32/text.o win32/pause.o win32/screenDifficulty.o win32/screenGame.o win32/screenInstruments.o win32/screenMain.o win32/screenPause.o win32/screenSongs.o win32/prefs.o win32/songlist.o $(RES)
-LIBS =  -L"C:/Dev-Cpp/lib" -mwindows -lglut32 -lopengl32 -lglu32 -lwinmm -lmingw32 -lSDLmain -lSDL -lSDL_image -lSDL_ttf -lportaudio -lsndfile  
+OBJ  = win32/freeband.o win32/graphics.o win32/input.o win32/demo.o win32/game.o win32/instruments.o win32/main.o win32/online.o win32/options.o win32/songs.o win32/difficulty.o win32/audio.o win32/ogg.o win32/sfx.o win32/track.o win32/text.o win32/pause.o win32/screenDifficulty.o win32/screenGame.o win32/screenInstruments.o win32/screenMain.o win32/screenPause.o win32/screenSongs.o win32/prefs.o win32/songlist.o win32/defaults.o win32/keys.o $(RES)
+LINKOBJ  = win32/freeband.o win32/graphics.o win32/input.o win32/demo.o win32/game.o win32/instruments.o win32/main.o win32/online.o win32/options.o win32/songs.o win32/difficulty.o win32/audio.o win32/ogg.o win32/sfx.o win32/track.o win32/text.o win32/pause.o win32/screenDifficulty.o win32/screenGame.o win32/screenInstruments.o win32/screenMain.o win32/screenPause.o win32/screenSongs.o win32/prefs.o win32/songlist.o win32/defaults.o win32/keys.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -mwindows -lglut32 -lopengl32 -lglu32 -lwinmm -lmingw32 -lSDLmain -lSDL -lSDL_image -lSDL_ttf -lportaudio -lsndfile -liniparser  
 INCS =  -I"C:/Dev-Cpp/include" 
 CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include" 
 BIN  = win32/freeband.exe
@@ -100,6 +100,12 @@ win32/prefs.o: src/io/prefs.c
 
 win32/songlist.o: src/screens/songlist.c
 	$(CC) -c src/screens/songlist.c -o win32/songlist.o $(CFLAGS)
+
+win32/defaults.o: src/io/defaults.c
+	$(CC) -c src/io/defaults.c -o win32/defaults.o $(CFLAGS)
+
+win32/keys.o: src/io/keys.c
+	$(CC) -c src/io/keys.c -o win32/keys.o $(CFLAGS)
 
 win32/Freeband_private.res: Freeband_private.rc 
 	$(WINDRES) -i Freeband_private.rc --input-format=rc -o win32/Freeband_private.res -O coff 

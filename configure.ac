@@ -21,6 +21,7 @@ AC_CHECK_LIB([portaudio], [Pa_Initialize], [], [AC_MSG_ERROR([PortAudio not foun
 AC_CHECK_LIB([sndfile], [sf_open], [], [AC_MSG_ERROR([libsndfile not found])])
 AC_CHECK_LIB([vorbis], [vorbis_comment_init], [], [AC_MSG_ERROR([Vorbis not found])])
 AC_CHECK_LIB([vorbisfile], [ov_open], [], [AC_MSG_ERROR([Vorbisfile not found])])
+AC_CHECK_LIB([iniparser], [iniparser_load], [], [AC_MSG_ERROR([iniparser not found])])
 
 dnl Mingw AC_CHECK_LIB([opengl32], [glGetString], [], [AC_MSG_ERROR([OpenGL not found])])
 dnl Mingw AC_CHECK_LIB([glut32], [glutInit], [], [AC_MSG_ERROR([GLUT not found])])

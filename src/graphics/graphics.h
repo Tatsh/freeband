@@ -44,7 +44,7 @@ GLint graphics_getTextureWidth(const char filename[]);
 GLfloat graphics_scaleTextureHeight(GLuint pWidth, GLuint pHeight, GLfloat destWidth);
 GLfloat graphics_scaleTextureWidth(GLuint pWidth, GLuint pHeight, GLfloat destHeight);
 
-GLint graphics_loadTexture(const char *filename);
+GLint graphics_loadTexture(const char filename[], GLuint i);
 
 GLvoid graphics_clear();
 GLvoid graphics_draw();

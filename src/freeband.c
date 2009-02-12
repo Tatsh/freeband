@@ -65,21 +65,16 @@ GLvoid fb_quit(GLint retnCode) {
 int main(GLint argc, char *argv[]) {
   ushort i;
   
-  /* Find home directory, copy files if non-existant */
-#ifdef __WIN32__
-#else
-  if (!prefs_nixPrefsDirExists()) {
-    if (!prefs_nixPrefsDirCreate())
-      exit(ERROR_CANNOT_CREATE_PREFS_DIRECTORY);
-  }
-#endif
-  
-  prefs_audio_mic_volume = 10; /* Default for now */
-
   for (i = 0; i < MAX_IMAGES; i++) texture[i] = -1;
   for (i = 0; i < MAX_TEXT; i++) text[i] = -1;
 
-  glutInit(&argc, argv);  /* GLUT */
+  if (!prefs_verify()) /* Verify preferences existence or create if does not exist (first launch) */
+    fb_quit(ERROR_VERIFYING_PREFS);
+  
+  if (!prefs_load())
+    fb_quit(ERROR_READING_PREFS);
+  
+  glutInit(&argc, argv);  /* Initialise GLUT */
   
   int videoFlags;                   /* Flags to send to SDL */
   bool hasQuit = false;             /* Main game loop variable */
@@ -133,7 +128,7 @@ int main(GLint argc, char *argv[]) {
   if (videoInfo->blit_hw) /* Check if hardware blits can be done */
     videoFlags |= SDL_HWACCEL;
 
-  fbSurface = SDL_SetVideoMode(WIDTH, HEIGHT, BPP, videoFlags); /* Get a SDL surface */
+  fbSurface = SDL_SetVideoMode(graphics_width, graphics_height, BPP, videoFlags); /* Get a SDL surface */
   if (!fbSurface) {
     fprintf(stderr,  "Video mode set failed: %s.\n", SDL_GetError());
     fb_quit(1);
@@ -154,7 +149,7 @@ int main(GLint argc, char *argv[]) {
   SDL_Surface *icon = IMG_Load("freeband.png"); /* Creates icon for window and task bar on Linux, but only task bar on Windows */
   SDL_WM_SetIcon(icon, NULL);
 
-  graphics_resizeWindow(WIDTH, HEIGHT);
+  graphics_resizeWindow(graphics_width, graphics_height);
   graphics_initColours(); /* Initialise colours */
 
   fb_screen.mainMenu = true; /* Set to main screen */
@@ -190,7 +185,7 @@ int main(GLint argc, char *argv[]) {
             fprintf(stderr, "Could not get a surface after resize: %s.\n", SDL_GetError());
             fb_quit(1);
           }
-          if (!(graphics_initGL(freeband.resize.w, freeband.resize.h))) {
+          if (!(graphics_resizeWindow(freeband.resize.w, freeband.resize.h))) {
             fprintf(stderr, "Could not resize window.\n");
             fb_quit(1);
           }

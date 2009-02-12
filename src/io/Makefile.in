@@ -44,7 +44,8 @@ AR = ar
 ARFLAGS = cru
 libFreebandIO_a_AR = $(AR) $(ARFLAGS)
 libFreebandIO_a_LIBADD =
-am_libFreebandIO_a_OBJECTS = prefs.$(OBJEXT)
+am_libFreebandIO_a_OBJECTS = prefs.$(OBJEXT) defaults.$(OBJEXT) \
+	keys.$(OBJEXT)
 libFreebandIO_a_OBJECTS = $(am_libFreebandIO_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -152,7 +153,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LIBRARIES = libFreebandIO.a
-libFreebandIO_a_SOURCES = prefs.c
+libFreebandIO_a_SOURCES = prefs.c defaults.c keys.c
 all: all-am
 
 .SUFFIXES:
@@ -200,6 +201,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/defaults.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keys.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/prefs.Po@am__quote@
 
 .c.o:

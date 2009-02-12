@@ -186,17 +186,17 @@ bool screenMain_buffer() {
     text_Quit_hl[i] = colour_blue_7CA4F6[i];
   }
   
-  if ((bg = graphics_loadTexture(bgTexture)) == -1) {
+  if ((bg = graphics_loadTexture(bgTexture, 0)) == -1) {
     fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
     return false;
   }
 
-  if ((logo = graphics_loadTexture(logoTexture)) == -1) {
+  if ((logo = graphics_loadTexture(logoTexture, 1)) == -1) {
     fprintf(stderr, "Unable to load texture: %s.\n", logoTexture);
     return false;
   }
   
-  if ((selectG = graphics_loadTexture(mainSelector)) == -1) {
+  if ((selectG = graphics_loadTexture(mainSelector, 2)) == -1) {
     fprintf(stderr, "Unable to load texture: %s.\n", mainSelector);
     return false;
   }

@@ -30,7 +30,7 @@ bool screenSongs_buffer() {
   
   byTier_s = true; /* Set default sort */
   
-  if ((bg = graphics_loadTexture(bgTexture)) == -1)
+  if ((bg = graphics_loadTexture(bgTexture, 0)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
   
   if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {

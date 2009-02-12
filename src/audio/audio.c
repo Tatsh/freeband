@@ -44,7 +44,8 @@ int paCallback(const void *inputBuffer, void *outputBuffer, unsigned long frames
 bool audio_buffer() {
   const PaDeviceInfo *deviceInfo;
   PaError err;
-  ushort i, numDevices;
+  ushort i;
+  uint numDevices;
 
   if ((err = Pa_Initialize()) != paNoError) {
     fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText( err ));
