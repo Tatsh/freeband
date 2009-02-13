@@ -74,13 +74,20 @@ bool screenSongs_buffer() {
   if (freeSans)
     TTF_CloseFont(freeSans);
   
+  if (!screenMenuFooter_buffer()) {
+    fprintf(stderr, "Unable to buffer screenMenuFooter.\n");
+    return false;
+  }
+  
   return true;
 }
 
 GLvoid screenSongs() {
-  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-  glBindTexture( GL_TEXTURE_2D, bg );
-  graphics_positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
+  glPushMatrix(); {
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glBindTexture( GL_TEXTURE_2D, bg );
+    graphics_positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
+  } glPopMatrix();
   
   glPushMatrix(); {
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -115,6 +122,8 @@ GLvoid screenSongs() {
       graphics_positionTexture(text_byBPMX, text_sortY, defVertexZ);
     }
   } glPopMatrix();
+  
+  screenMenuFooter();
   
   return;
 }

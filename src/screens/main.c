@@ -37,7 +37,35 @@ GLcoordsY text_Options_hl[4];
 GLcoordsY text_Quit_hl[4];
 
 texture_i bg, logo, selectG; /* Textures; must be called selectG thanks to Gentoo defining select randomly elsewhere this links to */
-texture_i single, multiplayer, onlineM, optionsM, quit; /* Menu options */
+text_i single, multiplayer, onlineM, optionsM, quit; /* Menu options */
+
+/* screenMenuBottom */
+text_i select_G, back_R, upDown_strum;
+GLcoordsX text_select_GX[4];
+GLcoordsY text_select_GY[] =  { 0.0f, BOTTOM_TEXT_HT, BOTTOM_TEXT_HT, 0.0f };
+GLcoordsX text_back_RX[4];
+GLcoordsY text_back_RY[4];
+GLcoordsX text_upDown_strumX[4];
+GLcoordsY text_upDown_strumY[4];
+
+texture_i button_green, button_red, strummer, button_bg;
+texture_p button_green_p[] = "GameData/themes/default/global/button_green.png";
+texture_p button_red_p[] = "GameData/themes/default/global/button_red.png";
+texture_p strummer_p[] = "GameData/themes/default/global/strummer.png";
+texture_p button_bg_p[] = "GameData/themes/default/global/screenbottom_bg.png";
+
+#define FOOTERBG_HT 0.145f
+
+GLcoordsX button_green_X[4];
+GLcoordsY button_green_Y[] = { 0.0f, BOTTOM_TEXT_HT, BOTTOM_TEXT_HT, 0.0f };
+GLcoordsX button_red_X[4];
+GLcoordsY button_red_Y[4];
+GLcoordsX strummer_X[4];
+GLcoordsY strummer_Y[4] = { 0.0f, 0.035f, 0.035f, 0.0f };
+GLcoordsX button_bg_X[4];
+GLcoordsY button_bg_Y[] = { 0.0f, FOOTERBG_HT, FOOTERBG_HT, 0.0f };
+GLcoordsX button_bg_X_upDown[4];
+/* End screenMenuBottom */
 
 GLuint screenMain_nSelection = 0;
 
@@ -172,6 +200,77 @@ GLvoid screenMain_highlighted(GLuint selectID) {
   return;
 }
 
+bool screenMenuFooter_buffer() {
+  ushort i;
+  GLfloat width;
+  TTF_Font *freeSans;
+  
+  if ((button_bg = graphics_loadTexture(button_bg_p, 0)) == -1)
+    fprintf(stderr, "Error loading %s texture.\n", button_bg_p);
+  for ( i = 0; i < 2; i++ ) button_bg_X[i] = graphics_centreAtX(0.0f,
+        graphics_scaleTextureWidth(graphics_getTextureWidth(button_bg_p), graphics_getTextureHeight(button_bg_p), FOOTERBG_HT));
+  for ( i = 2; i < 4; i++ ) button_bg_X[i] = button_bg_X[i-2] +
+        graphics_scaleTextureWidth(graphics_getTextureWidth(button_bg_p), graphics_getTextureHeight(button_bg_p), FOOTERBG_HT);
+  for ( i = 0; i < 2; i++ ) button_bg_X_upDown[i] = graphics_centreAtX(0.0f,
+        graphics_scaleTextureWidth(graphics_getTextureWidth(button_bg_p), graphics_getTextureHeight(button_bg_p), FOOTERBG_HT + 0.03));
+  for ( i = 2; i < 4; i++ ) button_bg_X_upDown[i] = button_bg_X_upDown[i-2] +
+        graphics_scaleTextureWidth(graphics_getTextureWidth(button_bg_p), graphics_getTextureHeight(button_bg_p), FOOTERBG_HT + 0.03);
+  
+  if ((button_green = graphics_loadTexture(button_green_p, 0)) == -1)
+    fprintf(stderr, "Error loading %s texture.\n", button_green_p);
+  for ( i = 0; i < 2; i++ ) button_green_X[i] = graphics_centreAtX(0.0f,
+        graphics_scaleTextureWidth(graphics_getTextureWidth(button_green_p), graphics_getTextureHeight(button_green_p), BOTTOM_TEXT_HT));
+  for ( i = 2; i < 4; i++ ) button_green_X[i] = button_green_X[i-2] +
+        graphics_scaleTextureWidth(graphics_getTextureWidth(button_green_p), graphics_getTextureHeight(button_green_p), BOTTOM_TEXT_HT);
+  
+  if ((button_red = graphics_loadTexture(button_red_p, 1)) == -1)
+    fprintf(stderr, "Error loading %s texture.\n", button_red_p);
+  for ( i = 0; i < 2; i++ ) button_red_X[i] = graphics_centreAtX(0.0f,
+        graphics_scaleTextureWidth(graphics_getTextureWidth(button_red_p), graphics_getTextureHeight(button_red_p), BOTTOM_TEXT_HT));
+  for ( i = 2; i < 4; i++ ) button_red_X[i] = button_red_X[i-2] +
+        graphics_scaleTextureWidth(graphics_getTextureWidth(button_red_p), graphics_getTextureHeight(button_red_p), BOTTOM_TEXT_HT);
+  for ( i = 0; i < 4; i++ ) button_red_Y[i] = button_green_Y[i];
+  
+  if ((strummer = graphics_loadTexture(strummer_p, 2)) == -1)
+    fprintf(stderr, "Error loading %s texture.\n", strummer_p);
+  for ( i = 0; i < 2; i++ ) strummer_X[i] = graphics_centreAtX(0.0f,
+        graphics_scaleTextureWidth(graphics_getTextureWidth(strummer_p), graphics_getTextureHeight(strummer_p), 0.05f));
+  for ( i = 2; i < 4; i++ ) strummer_X[i] = strummer_X[i-2] +
+        graphics_scaleTextureWidth(graphics_getTextureWidth(strummer_p), graphics_getTextureHeight(strummer_p), 0.05f);
+  
+  /* Text */
+  if ((freeSans = TTF_OpenFont(path_bold_freeSans, DEFAULT_TEXT_PT))) {
+    select_G = text_load("SELECT", freeSans, white);
+    width = text_scaleWidth("SELECT", freeSans, BOTTOM_TEXT_HT);
+    for ( i = 0; i < 2; i++ ) text_select_GX[i] = graphics_centreAtX(0.0f, width);
+    for ( i = 2; i < 4; i++ ) text_select_GX[i] = text_select_GX[i-2] + width;
+    
+    back_R = text_load("BACK", freeSans, white);
+    width = text_scaleWidth("BACK", freeSans, BOTTOM_TEXT_HT);
+    for ( i = 0; i < 2; i++ ) text_back_RX[i] = graphics_centreAtX(0.0f, width);
+    for ( i = 2; i < 4; i++ ) text_back_RX[i] = text_back_RX[i-2] + width;
+    for ( i = 0; i < 4; i++ ) text_back_RY[i] = text_select_GY[i];
+    
+    upDown_strum = text_load("UP/DOWN", freeSans, white);
+    width = text_scaleWidth("UP/DOWN", freeSans, BOTTOM_TEXT_HT);
+    for ( i = 0; i < 2; i++ ) text_upDown_strumX[i] = graphics_centreAtX(0.0f, width);
+    for ( i = 2; i < 4; i++ ) text_upDown_strumX[i] = text_back_RX[i-2] + width;
+    for ( i = 0; i < 4; i++ ) text_upDown_strumY[i] = text_select_GY[i];
+  }
+  else {
+#ifdef __WIN32__
+#else
+    fprintf(stderr, "Error opening %s font for screenMenuBottom: %s\n", path_bold_freeSans, TTF_GetError());
+#endif
+    return false;
+  }
+  
+  if (freeSans)
+    TTF_CloseFont(freeSans);
+  
+  return true;
+}
+
 bool screenMain_buffer() {
   GLuint i;
   GLfloat width;
@@ -285,5 +384,50 @@ GLvoid screenMain() {
   }
   glPopMatrix();
 
+  return;
+}
+
+GLvoid screenMenuFooter() {
+  glPushMatrix(); {
+    glTranslatef(-0.8f, 0.85f, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+    glBindTexture( GL_TEXTURE_2D, button_bg );
+    graphics_positionTexture(button_bg_X, button_bg_Y, defVertexZ);
+    glTranslatef(-0.18f, 0.025f, 0.0f);
+    glBindTexture( GL_TEXTURE_2D, button_green );
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    graphics_positionTexture(button_green_X, button_green_Y, defVertexZ);
+    glTranslatef(0.25f, 0.0f, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glBindTexture( GL_TEXTURE_2D, select_G );
+    graphics_positionTexture(text_select_GX, text_select_GY, defVertexZ);
+    
+    glTranslatef(0.6f, -0.025f, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+    glBindTexture( GL_TEXTURE_2D, button_bg );
+    graphics_positionTexture(button_bg_X, button_bg_Y, defVertexZ);
+    glTranslatef(-0.12f, 0.025f, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glBindTexture( GL_TEXTURE_2D, button_red );
+    graphics_positionTexture(button_red_X, button_red_Y, defVertexZ);
+    glTranslatef(0.2f, 0.0f, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glBindTexture( GL_TEXTURE_2D, back_R );
+    graphics_positionTexture(text_back_RX, text_back_RY, defVertexZ);
+    
+    glTranslatef(0.6f, -0.025f, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+    glBindTexture( GL_TEXTURE_2D, button_bg );
+    graphics_positionTexture(button_bg_X_upDown, button_bg_Y, defVertexZ);
+    glTranslatef(-0.23f, 0.05f, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glBindTexture( GL_TEXTURE_2D, strummer );
+    graphics_positionTexture(strummer_X, strummer_Y, defVertexZ);
+    glTranslatef(0.28f, -0.03f, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glBindTexture( GL_TEXTURE_2D, upDown_strum );
+    graphics_positionTexture(text_upDown_strumX, text_upDown_strumY, defVertexZ);
+  } glPopMatrix();
+  
   return;
 }

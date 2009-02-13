@@ -149,7 +149,7 @@ GLvoid screenInstruments_highlighted(GLuint instSelection) {
 bool screenInstruments_buffer() {
   GLfloat width;
   ushort i;
-  TTF_Font *bitstream, *crillee;
+  TTF_Font *freeSans, *crillee;
   
   if (fb_nPlayers == 1) {
     /* Generate Y coordinates for text */
@@ -168,25 +168,25 @@ bool screenInstruments_buffer() {
     if ((bg = graphics_loadTexture(bgTexture, 0)) == -1)
       fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
     
-    if ((bitstream = TTF_OpenFont(path_bold_bitstreamVeraSans, DEFAULT_TEXT_PT))) {
-      text_guitar = text_load(en_guitar, bitstream, white);
+    if ((freeSans = TTF_OpenFont(path_bold_freeSans, DEFAULT_TEXT_PT))) {
+      text_guitar = text_load(en_guitar, freeSans, white);
       /* GLint text_scaleWidth(const char text[], TTF_Font *font, GLuint ptsize, GLfloat textureHeight); */
-      width = text_scaleWidth(en_guitar, bitstream, MENUITEMSHT);
+      width = text_scaleWidth(en_guitar, freeSans, MENUITEMSHT);
       for ( i = 0; i < 2; i++ ) text_GuitarX[i] = graphics_centreAtX(0.6f, width);
       for ( i = 2; i < 4; i++ ) text_GuitarX[i] = text_GuitarX[i-2] + width;
 
-      text_bass = text_load(en_bass, bitstream, white);
-      width = text_scaleWidth(en_bass, bitstream, MENUITEMSHT);
+      text_bass = text_load(en_bass, freeSans, white);
+      width = text_scaleWidth(en_bass, freeSans, MENUITEMSHT);
       for ( i = 0; i < 2; i++ ) text_BassX[i] = graphics_centreAtX(0.6f, width);
       for ( i = 2; i < 4; i++ ) text_BassX[i] = text_BassX[i-2] + width;
 
-      text_drums = text_load(en_drums, bitstream, white);
-      width = text_scaleWidth(en_drums, bitstream, MENUITEMSHT);
+      text_drums = text_load(en_drums, freeSans, white);
+      width = text_scaleWidth(en_drums, freeSans, MENUITEMSHT);
       for ( i = 0; i < 2; i++ ) text_DrumsX[i] = graphics_centreAtX(0.6f, width);
       for ( i = 2; i < 4; i++ ) text_DrumsX[i] = text_DrumsX[i-2] + width;
 
-      text_vocals = text_load(en_vocals, bitstream, white);
-      width = text_scaleWidth(en_vocals, bitstream, MENUITEMSHT);
+      text_vocals = text_load(en_vocals, freeSans, white);
+      width = text_scaleWidth(en_vocals, freeSans, MENUITEMSHT);
       for ( i = 0; i < 2; i++ ) text_VocalsX[i] = graphics_centreAtX(0.6f, width);
       for ( i = 2; i < 4; i++ ) text_VocalsX[i] = text_VocalsX[i-2] + width;
     }
@@ -194,8 +194,8 @@ bool screenInstruments_buffer() {
       fprintf(stderr, "instruments.c: screenInstrumentsBuffer(): Could not open font %s: %s\n", path_bold_bitstreamVeraSans, TTF_GetError());
       return false;
     }
-    if (bitstream)
-      TTF_CloseFont(bitstream);
+    if (freeSans)
+      TTF_CloseFont(freeSans);
 
     if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
       text_selectInstrument = text_load(en_select_instrument, crillee, white);
@@ -212,14 +212,21 @@ bool screenInstruments_buffer() {
   }
   else
     fprintf(stdout, "Multiplayer not implemented yet.\n");
+    
+  if (!screenMenuFooter_buffer()) {
+    fprintf(stderr, "Unable to buffer screenMenuFooter.\n");
+    return false;
+  }
   
   return true;
 }
 
 GLvoid screenInstruments() {
-  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-  glBindTexture( GL_TEXTURE_2D, bg );
-  graphics_positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
+  glPushMatrix(); {
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glBindTexture( GL_TEXTURE_2D, bg );
+    graphics_positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
+  } glPopMatrix();
 
   /* Text elements */
   glPushMatrix(); {
@@ -248,58 +255,63 @@ GLvoid screenInstruments() {
     graphics_positionTexture(text_SelectInstrumentX, text_SelectInstrumentY, defVertexZ);
   } glPopMatrix();
 
+  glPushMatrix(); {
+    switch (screenInstruments_nSelection) {
+      case 0:
+        glTranslatef(-0.15f, -0.05f, 2.0f);
+        glRotatef( 110.0f, -0.05f, 0.0f, 0.0f );
+        glRotatef( degree, 0.0f, 0.0f, 0.05f );
+        glPushMatrix();
+        glBindTexture( GL_TEXTURE_2D, bg );
+        glColor4f(-1.0f, 1.0f, 1.0f, 1.0f);
+        gluCylinder( quadratic, 0.05f, 0.05f, 0.1f, 32, 32 );
+        glPopMatrix();
+        break;
+      
+      case 1:
+        glTranslatef(-0.15f, -0.05f, 2.0f);
+        glRotatef( 110.0f, -0.05f, 0.0f, 0.0f );
+        glRotatef( degree, 0.0f, 0.0f, 0.05f );
+        glPushMatrix();
+        glBindTexture( GL_TEXTURE_2D, bg );
+        glColor4f(1.0f, -1.0f, 1.0f, 1.0f);
+        gluCylinder( quadratic, 0.05f, 0.0f, 0.1f, 32, 32 );
+        glPopMatrix();
+        break;
+      
+      case 2:
+        glTranslatef(-0.15f, 0.0f, 2.0f);
+        glRotatef( 180.0f, 0.05f, 0.0f, 0.0f );
+        glRotatef( degree, 0.0f, -0.05f, 0.0f );
+        glPushMatrix();
+        glBindTexture( GL_TEXTURE_2D, bg );
+        glColor4f(1.0f, 1.0f, -1.0f, 1.0f);
+        glutSolidTeapot(0.05f);
+        glPopMatrix();
+        break;
+      
+      case 3:
+        glTranslatef(-0.15f, 0.0f, 2.0f);
+        glRotatef( 180.0f, 0.05f, 0.0f, 0.0f );
+        glRotatef( degree, 0.0f, -0.05f, 0.0f );
+        glPushMatrix();
+        glBindTexture( GL_TEXTURE_2D, bg );
+        glColor4f(-1.0f, 1.0f, -1.0f, 1.0f);
+        glutWireTeapot(0.05f);
+        glPopMatrix();
+        break;
+      
+      default:
+        break;
+    }
 
-  switch (screenInstruments_nSelection) {
-    case 0:
-      glTranslatef(-0.15f, -0.05f, 2.0f);
-      glRotatef( 110.0f, -0.05f, 0.0f, 0.0f );
-      glRotatef( degree, 0.0f, 0.0f, 0.05f );
-      glPushMatrix();
-      glBindTexture( GL_TEXTURE_2D, texture[0] );
-      glColor4f(-1.0f, 1.0f, 1.0f, 1.0f);
-      gluCylinder( quadratic, 0.05f, 0.05f, 0.1f, 32, 32 );
-      glPopMatrix();
-      break;
-      
-    case 1:
-      glTranslatef(-0.15f, -0.05f, 2.0f);
-      glRotatef( 110.0f, -0.05f, 0.0f, 0.0f );
-      glRotatef( degree, 0.0f, 0.0f, 0.05f );
-      glPushMatrix();
-      glBindTexture( GL_TEXTURE_2D, texture[0] );
-      glColor4f(1.0f, -1.0f, 1.0f, 1.0f);
-      gluCylinder( quadratic, 0.05f, 0.0f, 0.1f, 32, 32 );
-      glPopMatrix();
-      break;
-      
-    case 2:
-      glTranslatef(-0.15f, 0.0f, 2.0f);
-      glRotatef( 180.0f, 0.05f, 0.0f, 0.0f );
-      glRotatef( degree, 0.0f, -0.05f, 0.0f );
-      glPushMatrix();
-      glBindTexture( GL_TEXTURE_2D, texture[0] );
-      glColor4f(1.0f, 1.0f, -1.0f, 1.0f);
-      glutSolidTeapot(0.05f);
-      glPopMatrix();
-      break;
-      
-    case 3:
-      glTranslatef(-0.15f, 0.0f, 2.0f);
-      glRotatef( 180.0f, 0.05f, 0.0f, 0.0f );
-      glRotatef( degree, 0.0f, -0.05f, 0.0f );
-      glPushMatrix();
-      glBindTexture( GL_TEXTURE_2D, texture[0] );
-      glColor4f(-1.0f, 1.0f, -1.0f, 1.0f);
-      glutWireTeapot(0.05f);
-      glPopMatrix();
-      break;
-      
-    default:
-      break;
-  }
-
-  if (degree == 360.0f)
-    degree = 0.0f;
-  else
-    degree += 0.5f;
+    if (degree == 360.0f)
+      degree = 0.0f;
+    else
+      degree += 0.5f;
+  } glPopMatrix();
+  
+  screenMenuFooter();
+  
+  return;
 }

@@ -84,4 +84,7 @@ GLvoid screenMain_highlighted(GLuint nSelection);
 GLvoid screenMain_accept();
 GLvoid screenMain();
 
+bool screenMenuFooter_buffer();
+GLvoid screenMenuFooter();
+
 #endif

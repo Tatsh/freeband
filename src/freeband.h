@@ -36,6 +36,8 @@
 #define SCREENHEADTEXTHT 0.31f
 #define SCREENHEADTEXTOFFSET -1.05f
 
+#define BOTTOM_TEXT_HT 0.1
+
 #define BPP 32
 
 #ifdef __WIN32__

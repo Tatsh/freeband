@@ -34,9 +34,8 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
   
   /* We get the $HOME or %%HOME (Windows) environment variable */
 #ifdef __WIN32__
-  char myDocuments[255]; /* TCHAR is char */
-  if(SUCCEEDED(SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, myDocuments)))
-    strcat(prefs_root, myDocuments);
+  /* In this case, the 5th argument can take a char instead of LPTSTR or TCHAR; these are all the same here */
+  SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, prefs_root);
   
   if (prefs_root == NULL) {
     fprintf(stderr, "Could not find My Documents folder. Check to make sure you have one assigned in your Windows settings.\n");

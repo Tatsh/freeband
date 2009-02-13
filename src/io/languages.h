@@ -39,5 +39,6 @@
 #define zh_HK     0x24 /* Cantonese-Hong Kong (traditional Chinese) */
 #define es_PR     0x25 /* Spanish-Puerto Rico */
 #define ja_JP_HK  0x26 /* Japanese-Japan (Hiragana and Katakana ONLY) */
+#define pl_PL     0x27 /* Polish-Poland */
 
 #endif
