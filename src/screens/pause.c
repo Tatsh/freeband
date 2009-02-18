@@ -2,6 +2,7 @@
 #include "../graphics/graphics.h"
 #include "../graphics/text.h"
 #include "../input/input.h"
+#include "../io/languages.h"
 #include "../io/prefs.h"
 #include "game.h"
 #include "main.h"
@@ -43,8 +44,8 @@ bool screenPause_buffer() {
   pause_menuState.resume = true;
   
   if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
-    text_paused = text_load(en_paused, crillee, white);
-    width = text_scaleWidth(en_paused, crillee, SCREENHEADTEXTHT);
+    text_paused = text_load(languageStrings_screenPause.header, crillee, white);
+    width = text_scaleWidth(languageStrings_screenPause.header, crillee, SCREENHEADTEXTHT);
     for ( i = 0; i < 2; i++ ) text_pausedX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_pausedX[i] = text_pausedX[i-2] + width;
   }
@@ -52,33 +53,33 @@ bool screenPause_buffer() {
     TTF_CloseFont(crillee);
   
   if ((freeSans = TTF_OpenFont(path_bold_freeSans, DEFAULT_TEXT_PT))) {
-    text_resume = text_load(en_resume, freeSans, white);
-    width = text_scaleWidth(en_resume, freeSans, PAUSE_MENU_ITEMS_HT);
+    text_resume = text_load(languageStrings_screenPause.resume, freeSans, white);
+    width = text_scaleWidth(languageStrings_screenPause.resume, freeSans, PAUSE_MENU_ITEMS_HT);
     for ( i = 0; i < 2; i++ ) text_resumeX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_resumeX[i] = text_resumeX[i-2] + width;
     
-    text_restart = text_load(en_restart, freeSans, white);
-    width = text_scaleWidth(en_restart, freeSans, PAUSE_MENU_ITEMS_HT);
+    text_restart = text_load(languageStrings_screenPause.restart, freeSans, white);
+    width = text_scaleWidth(languageStrings_screenPause.restart, freeSans, PAUSE_MENU_ITEMS_HT);
     for ( i = 0; i < 2; i++ ) text_restartX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_restartX[i] = text_restartX[i-2] + width;
     
-    text_changeDifficulty = text_load(en_change_difficulty, freeSans, white);
-    width = text_scaleWidth(en_change_difficulty, freeSans, PAUSE_MENU_ITEMS_HT);
+    text_changeDifficulty = text_load(languageStrings_screenPause.change_difficulty, freeSans, white);
+    width = text_scaleWidth(languageStrings_screenPause.change_difficulty, freeSans, PAUSE_MENU_ITEMS_HT);
     for ( i = 0; i < 2; i++ ) text_changeDifficultyX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_changeDifficultyX[i] = text_changeDifficultyX[i-2] + width;
     
-    text_adjustMicVolume = text_load(en_adjust_mic_volume, freeSans, white);
-    width = text_scaleWidth(en_adjust_mic_volume, freeSans, PAUSE_MENU_ITEMS_HT);
+    text_adjustMicVolume = text_load(languageStrings_screenPause.adjust_microphone_volume, freeSans, white);
+    width = text_scaleWidth(languageStrings_screenPause.adjust_microphone_volume, freeSans, PAUSE_MENU_ITEMS_HT);
     for ( i = 0; i < 2; i++ ) text_adjustMicVolumeX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_adjustMicVolumeX[i] = text_adjustMicVolumeX[i-2] + width;
     
-    text_leftyMode = text_load(en_lefty_mode, freeSans, white);
-    width = text_scaleWidth(en_lefty_mode, freeSans, PAUSE_MENU_ITEMS_HT);
+    text_leftyMode = text_load(languageStrings_screenPause.lefty_mode, freeSans, white);
+    width = text_scaleWidth(languageStrings_screenPause.lefty_mode, freeSans, PAUSE_MENU_ITEMS_HT);
     for ( i = 0; i < 2; i++ ) text_leftyModeX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_leftyModeX[i] = text_leftyModeX[i-2] + width;
     
-    text_quit = text_load(en_quit, freeSans, white);
-    width = text_scaleWidth(en_quit, freeSans, PAUSE_MENU_ITEMS_HT);
+    text_quit = text_load(languageStrings_screenPause.quit, freeSans, white);
+    width = text_scaleWidth(languageStrings_screenPause.quit, freeSans, PAUSE_MENU_ITEMS_HT);
     for ( i = 0; i < 2; i++ ) text_quitX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_quitX[i] = text_quitX[i-2] + width;
   }

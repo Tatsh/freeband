@@ -6,54 +6,62 @@
 #include "input.h"
 #include "screenDifficulty.h"
 
-GLvoid input_screenDifficulty(GLuint direction) {
+void input_screenDifficulty(ushort direction) {
   ushort i;
   
   switch (direction) {
     case DOWN:
-      if (diffEasy) {
-        diffMedium = true;
-        diffEasy = false;
-        for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
-      }
-      else if (diffMedium) {
-        diffHard = true;
-        diffMedium = false;
-        for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
-      }
-      else if (diffHard) {
-        diffExpert = true;
-        diffHard = false;
-        for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
-      }
-      else if (diffExpert) {
-        diffEasy = true;
-        diffExpert = false;
-        screenDifficulty_selectionY[0] = 0.0f; screenDifficulty_selectionY[1] = DIFFHT;
-        screenDifficulty_selectionY[2] = DIFFHT; screenDifficulty_selectionY[3] = 0.0f;
+      switch (current_difficulty) {
+        case DIFFICULTY_EASY:
+          current_difficulty = DIFFICULTY_MEDIUM;
+          for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
+          break;
+          
+        case DIFFICULTY_MEDIUM:
+          current_difficulty = DIFFICULTY_HARD;
+          for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
+          break;
+          
+        case DIFFICULTY_HARD:
+          current_difficulty = DIFFICULTY_EXPERT;
+          for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
+          break;
+          
+        case DIFFICULTY_EXPERT:
+          current_difficulty = DIFFICULTY_EASY;
+          screenDifficulty_selectionY[0] = screenDifficulty_selectionY[3] = 0.0f;
+          screenDifficulty_selectionY[1] = screenDifficulty_selectionY[2] = DIFFHT;
+          break;
+          
+        default:
+          break;
       }
       break;
       
     case UP:
-      if (diffEasy) {
-        diffExpert = true;
-        diffEasy = false;
-        for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + (3.0f * DIFFHT);
-      }
-      else if (diffExpert) {
-        diffHard = true;
-        diffExpert = false;
-        for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
-      }
-      else if (diffHard) {
-        diffMedium = true;
-        diffHard = false;
-        for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
-      }
-      else if (diffMedium) {
-        diffEasy = true;
-        diffMedium = false;
-        for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
+      switch (current_difficulty) {
+        case DIFFICULTY_EASY:
+          current_difficulty = DIFFICULTY_EXPERT;
+          for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + (3.0f * DIFFHT);
+          break;
+          
+        case DIFFICULTY_MEDIUM:
+          current_difficulty = DIFFICULTY_EASY;
+          for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
+          break;
+          
+        case DIFFICULTY_HARD:
+          current_difficulty = DIFFICULTY_MEDIUM;
+          for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
+          break;
+          
+        case DIFFICULTY_EXPERT:
+          current_difficulty = DIFFICULTY_HARD;
+          for ( i = 0; i < 4; i++ ) screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
+          break;
+          
+        default:
+          break;
       }
       break;
       

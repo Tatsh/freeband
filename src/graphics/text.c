@@ -54,7 +54,7 @@ GLvoid text_position(GLfloat vertexX[], GLfloat vertexY[], GLfloat vertexZ[]) { 
   return;
 }
 
-GLint text_load(const char input[], TTF_Font *font, SDL_Color color) {
+GLint text_load(const char *input, TTF_Font *font, SDL_Color color) {
   SDL_Surface *textTexture;
   GLuint i = 0;
   

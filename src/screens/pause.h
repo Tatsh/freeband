@@ -5,27 +5,6 @@
 #define PAUSE_MENU_ITEMS_OFFSET -0.26 /* How far away from 'PAUSED' text this starts at */
 #define PAUSE_MENU_ITEMS_DIFF 0.11 /* How close the menu items are */
 
-#define en_paused             "PAUSED"
-
-#define en_resume             "RESUME"
-#define en_restart            "RESTART"
-#define en_lefty_mode         "LEFTY MODE"
-#define en_change_difficulty  "CHANGE DIFFICULTY"
-#define en_adjust_mic_volume  "ADJUST MIC VOLUME"
-#define en_quit               "QUIT"
-
-/* User selects restart or changes difficulty */
-#define en_game_will_resume   "SONG WILL RESUME IN..."
-
-/* User selects CHANGE DIFFICULTY */
-#define en_change_difficulty_easy   "EASY"
-#define en_change_difficulty_medium "MEDIUM"
-#define en_change_difficulty_hard   "HARD"
-#define en_change_difficulty_expert "EXPERT"
-
-#define en_new_song           "NEW SONG"
-#define en_main_menu          "MAIN MENU"
-
 typedef struct changeDifficulty {
   bool easy;
   bool medium;

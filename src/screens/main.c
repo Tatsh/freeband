@@ -1,6 +1,7 @@
 #include "../freeband.h"
 #include "../graphics/graphics.h"
 #include "../graphics/text.h"
+#include "../io/languages.h"
 #include "instruments.h"
 #include "main.h"
 
@@ -240,19 +241,19 @@ bool screenMenuFooter_buffer() {
   
   /* Text */
   if ((freeSans = TTF_OpenFont(path_bold_freeSans, DEFAULT_TEXT_PT))) {
-    select_G = text_load("SELECT", freeSans, white);
-    width = text_scaleWidth("SELECT", freeSans, BOTTOM_TEXT_HT);
+    select_G = text_load(languageStrings_screenFooter.select, freeSans, white); /* Force the scale of English to fit the text */
+    width = text_scaleWidth(EN_SELECT, freeSans, BOTTOM_TEXT_HT);
     for ( i = 0; i < 2; i++ ) text_select_GX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_select_GX[i] = text_select_GX[i-2] + width;
     
-    back_R = text_load("BACK", freeSans, white);
-    width = text_scaleWidth("BACK", freeSans, BOTTOM_TEXT_HT);
+    back_R = text_load(languageStrings_screenFooter.back, freeSans, white);
+    width = text_scaleWidth(EN_BACK, freeSans, BOTTOM_TEXT_HT);
     for ( i = 0; i < 2; i++ ) text_back_RX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_back_RX[i] = text_back_RX[i-2] + width;
     for ( i = 0; i < 4; i++ ) text_back_RY[i] = text_select_GY[i];
     
-    upDown_strum = text_load("UP/DOWN", freeSans, white);
-    width = text_scaleWidth("UP/DOWN", freeSans, BOTTOM_TEXT_HT);
+    upDown_strum = text_load(languageStrings_screenFooter.up_down, freeSans, white);
+    width = text_scaleWidth(EN_UPDOWN, freeSans, BOTTOM_TEXT_HT);
     for ( i = 0; i < 2; i++ ) text_upDown_strumX[i] = graphics_centreAtX(0.0f, width);
     for ( i = 2; i < 4; i++ ) text_upDown_strumX[i] = text_back_RX[i-2] + width;
     for ( i = 0; i < 4; i++ ) text_upDown_strumY[i] = text_select_GY[i];
@@ -306,28 +307,28 @@ bool screenMain_buffer() {
   
   /* Text */
   if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
-    single = text_load(EN_SINGLE_PLAYER, crillee, white); /* Always load text as white; change using glColor4f */
-    width = text_scaleWidth(EN_SINGLE_PLAYER, crillee, MENUITEMSHT);
+    single = text_load(languageStrings_screenMain.single_player, crillee, white); /* Always load text as white; change using glColor4f */
+    width = text_scaleWidth(languageStrings_screenMain.single_player, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_SinglePlayerX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_SinglePlayerX[i] = text_SinglePlayerX[i-2] + width;
 
-    multiplayer = text_load(EN_MULTIPLAYER, crillee, white);
-    width = text_scaleWidth(EN_MULTIPLAYER, crillee, MENUITEMSHT);
+    multiplayer = text_load(languageStrings_screenMain.multiplayer, crillee, white);
+    width = text_scaleWidth(languageStrings_screenMain.multiplayer, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_MultiplayerX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_MultiplayerX[i] = text_MultiplayerX[i-2] + width;
   
-    onlineM = text_load(en_online, crillee, white);
-    width = text_scaleWidth(en_online, crillee, MENUITEMSHT);
+    onlineM = text_load(languageStrings_screenMain.online, crillee, white);
+    width = text_scaleWidth(languageStrings_screenMain.online, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_OnlineX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_OnlineX[i] = text_OnlineX[i-2] + width;
   
-    optionsM = text_load(en_options, crillee, white);
-    width = text_scaleWidth(en_options, crillee, MENUITEMSHT);
+    optionsM = text_load(languageStrings_screenMain.options, crillee, white);
+    width = text_scaleWidth(languageStrings_screenMain.options, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_OptionsX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_OptionsX[i] = text_OptionsX[i-2] + width;
   
-    quit = text_load(en_quit, crillee, white);
-    width = text_scaleWidth(en_quit, crillee, MENUITEMSHT);
+    quit = text_load(languageStrings_screenMain.quit, crillee, white);
+    width = text_scaleWidth(languageStrings_screenMain.quit, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_QuitX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_QuitX[i] = text_QuitX[i-2] + width;
   }

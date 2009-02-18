@@ -111,7 +111,7 @@ void input_screenPause(ushort direction) {
 #ifdef __DEBUG__
         fprintf(stdout, "Quit stage. Now at screenMain().\n");
 #endif
-        screenInstruments_nSelection = 0;
+        current_instrument = prefs_Freeband.default_instrument_u;
       }
     
     case ESC:

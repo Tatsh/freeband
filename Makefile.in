@@ -161,7 +161,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = src .
-DIST_SUBDIRS = default-data songs src themes
+DIST_SUBDIRS = defaults songs src themes
 EXTRA_DIST = licences.txt AUTHORS COPYING ChangeLog INSTALL NEWS README
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive

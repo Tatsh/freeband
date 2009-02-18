@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* *nix and Mingw only */
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -26,8 +25,11 @@
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
 
+#include <iniparser.h>
+
 #ifdef __WIN32__
 #include <windows.h>
+#include <shlobj.h>
 #endif
 
 #define ERROR_VERIFYING_PREFS 10
@@ -38,10 +40,8 @@
 
 #define BOTTOM_TEXT_HT 0.1
 
-#define BPP 32
-
 #ifdef __WIN32__
-typedef unsigned short ushort;
+typedef unsigned short ushort; /* Yes Windows is missing this one */
 #endif
 
 typedef ushort score_t;

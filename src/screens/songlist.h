@@ -1,10 +1,6 @@
 #ifndef SONGLIST_H
 #define SONGLIST_H
 
-#ifdef __WIN32__
-typedef unsigned int uint;
-#endif
-
 typedef uint difficulty_i; /* Difficulty out of 5 */
 typedef float bpm_f;
 typedef char file_p; /* File path */

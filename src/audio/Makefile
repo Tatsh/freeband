@@ -67,7 +67,7 @@ AUTOMAKE = ${SHELL} /home/tatsh/dev/freeband/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -D__DEBUG__ -D__XBOX360XPLORER__ -Wall -Wextra -Wfatal-errors -ansi -std=c99 -pedantic -pipe
+CFLAGS = -g -O2 -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -D__DEBUG__ -D__XBOX360XPLORER__ -D__LANG_PL_PL__ -Wall -Wextra -Wfatal-errors -ansi -std=c99 -pedantic -pipe
 CPP = gcc -E
 CPPFLAGS =  
 CXX = g++

@@ -3,15 +3,13 @@
 
 #define DIFFHT 0.12
 
-#define en_select_difficulty "SELECT DIFFICULTY"
-#define en_easy "EASY"
-#define en_medium "MEDIUM"
-#define en_hard "HARD"
-#define en_expert "EXPERT"
-
-extern bool diffEasy, diffMedium, diffHard, diffExpert;
+#define DIFFICULTY_EASY   0x00
+#define DIFFICULTY_MEDIUM 0x01
+#define DIFFICULTY_HARD   0x02
+#define DIFFICULTY_EXPERT 0x03
 
 extern GLcoordsY screenDifficulty_selectionY[];
+extern ushort current_difficulty;
 
 bool screenDifficulty_buffer();
 GLvoid screenDifficulty();

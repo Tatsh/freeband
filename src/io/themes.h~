@@ -1,0 +1,11 @@
+#ifndef THEMES_H
+#define THEMES_H
+
+typedef char themes_path;
+
+extern bool themes_default;
+
+bool themes_loadTheme(char *theme);
+bool themes_loadDefaultTheme();
+
+#endif

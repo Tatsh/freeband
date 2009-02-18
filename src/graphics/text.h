@@ -23,6 +23,6 @@ GLfloat text_scaleWidth(const char text[], TTF_Font *font, GLfloat textureHeight
 GLvoid text_position(GLfloat vertexX[], GLfloat vertexY[], GLfloat vertexZ[]);
 GLint text_getHeight(const char text[], TTF_Font *font);
 GLint text_getWidth(const char text[], TTF_Font *font);
-GLint text_load(const char input[], TTF_Font *font, SDL_Color color);
+GLint text_load(const char *input, TTF_Font *font, SDL_Color color);
 
 #endif

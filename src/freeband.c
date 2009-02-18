@@ -5,6 +5,7 @@
 #include "input/input.h"
 #include "input/screenGame.h"
 #include "io/prefs.h"
+#include "io/languages.h"
 #include "screens/game.h"
 #include "screens/instruments.h"
 #include "screens/main.h"
@@ -14,7 +15,6 @@ bool menuQuit;
 
 char windowTitle[] = "Freeband";
 
-/*GLfloat text_SinglePlayerY[] = { -0.035f, 0.20f, 0.20f, -0.035f };*/ /* 'Single Player' text's default position */
 GLcoordsY text_SinglePlayerY[] = { 0.0f, MENUITEMSHT, MENUITEMSHT, 0.0f };
 GLcoordsY text_MultiplayerY[4], text_OnlineY[4], text_OptionsY[4], text_QuitY[4];
 
@@ -27,8 +27,6 @@ SDL_Surface *fbSurface; /* Main game surface */
 SDL_Joystick *joy;      /* Space for controllers */
 
 screen_s fb_screen; /* The current screen */
-
-TTF_Font *crillee, *bitstream, *bitstreamMonoBold, *freeSans, *freeSansBold;
 
 GLvoid fb_quit(GLint retnCode) {
   ushort i;
@@ -54,6 +52,13 @@ GLvoid fb_quit(GLint retnCode) {
       SDL_JoystickClose(joy);
   }
 
+  iniparser_freedict(lang_d);
+  iniparser_freedict(prefs);
+#ifdef __DEBUG__
+  fprintf(stdout, "Freed language INI dictionary.\n");
+  fprintf(stdout, "Freed preferences INI dictionary.\n");
+#endif
+  
   TTF_Quit();
   SDL_Quit();     /* Clean window */
 #ifdef __DEBUG__
@@ -127,8 +132,11 @@ int main(GLint argc, char *argv[]) {
 
   if (videoInfo->blit_hw) /* Check if hardware blits can be done */
     videoFlags |= SDL_HWACCEL;
+    
+  if (prefs_Graphics.fullscreen)
+    videoFlags |= SDL_FULLSCREEN;
 
-  fbSurface = SDL_SetVideoMode(graphics_width, graphics_height, BPP, videoFlags); /* Get a SDL surface */
+  fbSurface = SDL_SetVideoMode(prefs_Graphics.width, prefs_Graphics.height, prefs_Graphics.bpp, videoFlags); /* Get a SDL surface */
   if (!fbSurface) {
     fprintf(stderr,  "Video mode set failed: %s.\n", SDL_GetError());
     fb_quit(1);
@@ -149,7 +157,7 @@ int main(GLint argc, char *argv[]) {
   SDL_Surface *icon = IMG_Load("freeband.png"); /* Creates icon for window and task bar on Linux, but only task bar on Windows */
   SDL_WM_SetIcon(icon, NULL);
 
-  graphics_resizeWindow(graphics_width, graphics_height);
+  graphics_resizeWindow(prefs_Graphics.width, prefs_Graphics.height);
   graphics_initColours(); /* Initialise colours */
 
   fb_screen.mainMenu = true; /* Set to main screen */

@@ -1,37 +1,29 @@
 #include "../freeband.h"
 #include "../graphics/graphics.h"
+#include "../io/prefs.h"
 #include "../screens/instruments.h"
 #include "../screens/main.h"
 #include "../screens/songs.h"
 #include "input.h"
 #include "screenInstruments.h"
 
-GLvoid input_screenInstruments(ushort direction) {
+void input_screenInstruments(ushort direction) {
   switch (direction) {
     case DOWN:
       if (fb_nPlayers < 2) {
-        screenInstruments_nSelection++;
-        screenInstruments_highlighted(screenInstruments_nSelection);
-
-        if ( screenInstruments_nSelection < 4 );
-        else {
-          screenInstruments_nSelection = 0;
-          screenInstruments_highlighted(screenInstruments_nSelection);
-        }
+        if (current_instrument > INSTRUMENT_DRUMS)
+          current_instrument = INSTRUMENT_GUITAR;
+        else
+          current_instrument++;
       }
       break;
       
     case UP:
       if (fb_nPlayers < 2) {
-        if (screenInstruments_nSelection > 0) {
-          screenInstruments_nSelection--;
-          screenInstruments_highlighted(screenInstruments_nSelection);
-        }
-        else if (screenInstruments_nSelection < 1 ) {
-          screenInstruments_nSelection = 3; /* Vocals */
-          screenInstruments_highlighted(screenInstruments_nSelection);
-        }
-
+        if (current_instrument < INSTRUMENT_BASS)
+          current_instrument = INSTRUMENT_VOCALS;
+        else
+          current_instrument--;
       }
       break;
       
@@ -50,7 +42,7 @@ GLvoid input_screenInstruments(ushort direction) {
 #ifdef __DEBUG__
       fprintf(stdout, "Successfully switched back to screenMain.\n");
 #endif
-      screenInstruments_nSelection = 0;
+/*      prefs_Freeband.default_instrument_u = 0;*/
       break;
       
     default:
