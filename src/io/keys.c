@@ -3,7 +3,7 @@
 #include "keys.h"
 
 /* Map string keys in the INI file to SDL equivalents */
-int keys_mapKeystringToSDL(char keystring[]) {
+int keys_mapKeystringToSDL(char *keystring) {
   int key;
 
   if ((strncmp("ESC", keystring, 3)) == 0)  key = SDLK_ESCAPE;
