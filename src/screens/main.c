@@ -87,7 +87,7 @@ GLvoid screenMain_accept() {
 #endif
       fb_screen.mainMenu = graphics_loading = menuQuit = false;
       nonGame = false; /* We are not going to online mode, options menu, or going to quit */
-      fb_screen.instruments = instrument_P1.guitar = true; /* We set guitar to default selection, does not affect highlight */
+      fb_screen.instruments = instrument[0].guitar = true; /* We set guitar to default selection, does not affect highlight */
       break;
 
     case 1:
@@ -389,46 +389,49 @@ GLvoid screenMain() {
 }
 
 GLvoid screenMenuFooter() {
-  glPushMatrix(); {
-    glTranslatef(-0.8f, 0.85f, 0.0f);
-    glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
-    glBindTexture( GL_TEXTURE_2D, button_bg );
-    graphics_positionTexture(button_bg_X, button_bg_Y, defVertexZ);
-    glTranslatef(-0.18f, 0.025f, 0.0f);
-    glBindTexture( GL_TEXTURE_2D, button_green );
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    graphics_positionTexture(button_green_X, button_green_Y, defVertexZ);
-    glTranslatef(0.25f, 0.0f, 0.0f);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glBindTexture( GL_TEXTURE_2D, select_G );
-    graphics_positionTexture(text_select_GX, text_select_GY, defVertexZ);
+  if (fb_screen.songs);
+  else {
+    glPushMatrix(); {
+      glTranslatef(-0.8f, 0.85f, 0.0f);
+      glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+      glBindTexture( GL_TEXTURE_2D, button_bg );
+      graphics_positionTexture(button_bg_X, button_bg_Y, defVertexZ);
+      glTranslatef(-0.18f, 0.025f, 0.0f);
+      glBindTexture( GL_TEXTURE_2D, button_green );
+      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+      graphics_positionTexture(button_green_X, button_green_Y, defVertexZ);
+      glTranslatef(0.25f, 0.0f, 0.0f);
+      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+      glBindTexture( GL_TEXTURE_2D, select_G );
+      graphics_positionTexture(text_select_GX, text_select_GY, defVertexZ);
     
-    glTranslatef(0.6f, -0.025f, 0.0f);
-    glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
-    glBindTexture( GL_TEXTURE_2D, button_bg );
-    graphics_positionTexture(button_bg_X, button_bg_Y, defVertexZ);
-    glTranslatef(-0.12f, 0.025f, 0.0f);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glBindTexture( GL_TEXTURE_2D, button_red );
-    graphics_positionTexture(button_red_X, button_red_Y, defVertexZ);
-    glTranslatef(0.2f, 0.0f, 0.0f);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glBindTexture( GL_TEXTURE_2D, back_R );
-    graphics_positionTexture(text_back_RX, text_back_RY, defVertexZ);
+      glTranslatef(0.6f, -0.025f, 0.0f);
+      glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+      glBindTexture( GL_TEXTURE_2D, button_bg );
+      graphics_positionTexture(button_bg_X, button_bg_Y, defVertexZ);
+      glTranslatef(-0.12f, 0.025f, 0.0f);
+      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+      glBindTexture( GL_TEXTURE_2D, button_red );
+      graphics_positionTexture(button_red_X, button_red_Y, defVertexZ);
+      glTranslatef(0.2f, 0.0f, 0.0f);
+      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+      glBindTexture( GL_TEXTURE_2D, back_R );
+      graphics_positionTexture(text_back_RX, text_back_RY, defVertexZ);
     
-    glTranslatef(0.6f, -0.025f, 0.0f);
-    glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
-    glBindTexture( GL_TEXTURE_2D, button_bg );
-    graphics_positionTexture(button_bg_X_upDown, button_bg_Y, defVertexZ);
-    glTranslatef(-0.23f, 0.05f, 0.0f);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glBindTexture( GL_TEXTURE_2D, strummer );
-    graphics_positionTexture(strummer_X, strummer_Y, defVertexZ);
-    glTranslatef(0.28f, -0.03f, 0.0f);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glBindTexture( GL_TEXTURE_2D, upDown_strum );
-    graphics_positionTexture(text_upDown_strumX, text_upDown_strumY, defVertexZ);
-  } glPopMatrix();
+      glTranslatef(0.6f, -0.025f, 0.0f);
+      glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+      glBindTexture( GL_TEXTURE_2D, button_bg );
+      graphics_positionTexture(button_bg_X_upDown, button_bg_Y, defVertexZ);
+      glTranslatef(-0.23f, 0.05f, 0.0f);
+      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+      glBindTexture( GL_TEXTURE_2D, strummer );
+      graphics_positionTexture(strummer_X, strummer_Y, defVertexZ);
+      glTranslatef(0.28f, -0.03f, 0.0f);
+      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+      glBindTexture( GL_TEXTURE_2D, upDown_strum );
+      graphics_positionTexture(text_upDown_strumX, text_upDown_strumY, defVertexZ);
+    } glPopMatrix();
+  }
   
   return;
 }

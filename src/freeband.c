@@ -4,8 +4,9 @@
 #include "graphics/text.h"
 #include "input/input.h"
 #include "input/screenGame.h"
-#include "io/prefs.h"
+#include "io/keys.h"
 #include "io/languages.h"
+#include "io/prefs.h"
 #include "screens/game.h"
 #include "screens/instruments.h"
 #include "screens/main.h"
@@ -142,7 +143,7 @@ int main(GLint argc, char *argv[]) {
     fb_quit(1);
   }
   
-  if ((SDL_EnableKeyRepeat(100, SDL_DEFAULT_REPEAT_INTERVAL))) { /* Enable key repeat */
+  if (SDL_EnableKeyRepeat(100, SDL_DEFAULT_REPEAT_INTERVAL) != 0) { /* Enable key repeat */
     fprintf(stderr, "Setting keyboard repeat failed: %s\n", SDL_GetError());
     fb_quit(1);
   }
@@ -200,8 +201,7 @@ int main(GLint argc, char *argv[]) {
           break;
           
         case SDL_KEYDOWN: /* Handle key down event */
-          if (!fb_screen.game)
-            input_menuKeys(&freeband.key.keysym, fbSurface);
+          if (!fb_screen.game) input_menuKeys(&freeband.key.keysym, fbSurface);
           else {
             input_menuKeys(&freeband.key.keysym, fbSurface);
             input_screenGame();
@@ -209,8 +209,7 @@ int main(GLint argc, char *argv[]) {
           break;
 
         case SDL_KEYUP:
-          if (fb_screen.game)
-            input_screenGame();
+          if (fb_screen.game) input_screenGame();
           break;
 
 #ifdef __XBOX360XPLORER__

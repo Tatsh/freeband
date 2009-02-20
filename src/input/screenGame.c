@@ -19,7 +19,7 @@ void input_screenGamePause() {
 
 void input_screenGame() {
   Uint8 *keystates = SDL_GetKeyState(NULL);
-
+  
   if (keystates[SDLK_F1])
     screenGame_button.g = true;
   else

@@ -1,4 +1,5 @@
 #include "../freeband.h"
+#include "../audio/audio.h"
 #include "../graphics/graphics.h"
 #include "../graphics/text.h"
 #include "../io/prefs.h"
@@ -6,7 +7,8 @@
 #include "main.h"
 #include "pause.h"
 
-bool songEnded;
+bool songRunning = false;
+bool songEnded = false;
 
 GLfloat bringDownAngle = 90.0f;
 GLfloat NE_coord_neg = 0.0f;
@@ -16,6 +18,10 @@ texture_p buttonT[] = "GameData/themes/default/screenGame/button.png";
 texture_p string[] = "GameData/themes/default/screenGame/string.png";
 texture_p stringEndG[] = "GameData/themes/default/screenGame/button_top.png"; /* Green string */
 texture_p trackloop_a[] = "GameData/themes/default/screenGame/loop_a.png";
+
+uint combo = 0;
+float life = 50.0f; /* From 0 to 100 */
+uint score = 0;
 
 /* Order of corners: top-left, bottom-left, bottom-right, top-right */
 GLcoordsX button_sizeX[] = { 0.0f, 0.0f, 0.11f, 0.11f };
@@ -37,14 +43,23 @@ text_i combo0, combo1, combo2, combo3, combo4, combo5, combo6, combo7, combo8, c
 text_i score0, score1, score2, score3, score4, score5, score6, score7, score8, score9; /* Score numbers */
 texture_i trackloop_a_T, button_T, string_T, stringEndG_t;
 
-tButton screenGame_button;
+button_s screenGame_button;
+
+timing_window_s timing_window[NOTE_BUFFER];
 
 GLvoid screenGame_buffer() {
-  /*GLfloat f_width;
-  GLuint u_width, u_height, i;*/
+  ushort i;
   
   gamePaused = false;
   screenPause_buffer(); /* Buffer the pause screen in advance */
+  
+  for (i = 0; i < NOTE_BUFFER; i++) {
+    timing_window[i].note = 0;
+    timing_window[i].speed = 0;
+    timing_window[i].hit = COMPLETE_MISS;
+  }
+  
+  SDL_EnableKeyRepeat(0, 0); /* Disable key repeat */
   
   if ((trackloop_a_T = graphics_loadTexture(trackloop_a, 0)) == -1)
     fprintf(stderr, "Unable to load texture: %s.\n", trackloop_a);
@@ -98,8 +113,93 @@ GLvoid screenGame_buffer() {
   return;
 }
 
-GLfloat screenGame_failed() {
-  GLfloat percent = 0.0f;
+ushort screenGame_pollKey(ushort note) {
+  (void)note;
+  ushort hit = NOTE_HIT;
+  return hit;
+}
+
+void screenGame_loop() {
+  bool songFailed;
+  ushort i;
+  
+  /* As of now this is in part pseudo code; still need a way to align incoming notes properly based upon timing data etc */
+  
+  while (songRunning) {
+    
+    if (timing_window[0].note != DEAD_NOTE || timing_window[0].note != SONG_END) { /* If the note is not a 'dead' note, where no buttons are hit, process */
+      timing_window[0].hit = screenGame_pollKey(timing_window[0].note);
+      
+      switch (timing_window[0].hit) {
+        case NOTE_HIT:
+          ++combo;
+          if (!songFailed)
+            score += SCORE_ADD; /* This value may be dynamic based upon song difficulty */
+          else
+            score += SCORE_ADD_FAILED;
+          life += LIFE_ADD;
+          break;
+          
+        case NOTE_HIT_WITH_EXTRA:
+          combo = 0; /* Reset the combo */
+          if (!songFailed)
+            life -= LIFE_ADD; /* Minus life value to increase chances of failure */
+          /* audio_lowerTrackVolume();
+          audio_sfxMissed(instrument); */
+          break;
+          
+        case ALL_NOTES_HIT:
+          combo = 0;
+          if (!songFailed)
+            life -= (LIFE_ADD * 5.0f); /* We give a greater penalty here */
+          /* audio_lowerTrackVolume();
+          audio_sfxMissed(instrument);
+          audio_sfxAudienceBoo(); */
+          break;
+          
+        case COMPLETE_MISS:
+          combo = 0;
+          if (!songFailed)
+            life -= LIFE_ADD;
+          /* audio_lowerTrackVolume(); */
+          break;
+          
+        case FREEZE_BARELY_OFF:
+          ++combo; /* Yes, we do keep counting the combo */
+          if (!songFailed)
+            score += SCORE_ADD / 2.0f;
+          else
+            score += SCORE_ADD_FAILED / 2.0f;
+          /* screenGame_greyFreeze(timing_window.note);
+          audio_lowerTrackVolume(); */
+          break;
+          
+        case FREEZE_HIT_AND_RELEASED:
+          /* screenGame_greyFreeze(timing_window.note);
+          audio_lowerTrackVolume(); */
+          break;
+          
+        default:
+          break;
+      }
+      
+    }
+    
+    if (life < 0.5f /* && !prefs_Songs.fail_to_end */) /* Song failed */
+      break;
+    else
+      songFailed = true;
+    
+    for (i = 0; i < NOTE_BUFFER; i++) timing_window[i].note = timing_window[i+1].note; /* Shift all notes up 1 */
+    /* timing_window[NOTE_BUFFER-1].note = screenGame_getNextNote();
+   screenGame_alignNotes();*/
+  }
+  
+  return;
+}
+
+float screenGame_failed() {
+  float percent = 0.0f;
   return percent;
 }
 
@@ -117,13 +217,13 @@ GLvoid screenGame() {
         glRotatef( bringDownAngle, 0.0, 0.0f, -1.0f );
       glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
       glBindTexture( GL_TEXTURE_2D, trackloop_a_T );
-      glBegin( GL_QUADS );
-      glNormal3f( 0.0f, 0.5f, 0.0f );
-      glTexCoord2f( NE_coord_pos, 1.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -3.5f, 0.5f, -TRACKWIDTH );
-      glTexCoord2f( NE_coord_pos, 0.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -3.5f, 0.5f,  TRACKWIDTH );
-      glTexCoord2f( NE_coord_neg, 0.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f(  2.0f, 0.5f,  TRACKWIDTH );
-      glTexCoord2f( NE_coord_neg, 1.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f(  2.0f, 0.5f, -TRACKWIDTH );
-      glEnd();
+      glBegin( GL_QUADS ); {
+        glNormal3f( 0.0f, 0.5f, 0.0f );
+        glTexCoord2f( NE_coord_pos, 1.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -3.5f, 0.5f, -TRACKWIDTH );
+        glTexCoord2f( NE_coord_pos, 0.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 1.0f ); glVertex3f( -3.5f, 0.5f,  TRACKWIDTH );
+        glTexCoord2f( NE_coord_neg, 0.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f(  2.0f, 0.5f,  TRACKWIDTH );
+        glTexCoord2f( NE_coord_neg, 1.0 ); glColor4f( 1.0f, 1.0f, 1.0f, 0.0f ); glVertex3f(  2.0f, 0.5f, -TRACKWIDTH );
+      } glEnd();
     } glPopMatrix();
 
     glPushMatrix(); { /* Left bumper */

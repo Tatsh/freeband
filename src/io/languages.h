@@ -1,6 +1,8 @@
 #ifndef LANGUAGES_H
 #define LANGUAGES_H
 
+#include "iniparser.h"
+
 /* Add more here, we can go up to 0xFF (255); use ISO 639-1 for 2-character language names */
 #define en_GB     0x00 /* English-UK */
 #define en_US     0x01 /* English-USA */

@@ -25,8 +25,6 @@
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
 
-#include <iniparser.h>
-
 #ifdef __WIN32__
 #include <windows.h>
 #include <shlobj.h>
@@ -41,6 +39,7 @@
 #define BOTTOM_TEXT_HT 0.1
 
 #ifdef __WIN32__
+typedef unsigned int uint;
 typedef unsigned short ushort; /* Yes Windows is missing this one */
 #endif
 

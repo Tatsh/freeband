@@ -3,9 +3,10 @@
 #include "../screens/difficulty.h"
 #include "../screens/instruments.h"
 #include "fileio.h"
+#include "joypad.h"
+#include "keys.h"
 #include "languages.h"
 #include "prefs.h"
-#include "keys.h"
 
 dictionary *prefs;
 
@@ -18,20 +19,17 @@ prefs_path prefs_ini[255];
 prefs_Freeband_s prefs_Freeband;
 prefs_Audio_s prefs_Audio;
 prefs_Graphics_s prefs_Graphics;
-prefs_Input_Keyboard_s prefs_Input_Keyboard1;
-prefs_Input_Keyboard_s prefs_Input_Keyboard2;
-prefs_Input_Keyboard_s prefs_Input_Keyboard3;
-prefs_Input_Joystick_s prefs_Input_Joystick1;
-prefs_Input_Joystick_s prefs_Input_Joystick2;
-prefs_Input_Joystick_s prefs_Input_Joystick3;
+prefs_Input_Joystick_s prefs_Input_Joystick[3];
+prefs_Online_s prefs_Online;
+prefs_Songs_s prefs_Songs;
 
 bool prefs_verify() { /* This function only checks and fixes preferences; it does NOT read them */
   short ret;
   
 #ifdef __WIN32__
-  /* We get the $HOME or %%HOME (Windows) environment variable */
+  /* We get the My Documents/Documents (Windows) directory here */
   /* In this case, the 5th argument can take a char instead of LPTSTR or TCHAR; these are all the same here */
-  SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, prefs_root);
+  SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, prefs_root); /* Microosoft wants us to use a new function that is Vista only pfft */
   
   if (prefs_root == NULL) {
     fprintf(stderr, "Could not find My Documents folder. Check to make sure you have one assigned in your Windows settings.\n");
@@ -203,8 +201,6 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
 }
 
 bool prefs_load() {
-  prefs_Graphics.ar4x3 = prefs_Graphics.ar16x9 = prefs_Graphics.ar16x10 = false;
-  
   if ((prefs = iniparser_load(prefs_ini)) == NULL) {
     fprintf(stderr, "Error loading %s dictionary using iniparser.\n", prefs_ini);
     return false;
@@ -280,15 +276,6 @@ bool prefs_load() {
   prefs_Graphics.width = iniparser_getint(prefs, "Graphics:width", -1);
   prefs_Graphics.height = iniparser_getint(prefs, "Graphics:height", -1);
   prefs_Graphics.bpp = iniparser_getint(prefs, "Graphics:bpp", -1);
-  prefs_Graphics.aspect_ratio = iniparser_getstring(prefs, "Graphics:aspect_ratio", INIERROR);
-  if (strncmp(four_three, prefs_Graphics.aspect_ratio, 3) == 0)
-    prefs_Graphics.ar4x3 = true;
-  else if (strncmp(sixteen_nine, prefs_Graphics.aspect_ratio, 3) == 0)
-    prefs_Graphics.ar16x9 = true;
-  else if (strncmp(sixteen_ten, prefs_Graphics.aspect_ratio, 4) == 0)
-    prefs_Graphics.ar16x10 = true;
-  else
-    prefs_Graphics.ar4x3 = true;
   if ((prefs_Graphics.display_band = iniparser_getboolean(prefs, "Graphics:display_band", -1)) != 1)
     prefs_Graphics.display_band = false;
   else
@@ -301,7 +288,13 @@ bool prefs_load() {
     prefs_Graphics.fullscreen = false;
   else
     prefs_Graphics.fullscreen = true;
-
+  
+  prefs_keys_get();
+  
+  /* [Online] */
+  
+  /* [Songs */
+  
 #ifdef __DEBUG__
   fprintf(stdout, "\n[Freeband]\n");
   fprintf(stdout, "language=%s (%#x)\n", prefs_Freeband.language, prefs_Freeband.language_u);
@@ -316,10 +309,79 @@ bool prefs_load() {
   fprintf(stdout, "width=%d\n", prefs_Graphics.width);
   fprintf(stdout, "height=%d\n", prefs_Graphics.height);
   fprintf(stdout, "bpp=%d (%d-bit)\n", prefs_Graphics.bpp, prefs_Graphics.bpp);
-  fprintf(stdout, "aspect_ratio=%s\n", prefs_Graphics.aspect_ratio);
   fprintf(stdout, "display_band=%s\n", prefs_Graphics.display_band ? "true" : "false");
   fprintf(stdout, "display_venue=%s\n", prefs_Graphics.display_venue ? "true" : "false");
-  fprintf(stdout, "fullscreen=%s\n", prefs_Graphics.fullscreen ? "true" : "false");
+  fprintf(stdout, "fullscreen=%s\n\n", prefs_Graphics.fullscreen ? "true" : "false");
+  
+  fprintf(stdout, "[Input_Keyboard1]\n");
+  fprintf(stdout, "disable_pick=%s\n", prefs_Input_Keyboard[0].disable_pick ? "true" : "false" );
+  fprintf(stdout, "button_green=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_green", INIERROR));
+  fprintf(stdout, "button_red=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_red", INIERROR));
+  fprintf(stdout, "button_yellow=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_yellow", INIERROR));
+  fprintf(stdout, "button_blue=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_blue", INIERROR));
+  fprintf(stdout, "button_orange=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_orange", INIERROR));
+  fprintf(stdout, "button_pick_up=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_pick_up", INIERROR));
+  fprintf(stdout, "button_pick_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_pick_down", INIERROR));
+  fprintf(stdout, "button_start=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_start", INIERROR));
+  fprintf(stdout, "button_select=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_select", INIERROR));
+  fprintf(stdout, "button_direction_left=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_direction_left", INIERROR));
+  fprintf(stdout, "button_direction_right=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_direction_right", INIERROR));
+  fprintf(stdout, "button_direction_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_direction_down", INIERROR));
+  fprintf(stdout, "button_direction_up=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_direction_up", INIERROR));
+  fprintf(stdout, "whammy_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:whammy_down", INIERROR));
+  fprintf(stdout, "whammy_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:whammy_down", INIERROR));
+  fprintf(stdout, "star_power=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:star_power", INIERROR));
+  fprintf(stdout, "screenshot=%s\n\n", iniparser_getstring(prefs, "Input_Keyboard1:screenshot", INIERROR));
+  
+  fprintf(stdout, "[Input_Keyboard2]\n");
+  if (prefs_Input_Keyboard[1].enabled) {
+    fprintf(stdout, "enabled=true\n");
+    fprintf(stdout, "disable_pick=%s\n", prefs_Input_Keyboard[1].disable_pick ? "true" : "false" );
+    fprintf(stdout, "button_green=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_green", INIERROR));
+    fprintf(stdout, "button_red=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_red", INIERROR));
+    fprintf(stdout, "button_yellow=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_yellow", INIERROR));
+    fprintf(stdout, "button_blue=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_blue", INIERROR));
+    fprintf(stdout, "button_orange=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_orange", INIERROR));
+    fprintf(stdout, "button_pick_up=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_pick_up", INIERROR));
+    fprintf(stdout, "button_pick_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_pick_down", INIERROR));
+    fprintf(stdout, "button_start=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_start", INIERROR));
+    fprintf(stdout, "button_select=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_select", INIERROR));
+    fprintf(stdout, "button_direction_left=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_direction_left", INIERROR));
+    fprintf(stdout, "button_direction_right=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_direction_right", INIERROR));
+    fprintf(stdout, "button_direction_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_direction_down", INIERROR));
+    fprintf(stdout, "button_direction_up=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_direction_up", INIERROR));
+    fprintf(stdout, "whammy_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:whammy_down", INIERROR));
+    fprintf(stdout, "whammy_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:whammy_down", INIERROR));
+    fprintf(stdout, "star_power=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:star_power", INIERROR));
+    fprintf(stdout, "screenshot=%s\n\n", iniparser_getstring(prefs, "Input_Keyboard2:screenshot", INIERROR));
+  }
+  else
+    fprintf(stdout, "enabled=false\n\n");
+  
+  fprintf(stdout, "[Input_Keyboard3]\n");
+  if (prefs_Input_Keyboard[2].enabled) {
+    fprintf(stdout, "enabled=true\n");
+    fprintf(stdout, "disable_pick=%s\n", prefs_Input_Keyboard[2].disable_pick ? "true" : "false" );
+    fprintf(stdout, "button_green=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_green", INIERROR));
+    fprintf(stdout, "button_red=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_red", INIERROR));
+    fprintf(stdout, "button_yellow=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_yellow", INIERROR));
+    fprintf(stdout, "button_blue=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_blue", INIERROR));
+    fprintf(stdout, "button_orange=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_orange", INIERROR));
+    fprintf(stdout, "button_pick_up=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_pick_up", INIERROR));
+    fprintf(stdout, "button_pick_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_pick_down", INIERROR));
+    fprintf(stdout, "button_start=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_start", INIERROR));
+    fprintf(stdout, "button_select=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_select", INIERROR));
+    fprintf(stdout, "button_direction_left=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_direction_left", INIERROR));
+    fprintf(stdout, "button_direction_right=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_direction_right", INIERROR));
+    fprintf(stdout, "button_direction_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_direction_down", INIERROR));
+    fprintf(stdout, "button_direction_up=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_direction_up", INIERROR));
+    fprintf(stdout, "whammy_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:whammy_down", INIERROR));
+    fprintf(stdout, "whammy_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:whammy_down", INIERROR));
+    fprintf(stdout, "star_power=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:star_power", INIERROR));
+    fprintf(stdout, "screenshot=%s\n\n", iniparser_getstring(prefs, "Input_Keyboard3:screenshot", INIERROR));
+  }
+  else
+    fprintf(stdout, "enabled=false\n");
   
   fprintf(stdout, "\n");
 #endif

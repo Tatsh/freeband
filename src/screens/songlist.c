@@ -1,9 +1,4 @@
 #include "../freeband.h"
-
-#ifdef __WIN32__
-#include "../io/prefs.h" /* For typedef uint in Windows */
-#endif
-
 #include "songs.h"
 #include "songlist.h"
 

@@ -45,7 +45,8 @@ ARFLAGS = cru
 libFreebandIO_a_AR = $(AR) $(ARFLAGS)
 libFreebandIO_a_LIBADD =
 am_libFreebandIO_a_OBJECTS = prefs.$(OBJEXT) fileio.$(OBJEXT) \
-	keys.$(OBJEXT) languages.$(OBJEXT) themes.$(OBJEXT)
+	keys.$(OBJEXT) languages.$(OBJEXT) themes.$(OBJEXT) \
+	dictionary.$(OBJEXT) iniparser.$(OBJEXT)
 libFreebandIO_a_OBJECTS = $(am_libFreebandIO_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -153,7 +154,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LIBRARIES = libFreebandIO.a
-libFreebandIO_a_SOURCES = prefs.c fileio.c keys.c languages.c themes.c
+libFreebandIO_a_SOURCES = prefs.c fileio.c keys.c languages.c themes.c dictionary.c iniparser.c
 all: all-am
 
 .SUFFIXES:
@@ -201,7 +202,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dictionary.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fileio.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iniparser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keys.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/languages.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/prefs.Po@am__quote@

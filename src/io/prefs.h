@@ -1,15 +1,13 @@
 #ifndef PREFS_H
 #define PREFS_H
 
+#include "iniparser.h"
+
 #define INIERROR "iniparser error string"
 
 #define four_three    "4x3"
 #define sixteen_nine  "16x9"
 #define sixteen_ten   "16x10"
-
-#ifdef __WIN32__
-typedef unsigned int uint;
-#endif
 
 typedef char prefs_path; /* Preferences directories and paths to files */
 
@@ -46,58 +44,29 @@ typedef struct { /* Graphics */
   uint width;
   uint height;
   ushort bpp;
-  char *aspect_ratio;
-  ushort aspect_ratio_u;
-  bool ar4x3;
-  bool ar16x9;
-  bool ar16x10;
   bool fullscreen;
   bool display_band;
   bool display_venue;
   bool display_audience;
 } prefs_Graphics_s;
 
-typedef struct { /* Input_Keyboard1 */
-  bool enabled;
-  char *button_green;
-  char *button_red;
-  char *button_yellow;
-  char *button_blue;
-  char *button_orange;
-  char *button_pick_up;
-  char *button_pick_down;
-  char *button_start;
-  char *button_select;
-  char *button_direction_left;
-  char *button_direction_right;
-  char *button_direction_up;
-  char *button_direction_down;
-  char *whammy_up;
-  char *whammy_down;
-  char *star_power;
-  char *screenshot;
-} prefs_Input_Keyboard_s;
+typedef struct { /* Online */
+  bool use_proxy;
+  char *proxy_url;
+  bool time_limit;
+  ushort time_limit_sec;
+} prefs_Online_s;
 
-typedef struct { /* Input_Joystick1 */
-  bool enabled;
-  ushort button_green;
-  ushort button_red;
-  ushort button_yellow;
-  ushort button_blue;
-  ushort button_orange;
-  ushort button_pick_up;
-  ushort button_pick_down;
-  ushort button_start;
-  ushort button_select;
-  ushort button_direction_left;
-  ushort button_direction_right;
-  ushort button_direction_up;
-  ushort button_direction_down;
-  ushort whammy_up;
-  ushort whammy_down;
-  ushort star_power;
-  ushort screenshot;
-} prefs_Input_Joystick_s;
+typedef struct { /* Songs */
+  char *default_sort;
+  char *last_song;
+  bool use_last_song;
+  bool save_song_speed; /* For keeping song speeds specific to songs */
+  ushort default_speed_mod; /* From 1-4 */
+  char *additional_folders; /* Comma separated list of paths with groups in them */
+  bool time_limit;
+  ushort time_limit_sec;
+} prefs_Songs_s;
 
 extern dictionary *prefs;
 
@@ -109,12 +78,8 @@ extern prefs_path prefs_themes[255];
 extern prefs_Freeband_s prefs_Freeband;
 extern prefs_Audio_s prefs_Audio;
 extern prefs_Graphics_s prefs_Graphics;
-extern prefs_Input_Keyboard_s prefs_Input_Keyboard1;
-extern prefs_Input_Keyboard_s prefs_Input_Keyboard2;
-extern prefs_Input_Keyboard_s prefs_Input_Keyboard3;
-extern prefs_Input_Joystick_s prefs_Input_Joystick1;
-extern prefs_Input_Joystick_s prefs_Input_Joystick2;
-extern prefs_Input_Joystick_s prefs_Input_Joystick3;
+extern prefs_Online_s prefs_Online;
+extern prefs_Songs_s prefs_Songs;
 
 bool prefs_verify();
 bool prefs_load();

@@ -8,6 +8,6 @@
 #define RETURN 4
 #define ESC 5
 
-GLvoid input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface);
+void input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface);
 
 #endif

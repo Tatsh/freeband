@@ -16,20 +16,43 @@
 #define GREENNOTE       -0.277f
 #define GREENSTRCOORD   -0.332f /* This influences all the other strings' positions! */
 
+#define NOTE_HIT                0x00
+#define NOTE_HIT_WITH_EXTRA     0x01
+#define ALL_NOTES_HIT           0x02
+#define COMPLETE_MISS           0x03
+#define FREEZE_BARELY_OFF       0x04
+#define FREEZE_HIT_AND_RELEASED 0x05
+
+#define DEAD_NOTE 0x00
+#define SONG_END 0xFF
+
+#define SCORE_ADD 250 /* Might change later */
+#define SCORE_ADD_FAILED 10
+#define LIFE_ADD 0.1
+
+#define NOTE_BUFFER 100
+
 typedef struct {
   bool g;
   bool r;
   bool y;
   bool b;
   bool o;
-} tButton;
+} button_s;
+
+typedef struct {
+  ushort note;
+  ushort speed;
+  ushort hit;
+} timing_window_s;
 
 extern GLfloat bringDownAngle;
 
 extern GLfloat NE_coord_neg;
 extern GLfloat NE_coord_pos;
 
-extern tButton screenGame_button;
+extern button_s screenGame_button;
+extern timing_window_s timing_window[];
 
 GLvoid screenGame_buffer();
 GLvoid screenGame();

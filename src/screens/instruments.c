@@ -25,31 +25,31 @@ texture_i bg;
 texture_i text_guitar, text_bass, text_drums, text_vocals;
 texture_i text_selectInstrument;
 
-tInstrument instrument_P1;
+instrument_s instrument[4];
 
 ushort current_instrument;
 
 GLvoid screenInstruments_accept() {
   switch(current_instrument) {
-    case 0:
+    case INSTRUMENT_GUITAR:
 #ifdef __DEBUG__
       fprintf(stdout, "Starting %d player guitar game.\n", fb_nPlayers);
 #endif
       break;
       
-    case 1:
+    case INSTRUMENT_BASS:
 #ifdef __DEBUG__
       fprintf(stdout, "Starting %d player bass game.\n", fb_nPlayers);
 #endif      
       break;
       
-    case 2:
+    case INSTRUMENT_DRUMS:
 #ifdef __DEBUG__
       fprintf(stdout, "Starting %d player drums game.\n", fb_nPlayers);
 #endif
       break;
       
-    case 3:
+    case INSTRUMENT_VOCALS:
 #ifdef __DEBUG__
       fprintf(stdout, "Starting %d player vocals game.\n", fb_nPlayers);
 #endif

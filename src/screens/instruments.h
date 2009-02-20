@@ -11,16 +11,13 @@ typedef struct {
   bool bass;
   bool drums;
   bool vocals;
-} tInstrument;
+} instrument_s;
 
 extern GLcoordsX screenInstruments_selectionX[];
 extern GLcoordsY screenInstruments_selectionY[];
 extern GLcoordsX screenInstruments_selectionReset[];
 
-extern tInstrument instrument_P1;
-extern tInstrument instrument_P2;
-extern tInstrument instrument_P3;
-extern tInstrument instrument_P4;
+extern instrument_s instrument[];
 
 extern ushort current_instrument;
 

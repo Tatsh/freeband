@@ -7,7 +7,7 @@ audio_deviceInfo_s audio_deviceInfoUnsupported[MAX_AUDIO_DEVICES];
 
 audio_deviceInfo_s audio_deviceInfoTemplate;
 
-bool audio_verifyFiletype(unsigned short filetype, char path[]) {
+bool audio_verifyFiletype(ushort filetype, char path[]) {
   bool ok = false;
   
   switch (filetype) {
@@ -20,8 +20,14 @@ bool audio_verifyFiletype(unsigned short filetype, char path[]) {
     case FLAC:
       break;
       
-#ifdef __AUDIOQUL__
+#ifdef __AUDIOQL__
     case MP3:
+      break;
+      
+    case MP2:
+      break;
+      
+    case MP1:
       break;
       
     case AAC:
@@ -45,7 +51,7 @@ bool audio_buffer() {
   const PaDeviceInfo *deviceInfo;
   PaError err;
   ushort i;
-  uint numDevices;
+  int numDevices;
 
   if ((err = Pa_Initialize()) != paNoError) {
     fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText( err ));
@@ -57,7 +63,7 @@ bool audio_buffer() {
 #endif
   
   if ((numDevices = Pa_GetDeviceCount()) < 0) {
-    fprintf(stderr, "Error: Pa_CountDevices returned %d devices.\n", numDevices);
+    fprintf(stderr, "Error: Pa_GetDeviceCount() returned %d devices.\n", numDevices);
     return false;
   }
   else {
@@ -83,8 +89,7 @@ bool audio_buffer() {
       deviceInfo = Pa_GetDeviceInfo(i);
       /* Windows is different in that it will have 2 devices of the same name but 1 with input channels and 1 with output channels
          Since we are using the default device by default, we will not worry about this yet
-         It may confusing to the Windows user in the options menu since devices have the same name, so maybe we should add (input) and (output) to the 
-         strings? */
+         It may confusing to the Windows user in the options menu since devices have the same name, so maybe we should add (input) and (output) to the strings? */
 #ifdef __WIN32__
       if (deviceInfo->defaultSampleRate >= 44100.0f &&
           deviceInfo->defaultLowInputLatency >= 0.0f &&

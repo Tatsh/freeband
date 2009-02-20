@@ -105,6 +105,7 @@ void input_screenPause(ushort direction) {
         pause_menuState.quit = false;
         pause_menuState.resume = menuQuit = graphics_loading = true;
         graphics_clear();
+        SDL_EnableKeyRepeat(100, SDL_DEFAULT_REPEAT_INTERVAL); /* Re-enable key repeat */
         screenMain_buffer();
         fb_screen.instruments = graphics_loading = menuQuit = false;
         fb_screen.mainMenu = true;
