@@ -1,6 +1,9 @@
 #include "../freeband.h"
+#include "../nonstd.h"
 #include "keys.h"
 #include "prefs.h"
+
+#define INPUTKEYBOARD "Input_Keyboard"
 
 prefs_Input_Keyboard_s prefs_Input_Keyboard[3];
 
@@ -293,80 +296,264 @@ int keys_mapKeystringToSDL(char *key) {
   }
   
 #ifdef __DEBUG__
-  fprintf(stdout, "keys_mapKeystringToSDL(): Mapped key string \"%s\" to SDL key %d (%#x).\n", key, retkey, retkey);
+  if (retkey != KEYS_NOKEY)
+    fprintf(stdout, "keys_mapKeystringToSDL(): Mapped key string \"%s\" to SDL key %d (%#x).\n", key, retkey, retkey);
+  else
+    fprintf(stdout, "keys_mapKeystringToSDL(): Mapped key string \"%s\" to no key.", key);
 #endif
 
   return retkey;
 }
 
 void prefs_keys_get() {
-  /* [Input_Keyboard1] is not possible to disable */
-  if ((prefs_Input_Keyboard[0].disable_pick = iniparser_getboolean(prefs, "Input_Keyboard1:disable_pick", -1)) != 1)
-    prefs_Input_Keyboard[0].disable_pick = false;
-  else
-    prefs_Input_Keyboard[0].disable_pick = true;
-  prefs_Input_Keyboard[0].button_green = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:button_green", INIERROR));
-  prefs_Input_Keyboard[0].button_red = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:button_red", INIERROR));
-  prefs_Input_Keyboard[0].button_yellow = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:button_yellow", INIERROR));
-  prefs_Input_Keyboard[0].button_blue = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:button_blue", INIERROR));
-  prefs_Input_Keyboard[0].button_orange = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:button_orange", INIERROR));
-  prefs_Input_Keyboard[0].button_pick_up = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:button_pick_up", INIERROR));
-  prefs_Input_Keyboard[0].button_pick_down = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:button_pick_down", INIERROR));
-  prefs_Input_Keyboard[0].button_start = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:button_start", INIERROR));
-  prefs_Input_Keyboard[0].button_select = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:button_select", INIERROR));
-  prefs_Input_Keyboard[0].button_direction_left = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:button_direction_left", INIERROR));
-  prefs_Input_Keyboard[0].button_direction_right = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:button_direction_right", INIERROR));
-  prefs_Input_Keyboard[0].button_direction_down = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:button_direction_down", INIERROR));
-  prefs_Input_Keyboard[0].button_direction_up = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:button_direction_up", INIERROR));
-  prefs_Input_Keyboard[0].whammy_down = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:whammy_down", INIERROR));
-  prefs_Input_Keyboard[0].whammy_up = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:whammy_up", INIERROR));
-  prefs_Input_Keyboard[0].star_power = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:star_power", INIERROR));
-  prefs_Input_Keyboard[0].screenshot = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard1:screenshot", INIERROR));
+  char iniPref[100];
+  char buf[1];
+  ushort i;
   
-  if ((prefs_Input_Keyboard[1].enabled = iniparser_getboolean(prefs, "Input_Keyboard2:enabled", -1)) != 1)
-    prefs_Input_Keyboard[1].enabled = false;
-  else { /* If it is enabled, we check for keys */
-    prefs_Input_Keyboard[1].enabled = true;
-    prefs_Input_Keyboard[1].button_green = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:button_green", INIERROR));
-    prefs_Input_Keyboard[1].button_red = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:button_red", INIERROR));
-    prefs_Input_Keyboard[1].button_yellow = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:button_yellow", INIERROR));
-    prefs_Input_Keyboard[1].button_blue = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:button_blue", INIERROR));
-    prefs_Input_Keyboard[1].button_orange = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:button_orange", INIERROR));
-    prefs_Input_Keyboard[1].button_pick_up = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:button_pick_up", INIERROR));
-    prefs_Input_Keyboard[1].button_pick_down = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:button_pick_down", INIERROR));
-    prefs_Input_Keyboard[1].button_start = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:button_start", INIERROR));
-    prefs_Input_Keyboard[1].button_select = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:button_select", INIERROR));
-    prefs_Input_Keyboard[1].button_direction_left = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:button_direction_left", INIERROR));
-    prefs_Input_Keyboard[1].button_direction_right = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:button_direction_right", INIERROR));
-    prefs_Input_Keyboard[1].button_direction_down = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:button_direction_down", INIERROR));
-    prefs_Input_Keyboard[1].button_direction_up = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:button_direction_up", INIERROR));
-    prefs_Input_Keyboard[1].whammy_down = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:whammy_down", INIERROR));
-    prefs_Input_Keyboard[1].whammy_up = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:whammy_up", INIERROR));
-    prefs_Input_Keyboard[1].star_power = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:star_power", INIERROR));
-    prefs_Input_Keyboard[1].screenshot = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard2:screenshot", INIERROR));
-  }
-  
-  if ((prefs_Input_Keyboard[2].enabled = iniparser_getboolean(prefs, "Input_Keyboard3:enabled", -1)) != 1)
-    prefs_Input_Keyboard[2].enabled = false;
-  else { /* If it is enabled, we check for keys */
-    prefs_Input_Keyboard[2].enabled = true;
-    prefs_Input_Keyboard[2].button_green = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:button_green", INIERROR));
-    prefs_Input_Keyboard[2].button_red = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:button_red", INIERROR));
-    prefs_Input_Keyboard[2].button_yellow = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:button_yellow", INIERROR));
-    prefs_Input_Keyboard[2].button_blue = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:button_blue", INIERROR));
-    prefs_Input_Keyboard[2].button_orange = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:button_orange", INIERROR));
-    prefs_Input_Keyboard[2].button_pick_up = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:button_pick_up", INIERROR));
-    prefs_Input_Keyboard[2].button_pick_down = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:button_pick_down", INIERROR));
-    prefs_Input_Keyboard[2].button_start = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:button_start", INIERROR));
-    prefs_Input_Keyboard[2].button_select = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:button_select", INIERROR));
-    prefs_Input_Keyboard[2].button_direction_left = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:button_direction_left", INIERROR));
-    prefs_Input_Keyboard[2].button_direction_right = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:button_direction_right", INIERROR));
-    prefs_Input_Keyboard[2].button_direction_down = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:button_direction_down", INIERROR));
-    prefs_Input_Keyboard[2].button_direction_up = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:button_direction_up", INIERROR));
-    prefs_Input_Keyboard[2].whammy_down = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:whammy_down", INIERROR));
-    prefs_Input_Keyboard[2].whammy_up = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:whammy_up", INIERROR));
-    prefs_Input_Keyboard[2].star_power = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:star_power", INIERROR));
-    prefs_Input_Keyboard[2].screenshot = keys_mapKeystringToSDL(iniparser_getstring(prefs, "Input_Keyboard3:screenshot", INIERROR));
+  for (i = 0; i < 3; i++) {
+    itoa(i + 1, buf); /* Convert int to string, not a standard C function; void */
+    
+#ifdef __DEBUG__
+    iniPref[0] = '\0';
+    strcat(iniPref, INPUTKEYBOARD);
+    strcat(iniPref, buf);
+    fprintf(stdout, "Getting [%s] preferences from INI...\n", iniPref);
+#endif
+    
+    if (i == 0) {
+      iniPref[0] = '\0'; /* Reset string */
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":operator");
+      prefs_Input_Keyboard[i].operator = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR)); /* Only on keyboard 1 */
+    }
+    
+    if (i > 0) {
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":enabled");
+      if ((prefs_Input_Keyboard[i].enabled = iniparser_getboolean(prefs, iniPref, -1)) != 1)
+        prefs_Input_Keyboard[i].enabled = false;
+      else
+        prefs_Input_Keyboard[i].enabled = true;
+      
+#ifdef __DEBUG__
+      fprintf(stdout, "  Keyboard %d is disabled.\n", i + 1); /* Continuation from above */
+#endif
+      
+      if (prefs_Input_Keyboard[i].enabled) {
+        strcat(iniPref, ":disable_pick");
+        if ((prefs_Input_Keyboard[i].disable_pick = iniparser_getboolean(prefs, iniPref, -1)) != 1)
+          prefs_Input_Keyboard[i].disable_pick = false;
+        else
+          prefs_Input_Keyboard[i].disable_pick = true;
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":button_green");
+        prefs_Input_Keyboard[i].button_green = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":button_red");
+        prefs_Input_Keyboard[i].button_red = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":button_yellow");
+        prefs_Input_Keyboard[i].button_yellow = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":button_blue");
+        prefs_Input_Keyboard[i].button_blue = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":button_orange");
+        prefs_Input_Keyboard[i].button_orange = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":button_pick_up");
+        prefs_Input_Keyboard[i].button_pick_up = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":button_pick_down");
+        prefs_Input_Keyboard[i].button_pick_down = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":button_start");
+        prefs_Input_Keyboard[i].button_start = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":button_select");
+        prefs_Input_Keyboard[i].button_select = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":button_direction_left");
+        prefs_Input_Keyboard[i].button_direction_left = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":button_direction_right");
+        prefs_Input_Keyboard[i].button_direction_right = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":button_direction_down");
+        prefs_Input_Keyboard[i].button_direction_down = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":button_direction_up");
+        prefs_Input_Keyboard[i].button_direction_up = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":whammy_down");
+        prefs_Input_Keyboard[i].whammy_down = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":whammy_up");
+        prefs_Input_Keyboard[i].whammy_up = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        iniPref[0] = '\0';
+        strcat(iniPref, INPUTKEYBOARD);
+        strcat(iniPref, buf);
+        strcat(iniPref, ":star_power");
+        prefs_Input_Keyboard[i].star_power = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+        prefs_Input_Keyboard[i].operator = KEYS_NOKEY;
+      }
+    }
+    else { /* [Input_Keyboard1] is not possible to disable for obvious reasons */
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":disable_pick");
+      if ((prefs_Input_Keyboard[i].disable_pick = iniparser_getboolean(prefs, iniPref, -1)) != 1)
+        prefs_Input_Keyboard[i].disable_pick = false;
+      else
+        prefs_Input_Keyboard[i].disable_pick = true;
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":button_green");
+      prefs_Input_Keyboard[i].button_green = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":button_red");
+      prefs_Input_Keyboard[i].button_red = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":button_yellow");
+      prefs_Input_Keyboard[i].button_yellow = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":button_blue");
+      prefs_Input_Keyboard[i].button_blue = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":button_orange");
+      prefs_Input_Keyboard[i].button_orange = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":button_pick_up");
+      prefs_Input_Keyboard[i].button_pick_up = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":button_pick_down");
+      prefs_Input_Keyboard[i].button_pick_down = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":button_start");
+      prefs_Input_Keyboard[i].button_start = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":button_select");
+      prefs_Input_Keyboard[i].button_select = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":button_direction_left");
+      prefs_Input_Keyboard[i].button_direction_left = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":button_direction_right");
+      prefs_Input_Keyboard[i].button_direction_right = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":button_direction_down");
+      prefs_Input_Keyboard[i].button_direction_down = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":button_direction_up");
+      prefs_Input_Keyboard[i].button_direction_up = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":whammy_down");
+      prefs_Input_Keyboard[i].whammy_down = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":whammy_up");
+      prefs_Input_Keyboard[i].whammy_up = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+      
+      iniPref[0] = '\0';
+      strcat(iniPref, INPUTKEYBOARD);
+      strcat(iniPref, buf);
+      strcat(iniPref, ":star_power");
+      prefs_Input_Keyboard[i].star_power = keys_mapKeystringToSDL(iniparser_getstring(prefs, iniPref, INIERROR));
+    }
   }
   
   return;

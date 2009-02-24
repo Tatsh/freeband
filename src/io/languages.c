@@ -120,7 +120,7 @@ void languages_checkForINIs() {
   
   if ((ret = _stat(checkINI, &buffer)) != 0) {
     fprintf(stderr, "Unable to locate %s language file. Copying now...\n", checkINI);
-    fileIO_copyFile("GameData/en_GB.ini", checkINI);
+    fileIO_copyFile("GameData/languages/en_GB.ini", checkINI);
   }
 #ifdef __DEBUG__
   else
@@ -134,7 +134,7 @@ void languages_checkForINIs() {
   
   if ((ret = _stat(checkINI, &buffer)) != 0) {
     fprintf(stderr, "Unable to locate %s language file. Copying now...\n", checkINI);
-    fileIO_copyFile("GameData/pl_PL.ini", checkINI);
+    fileIO_copyFile("GameData/languges/pl_PL.ini", checkINI);
   }
 #ifdef __DEBUG__
   else

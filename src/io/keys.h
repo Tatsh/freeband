@@ -23,6 +23,7 @@ typedef struct { /* Input_Keyboard */
   uint whammy_down;
   uint star_power;
   uint screenshot;
+  uint operator;
 } prefs_Input_Keyboard_s;
 
 extern prefs_Input_Keyboard_s prefs_Input_Keyboard[];

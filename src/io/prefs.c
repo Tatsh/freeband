@@ -8,6 +8,10 @@
 #include "languages.h"
 #include "prefs.h"
 
+#ifdef __WIN32__
+#include "unix2dos.h"
+#endif
+
 dictionary *prefs;
 
 prefs_path prefs_root[255];
@@ -201,6 +205,11 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
 }
 
 bool prefs_load() {
+  FILE *inifile;
+#ifdef __WIN32__
+  CFlag_s *pFlag;
+#endif
+  
   if ((prefs = iniparser_load(prefs_ini)) == NULL) {
     fprintf(stderr, "Error loading %s dictionary using iniparser.\n", prefs_ini);
     return false;
@@ -214,8 +223,10 @@ bool prefs_load() {
   }
   else if (strncmp("en_GB", prefs_Freeband.language, 4) == 0)
     prefs_Freeband.language_u = en_GB;
+#ifdef __LANG_PL_PL__
   else if (strncmp("pl_PL", prefs_Freeband.language, 4) == 0)
     prefs_Freeband.language_u = pl_PL;
+#endif /* __LANG_PL_PL__ */
   else /* If language is not recognised, force to default */
     prefs_Freeband.language_u = en_GB;
   languages_loadLanguage(prefs_Freeband.language_u);
@@ -260,10 +271,10 @@ bool prefs_load() {
     prefs_Freeband.default_difficulty_u = DIFFICULTY_EASY;
   current_difficulty = prefs_Freeband.default_difficulty_u;
   
-  prefs_Freeband.difficulty_judge = iniparser_getint(prefs, "Freeband:difficulty_judge", 11);
+  prefs_Freeband.difficulty_judge = iniparser_getint(prefs, "Freeband:difficulty_judge", -1);
   if (prefs_Freeband.difficulty_judge < 1 || prefs_Freeband.difficulty_judge > 10) {
-    /* iniparser_set(prefs, "Freeband:difficulty_judge", "5"); Requires patched iniparser.h */
-    fprintf(stderr, "Invalid judge setting. Using default: 5\n");
+    iniparser_setstring(prefs, "Freeband:difficulty_judge", "5");
+    fprintf(stderr, "Invalid difficulty_judge setting. Using default: 5\n");
     prefs_Freeband.difficulty_judge = 5;
   }
   
@@ -294,6 +305,13 @@ bool prefs_load() {
   /* [Online] */
   
   /* [Songs */
+  
+  inifile = fopen(prefs_ini, "w+");
+  iniparser_dump_ini(prefs, inifile); /* Write a new INI, just in case settings are invalid and are being reset */
+#ifdef __WIN32__
+  fileIO_unix2dos(inifile); /* Convert to DOS format for Windows users */
+#endif /* __WIN32__ */
+  fclose(inifile);
   
 #ifdef __DEBUG__
   fprintf(stdout, "\n[Freeband]\n");

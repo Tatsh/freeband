@@ -43,7 +43,7 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-am_freeband_OBJECTS = freeband.$(OBJEXT)
+am_freeband_OBJECTS = freeband.$(OBJEXT) nonstd.$(OBJEXT)
 freeband_OBJECTS = $(am_freeband_OBJECTS)
 freeband_DEPENDENCIES = input/libFreebandInput.a \
 	audio/libFreebandAudio.a screens/libFreebandScreens.a \
@@ -164,7 +164,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 DIST_SUBDIRS = GameData
 SUBDIRS = audio graphics input io screens .
-freeband_SOURCES = freeband.c
+freeband_SOURCES = freeband.c nonstd.c
 freeband_LDADD = input/libFreebandInput.a audio/libFreebandAudio.a screens/libFreebandScreens.a io/libFreebandIO.a graphics/libFreebandGraphics.a
 all: all-recursive
 
@@ -233,6 +233,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/freeband.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nonstd.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
