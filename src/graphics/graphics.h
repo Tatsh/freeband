@@ -3,6 +3,12 @@
 
 #define MAX_IMAGES 20
 
+/* Preferences */
+#define PREF_WIDTH  prefs_ints[0].iUser_value
+#define PREF_HEIGHT prefs_ints[1].iUser_value
+#define PREF_FULLSCREEN prefs_bools[5].bUser_value
+#define PREF_BPP prefs_shorts[1].sUser_value
+
 typedef char texture_p;
 typedef GLfloat GLalpha;
 typedef GLfloat GLcolour;

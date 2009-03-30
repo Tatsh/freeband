@@ -14,41 +14,139 @@
 
 dictionary *prefs;
 
-prefs_path prefs_root[255];
-prefs_path prefs_languages[255];
-prefs_path prefs_songs[255];
-prefs_path prefs_themes[255];
-prefs_path prefs_ini[255];
+prefs_path prefs_root[ARRAY_BUFFER * 2];
+prefs_path prefs_languages[ARRAY_BUFFER * 2];
+prefs_path prefs_songs[ARRAY_BUFFER * 2];
+prefs_path prefs_themes[ARRAY_BUFFER * 2];
+prefs_path prefs_ini[ARRAY_BUFFER * 2];
 
-prefs_Freeband_s prefs_Freeband;
-prefs_Audio_s prefs_Audio;
-prefs_Graphics_s prefs_Graphics;
-prefs_Input_Joystick_s prefs_Input_Joystick[3];
-prefs_Online_s prefs_Online;
-prefs_Songs_s prefs_Songs;
-
-bool prefs_verify() { /* This function only checks and fixes preferences; it does NOT read them */
-  short ret;
+prefs_bool_s prefs_bools[] = {
+  { "Freeband:enable_demo", true, true },
+  { "Freeband:theming_mode", false, false },
   
+  { "Graphics:display_band", true, true },
+  { "Graphics:display_venue", true, true },
+  { "Graphics:fullscreen", false, false },
+  
+  { "Online:time_limit", false, false },
+  { "Online:use_proxy", false, false },
+  
+  { "Songs:use_last_song", true, true },
+  { "Songs:save_song_speed", true, true },
+  { "Songs:time_limit", false, false },
+  { "Songs:fail_to_end", true, true }
+};
+
+bool prefs_getBools(dictionary *prefs) {
+  ushort i;
+  
+  for (i = 0; i < structln(prefs_bools); i++)
+    prefs_bools[i].bUser_value = iniparser_getboolean(prefs, prefs_bools[i].ini_item, -1);
+  
+  return true;
+}
+
+prefs_char_s prefs_chars[] = {
+  { "Freeband:language", "en_GB", "en_GB", 0x00 },
+  { "Freeband:theme", "default", "default", 0 }, /* No numbers here */
+  { "Freeband:default_instrument", "guitar", "guitar", INSTRUMENT_GUITAR },
+  { "Freeband:default_difficulty", "easy", "easy", DIFFICULTY_EASY },
+  
+  { "Audio:output_device", "none", "none", 0 },
+  { "Audio:mic_device", "none", "none", 0 },
+  
+  { "Online:proxy_url", "none", "none", 0 },
+  
+  { "Songs:default_sort", "by Tier", "by Tier", SORT_BY_TIER },
+  { "Songs:last_song", "", "", 0 },
+  { "Songs:additional_folders", "", "", 0 }
+};
+
+bool prefs_getChars(dictionary *prefs) {
+  ushort i;
+  
+  for (i = 0; i < structln(prefs_chars); i++) 
+    prefs_chars[i].cUser_value = iniparser_getstring(prefs, prefs_chars[i].ini_item, INIERROR);
+  
+  return true;
+}
+
+prefs_ints_s prefs_ints[] = {
+  { "Graphics:width", 800, 800 },
+  { "Graphics:height", 600, 600 }
+};
+
+prefs_short_s prefs_shorts[] = {
+  { "Freeband:difficulty_judge", 5, 5 },
+  
+  { "Graphics:bpp", 32, 32 },
+};
+
+bool prefs_getInts(dictionary *prefs) {
+  ushort i;
+  
+  for (i = 0; i < structln(prefs_ints); i++) /* Handle ints and shorts here */
+    prefs_ints[i].iUser_value = iniparser_getint(prefs, prefs_ints[i].ini_item, -1);
+  
+  for (i = 0; i < structln(prefs_shorts); i++)
+    prefs_shorts[i].sUser_value = iniparser_getint(prefs, prefs_shorts[i].ini_item, -1);
+  
+  return true;
+}
+
+bool getHomePath() {
 #ifdef __WIN32__
   /* We get the My Documents/Documents (Windows) directory here */
   /* In this case, the 5th argument can take a char instead of LPTSTR or TCHAR; these are all the same here */
-  SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, prefs_root); /* Microosoft wants us to use a new function that is Vista only pfft */
-  
-  if (prefs_root == NULL) {
-    fprintf(stderr, "Could not find My Documents folder. Check to make sure you have one assigned in your Windows settings.\n");
-    return false;
-  }
-#else /* POSIX; this is preferred :) */
+  SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, root);
+#else /* POSIX */
   strcat(prefs_root, getenv("HOME"));
-  
+#endif /* __WIN32__ */
+ 
   if (prefs_root == NULL) {
-    fprintf(stderr, "Could not find home directory.\nTry setting $HOME to a path.");
+    fprintf(stderr, "Could not find home directory. Check your settings.\n");
     return false;
   }
+  
+  return true;
+}
+
+#ifdef __WIN32__
+bool prefs_verifyPaths_win32(prefs_path search[]) {
+  struct _stat buffer;
+  /* /languages directory */
+  
+  /* /songs directory */
+  
+  /* /themes directory */
+  
+  return true;
+}
 #endif
 
-  strcat(prefs_root, "/Freeband"); /* Create paths to search for or make */
+bool prefs_verifyPaths() {
+  if (getHomePath()) {
+#ifdef __WIN32__
+    prefs_verifyPaths_win32(search);
+#else
+  /* /languages directory */
+  
+  /* /songs directory */
+  
+  /* /themes directory */
+#endif
+  }
+  else
+    fprintf(stderr, "Fatal error finding home path.\n");
+  
+  return true;
+}
+
+bool prefs_verify() { /* This function only checks and fixes preferences; it does NOT read them */
+  short ret;
+  getHomePath();
+  
+  strcat(prefs_root, FREEBAND_PREFS_ROOT); /* Create paths to search for or make */
   strcat(prefs_languages, prefs_root);
   strcat(prefs_languages, "/languages");
   strcat(prefs_songs, prefs_root);
@@ -58,22 +156,9 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
   strcat(prefs_ini, prefs_root);
   strcat(prefs_ini, "/preferences.ini");
   
-#ifdef __WIN32__
-  struct _stat buffer;
+  struct stat buffer;
   
-  if ((ret = _stat(prefs_root, &buffer)) != 0) {
-    fprintf(stderr, "Unable to locate Freeband directory in your home directory. Creating one now...\n");
-    
-    if ((ret = _mkdir(prefs_root)) != 0) {
-      fprintf(stderr, "Unable to create %s directory. Check if you have permission.\n", prefs_root);
-      return false;
-    }
-  }
-#ifdef __DEBUG__
-  else
-    fprintf(stdout, "Found preferences root: %s.\n", prefs_root);
-#endif
-
+#ifdef __WIN32__
   if ((ret = _stat(prefs_songs, &buffer)) != 0) { /* No? Create songs folder */
     fprintf(stderr, "Unable to locate a Freeband songs directory. Creating one now...\n");
     
@@ -127,21 +212,7 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
 #endif
   
 #else /* POSIX */
-  struct stat buffer;
-  
-  /* We check to see if $HOME has a directory 'Freeband' */
-  if ((ret = stat(prefs_root, &buffer)) != 0) { /* No? Create one */
-    fprintf(stderr, "Unable to locate a Freeband directory in your home directory. Creating one now...\n");
-    
-    if ((ret = mkdir(prefs_root, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)) != 0) {
-      fprintf(stderr, "Unable to create %s directory. Check if you have permission.\n", prefs_root);
-      return false; /* Error! Do we have permission? */
-    }
-  }
-#ifdef __DEBUG__
-  else
-    fprintf(stdout, "Found preferences root: %s.\n", prefs_root);
-#endif
+
   
   /* Do we have a languages folder? */
   if ((ret = stat(prefs_languages, &buffer)) != 0) { /* No? Create it */
@@ -214,195 +285,18 @@ bool prefs_load() {
     fprintf(stderr, "Error loading %s dictionary using iniparser.\n", prefs_ini);
     return false;
   }
-
-  /* [Freeband] */
-  prefs_Freeband.language = iniparser_getstring(prefs, "Freeband:language", INIERROR);
-  if (strcmp(INIERROR, prefs_Freeband.language) == 0) { /* Verify language file exists later */
-    prefs_Freeband.language = "en_GB"; /* Force to default if there is no language in the file */
-    prefs_Freeband.language_u = en_GB;
-  }
-  else if (strncmp("en_GB", prefs_Freeband.language, 4) == 0)
-    prefs_Freeband.language_u = en_GB;
-#ifdef __LANG_PL_PL__
-  else if (strncmp("pl_PL", prefs_Freeband.language, 4) == 0)
-    prefs_Freeband.language_u = pl_PL;
-#endif /* __LANG_PL_PL__ */
-  else /* If language is not recognised, force to default */
-    prefs_Freeband.language_u = en_GB;
-  languages_loadLanguage(prefs_Freeband.language_u);
   
-  if ((prefs_Freeband.enable_demo = iniparser_getboolean(prefs, "Freeband:enable_demo", -1)) != 1)
-    prefs_Freeband.enable_demo = false;
-  else
-    prefs_Freeband.enable_demo = true;
-
-  prefs_Freeband.theme = iniparser_getstring(prefs, "Freeband:theme", INIERROR);
-  if (strcmp(INIERROR, prefs_Freeband.theme) == 0) /* We will verify the folder exists later */
-    prefs_Freeband.theme = "default";
-  /*themes_loadTheme(prefs_Freeband.theme);*/
+  prefs_getBools(prefs);
+  prefs_getChars(prefs);
+  prefs_getInts(prefs);
+  prefs_getKeys(prefs);
   
-  prefs_Freeband.default_instrument = iniparser_getstring(prefs, "Freeband:default_instrument", INIERROR);
-  if (strcmp(INIERROR, prefs_Freeband.default_instrument) == 0)
-    prefs_Freeband.default_instrument = "guitar";
-  if (strncmp("guitar", prefs_Freeband.default_instrument, 6) == 0) /* This is for if default_instrument="fioejaiofej" for example */
-    prefs_Freeband.default_instrument_u = INSTRUMENT_GUITAR;
-  else if (strncmp("bass", prefs_Freeband.default_instrument, 4) == 0)
-    prefs_Freeband.default_instrument_u = INSTRUMENT_BASS;
-  else if (strncmp("drums", prefs_Freeband.default_instrument, 5) == 0)
-    prefs_Freeband.default_instrument_u = INSTRUMENT_DRUMS;
-  else if (strncmp("vocals", prefs_Freeband.default_instrument, 6) == 0)
-    prefs_Freeband.default_instrument_u = INSTRUMENT_VOCALS;
-  else
-    prefs_Freeband.default_instrument_u = INSTRUMENT_GUITAR;
-  current_instrument = prefs_Freeband.default_instrument_u;
-  
-  prefs_Freeband.default_difficulty = iniparser_getstring(prefs, "Freeband:default_difficulty", INIERROR);
-  if (strcmp(INIERROR, prefs_Freeband.default_difficulty) == 0)
-    prefs_Freeband.default_difficulty = "easy";
-  if (strcmp("easy", prefs_Freeband.default_difficulty) == 0)
-    prefs_Freeband.default_difficulty_u = DIFFICULTY_EASY;
-  else if (strcmp("medium", prefs_Freeband.default_difficulty) == 0)
-    prefs_Freeband.default_difficulty_u = DIFFICULTY_MEDIUM;
-  else if (strcmp("hard", prefs_Freeband.default_difficulty) == 0)
-    prefs_Freeband.default_difficulty_u = DIFFICULTY_HARD;
-  else if (strcmp("expert", prefs_Freeband.default_difficulty) == 0)
-    prefs_Freeband.default_difficulty_u = DIFFICULTY_EXPERT;
-  else
-    prefs_Freeband.default_difficulty_u = DIFFICULTY_EASY;
-  current_difficulty = prefs_Freeband.default_difficulty_u;
-  
-  prefs_Freeband.difficulty_judge = iniparser_getint(prefs, "Freeband:difficulty_judge", -1);
-  if (prefs_Freeband.difficulty_judge < 1 || prefs_Freeband.difficulty_judge > 10) {
-    iniparser_setstring(prefs, "Freeband:difficulty_judge", "5");
-    fprintf(stderr, "Invalid difficulty_judge setting. Using default: 5\n");
-    prefs_Freeband.difficulty_judge = 5;
-  }
-  
-  if ((prefs_Freeband.theming_mode = iniparser_getboolean(prefs, "Freeband:theming_mode", -1)) != 1)
-    prefs_Freeband.theming_mode = false;
-  else
-    prefs_Freeband.theming_mode = true;
-
-  /* [Graphics] */
-  prefs_Graphics.width = iniparser_getint(prefs, "Graphics:width", -1);
-  prefs_Graphics.height = iniparser_getint(prefs, "Graphics:height", -1);
-  prefs_Graphics.bpp = iniparser_getint(prefs, "Graphics:bpp", -1);
-  if ((prefs_Graphics.display_band = iniparser_getboolean(prefs, "Graphics:display_band", -1)) != 1)
-    prefs_Graphics.display_band = false;
-  else
-    prefs_Graphics.display_band = true;
-  if ((prefs_Graphics.display_venue = iniparser_getboolean(prefs, "Graphics:display_venue", -1)) != 1)
-    prefs_Graphics.display_venue = false;
-  else
-    prefs_Graphics.display_venue = true;
-  if ((prefs_Graphics.fullscreen = iniparser_getboolean(prefs, "Graphics:fullscreen", -1)) != 1)
-    prefs_Graphics.fullscreen = false;
-  else
-    prefs_Graphics.fullscreen = true;
-  
-  prefs_keys_get();
-  
-  /* [Online] */
-  
-  /* [Songs */
-  
-  inifile = fopen(prefs_ini, "w+");
+/*  inifile = fopen(prefs_ini, "w+");
   iniparser_dump_ini(prefs, inifile); /* Write a new INI, just in case settings are invalid and are being reset */
-#ifdef __WIN32__
+/*#ifdef __WIN32__
   fileIO_unix2dos(inifile); /* Convert to DOS format for Windows users */
-#endif /* __WIN32__ */
-  fclose(inifile);
-  
-#ifdef __DEBUG__
-  fprintf(stdout, "\n[Freeband]\n");
-  fprintf(stdout, "language=%s (%#x)\n", prefs_Freeband.language, prefs_Freeband.language_u);
-  fprintf(stdout, "enable_demo=%s\n", prefs_Freeband.enable_demo ? "true" : "false");
-  fprintf(stdout, "theme=%s\n", prefs_Freeband.theme);
-  fprintf(stdout, "default_instrument=%s (%#x)\n", prefs_Freeband.default_instrument, prefs_Freeband.default_instrument_u);
-  fprintf(stdout, "default_difficulty=%s (%#x)\n", prefs_Freeband.default_difficulty, prefs_Freeband.default_difficulty_u);
-  fprintf(stdout, "difficulty_judge=%d\n", prefs_Freeband.difficulty_judge);
-  fprintf(stdout, "theming_mode=%s\n\n", prefs_Freeband.theming_mode ? "true" : "false");
-  
-  fprintf(stdout, "[Graphics]\n");
-  fprintf(stdout, "width=%d\n", prefs_Graphics.width);
-  fprintf(stdout, "height=%d\n", prefs_Graphics.height);
-  fprintf(stdout, "bpp=%d (%d-bit)\n", prefs_Graphics.bpp, prefs_Graphics.bpp);
-  fprintf(stdout, "display_band=%s\n", prefs_Graphics.display_band ? "true" : "false");
-  fprintf(stdout, "display_venue=%s\n", prefs_Graphics.display_venue ? "true" : "false");
-  fprintf(stdout, "fullscreen=%s\n\n", prefs_Graphics.fullscreen ? "true" : "false");
-  
-  fprintf(stdout, "[Input_Keyboard1]\n");
-  fprintf(stdout, "disable_pick=%s\n", prefs_Input_Keyboard[0].disable_pick ? "true" : "false" );
-  fprintf(stdout, "button_green=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_green", INIERROR));
-  fprintf(stdout, "button_red=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_red", INIERROR));
-  fprintf(stdout, "button_yellow=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_yellow", INIERROR));
-  fprintf(stdout, "button_blue=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_blue", INIERROR));
-  fprintf(stdout, "button_orange=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_orange", INIERROR));
-  fprintf(stdout, "button_pick_up=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_pick_up", INIERROR));
-  fprintf(stdout, "button_pick_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_pick_down", INIERROR));
-  fprintf(stdout, "button_start=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_start", INIERROR));
-  fprintf(stdout, "button_select=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_select", INIERROR));
-  fprintf(stdout, "button_direction_left=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_direction_left", INIERROR));
-  fprintf(stdout, "button_direction_right=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_direction_right", INIERROR));
-  fprintf(stdout, "button_direction_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_direction_down", INIERROR));
-  fprintf(stdout, "button_direction_up=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:button_direction_up", INIERROR));
-  fprintf(stdout, "whammy_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:whammy_down", INIERROR));
-  fprintf(stdout, "whammy_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:whammy_down", INIERROR));
-  fprintf(stdout, "star_power=%s\n", iniparser_getstring(prefs, "Input_Keyboard1:star_power", INIERROR));
-  fprintf(stdout, "screenshot=%s\n\n", iniparser_getstring(prefs, "Input_Keyboard1:screenshot", INIERROR));
-  
-  fprintf(stdout, "[Input_Keyboard2]\n");
-  if (prefs_Input_Keyboard[1].enabled) {
-    fprintf(stdout, "enabled=true\n");
-    fprintf(stdout, "disable_pick=%s\n", prefs_Input_Keyboard[1].disable_pick ? "true" : "false" );
-    fprintf(stdout, "button_green=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_green", INIERROR));
-    fprintf(stdout, "button_red=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_red", INIERROR));
-    fprintf(stdout, "button_yellow=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_yellow", INIERROR));
-    fprintf(stdout, "button_blue=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_blue", INIERROR));
-    fprintf(stdout, "button_orange=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_orange", INIERROR));
-    fprintf(stdout, "button_pick_up=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_pick_up", INIERROR));
-    fprintf(stdout, "button_pick_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_pick_down", INIERROR));
-    fprintf(stdout, "button_start=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_start", INIERROR));
-    fprintf(stdout, "button_select=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_select", INIERROR));
-    fprintf(stdout, "button_direction_left=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_direction_left", INIERROR));
-    fprintf(stdout, "button_direction_right=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_direction_right", INIERROR));
-    fprintf(stdout, "button_direction_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_direction_down", INIERROR));
-    fprintf(stdout, "button_direction_up=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:button_direction_up", INIERROR));
-    fprintf(stdout, "whammy_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:whammy_down", INIERROR));
-    fprintf(stdout, "whammy_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:whammy_down", INIERROR));
-    fprintf(stdout, "star_power=%s\n", iniparser_getstring(prefs, "Input_Keyboard2:star_power", INIERROR));
-    fprintf(stdout, "screenshot=%s\n\n", iniparser_getstring(prefs, "Input_Keyboard2:screenshot", INIERROR));
-  }
-  else
-    fprintf(stdout, "enabled=false\n\n");
-  
-  fprintf(stdout, "[Input_Keyboard3]\n");
-  if (prefs_Input_Keyboard[2].enabled) {
-    fprintf(stdout, "enabled=true\n");
-    fprintf(stdout, "disable_pick=%s\n", prefs_Input_Keyboard[2].disable_pick ? "true" : "false" );
-    fprintf(stdout, "button_green=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_green", INIERROR));
-    fprintf(stdout, "button_red=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_red", INIERROR));
-    fprintf(stdout, "button_yellow=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_yellow", INIERROR));
-    fprintf(stdout, "button_blue=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_blue", INIERROR));
-    fprintf(stdout, "button_orange=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_orange", INIERROR));
-    fprintf(stdout, "button_pick_up=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_pick_up", INIERROR));
-    fprintf(stdout, "button_pick_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_pick_down", INIERROR));
-    fprintf(stdout, "button_start=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_start", INIERROR));
-    fprintf(stdout, "button_select=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_select", INIERROR));
-    fprintf(stdout, "button_direction_left=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_direction_left", INIERROR));
-    fprintf(stdout, "button_direction_right=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_direction_right", INIERROR));
-    fprintf(stdout, "button_direction_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_direction_down", INIERROR));
-    fprintf(stdout, "button_direction_up=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:button_direction_up", INIERROR));
-    fprintf(stdout, "whammy_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:whammy_down", INIERROR));
-    fprintf(stdout, "whammy_down=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:whammy_down", INIERROR));
-    fprintf(stdout, "star_power=%s\n", iniparser_getstring(prefs, "Input_Keyboard3:star_power", INIERROR));
-    fprintf(stdout, "screenshot=%s\n\n", iniparser_getstring(prefs, "Input_Keyboard3:screenshot", INIERROR));
-  }
-  else
-    fprintf(stdout, "enabled=false\n");
-  
-  fprintf(stdout, "\n");
-#endif
+/*#endif /* __WIN32__ */
+  /*fclose(inifile);*/
   
   return true;
 }

@@ -1,11 +1,6 @@
 #ifndef INSTRUMENTS_H
 #define INSTRUMENTS_H
 
-#define INSTRUMENT_GUITAR 0x00
-#define INSTRUMENT_BASS   0x01
-#define INSTRUMENT_DRUMS  0x02
-#define INSTRUMENT_VOCALS 0x03
-
 typedef struct {
   bool guitar;
   bool bass;

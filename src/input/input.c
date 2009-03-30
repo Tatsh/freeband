@@ -17,17 +17,39 @@
 #include "screenPause.h"
 #include "screenSongs.h"
 
+/* Preferences */
+#define FBKEY_OPERATOR    keyPrefs[0].user_value
+#define KBENABLED         keyPrefs[1].user_value
+#define DISABLEPICK       keyPrefs[2].user_value
+#define FBKEY_GREEN       keyPrefs[3].user_value
+#define FBKEY_RED         keyPrefs[4].user_value
+#define FBKEY_YELLOW      keyPrefs[5].user_value
+#define FBKEY_BLUE        keyPrefs[6].user_value
+#define FBKEY_ORANGE      keyPrefs[7].user_value
+#define FBKEY_PICKUP      keyPrefs[8].user_value
+#define FBKEY_PICKDOWN    keyPrefs[9].user_value
+#define FBKEY_START       keyPrefs[10].user_value
+#define FBKEY_BACK        keyPrefs[11].user_value
+#define FBKEY_LEFT        keyPrefs[12].user_value
+#define FBKEY_RIGHT       keyPrefs[13].user_value
+#define FBKEY_UP          keyPrefs[14].user_value
+#define FBKEY_DOWN        keyPrefs[15].user_value
+#define FBKEY_WHAMMYDOWN  keyPrefs[16].user_value
+#define FBKEY_WHAMMYUP    keyPrefs[17].user_value
+#define FBKEY_STARPOWER   keyPrefs[18].user_value
+#define FBKEY_SCREENSHOT  keyPrefs[19].user_value
+
 void input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
   online = options = false;
 
-  if (keysym->sym == prefs_Input_Keyboard[0].button_pick_down || keysym->sym == prefs_Input_Keyboard[0].button_direction_down) {
+  if (keysym->sym == FBKEY_PICKDOWN || keysym->sym == FBKEY_DOWN) {
     if (fb_screen.mainMenu) input_screenMain(DOWN);
     else if (fb_screen.instruments) input_screenInstruments(DOWN);
     else if (fb_screen.difficulty) input_screenDifficulty(DOWN);
     else if (fb_screen.game && gamePaused) input_screenPause(DOWN);
   }
   
-  if (keysym->sym == prefs_Input_Keyboard[0].button_pick_up || keysym->sym == prefs_Input_Keyboard[0].button_direction_up) {
+  if (keysym->sym == FBKEY_PICKUP || keysym->sym == FBKEY_UP) {
     if (fb_screen.mainMenu) input_screenMain(UP);
     else if (fb_screen.instruments) input_screenInstruments(UP);
     else if (fb_screen.difficulty) input_screenDifficulty(UP);
@@ -36,7 +58,7 @@ void input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
   
 
   
-  if (keysym->sym == prefs_Input_Keyboard[0].button_start || keysym->sym == prefs_Input_Keyboard[0].button_green) {
+  if (keysym->sym == FBKEY_GREEN || keysym->sym == FBKEY_START) {
     if (keysym->mod & KMOD_ALT) /* Switch to full screen only if Alt+Enter is pressed, hard-coded */
       SDL_WM_ToggleFullScreen(surface);
     else {
@@ -48,22 +70,22 @@ void input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
     }
   }
   
-  if (keysym->sym == SDLK_ESCAPE) {
+  if (keysym->sym == SDLK_ESCAPE || keysym->sym == FBKEY_START) {
     if (fb_screen.game && !gamePaused) input_screenGamePause();
     else if (fb_screen.game && gamePaused) input_screenPause(ESC);
   }
   
-  if (keysym->sym == prefs_Input_Keyboard[0].button_red || keysym->sym == SDLK_ESCAPE) { /* Hard-coded Escape for back */
+  if (keysym->sym == FBKEY_RED || keysym->sym == SDLK_ESCAPE) { /* Hard-coded Escape for back */
     if (fb_screen.mainMenu) fb_quit(EXIT_SUCCESS);
     else if (fb_screen.instruments) input_screenInstruments(ESC);
     else if (fb_screen.songs) input_screenSongs(ESC);
     else if (fb_screen.difficulty) input_screenDifficulty(ESC);
   }
   
-  if (keysym->sym == prefs_Input_Keyboard[0].button_yellow) /* Change sort of song screen */
+  if (keysym->sym == FBKEY_YELLOW) /* Change sort of song screen */
     if (fb_screen.songs) input_screenSongs(SONG_SORT);
  
-  if (prefs_Input_Keyboard[1].enabled && keysym->sym == prefs_Input_Keyboard[1].button_start) {
+/*  if (prefs_Input_Keyboard[1].enabled && keysym->sym == prefs_Input_Keyboard[1].button_start) {
     if (fb_screen.mainMenu || fb_screen.instruments || fb_screen.songs) {
       if (fb_nPlayers < 4) {
         fb_nPlayers++;
@@ -94,7 +116,7 @@ void input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
       else
         fprintf(stderr, "Maximum players is 4.\n");
     }
-  }
+  }*/
 
   return;
 }

@@ -9,6 +9,7 @@ audio_deviceInfo_s audio_deviceInfoTemplate;
 
 bool audio_verifyFiletype(ushort filetype, char path[]) {
   bool ok = false;
+  (void)path;
   
   switch (filetype) {
     case OGG:
@@ -43,6 +44,12 @@ bool audio_verifyFiletype(ushort filetype, char path[]) {
 
 int paCallback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags, void *userData) {
   /* Do not call any PortAudio functions here except for Pa_StreamTime() and Pa_GetCPULoad() */
+  (void)inputBuffer;
+  (void)outputBuffer;
+  (void)framesPerBuffer;
+  (void)timeInfo;
+  (void)statusFlags;
+  (void)userData;
   
   return 0;
 }
@@ -89,7 +96,7 @@ bool audio_buffer() {
       deviceInfo = Pa_GetDeviceInfo(i);
       /* Windows is different in that it will have 2 devices of the same name but 1 with input channels and 1 with output channels
          Since we are using the default device by default, we will not worry about this yet
-         It may confusing to the Windows user in the options menu since devices have the same name, so maybe we should add (input) and (output) to the strings? */
+      It may confusinig to the Windows user in the options menu since devices have the same name, so maybe we should add (input) and (output) to the strings? */
 #ifdef __WIN32__
       if (deviceInfo->defaultSampleRate >= 44100.0f &&
           deviceInfo->defaultLowInputLatency >= 0.0f &&

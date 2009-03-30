@@ -10,6 +10,8 @@
 #include "input.h"
 #include "screenPause.h"
 
+#define PREF_DEFAULT_INSTRUMENT prefs_chars[2].iValue
+
 void input_screenPause(ushort direction) {
   switch (direction) {
     case DOWN:
@@ -112,7 +114,7 @@ void input_screenPause(ushort direction) {
 #ifdef __DEBUG__
         fprintf(stdout, "Quit stage. Now at screenMain().\n");
 #endif
-        current_instrument = prefs_Freeband.default_instrument_u;
+        current_instrument = PREF_DEFAULT_INSTRUMENT;
       }
     
     case ESC:

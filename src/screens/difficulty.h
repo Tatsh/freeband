@@ -3,10 +3,10 @@
 
 #define DIFFHT 0.12
 
-#define DIFFICULTY_EASY   0x00
-#define DIFFICULTY_MEDIUM 0x01
-#define DIFFICULTY_HARD   0x02
-#define DIFFICULTY_EXPERT 0x03
+#define DIFFICULTY_EASY 0
+#define DIFFICULTY_MEDIUM 1
+#define DIFFICULTY_HARD 2
+#define DIFFICULTY_EXPERT 3
 
 extern GLcoordsY screenDifficulty_selectionY[];
 extern ushort current_difficulty;

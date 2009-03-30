@@ -3,7 +3,7 @@
 
 typedef char themes_path;
 
-typedef struct { 
+/*typedef struct { 
 } themes_screenMain_s;
 
 typedef struct {
@@ -19,7 +19,7 @@ typedef struct {
 } themes_screenGame_s;
 
 typedef struct {
-} themes_GamePause_s;
+} themes_GamePause_s;*/
 
 extern bool themes_default;
 

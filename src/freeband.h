@@ -28,7 +28,12 @@
 #ifdef __WIN32__
 #include <windows.h>
 #include <shlobj.h>
+
+typedef unsigned int uint;
+typedef unsigned short ushort; /* Yes Windows is missing this one */
 #endif
+
+#define structln(x) (sizeof(x)/sizeof(x[0])) /* Returns how many entries in a struct array */
 
 #define ERROR_VERIFYING_PREFS 10
 #define ERROR_READING_PREFS 11
@@ -38,10 +43,7 @@
 
 #define BOTTOM_TEXT_HT 0.1
 
-#ifdef __WIN32__
-typedef unsigned int uint;
-typedef unsigned short ushort; /* Yes Windows is missing this one */
-#endif
+#define ARRAY_BUFFER 128 /* Do not use caching, since 128 is power of 2 */
 
 typedef ushort score_t;
 typedef ushort combo_t;

@@ -29,7 +29,7 @@ SDL_Joystick *joy;      /* Space for controllers */
 
 screen_s fb_screen; /* The current screen */
 
-GLvoid fb_quit(GLint retnCode) {
+void fb_quit(GLint retnCode) {
   ushort i;
   PaError err;
   
@@ -71,9 +71,9 @@ GLvoid fb_quit(GLint retnCode) {
 int main(GLint argc, char *argv[]) {
   ushort i;
   
-  for (i = 0; i < MAX_IMAGES; i++) texture[i] = -1;
-  for (i = 0; i < MAX_TEXT; i++) text[i] = -1;
-
+  for (i = 0; i < MAX_IMAGES; i++) texture[i] = 0;
+  for (i = 0; i < MAX_TEXT; i++) text[i] = 0;
+  
   if (!prefs_verify()) /* Verify preferences existence or create if does not exist (first launch) */
     fb_quit(ERROR_VERIFYING_PREFS);
   
@@ -134,10 +134,10 @@ int main(GLint argc, char *argv[]) {
   if (videoInfo->blit_hw) /* Check if hardware blits can be done */
     videoFlags |= SDL_HWACCEL;
     
-  if (prefs_Graphics.fullscreen)
+  if (PREF_FULLSCREEN)
     videoFlags |= SDL_FULLSCREEN;
 
-  fbSurface = SDL_SetVideoMode(prefs_Graphics.width, prefs_Graphics.height, prefs_Graphics.bpp, videoFlags); /* Get a SDL surface */
+  fbSurface = SDL_SetVideoMode(PREF_WIDTH, PREF_HEIGHT, PREF_BPP, videoFlags); /* Get a SDL surface */
   if (!fbSurface) {
     fprintf(stderr,  "Video mode set failed: %s.\n", SDL_GetError());
     fb_quit(1);
@@ -158,7 +158,7 @@ int main(GLint argc, char *argv[]) {
   SDL_Surface *icon = IMG_Load("freeband.png"); /* Creates icon for window and task bar on Linux, but only task bar on Windows */
   SDL_WM_SetIcon(icon, NULL);
 
-  graphics_resizeWindow(prefs_Graphics.width, prefs_Graphics.height);
+  graphics_resizeWindow(PREF_WIDTH, PREF_HEIGHT);
   graphics_initColours(); /* Initialise colours */
 
   fb_screen.mainMenu = true; /* Set to main screen */

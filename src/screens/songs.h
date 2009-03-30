@@ -8,11 +8,6 @@
 #define offset_screenSongs_sortbyBPM_x -1.09f
 #define SORT_TEXT_Y_OFFSET -0.81f
 
-#define SORT_BY_TIER 0
-#define SORT_AZ_TITLE 1
-#define SORT_AZ_ARTIST 2
-#define SORT_BPM 3
-
 typedef bool song_sort;
 
 extern bool gamePaused;
