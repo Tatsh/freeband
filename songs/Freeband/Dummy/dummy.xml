@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE freebandNotes SYSTEM "/home/tatsh/dev/freeband2/src/io/fbnotes.dtd">
-
 <!-- proposed Freeband XML song format -->
-
 <freebandNotes>
 
 <artist>Dummy Artist</artist>

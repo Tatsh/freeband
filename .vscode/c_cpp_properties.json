@@ -1,0 +1,13 @@
+{
+  "configurations": [
+    {
+      "cStandard": "gnu23",
+      "compilerPath": "/usr/bin/gcc",
+      "cppStandard": "gnu++23",
+      "defines": [],
+      "includePath": ["${workspaceFolder}/src/**"],
+      "name": "Linux"
+    }
+  ],
+  "version": 4
+}

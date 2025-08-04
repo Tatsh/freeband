@@ -1,0 +1,10 @@
+{
+  "dependencies": ["sdl1"],
+  "description": "An attempt at making a clone of Guitar Hero/Rock Band in C with SDL and OpenGL (archived project).",
+  "documentation": "https://freeband.readthedocs.org",
+  "homepage": "https://tatsh.github.io/freeband/",
+  "license": "MIT",
+  "maintainers": ["Andrew Udvare <audvare@gmail.com>"],
+  "name": "freeband",
+  "version": "0.0.0"
+}
