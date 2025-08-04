@@ -3,24 +3,24 @@
 <!-- proposed Freeband XML song format -->
 <freebandNotes>
 
-<artist>Dummy Artist</artist>
-<title>Dummy Song</title>
-<album>Dummy Album</album>
-<tier>1</tier>
-<bpm>125.000</bpm>
-<gap type="ms">533</gap>
-<samplestart type="s">30.543</samplestart>
-<samplelength type="s">30.000</samplelength>
+  <artist>Dummy Artist</artist>
+  <title>Dummy Song</title>
+  <album>Dummy Album</album>
+  <tier>1</tier>
+  <bpm>125.000</bpm>
+  <gap type="ms">533</gap>
+  <samplestart type="s">30.543</samplestart>
+  <samplelength type="s">30.000</samplelength>
 
-<guitar>Dummy-guitar.ogg</guitar>
-<bass>Dummy-bass.ogg</bass>
-<drums>Dummy-drums.ogg</drums>
-<vocals>Dummy-vocals.ogg</vocals>
-<bgm>Dummy-bgm.ogg</bgm>
+  <guitar>Dummy-guitar.ogg</guitar>
+  <bass>Dummy-bass.ogg</bass>
+  <drums>Dummy-drums.ogg</drums>
+  <vocals>Dummy-vocals.ogg</vocals>
+  <bgm>Dummy-bgm.ogg</bgm>
 
-<!--
+  <!--
 All songs must start with a freebandNotes tag and end with one.
-    
+
 album is an optional tag. It also can be written as <album /> for no data.
 tier is the level of difficulty from 1-10 overall. Freeband has 10 tiers, similar to Guitar Hero and Rock Band's tiers. 1 is easiest, 10 is hardest. 10 will make a song go into an "Impossible Songs"-like tier.
 gap, samplestart, and samplelength support type="ms" and type="s" for milliseconds and seconds, respectively. Default for gap is ms. Default for samplestart and samplelength is s.
@@ -48,7 +48,7 @@ By default, every note is an 8th note. To group notes, use gr around them, for e
 
 To make things easier, you may use fth around quarter notes.
 
-For 12th notes, use tfth around the notes. For 16th notes, use sth. For 24th notes, use tfrth. For 32nd notes, use tsnd. Lastly for 64th notes, use sfth. Arbitary values are NOT allowed and will be ignored.
+For 12th notes, use tfth around the notes. For 16th notes, use sth. For 24th notes, use tfrth. For 32nd notes, use tsnd. Lastly for 64th notes, use sfth. Arbitrary values are NOT allowed and will be ignored.
 
 For triplets, which may be within any type of note timing, use tr.
 
@@ -69,72 +69,78 @@ Vocals format is defined below.
 As always with XML, you can make notes like this anywhere within the document.
 -->
 
-<notes type="guitar" difficulty="easy">
-</notes>
+  <notes type="guitar" difficulty="easy">
+  </notes>
 
-<notes type="guitar" difficulty="medium">
-</notes>
+  <notes type="guitar" difficulty="medium">
+  </notes>
 
-<notes type="guitar" difficulty="hard">
-</notes>
+  <notes type="guitar" difficulty="hard">
+  </notes>
 
-<notes type="guitar" difficulty="expert">
+  <notes type="guitar" difficulty="expert">
 113<h>2</h>
 1130
 113<h>2</h>
 1130
-<p>113<h>2</h>
+    <p>113<h>2</h>
 1130
 1140
 11<w>4</w>0</p>
-<f>10000000</f>
-</notes>
+    <f>10000000</f>
+  </notes>
 
-<notes type="bass" difficulty="easy">
-</notes>
+  <notes type="bass" difficulty="easy">
+  </notes>
 
-<notes type="bass" difficulty="medium">
-</notes>
+  <notes type="bass" difficulty="medium">
+  </notes>
 
-<notes type="bass" difficulty="hard">
-</notes>
+  <notes type="bass" difficulty="hard">
+  </notes>
 
-<notes type="bass" difficulty="expert">
-</notes>
+  <notes type="bass" difficulty="expert">
+  </notes>
 
-<notes type="drums" difficulty="easy">
-</notes>
+  <notes type="drums" difficulty="easy">
+  </notes>
 
-<notes type="drums" difficulty="medium">
-</notes>
+  <notes type="drums" difficulty="medium">
+  </notes>
 
-<notes type="drums" difficulty="hard">
-</notes>
+  <notes type="drums" difficulty="hard">
+  </notes>
 
-<notes type="drums" difficulty="expert">
-<fth>
+  <notes type="drums" difficulty="expert">
+    <fth>
 4444</fth>
 
-<gr>k2</gr>0
-<gr>12</gr>2
-<gr>12</gr>2
-<gr>12</gr>2
-<p><gr>12</gr>2
-<gr>k2</gr>0</p>
-<gr>12</gr>2
-<gr>12</gr>2
-<gr>12</gr>2
-<gr>12</gr><sth>2<w>2</w></sth>
+    <gr>k2</gr>0
+    <gr>12</gr>2
+    <gr>12</gr>2
+    <gr>12</gr>2
+    <p>
+      <gr>12</gr>2
+      <gr>k2</gr>0</p>
+    <gr>12</gr>2
+    <gr>12</gr>2
+    <gr>12</gr>2
+    <gr>12</gr>
+    <sth>2<w>2</w>
+    </sth>
 
-<tfth><tr>
-44<p>4</p></tr></tfth>
-</notes>
+    <tfth>
+      <tr>
+44<p>4</p>
+      </tr>
+    </tfth>
+  </notes>
 
-<lyrics>
-<tone note="C3">This is a</tone>
-<tone note="A#3">dummy file</tone>
-</lyrics>
+  <lyrics>
+    <tone note="C3">This is a</tone>
+    <tone note="A#3">dummy file</tone>
+  </lyrics>
 
-<!-- Lyrics require at least ONE <tone> tag surround lyrics. For lyrics to validate, all lyrics within <lyrics> MUST have a <tone> tag surrounding them or the vocals will not load. Freeband can use notes from C1 to C10. -->
+  <!-- Lyrics require at least ONE <tone> tag surround lyrics. For lyrics to validate, all lyrics within <lyrics> MUST have a <tone> tag surrounding them or the vocals will not load. Freeband can use notes from C1 to C10. -->
 
 </freebandNotes>
