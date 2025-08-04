@@ -1,7 +1,7 @@
-#include "../freeband.h"
-#include "../graphics/graphics.h"
-#include "../screens/difficulty.h"
-#include "../screens/instruments.h"
+#include "freeband.h"
+#include "graphics/graphics.h"
+#include "screens/difficulty.h"
+#include "screens/instruments.h"
 #include "fileio.h"
 #include "joypad.h"
 #include "keys.h"
@@ -41,7 +41,7 @@ bool prefs_getBools(dictionary *prefs) {
   ushort i;
   
   for (i = 0; i < structln(prefs_bools); i++)
-    prefs_bools[i].bUser_value = iniparser_getboolean(prefs, prefs_bools[i].ini_item, -1);
+    prefs_bools[i].bUser_value = iniparser_getboolean(prefs, prefs_bools[i].ini_item, prefs_bools[i].bDefault_value);
   
   return true;
 }
@@ -66,7 +66,7 @@ bool prefs_getChars(dictionary *prefs) {
   ushort i;
   
   for (i = 0; i < structln(prefs_chars); i++) 
-    prefs_chars[i].cUser_value = iniparser_getstring(prefs, prefs_chars[i].ini_item, INIERROR);
+    prefs_chars[i].cUser_value = iniparser_getstring(prefs, prefs_chars[i].ini_item, prefs_chars[i].cDefault_value);
   
   return true;
 }
@@ -86,10 +86,10 @@ bool prefs_getInts(dictionary *prefs) {
   ushort i;
   
   for (i = 0; i < structln(prefs_ints); i++) /* Handle ints and shorts here */
-    prefs_ints[i].iUser_value = iniparser_getint(prefs, prefs_ints[i].ini_item, -1);
+    prefs_ints[i].iUser_value = iniparser_getint(prefs, prefs_ints[i].ini_item, prefs_ints[i].iDefault_value);
   
   for (i = 0; i < structln(prefs_shorts); i++)
-    prefs_shorts[i].sUser_value = iniparser_getint(prefs, prefs_shorts[i].ini_item, -1);
+    prefs_shorts[i].sUser_value = iniparser_getint(prefs, prefs_shorts[i].ini_item, prefs_ints[i].iDefault_value);
   
   return true;
 }
@@ -157,6 +157,11 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
   strcat(prefs_ini, "/preferences.ini");
   
   struct stat buffer;
+
+  if (stat(prefs_root, &buffer) != 0) { /* No? Create Freeband root folder */
+    fprintf(stderr, "Unable to locate a Freeband root directory. Creating one now...\n");
+    mkdir(prefs_root, S_IRWXU | S_IRWXG);
+  }
   
 #ifdef __WIN32__
   if ((ret = _stat(prefs_songs, &buffer)) != 0) { /* No? Create songs folder */
@@ -167,7 +172,7 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
       return false; /* Error! Do we have permission? */
     }
   }
-#ifdef __DEBUG__
+#ifndef NDEBUG
   else
     fprintf(stdout, "Found songs directory: %s.\n", prefs_songs);
 #endif
@@ -182,7 +187,7 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
     }
   }
   else {
-#ifdef __DEBUG__
+#ifndef NDEBUG
     fprintf(stdout, "Found languages directory: %s.\n", prefs_languages);
 #endif
     languages_checkForINIs();
@@ -196,7 +201,7 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
       return false; /* Error! Do we have permission? */
     }
   }
-#ifdef __DEBUG__
+#ifndef NDEBUG
   else
     fprintf(stdout, "Found themes directory: %s.\n", prefs_themes);
 #endif
@@ -204,9 +209,9 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
   /* Do we already have a preferences.ini file in $HOME/Freeband? */
   if ((ret = _stat(prefs_ini, &buffer)) != 0) { /* No? Copy a default one then */
     fprintf(stderr, "Unable to find %s file. Copying a default one now...\n", prefs_ini);
-    fileIO_copyFile("GameData/preferences.ini", prefs_ini);
+    fileIO_copyFile("preferences.ini", prefs_ini);
   }
-#ifdef __DEBUG__
+#ifndef NDEBUG
   else
     fprintf(stdout, "Found preferences.ini file: %s.\nGetting preferences...\n", prefs_ini);
 #endif
@@ -224,7 +229,7 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
     }
   }
   else {
-#ifdef __DEBUG__
+#ifndef NDEBUG
     fprintf(stdout, "Found languages directory: %s.\n", prefs_languages);
 #endif
     languages_checkForINIs();
@@ -239,7 +244,7 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
       return false; /* Error! Do we have permission? */
     }
   }
-#ifdef __DEBUG__
+#ifndef NDEBUG
   else
     fprintf(stdout, "Found songs directory: %s.\n", prefs_songs);
 #endif
@@ -253,7 +258,7 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
       return false; /* Error! Do we have permission? */
     }
   }
-#ifdef __DEBUG__
+#ifndef NDEBUG
   else
     fprintf(stdout, "Found themes directory: %s.\n", prefs_themes);
 #endif
@@ -261,9 +266,9 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
   /* Do we already have a preferences.ini file in $HOME/Freeband? */
   if ((ret = stat(prefs_ini, &buffer)) != 0) { /* No? Copy a default one then */
     fprintf(stderr, "Unable to find %s file. Copying a default one now...\n", prefs_ini);
-    fileIO_copyFile("GameData/preferences.ini", prefs_ini);
+    fileIO_copyFile("preferences.ini", prefs_ini);
   }
-#ifdef __DEBUG__
+#ifndef NDEBUG
   else
     fprintf(stdout, "Found preferences.ini file: %s.\nGetting preferences...\n", prefs_ini);
 #endif

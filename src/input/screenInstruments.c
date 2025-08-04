@@ -1,9 +1,9 @@
-#include "../freeband.h"
-#include "../graphics/graphics.h"
-#include "../io/prefs.h"
-#include "../screens/instruments.h"
-#include "../screens/main.h"
-#include "../screens/songs.h"
+#include "freeband.h"
+#include "graphics/graphics.h"
+#include "io/prefs.h"
+#include "screens/instruments.h"
+#include "screens/main.h"
+#include "screens/songs.h"
 #include "input.h"
 #include "screenInstruments.h"
 
@@ -39,7 +39,7 @@ void input_screenInstruments(ushort direction) {
       screenMain_buffer();
       fb_screen.instruments = graphics_loading = menuQuit = false;
       fb_screen.mainMenu = true;
-#ifdef __DEBUG__
+#ifndef NDEBUG
       fprintf(stdout, "Successfully switched back to screenMain.\n");
 #endif
 /*      prefs_Freeband.default_instrument_u = 0;*/
@@ -49,5 +49,4 @@ void input_screenInstruments(ushort direction) {
       break;
   }
 
-  return;
 }

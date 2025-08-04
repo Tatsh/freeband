@@ -1,0 +1,25 @@
+{
+  "configurations": [
+    {
+      "MIMode": "gdb",
+      "args": [],
+      "cwd": "${workspaceFolder}/build/prefix/share/freeband",
+      "environment": [],
+      "externalConsole": true,
+      "name": "Debug",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/build/prefix/bin/freeband",
+      "request": "launch",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "ignoreFailures": true,
+          "text": "-enable-pretty-printing"
+        }
+      ],
+      "stopAtEntry": false,
+      "type": "cppdbg"
+    }
+  ],
+  "version": "0.2.0"
+}

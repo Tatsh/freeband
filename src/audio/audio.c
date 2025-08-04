@@ -1,5 +1,5 @@
-#include "../freeband.h"
-#include "../io/prefs.h"
+#include "freeband.h"
+#include "io/prefs.h"
 #include "audio.h"
 
 audio_deviceInfo_s audio_deviceInfoSupported[MAX_AUDIO_DEVICES];
@@ -64,7 +64,7 @@ bool audio_buffer() {
     fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText( err ));
     return false;
   }
-#ifdef __DEBUG__
+#ifndef NDEBUG
   else
     fprintf(stdout, "PortAudio initialised successfully.\n");
 #endif
@@ -74,7 +74,7 @@ bool audio_buffer() {
     return false;
   }
   else {
-#ifdef __DEBUG__
+#ifndef NDEBUG
     fprintf(stdout, "PortAudio found %d devices.\n", numDevices);
 #endif
     
@@ -137,7 +137,7 @@ bool audio_buffer() {
       }
       else {
         fprintf(stdout, "%s is not a 100%% compatible audio device.\n", deviceInfo->name);
-#ifdef __DEBUG__
+#ifndef NDEBUG
         fprintf(stdout, "  Max input channels:  %d\n", deviceInfo->maxInputChannels);
         fprintf(stdout, "  Max output channels: %d\n", deviceInfo->maxOutputChannels);
         fprintf(stdout, "  High output latency: %f\n", deviceInfo->defaultHighOutputLatency);

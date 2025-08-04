@@ -1,5 +1,5 @@
-#include "../freeband.h"
-#include "../nonstd.h"
+#include "freeband.h"
+#include "nonstd.h"
 #include "keys.h"
 #include "prefs.h"
 
@@ -71,9 +71,9 @@ keyPrefs_s keyPrefs[] = { /* To the right are the default values to use in case 
   { "button_start",           SDLK_RETURN,    SDLK_RETURN },
   { "button_select",          SDLK_BACKQUOTE, SDLK_BACKQUOTE },
   { "button_direction_left",  SDLK_LEFT,      SDLK_LEFT },
-  { "button_direction_right", SDLK_RIGHT,     SDLK_LEFT },
-  { "button_direction_down",  SDLK_DOWN,      SDLK_DOWN },
+  { "button_direction_right", SDLK_RIGHT,     SDLK_RIGHT },
   { "button_direction_up",    SDLK_UP,        SDLK_UP },
+  { "button_direction_down",  SDLK_DOWN,      SDLK_DOWN },
   { "whammy_down",            SDLK_2,         SDLK_2 },
   { "whammy_up",              SDLK_3,         SDLK_3 },
   { "star_power",             SDLK_5,         SDLK_5 },
@@ -283,7 +283,7 @@ int keys_mapKeystringToSDL(char *key) {
     }
   }
   
-#ifdef __DEBUG__
+#ifndef NDEBUG
   if (retkey != KEYS_NOKEY)
     fprintf(stdout, "keys_mapKeystringToSDL(): Mapped key string \"%s\" to SDL key %d (%#x).\n", key, retkey, retkey);
   else
@@ -294,30 +294,31 @@ int keys_mapKeystringToSDL(char *key) {
 }
 
 void prefs_getKeys(dictionary *prefs) {
-  char *iniItem = '\0';
+  const int buf_size = 1024;
+  char *iniItem = calloc(buf_size, 1);
   ushort i;
   
   /* Get data for keyboard 1; it is always enabled */
   for ( i = 0; i < structln(keyPrefs); i++ ) {
     strcat(iniItem, "Input_Keyboard1:");
     strcat(iniItem, keyPrefs[i].iniItem);
-    iniparser_getstring(prefs, iniItem, INIERROR);
+    iniparser_getint(prefs, iniItem, keyPrefs[i].default_value);
   }
   
   /* Keyboards 2 and 3 only if enabled */
-  iniItem = '\0';
+  memset(iniItem, 0, buf_size);
   for ( i = 0; i < structln(keyPrefs); i++ ) {
     strcat(iniItem, "Input_Keyboard2:");
     strcat(iniItem, keyPrefs[i].iniItem);
-    iniparser_getstring(prefs, iniItem, INIERROR);
+    iniparser_getint(prefs, iniItem, keyPrefs[i].default_value);
   }
   
-  iniItem = '\0';
+  memset(iniItem, 0, buf_size);
   for ( i = 0; i < structln(keyPrefs); i++ ) {
     strcat(iniItem, "Input_Keyboard3:");
     strcat(iniItem, keyPrefs[i].iniItem);
-    iniparser_getstring(prefs, iniItem, INIERROR);
+    iniparser_getint(prefs, iniItem, keyPrefs[i].default_value);
   }
-  
-  return;
+
+  free(iniItem);
 }

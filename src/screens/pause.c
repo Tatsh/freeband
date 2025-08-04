@@ -1,9 +1,9 @@
-#include "../freeband.h"
-#include "../graphics/graphics.h"
-#include "../graphics/text.h"
-#include "../input/input.h"
-#include "../io/languages.h"
-#include "../io/prefs.h"
+#include "freeband.h"
+#include "graphics/graphics.h"
+#include "graphics/text.h"
+#include "input/input.h"
+#include "io/languages.h"
+#include "io/prefs.h"
 #include "game.h"
 #include "main.h"
 #include "pause.h"
@@ -193,5 +193,4 @@ GLvoid screenPause() {
     text_position(text_quitX, text_quitY, defVertexZ);
   } glPopMatrix();
   
-  return;
 }

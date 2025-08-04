@@ -1,12 +1,12 @@
-#include "../freeband.h"
-#include "../graphics/graphics.h"
-#include "../graphics/text.h"
-#include "../io/languages.h"
-#include "../io/prefs.h"
+#include "freeband.h"
+#include "graphics/graphics.h"
+#include "graphics/text.h"
+#include "io/languages.h"
+#include "io/prefs.h"
 #include "difficulty.h"
 #include "main.h"
 
-texture_p pSelection[] = "GameData/themes/default/screenDifficulty/selection.png";
+texture_p pSelection[] = "themes/default/screenDifficulty/selection.png";
 
 GLcoordsX screenDifficulty_selectionX[4];
 GLcoordsY screenDifficulty_selectionY[] = { 0.0f, DIFFHT, DIFFHT, 0.0f };
@@ -192,5 +192,4 @@ GLvoid screenDifficulty() {
   
   screenMenuFooter();
 
-  return;
 }

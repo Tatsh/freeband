@@ -1,4 +1,4 @@
-#include "../freeband.h"
+#include "freeband.h"
 #include "songs.h"
 #include "songlist.h"
 
@@ -141,5 +141,4 @@ GLvoid songs_destroySongList(songList_s *list) {
     --list->size;
   }
   
-  return;
 }

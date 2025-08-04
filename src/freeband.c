@@ -36,7 +36,7 @@ void fb_quit(GLint retnCode) {
   err = Pa_Terminate();
   if( err != paNoError )
     fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText(err));
-#ifdef __DEBUG__
+#ifndef NDEBUG
   else
     fprintf(stdout, "PortAudio terminated successfully.\n");
 #endif
@@ -55,32 +55,32 @@ void fb_quit(GLint retnCode) {
 
   iniparser_freedict(lang_d);
   iniparser_freedict(prefs);
-#ifdef __DEBUG__
+#ifndef NDEBUG
   fprintf(stdout, "Freed language INI dictionary.\n");
   fprintf(stdout, "Freed preferences INI dictionary.\n");
 #endif
   
   TTF_Quit();
   SDL_Quit();     /* Clean window */
-#ifdef __DEBUG__
+#ifndef NDEBUG
   fprintf(stdout, "Quitting...\n");
 #endif
   exit(retnCode);
 }
 
-int main(GLint argc, char *argv[]) {
+int main(int argc, char *argv[]) {
   ushort i;
   
   for (i = 0; i < MAX_IMAGES; i++) texture[i] = 0;
   for (i = 0; i < MAX_TEXT; i++) text[i] = 0;
   
+  glutInit(&argc, argv);  /* Initialise GLUT */
+
   if (!prefs_verify()) /* Verify preferences existence or create if does not exist (first launch) */
     fb_quit(ERROR_VERIFYING_PREFS);
   
   if (!prefs_load())
     fb_quit(ERROR_READING_PREFS);
-  
-  glutInit(&argc, argv);  /* Initialise GLUT */
   
   int videoFlags;                   /* Flags to send to SDL */
   bool hasQuit = false;             /* Main game loop variable */
@@ -137,6 +137,8 @@ int main(GLint argc, char *argv[]) {
   if (PREF_FULLSCREEN)
     videoFlags |= SDL_FULLSCREEN;
 
+  languages_loadLanguage(en_GB);
+
   fbSurface = SDL_SetVideoMode(PREF_WIDTH, PREF_HEIGHT, PREF_BPP, videoFlags); /* Get a SDL surface */
   if (!fbSurface) {
     fprintf(stderr,  "Video mode set failed: %s.\n", SDL_GetError());
@@ -181,6 +183,8 @@ int main(GLint argc, char *argv[]) {
   for ( i = 0; i < 4; i++ ) text_OnlineY[i] = text_MultiplayerY[i] + 0.2;
   for ( i = 0; i < 4; i++ ) text_OptionsY[i] = text_OnlineY[i] + 0.2;
   for ( i = 0; i < 4; i++ ) text_QuitY[i] = text_OptionsY[i] + 0.21;
+
+  SDL_EnableKeyRepeat(0, 0);
   
   while (!hasQuit) {
     
@@ -189,7 +193,7 @@ int main(GLint argc, char *argv[]) {
       switch (freeband.type) {
 
         case SDL_VIDEORESIZE: /* Handle resize event */
-          fbSurface = SDL_SetVideoMode(freeband.resize.w, freeband.resize.h, 32, videoFlags);
+          fbSurface = SDL_SetVideoMode(freeband.resize.w, freeband.resize.h, PREF_BPP, videoFlags);
           if (!fbSurface) {
             fprintf(stderr, "Could not get a surface after resize: %s.\n", SDL_GetError());
             fb_quit(1);
@@ -249,7 +253,7 @@ int main(GLint argc, char *argv[]) {
             screenMain_buffer();
             fb_screen.instruments = graphics_loading = menuQuit = false;
             fb_screen.mainMenu = true;
-#ifdef __DEBUG__
+#ifndef NDEBUG
             fprintf(stdout, "Switched back to screenMain.\n");
 #endif
           }
@@ -259,7 +263,7 @@ int main(GLint argc, char *argv[]) {
             screenInstruments_buffer();
             fb_screen.instruments = graphics_loading = menuQuit = false;
             fb_screen.instruments = true;
-#ifdef __DEBUG__
+#ifndef NDEBUG
             fprintf(stdout, "Switched back to screenInstruments.\n");
 #endif
           }
@@ -269,19 +273,19 @@ int main(GLint argc, char *argv[]) {
             screenSongs_buffer();
             fb_screen.difficulty = graphics_loading = menuQuit = false;
             fb_screen.songs = true;
-#ifdef __DEBUG__
+#ifndef NDEBUG
             fprintf(stdout, "Switched back to screenSongs.\n");
 #endif
           }
           else if (fb_screen.game && gamePaused) {
             gamePaused = false;
-#ifdef __DEBUG__
+#ifndef NDEBUG
             fprintf(stdout, "Game resumed.\n");
 #endif
           }
           else if (fb_screen.game && !gamePaused) {
             gamePaused = true;
-#ifdef __DEBUG__
+#ifndef NDEBUG
             fprintf(stdout, "Game paused.\n");
 #endif
           }

@@ -1,13 +1,13 @@
-#include "../freeband.h"
+#include "freeband.h"
 #include "graphics.h"
 #include "text.h"
-#include "../io/prefs.h"
-#include "../screens/difficulty.h"
-#include "../screens/game.h"
-#include "../screens/instruments.h"
-#include "../screens/main.h"
-#include "../screens/pause.h"
-#include "../screens/songs.h"
+#include "io/prefs.h"
+#include "screens/difficulty.h"
+#include "screens/game.h"
+#include "screens/instruments.h"
+#include "screens/main.h"
+#include "screens/pause.h"
+#include "screens/songs.h"
 
 bool graphics_loading;
 
@@ -179,7 +179,6 @@ GLint graphics_loadTexture(const char filename[], GLuint i) {
 GLvoid graphics_clear() {
   glDeleteTextures(MAX_IMAGES, &texture[0]); /* Clean up old screen */
   glDeleteTextures(MAX_TEXT, &text[0]);
-  return;
 }
 
 GLvoid graphics_positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *vertexZ) {
@@ -191,7 +190,6 @@ GLvoid graphics_positionTexture(GLfloat *vertexX, GLfloat *vertexY, GLfloat *ver
     glTexCoord2f( 1.0f, 0.0f ); glVertex3f( vertexX[3], vertexY[3], vertexZ[3] ); /* Top right corner */
   glEnd();
 
-  return;
 }
 
 GLvoid graphics_initColours() {
@@ -207,7 +205,6 @@ GLvoid graphics_initColours() {
   yellow.g = 255;
   yellow.b = 240;
   
-  return;
 }
 
 GLvoid graphics_draw() {
@@ -221,11 +218,11 @@ GLvoid graphics_draw() {
   else if (fb_screen.mainMenu && !menuQuit)
     screenMain();
   else if (fb_screen.instruments && !menuQuit)
-    screenInstruments(fb_nPlayers);
+    screenInstruments();
   else if (fb_screen.songs && !menuQuit)
     screenSongs();
   else if (fb_screen.difficulty && !menuQuit)
-    screenDifficulty(fb_nPlayers);
+    screenDifficulty();
   else if (fb_screen.game)
     screenGame();
 
@@ -234,7 +231,7 @@ GLvoid graphics_draw() {
   /* Gather our frames per second */
   static GLuint Frames = 0;
   Frames++;
-#ifdef __DEBUG__
+#ifndef NDEBUG
   static GLuint T0     = 0;
   GLuint t = SDL_GetTicks();
   if (t - T0 >= 5000) {
@@ -245,6 +242,4 @@ GLvoid graphics_draw() {
     Frames = 0;
   }
 #endif
-
-  return;
 }

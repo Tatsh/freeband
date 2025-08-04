@@ -1,4 +1,4 @@
-#include "../freeband.h"
+#include "freeband.h"
 #include "graphics.h"
 #include "text.h"
 
@@ -6,13 +6,13 @@
    Name variables as such:
    char path_<fontStyle>_<fontName>[];
    fontStyles: regular, bold, italic, boldItalic */
-font_p path_bold_bitstreamVeraSans[] = "GameData/themes/default/fonts/bold-bitstream-vera-sans-mono.ttf";
-font_p path_bold_bitstreamVeraSansMono[] = "GameData/themes/default/fonts/bold-bitstream-vera-sans.ttf";
-font_p path_bold_freeSans[] = "GameData/themes/default/fonts/bold-freesans.ttf";
+font_p path_bold_bitstreamVeraSans[] = "themes/default/fonts/bold-bitstream-vera-sans-mono.ttf";
+font_p path_bold_bitstreamVeraSansMono[] = "themes/default/fonts/bold-bitstream-vera-sans.ttf";
+font_p path_bold_freeSans[] = "themes/default/fonts/bold-freesans.ttf";
 
-font_p path_italic_crillee[] = "GameData/themes/default/fonts/italic-crillee.ttf";
+font_p path_italic_crillee[] = "themes/default/fonts/italic-crillee.ttf";
 
-font_p path_regular_freeSans[] = "GameData/themes/default/fonts/regular-freesans.ttf";
+font_p path_regular_freeSans[] = "themes/default/fonts/regular-freesans.ttf";
 /* End font paths */
 
 GLint text_getHeight(const char text[], TTF_Font *font) {
@@ -51,7 +51,6 @@ GLfloat text_scaleWidth(const char text[], TTF_Font *font, GLfloat textureHeight
 
 GLvoid text_position(GLfloat vertexX[], GLfloat vertexY[], GLfloat vertexZ[]) { /* Wrapper */
   graphics_positionTexture(vertexX, vertexY, vertexZ);
-  return;
 }
 
 GLint text_load(const char *input, TTF_Font *font, SDL_Color color) {

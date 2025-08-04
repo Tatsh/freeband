@@ -1,4 +1,4 @@
-#include "../freeband.h"
+#include "freeband.h"
 #include "audio.h"
 
 OggVorbis_File oggStream;

@@ -1,20 +1,19 @@
-#include "../freeband.h"
-#include "../graphics/graphics.h"
-#include "../screens/difficulty.h"
-#include "../screens/game.h"
-#include "../screens/instruments.h"
-#include "../screens/main.h"
-#include "../screens/pause.h"
-#include "../screens/songs.h"
+#include "freeband.h"
+#include "graphics/graphics.h"
+#include "screens/difficulty.h"
+#include "screens/game.h"
+#include "screens/instruments.h"
+#include "screens/main.h"
+#include "screens/pause.h"
+#include "screens/songs.h"
 #include "input.h"
 #include "screenGame.h"
 
 void input_screenGamePause() {
   gamePaused = true;
-#ifdef __DEBUG__
+#ifndef NDEBUG
   fprintf(stdout, "Now in screenPause() function.\n");
 #endif
-  return;
 }
 
 void input_screenGame() {
@@ -45,5 +44,4 @@ void input_screenGame() {
   else
     screenGame_button.o = false;
   
-  return;
 }

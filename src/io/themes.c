@@ -1,4 +1,4 @@
-#include "../freeband.h"
+#include "freeband.h"
 #include "prefs.h"
 #include "themes.h"
 

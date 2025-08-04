@@ -1,4 +1,4 @@
-#include "../freeband.h"
+#include "freeband.h"
 #include "fileio.h"
 #include "prefs.h"
 #include "languages.h"
@@ -24,7 +24,7 @@ bool languages_loadLanguage(ushort lang) {
         fprintf(stderr, "Error loading %s dictionary using iniparser.\n", languageIni);
         return false;
       }
-#ifdef __DEBUG__
+#ifndef NDEBUG
       else
         fprintf(stdout, "Successfully opened English-Commonwealth language file: %s.\n", languageIni);
 #endif
@@ -37,7 +37,7 @@ bool languages_loadLanguage(ushort lang) {
         fprintf(stderr, "Error loading %s dictionary using iniparser.\n", languageIni);
         return false;
       }
-#ifdef __DEBUG__
+#ifndef NDEBUG
       else
         fprintf(stdout, "Successfully opened Polish language file: %s.\n", languageIni);
 #endif
@@ -120,9 +120,9 @@ void languages_checkForINIs() {
   
   if ((ret = _stat(checkINI, &buffer)) != 0) {
     fprintf(stderr, "Unable to locate %s language file. Copying now...\n", checkINI);
-    fileIO_copyFile("GameData/languages/en_GB.ini", checkINI);
+    fileIO_copyFile("languages/en_GB.ini", checkINI);
   }
-#ifdef __DEBUG__
+#ifndef NDEBUG
   else
     fprintf(stdout, "Found %s language file.\n", checkINI);
 #endif
@@ -134,9 +134,9 @@ void languages_checkForINIs() {
   
   if ((ret = _stat(checkINI, &buffer)) != 0) {
     fprintf(stderr, "Unable to locate %s language file. Copying now...\n", checkINI);
-    fileIO_copyFile("GameData/languges/pl_PL.ini", checkINI);
+    fileIO_copyFile("languges/pl_PL.ini", checkINI);
   }
-#ifdef __DEBUG__
+#ifndef NDEBUG
   else
     fprintf(stdout, "Found %s language file.\n", checkINI);
 #endif
@@ -148,9 +148,9 @@ void languages_checkForINIs() {
 
   if ((ret = stat(checkINI, &buffer)) != 0) {
     fprintf(stderr, "Unable to locate %s language file. Copying now...\n", checkINI);
-    fileIO_copyFile("GameData/languages/en_GB.ini", checkINI);
+    fileIO_copyFile("languages/en_GB.ini", checkINI);
   }
-#ifdef __DEBUG__
+#ifndef NDEBUG
   else
     fprintf(stdout, "Found %s language file.\n", checkINI);
 #endif
@@ -162,10 +162,9 @@ void languages_checkForINIs() {
   
   if ((ret = stat(checkINI, &buffer)) != 0) {
     fprintf(stderr, "Unable to locate %s language file. Copying now...\n", checkINI);
-    fileIO_copyFile("GameData/languages/pl_PL.ini", checkINI);
+    fileIO_copyFile("languages/pl_PL.ini", checkINI);
   }
 #endif /* __LANG_PL_PL__ */
   
 #endif /* POSIX */
-  return;
 }

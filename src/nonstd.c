@@ -10,8 +10,6 @@ void strrev(char s[]) {
     s[i] = s[j];
     s[j] = c;
   }
-
-  return;
 }
 
 void itoa(int n, char s[]) {
@@ -27,6 +25,4 @@ void itoa(int n, char s[]) {
     s[i++] = '-';
   s[i] = '\0';
   strrev(s);
-
-  return;
 }

@@ -1,8 +1,8 @@
-#include "../freeband.h"
-#include "../graphics/graphics.h"
-#include "../graphics/text.h"
-#include "../io/languages.h"
-#include "../io/prefs.h"
+#include "freeband.h"
+#include "graphics/graphics.h"
+#include "graphics/text.h"
+#include "io/languages.h"
+#include "io/prefs.h"
 #include "instruments.h"
 #include "main.h"
 #include "songs.h"
@@ -21,7 +21,7 @@ GLcoordsY text_SelectInstrumentY[] = { 0.0f, SCREENHEADTEXTHT, SCREENHEADTEXTHT,
 
 GLfloat degree = 0.0f;
 
-texture_i bg;
+extern texture_i bg;
 texture_i text_guitar, text_bass, text_drums, text_vocals;
 texture_i text_selectInstrument;
 
@@ -32,25 +32,25 @@ ushort current_instrument;
 GLvoid screenInstruments_accept() {
   switch(current_instrument) {
     case INSTRUMENT_GUITAR:
-#ifdef __DEBUG__
+#ifndef NDEBUG
       fprintf(stdout, "Starting %d player guitar game.\n", fb_nPlayers);
 #endif
       break;
       
     case INSTRUMENT_BASS:
-#ifdef __DEBUG__
+#ifndef NDEBUG
       fprintf(stdout, "Starting %d player bass game.\n", fb_nPlayers);
 #endif      
       break;
       
     case INSTRUMENT_DRUMS:
-#ifdef __DEBUG__
+#ifndef NDEBUG
       fprintf(stdout, "Starting %d player drums game.\n", fb_nPlayers);
 #endif
       break;
       
     case INSTRUMENT_VOCALS:
-#ifdef __DEBUG__
+#ifndef NDEBUG
       fprintf(stdout, "Starting %d player vocals game.\n", fb_nPlayers);
 #endif
       break;
@@ -62,13 +62,12 @@ GLvoid screenInstruments_accept() {
   menuQuit = true;
   graphics_loading = true;
   graphics_clear();
-#ifdef __DEBUG__
+#ifndef NDEBUG
   fprintf(stdout, "Deleted all screenInstruments elements.\nLoading screenSongs elements...\n");
 #endif
   fb_screen.instruments = graphics_loading = menuQuit = false;
   fb_screen.songs = true;
 
-  return;
 }
 
 bool screenInstruments_buffer() {
@@ -242,5 +241,4 @@ GLvoid screenInstruments() {
   
   screenMenuFooter();
   
-  return;
 }

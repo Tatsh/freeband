@@ -1,13 +1,13 @@
-#include "../freeband.h"
-#include "../graphics/graphics.h"
-#include "../screens/instruments.h"
-#include "../screens/main.h"
+#include "freeband.h"
+#include "graphics/graphics.h"
+#include "screens/instruments.h"
+#include "screens/main.h"
 #include "input.h"
 #include "screenMain.h"
 
 void input_screenMain(ushort direction) {
   ushort i;
-  
+
   switch (direction) {
     case DOWN:
       screenMain_nSelection++;
@@ -56,5 +56,4 @@ void input_screenMain(ushort direction) {
       break;
   }
   
-  return;
 }

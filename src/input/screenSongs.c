@@ -1,8 +1,8 @@
-#include "../freeband.h"
-#include "../graphics/graphics.h"
-#include "../screens/difficulty.h"
-#include "../screens/instruments.h"
-#include "../screens/songs.h"
+#include "freeband.h"
+#include "graphics/graphics.h"
+#include "screens/difficulty.h"
+#include "screens/instruments.h"
+#include "screens/songs.h"
 #include "input.h"
 #include "screenSongs.h"
 
@@ -13,7 +13,7 @@ void input_screenSongs(ushort direction) {
         byTier_s = false;
         /* screenSongs_sort(SORT_AZ_TITLE); */
         titleAZ_s = true;
-#ifdef __DEBUG__
+#ifndef NDEBUG
         fprintf(stdout, "Songs sorted alphabetically by title.\n");
 #endif
       }
@@ -21,7 +21,7 @@ void input_screenSongs(ushort direction) {
         titleAZ_s = false;
         /* screenSongs_sort(SORT_AZ_ARTIST); */
         artistAZ_s = true;
-#ifdef __DEBUG__
+#ifndef NDEBUG
         fprintf(stdout, "Songs sorted alphabetically by artist.\n");
 #endif
       }
@@ -29,7 +29,7 @@ void input_screenSongs(ushort direction) {
         artistAZ_s = false;
         /* screenSongs_sort(SORT_BPM); */
         byBPM_s = true;
-#ifdef __DEBUG__
+#ifndef NDEBUG
         fprintf(stdout, "Songs sorted ascendingly by BPM.\n");
 #endif
       }
@@ -37,7 +37,7 @@ void input_screenSongs(ushort direction) {
         byBPM_s = false;
         /* screenSongs_sort(SORT_BY_TIER); */
         byTier_s = true;
-#ifdef __DEBUG__
+#ifndef NDEBUG
         fprintf(stdout, "Songs sorted by Tier.\n");
 #endif
       }
@@ -49,7 +49,7 @@ void input_screenSongs(ushort direction) {
       graphics_clear();
       screenDifficulty_buffer();
       fb_screen.difficulty = true;
-#ifdef __DEBUG__
+#ifndef NDEBUG
       fprintf(stdout, "Now in screenDifficulty().\n");
 #endif
       graphics_loading = menuQuit = false;
@@ -67,5 +67,4 @@ void input_screenSongs(ushort direction) {
       break;
   }
   
-  return;
 }

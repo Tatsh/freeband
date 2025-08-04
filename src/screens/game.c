@@ -1,8 +1,8 @@
-#include "../freeband.h"
-#include "../audio/audio.h"
-#include "../graphics/graphics.h"
-#include "../graphics/text.h"
-#include "../io/prefs.h"
+#include "freeband.h"
+#include "audio/audio.h"
+#include "graphics/graphics.h"
+#include "graphics/text.h"
+#include "io/prefs.h"
 #include "game.h"
 #include "main.h"
 #include "pause.h"
@@ -14,10 +14,10 @@ GLfloat bringDownAngle = 90.0f;
 GLfloat NE_coord_neg = 0.0f;
 GLfloat NE_coord_pos = 1.0f;
 
-texture_p buttonT[] = "GameData/themes/default/screenGame/button.png";
-texture_p string[] = "GameData/themes/default/screenGame/string.png";
-texture_p stringEndG[] = "GameData/themes/default/screenGame/button_top.png"; /* Green string */
-texture_p trackloop_a[] = "GameData/themes/default/screenGame/loop_a.png";
+texture_p buttonT[] = "themes/default/screenGame/button.png";
+texture_p string[] = "themes/default/screenGame/string.png";
+texture_p stringEndG[] = "themes/default/screenGame/button_top.png"; /* Green string */
+texture_p trackloop_a[] = "themes/default/screenGame/loop_a.png";
 
 uint combo = 0;
 float life = 50.0f; /* From 0 to 100 */
@@ -110,7 +110,6 @@ GLvoid screenGame_buffer() {
   if (freeSansBold)
     TTF_CloseFont(freeSansBold);
 
-  return;
 }
 
 ushort screenGame_pollKey(ushort note) {
@@ -195,7 +194,6 @@ void screenGame_loop() {
    screenGame_alignNotes();*/
   }
   
-  return;
 }
 
 float screenGame_failed() {
@@ -204,7 +202,6 @@ float screenGame_failed() {
 }
 
 GLvoid screenGame_completed() {
-  return;
 }
 
 GLvoid screenGame() {
@@ -431,5 +428,4 @@ GLvoid screenGame() {
   else
     screenPause();
   
-  return;
 }

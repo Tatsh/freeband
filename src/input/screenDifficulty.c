@@ -1,8 +1,8 @@
-#include "../freeband.h"
-#include "../graphics/graphics.h"
-#include "../screens/difficulty.h"
-#include "../screens/game.h"
-#include "../screens/songs.h"
+#include "freeband.h"
+#include "graphics/graphics.h"
+#include "screens/difficulty.h"
+#include "screens/game.h"
+#include "screens/songs.h"
 #include "input.h"
 #include "screenDifficulty.h"
 
@@ -72,7 +72,7 @@ void input_screenDifficulty(ushort direction) {
       screenGame_buffer();
       fb_screen.game = true;
       graphics_loading = gamePaused = false;
-#ifdef __DEBUG__
+#ifndef NDEBUG
       fprintf(stdout, "Now in screenGame() function.\n");
 #endif
       break;
@@ -83,7 +83,7 @@ void input_screenDifficulty(ushort direction) {
       screenSongs_buffer();
       fb_screen.difficulty = graphics_loading = menuQuit = false;
       fb_screen.songs = true;
-#ifdef __DEBUG__
+#ifndef NDEBUG
       fprintf(stdout, "Switched back to screenSongs.\n");
 #endif
       break;
@@ -92,5 +92,4 @@ void input_screenDifficulty(ushort direction) {
       break;
   }
 
-  return;
 }

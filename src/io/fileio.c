@@ -1,4 +1,4 @@
-#include "../freeband.h"
+#include "freeband.h"
 #include "fileio.h"
 #include "languages.h"
 #include "prefs.h"
@@ -57,7 +57,7 @@ bool fileIO_unix2dos(FILE *in) {
   strcat(path_temp, "XXXXXX");  if (fopen(path_temp, "w+") == NULL)
       return false;
   
-#ifdef __DEBUG__
+#ifndef NDEBUG
   fprintf(stderr, "fileIO_unix2dos(): using %s as temporary file...\n", path_temp);
 #endif /* __DEBUG__ */
   

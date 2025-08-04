@@ -30,8 +30,8 @@
 #include <shlobj.h>
 
 typedef unsigned int uint;
-typedef unsigned short ushort; /* Yes Windows is missing this one */
 #endif
+typedef unsigned short ushort;
 
 #define structln(x) (sizeof(x)/sizeof(x[0])) /* Returns how many entries in a struct array */
 

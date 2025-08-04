@@ -1,14 +1,14 @@
-#include "../freeband.h"
-#include "../audio/audio.h"
-#include "../graphics/graphics.h"
-#include "../io/joypad.h"
-#include "../io/keys.h"
-#include "../screens/main.h"
-#include "../screens/difficulty.h"
-#include "../screens/game.h"
-#include "../screens/instruments.h"
-#include "../screens/pause.h"
-#include "../screens/songs.h"
+#include "freeband.h"
+#include "audio/audio.h"
+#include "graphics/graphics.h"
+#include "io/joypad.h"
+#include "io/keys.h"
+#include "screens/main.h"
+#include "screens/difficulty.h"
+#include "screens/game.h"
+#include "screens/instruments.h"
+#include "screens/pause.h"
+#include "screens/songs.h"
 #include "input.h"
 #include "screenDifficulty.h"
 #include "screenGame.h"
@@ -48,15 +48,13 @@ void input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
     else if (fb_screen.difficulty) input_screenDifficulty(DOWN);
     else if (fb_screen.game && gamePaused) input_screenPause(DOWN);
   }
-  
+
   if (keysym->sym == FBKEY_PICKUP || keysym->sym == FBKEY_UP) {
     if (fb_screen.mainMenu) input_screenMain(UP);
     else if (fb_screen.instruments) input_screenInstruments(UP);
     else if (fb_screen.difficulty) input_screenDifficulty(UP);
     else if (fb_screen.game && gamePaused) input_screenPause(UP);
   }
-  
-
   
   if (keysym->sym == FBKEY_GREEN || keysym->sym == FBKEY_START) {
     if (keysym->mod & KMOD_ALT) /* Switch to full screen only if Alt+Enter is pressed, hard-coded */
@@ -70,7 +68,7 @@ void input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
     }
   }
   
-  if (keysym->sym == SDLK_ESCAPE || keysym->sym == FBKEY_START) {
+  if (keysym->sym == SDLK_ESCAPE) {
     if (fb_screen.game && !gamePaused) input_screenGamePause();
     else if (fb_screen.game && gamePaused) input_screenPause(ESC);
   }
@@ -117,6 +115,4 @@ void input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
         fprintf(stderr, "Maximum players is 4.\n");
     }
   }*/
-
-  return;
 }

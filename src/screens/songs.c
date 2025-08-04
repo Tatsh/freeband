@@ -1,8 +1,8 @@
-#include "../freeband.h"
-#include "../graphics/graphics.h"
-#include "../graphics/text.h"
-#include "../io/languages.h"
-#include "../io/prefs.h"
+#include "freeband.h"
+#include "graphics/graphics.h"
+#include "graphics/text.h"
+#include "io/languages.h"
+#include "io/prefs.h"
 #include "main.h"
 #include "songs.h"
 #include "songlist.h"
@@ -18,7 +18,7 @@ GLcoordsX text_byBPMX[4];
 
 GLcoordsY text_sortY[4] = { 0.0, SORT_TEXT_HT, SORT_TEXT_HT, 0.0f };
 
-texture_i bg;
+extern texture_i bg;
 text_i text_songs, text_byTier, text_titleAZ, text_artistAZ, text_byBPM;
 song_sort byTier_s, titleAZ_s, artistAZ_s, byBPM_s;
 
@@ -126,6 +126,4 @@ GLvoid screenSongs() {
   } glPopMatrix();
   
   screenMenuFooter();
-  
-  return;
 }

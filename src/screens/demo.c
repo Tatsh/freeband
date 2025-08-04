@@ -1,2 +1,2 @@
-#include "../freeband.h"
+#include "freeband.h"
 

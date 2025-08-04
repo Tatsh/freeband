@@ -1,7 +1,7 @@
-#include "../freeband.h"
-#include "../graphics/graphics.h"
-#include "../graphics/text.h"
-#include "../io/languages.h"
+#include "freeband.h"
+#include "graphics/graphics.h"
+#include "graphics/text.h"
+#include "io/languages.h"
 #include "instruments.h"
 #include "main.h"
 
@@ -9,9 +9,9 @@ bool nonGame;
 bool online;
 bool options;
 
-texture_p bgTexture[] = "GameData/themes/default/global/bg.png";
-texture_p logoTexture[] = "GameData/themes/default/screenMain/banner.png";
-texture_p mainSelector[] = "GameData/themes/default/screenMain/selector.png";
+texture_p bgTexture[] = "themes/default/global/bg.png";
+texture_p logoTexture[] = "themes/default/screenMain/banner.png";
+texture_p mainSelector[] = "themes/default/screenMain/selector.png";
 
 /* Note:
    Negative is to the left, positive is to the right when horizontal (x)
@@ -25,11 +25,12 @@ GLcoordsX screenMain_selectionX[4]; /* Main menu selector's default position */
 GLcoordsY screenMain_selectionY[] = {  0.18f, 0.0f, 0.0f, 0.18f };
 
 GLcoordsX text_SinglePlayerX[4]; /* SINGLE PLAYER */
-GLcoordsY text_SinglePlayerY[4];
 GLcoordsX text_MultiplayerX[4]; /* MULTIPLAYER */
 GLcoordsX text_OnlineX[4]; /* ONLINE */
 GLcoordsX text_OptionsX[4]; /* OPTIONS */
 GLcoordsX text_QuitX[4]; /* QUIT */
+
+extern GLcoordsY text_SinglePlayerY[4];
 
 GLcoordsY text_SinglePlayer_hl[4];
 GLcoordsY text_Multiplayer_hl[4];
@@ -37,7 +38,8 @@ GLcoordsY text_Online_hl[4];
 GLcoordsY text_Options_hl[4];
 GLcoordsY text_Quit_hl[4];
 
-texture_i bg, logo, selectG; /* Textures; must be called selectG thanks to Gentoo defining select randomly elsewhere this links to */
+texture_i logo, selectG; /* Textures; must be called selectG thanks to Gentoo defining select randomly elsewhere this links to */
+extern texture_i bg;
 text_i single, multiplayer, onlineM, optionsM, quit; /* Menu options */
 
 /* screenMenuBottom */
@@ -50,10 +52,10 @@ GLcoordsX text_upDown_strumX[4];
 GLcoordsY text_upDown_strumY[4];
 
 texture_i button_green, button_red, strummer, button_bg;
-texture_p button_green_p[] = "GameData/themes/default/global/button_green.png";
-texture_p button_red_p[] = "GameData/themes/default/global/button_red.png";
-texture_p strummer_p[] = "GameData/themes/default/global/strummer.png";
-texture_p button_bg_p[] = "GameData/themes/default/global/screenbottom_bg.png";
+texture_p button_green_p[] = "themes/default/global/button_green.png";
+texture_p button_red_p[] = "themes/default/global/button_red.png";
+texture_p strummer_p[] = "themes/default/global/strummer.png";
+texture_p button_bg_p[] = "themes/default/global/screenbottom_bg.png";
 
 #define FOOTERBG_HT 0.145f
 
@@ -72,17 +74,19 @@ GLuint screenMain_nSelection = 0;
 
 mainMenu_s screenMain_selection;
 
+extern instrument_s main_instrument[4];
+
 GLvoid screenMain_accept() {
   switch (screenMain_nSelection) {
     case 0:
-#ifdef __DEBUG__
+#ifndef NDEBUG
       fprintf(stdout, "Starting single player mode.\n");
 #endif
       fb_nPlayers = 1;
       menuQuit = true; /* We are leaving the menu */
       graphics_loading = true; /* We are currently loading textures */
       graphics_clear(); /* Clean up screen */
-#ifdef __DEBUG__
+#ifndef NDEBUG
       fprintf(stdout, "Deleted all screen mainMenu elements.\nLoading single player screenInstruments elements...\n");
 #endif
       fb_screen.mainMenu = graphics_loading = menuQuit = false;
@@ -91,7 +95,7 @@ GLvoid screenMain_accept() {
       break;
 
     case 1:
-#ifdef __DEBUG__
+#ifndef NDEBUG
       fprintf(stdout, "Starting multiplayer mode.\n");
 #endif
       nonGame = true; /* Until multiplayer is implemented */
@@ -117,7 +121,6 @@ GLvoid screenMain_accept() {
       break;
   }
 
-  return;
 }
 
 GLvoid screenMain_highlighted(GLuint selectID) {
@@ -133,7 +136,7 @@ GLvoid screenMain_highlighted(GLuint selectID) {
         text_Multiplayer_hl[i] = colour_blue_7CA4F6[i]; /* From up arrow */
         text_SinglePlayer_hl[i] = 1.0f;
     }
-#ifdef __DEBUG__
+#ifndef NDEBUG
     fprintf(stdout, "Selected single player mode.\n");
 #endif
     break;
@@ -147,7 +150,7 @@ GLvoid screenMain_highlighted(GLuint selectID) {
         text_Online_hl[i] = colour_blue_7CA4F6[i];
         text_Multiplayer_hl[i] = 1.0f;
       }
-#ifdef __DEBUG__
+#ifndef NDEBUG
       fprintf(stdout, "Selected multiplayer player mode.\n");
 #endif
       break;
@@ -161,7 +164,7 @@ GLvoid screenMain_highlighted(GLuint selectID) {
         text_Options_hl[i] = colour_blue_7CA4F6[i];
         text_Online_hl[i] = 1.0f;
       }
-#ifdef __DEBUG__
+#ifndef NDEBUG
       fprintf(stdout, "Selected online mode.\n");
 #endif
       break;
@@ -175,7 +178,7 @@ GLvoid screenMain_highlighted(GLuint selectID) {
         text_Quit_hl[i] = colour_blue_7CA4F6[i];
         text_Options_hl[i] = 1.0f;
       }
-#ifdef __DEBUG__
+#ifndef NDEBUG
       fprintf(stdout, "Selected options menu.\n");
 #endif
       break;
@@ -189,7 +192,7 @@ GLvoid screenMain_highlighted(GLuint selectID) {
         text_SinglePlayer_hl[i] = colour_blue_7CA4F6[i];
         text_Quit_hl[i] = 1.0f;
       }
-#ifdef __DEBUG__
+#ifndef NDEBUG
       fprintf(stdout, "Selected to quit.\n");
 #endif
       break;
@@ -198,7 +201,6 @@ GLvoid screenMain_highlighted(GLuint selectID) {
         break;
   }
 
-  return;
 }
 
 bool screenMenuFooter_buffer() {
@@ -308,6 +310,7 @@ bool screenMain_buffer() {
   /* Text */
   if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
     single = text_load(languageStrings_screenMain.single_player, crillee, white); /* Always load text as white; change using glColor4f */
+    printf("Loaded single player text: %s\n", languageStrings_screenMain.single_player);
     width = text_scaleWidth(languageStrings_screenMain.single_player, crillee, MENUITEMSHT);
     for ( i = 0; i < 2; i++ ) text_SinglePlayerX[i] = graphics_centreAtX(0.6f, width);
     for ( i = 2; i < 4; i++ ) text_SinglePlayerX[i] = text_SinglePlayerX[i-2] + width;
@@ -385,7 +388,6 @@ GLvoid screenMain() {
   }
   glPopMatrix();
 
-  return;
 }
 
 GLvoid screenMenuFooter() {
@@ -433,5 +435,4 @@ GLvoid screenMenuFooter() {
     } glPopMatrix();
   }
   
-  return;
 }
