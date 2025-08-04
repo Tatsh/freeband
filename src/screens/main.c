@@ -307,7 +307,7 @@ bool screenMenuFooter_buffer() {
     for (i = 0; i < 4; i++)
       text_upDown_strumY[i] = text_select_GY[i];
   } else {
-#ifdef __WIN32__
+#ifdef _WIN32
 #else
     fprintf(stderr,
             "Error opening %s font for screenMenuBottom: %s\n",
@@ -402,7 +402,7 @@ bool screenMain_buffer() {
     for (i = 2; i < 4; i++)
       text_QuitX[i] = text_QuitX[i - 2] + width;
   } else {
-#ifdef __WIN32__
+#ifdef _WIN32
 #else
     fprintf(
       stderr, "Error opening %s font for screenMain: %s\n", path_italic_crillee, TTF_GetError());

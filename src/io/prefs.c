@@ -8,7 +8,7 @@
 #include "screens/difficulty.h"
 #include "screens/instruments.h"
 
-#ifdef __WIN32__
+#ifdef _WIN32
 #include <direct.h>
 
 #include "unix2dos.h"
@@ -95,13 +95,13 @@ bool prefs_getInts(dictionary *prefs) {
 }
 
 bool getHomePath() {
-#ifdef __WIN32__
+#ifdef _WIN32
   /* We get the My Documents/Documents (Windows) directory here */
   /* In this case, the 5th argument can take a char instead of LPTSTR or TCHAR; these are all the same here */
   SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, prefs_root);
 #else  /* POSIX */
   strcat(prefs_root, getenv("HOME"));
-#endif /* __WIN32__ */
+#endif /* _WIN32 */
 
   if (prefs_root == NULL) {
     fprintf(stderr, "Could not find home directory. Check your settings.\n");
@@ -111,7 +111,7 @@ bool getHomePath() {
   return true;
 }
 
-#ifdef __WIN32__
+#ifdef _WIN32
 bool prefs_verifyPaths_win32(prefs_path search[]) {
   struct _stat buffer;
   /* /languages directory */
@@ -126,7 +126,7 @@ bool prefs_verifyPaths_win32(prefs_path search[]) {
 
 bool prefs_verifyPaths() {
   if (getHomePath()) {
-#ifdef __WIN32__
+#ifdef _WIN32
     prefs_verifyPaths_win32(NULL);
 #else
     /* /languages directory */
@@ -166,7 +166,7 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
 #endif
   }
 
-#ifdef __WIN32__
+#ifdef _WIN32
   if ((ret = _stat(prefs_songs, &buffer)) != 0) { /* No? Create songs folder */
     fprintf(stderr, "Unable to locate a Freeband songs directory. Creating one now...\n");
 
@@ -303,9 +303,9 @@ bool prefs_load() {
 
   /*  inifile = fopen(prefs_ini, "w+");
   iniparser_dump_ini(prefs, inifile); /* Write a new INI, just in case settings are invalid and are being reset */
-  /*#ifdef __WIN32__
+  /*#ifdef _WIN32
   fileIO_unix2dos(inifile); /* Convert to DOS format for Windows users */
-  /*#endif /* __WIN32__ */
+  /*#endif /* _WIN32 */
   /*fclose(inifile);*/
 
   return true;

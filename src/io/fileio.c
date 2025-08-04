@@ -3,7 +3,7 @@
 #include "languages.h"
 #include "prefs.h"
 
-#ifdef __WIN32__
+#ifdef _WIN32
 #include "unix2dos.h"
 #include <utime.h>
 #endif
@@ -46,7 +46,7 @@ bool fileIO_copyFile(char originalPath[], char destinationPath[]) {
   return success;
 }
 
-#ifdef __WIN32__
+#ifdef _WIN32
 /* Based on unix2dos */
 bool fileIO_unix2dos(FILE *in) {
   FILE *temp;
@@ -79,4 +79,4 @@ bool fileIO_unix2dos(FILE *in) {
 
   return true;
 }
-#endif /* __WIN32__ */
+#endif /* _WIN32 */

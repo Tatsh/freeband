@@ -147,7 +147,7 @@ void languages_checkForINIs() {
   strcat(checkINI, prefs_languages);
   strcat(checkINI, "/en_GB.ini");
 
-#ifdef __WIN32__
+#ifdef _WIN32
   struct _stat buffer;
 
   if ((ret = _stat(checkINI, &buffer)) != 0) {

@@ -103,7 +103,7 @@ bool audio_buffer() {
       /* Windows is different in that it will have 2 devices of the same name but 1 with input channels and 1 with output channels
          Since we are using the default device by default, we will not worry about this yet
       It may confusinig to the Windows user in the options menu since devices have the same name, so maybe we should add (input) and (output) to the strings? */
-#ifdef __WIN32__
+#ifdef _WIN32
       if (deviceInfo->defaultSampleRate >= 44100.0f && deviceInfo->defaultLowInputLatency >= 0.0f &&
           deviceInfo->defaultLowOutputLatency >= 0.0f &&
           deviceInfo->defaultHighInputLatency >= 0.0f &&

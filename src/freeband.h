@@ -25,7 +25,7 @@
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
 
-#ifdef __WIN32__
+#ifdef _WIN32
 #include <windows.h>
 
 #include <shlobj.h>

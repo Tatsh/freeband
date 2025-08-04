@@ -19,7 +19,7 @@ bool themes_loadDefaultTheme() {
   strcat(theme_directory, prefs_themes);
   strcat("/default", theme_directory);
 
-#ifdef __WIN32__
+#ifdef _WIN32
 #else
   /* Does the directory exist? */
   /* Does it have a metrics.ini file? If not, copy the file and report */
@@ -56,7 +56,7 @@ bool themes_loadTheme(char *theme) {
   strcat("/", theme_directory);
   strcat(theme, theme_directory);
 
-#ifdef __WIN32__
+#ifdef _WIN32
   /* Here we use functions like _stat() instead of stat() etc */
 #else
   /* Does the directory exist? */
