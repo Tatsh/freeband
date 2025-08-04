@@ -1,11 +1,15 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
-#define MAX_AUDIO_DEVICES 20 /* Safe value? */
+#include <stdbool.h>
+
+#include <portaudio.h>
 
 #include "ogg.h"
 #include "sfx.h"
 #include "track.h"
+
+#define MAX_AUDIO_DEVICES 20 /* Safe value? */
 
 /* 100% legal to distribute/link with */
 #define OGG 0 /* Supported/will-be supported audio formats */
@@ -34,6 +38,11 @@ extern audio_deviceInfo_s audio_deviceInfoUnsupported[];
 bool audio_buffer();
 bool audio_verifyFiletype(ushort filetype, char path[]);
 bool audio_findSupportedDevices();
-int paCallback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags, void *userData);
+int paCallback(const void *inputBuffer,
+               void *outputBuffer,
+               unsigned long framesPerBuffer,
+               const PaStreamCallbackTimeInfo *timeInfo,
+               PaStreamCallbackFlags statusFlags,
+               void *userData);
 
 #endif

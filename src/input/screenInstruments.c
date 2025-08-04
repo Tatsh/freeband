@@ -1,11 +1,11 @@
+#include "screenInstruments.h"
 #include "freeband.h"
 #include "graphics/graphics.h"
+#include "input.h"
 #include "io/prefs.h"
 #include "screens/instruments.h"
 #include "screens/main.h"
 #include "screens/songs.h"
-#include "input.h"
-#include "screenInstruments.h"
 
 void input_screenInstruments(ushort direction) {
   switch (direction) {
@@ -17,7 +17,7 @@ void input_screenInstruments(ushort direction) {
           current_instrument++;
       }
       break;
-      
+
     case UP:
       if (fb_nPlayers < 2) {
         if (current_instrument < INSTRUMENT_BASS)
@@ -26,13 +26,13 @@ void input_screenInstruments(ushort direction) {
           current_instrument--;
       }
       break;
-      
+
     case RETURN:
       screenInstruments_accept();
       screenSongs_buffer();
       /* screenCharactersBuffer(nPlayers); someday */
       break;
-      
+
     case ESC:
       menuQuit = graphics_loading = true;
       graphics_clear();
@@ -42,11 +42,10 @@ void input_screenInstruments(ushort direction) {
 #ifndef NDEBUG
       fprintf(stdout, "Successfully switched back to screenMain.\n");
 #endif
-/*      prefs_Freeband.default_instrument_u = 0;*/
+      /*      prefs_Freeband.default_instrument_u = 0;*/
       break;
-      
+
     default:
       break;
   }
-
 }

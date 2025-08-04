@@ -1,10 +1,14 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <SDL/SDL.h>
+
 #define MAX_IMAGES 20
 
 /* Preferences */
-#define PREF_WIDTH  prefs_ints[0].iUser_value
+#define PREF_WIDTH prefs_ints[0].iUser_value
 #define PREF_HEIGHT prefs_ints[1].iUser_value
 #define PREF_FULLSCREEN prefs_bools[5].bUser_value
 #define PREF_BPP prefs_shorts[1].sUser_value
@@ -32,7 +36,7 @@ extern GLcolour colour_yellow_F0FF07[];
 extern GLcoordsX offscreenVertexXY[]; /* Offscreen coordinates */
 extern GLcoordsX fillBGVertexX[];     /* 'Fill entire background' positions */
 extern GLcoordsY fillBGVertexY[];
-extern GLcoordsZ defVertexZ[];        /* All flat facing user textures use these z values */
+extern GLcoordsZ defVertexZ[]; /* All flat facing user textures use these z values */
 
 extern GLUquadricObj *quadratic;
 

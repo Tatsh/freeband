@@ -7,14 +7,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include <portaudio.h>
 
-#include <sndfile.h>
 #include <ogg/ogg.h>
+#include <sndfile.h>
 #include <vorbis/vorbisfile.h>
 
 #include <GL/gl.h>
@@ -26,14 +26,14 @@
 #include <SDL/SDL_ttf.h>
 
 #ifdef __WIN32__
-#include <windows.h>
 #include <shlobj.h>
+#include <windows.h>
 
 typedef unsigned int uint;
 #endif
 typedef unsigned short ushort;
 
-#define structln(x) (sizeof(x)/sizeof(x[0])) /* Returns how many entries in a struct array */
+#define structln(x) (sizeof(x) / sizeof(x[0])) /* Returns how many entries in a struct array */
 
 #define ERROR_VERIFYING_PREFS 10
 #define ERROR_READING_PREFS 11

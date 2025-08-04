@@ -1,6 +1,6 @@
+#include "songlist.h"
 #include "freeband.h"
 #include "songs.h"
-#include "songlist.h"
 
 songNode_s songNode; /* 1 song */
 songList_s songList; /* The song list */
@@ -9,22 +9,21 @@ songList_s songList; /* The song list */
 
 songList_s *songs_createSongList() {
   songList_s *list = malloc(sizeof *list);
-  
+
   if (list != NULL) {
     list->head = songs_createSongNode(NULL, NULL, NULL, NULL, NULL);
     list->size = 0;
-    
+
     if (list->head != NULL) {
       /* Circular references */
       list->head->next = list->head;
       list->head->prev = list->head;
-    }
-    else {
+    } else {
       free(list);
       list = NULL;
     }
   }
-  
+
   return list;
 }
 
@@ -34,10 +33,10 @@ songNode_s *songs_createSongNode(file_p *notes,
                                  songAudioProps_s *songAudioProperties,
                                  songNode_s *next) {
   songNode_s *node = malloc(sizeof *node);
-  if (node !=NULL) {
+  if (node != NULL) {
     node->next = next;
   }
-  
+
   return node;
 }
 
@@ -48,17 +47,18 @@ songNode_s *songs_insertSongNodeAfter(file_p *notes,
                                       songList_s *list,
                                       songNode_s *position) {
   songNode_s *ref = NULL;
-  
+
   if (list != NULL && position != NULL) {
-    ref = songs_createSongNode(notes, songStrings, songDifficulties, songAudioProperties, position->next);
-    
+    ref = songs_createSongNode(
+      notes, songStrings, songDifficulties, songAudioProperties, position->next);
+
     if (ref != NULL) {
       position->next->prev = ref;
       position->next = ref;
       ++list->size;
     }
   }
-  
+
   return ref;
 }
 
@@ -69,38 +69,39 @@ songNode_s *songs_insertSongNodeBefore(file_p *notes,
                                        songList_s *list,
                                        songNode_s *position) {
   songNode_s *ref = NULL;
-  
+
   if (list != NULL && position != NULL) {
-    ref = songs_createSongNode(notes, songStrings, songDifficulties, songAudioProperties, position->prev);
-    
+    ref = songs_createSongNode(
+      notes, songStrings, songDifficulties, songAudioProperties, position->prev);
+
     if (ref != NULL) {
       position->prev->next = ref;
       position->prev = ref;
       ++list->size;
     }
   }
-  
+
   return ref;
 }
 
 songNode_s *songs_deleteSongNode(songList_s *list, songNode_s *position) {
   songNode_s *node = NULL;
-  
-  if ( list != NULL && position != NULL ) {
-    if (position != list->head ) {
+
+  if (list != NULL && position != NULL) {
+    if (position != list->head) {
       /* Remove non-header node */
       node = position;
-      
+
       /* Reset the list links */
       node->prev->next = node->next;
       node->next->prev = node->prev;
-      
+
       /* Clean up the old node */
       node->prev = node->next = NULL;
       --list->size;
     }
   }
-  
+
   return node;
 }
 
@@ -140,5 +141,4 @@ GLvoid songs_destroySongList(songList_s *list) {
     list->head = songs_deleteSongNode(list, list->head);
     --list->size;
   }
-  
 }

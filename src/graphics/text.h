@@ -1,6 +1,10 @@
 #ifndef TEXT_H
 #define TEXT_H
 
+#include <GL/gl.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
+
 #define DEFAULT_TEXT_PT 72
 #define MAX_TEXT 1000
 

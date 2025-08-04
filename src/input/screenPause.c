@@ -1,5 +1,7 @@
+#include "screenPause.h"
 #include "freeband.h"
 #include "graphics/graphics.h"
+#include "input.h"
 #include "io/prefs.h"
 #include "screens/difficulty.h"
 #include "screens/game.h"
@@ -7,8 +9,6 @@
 #include "screens/main.h"
 #include "screens/pause.h"
 #include "screens/songs.h"
-#include "input.h"
-#include "screenPause.h"
 
 #define PREF_DEFAULT_INSTRUMENT prefs_chars[2].iValue
 
@@ -18,56 +18,46 @@ void input_screenPause(ushort direction) {
       if (pause_menuState.resume) {
         pause_menuState.resume = false;
         pause_menuState.restart = true;
-      }
-      else if (pause_menuState.restart) {
+      } else if (pause_menuState.restart) {
         pause_menuState.restart = false;
         pause_menuState.change_difficulty = true;
-      }
-      else if (pause_menuState.change_difficulty) {
+      } else if (pause_menuState.change_difficulty) {
         pause_menuState.change_difficulty = false;
         pause_menuState.change_mic_volume = true;
-      }
-      else if (pause_menuState.change_mic_volume) {
+      } else if (pause_menuState.change_mic_volume) {
         pause_menuState.change_mic_volume = false;
         pause_menuState.lefty_mode = true;
-      }
-      else if (pause_menuState.lefty_mode) {
+      } else if (pause_menuState.lefty_mode) {
         pause_menuState.lefty_mode = false;
         pause_menuState.quit = true;
-      }
-      else {
+      } else {
         pause_menuState.quit = false;
         pause_menuState.resume = true;
       }
       break;
-      
+
     case UP:
       if (pause_menuState.resume) {
         pause_menuState.resume = false;
         pause_menuState.quit = true;
-      }
-      else if (pause_menuState.quit) {
+      } else if (pause_menuState.quit) {
         pause_menuState.quit = false;
         pause_menuState.lefty_mode = true;
-      }
-      else if (pause_menuState.lefty_mode) {
+      } else if (pause_menuState.lefty_mode) {
         pause_menuState.lefty_mode = false;
         pause_menuState.change_mic_volume = true;
-      }
-      else if (pause_menuState.change_mic_volume) {
+      } else if (pause_menuState.change_mic_volume) {
         pause_menuState.change_mic_volume = false;
         pause_menuState.change_difficulty = true;
-      }
-      else if (pause_menuState.change_difficulty) {
+      } else if (pause_menuState.change_difficulty) {
         pause_menuState.change_difficulty = false;
         pause_menuState.restart = true;
-      }
-      else {
+      } else {
         pause_menuState.restart = false;
         pause_menuState.resume = true;
       }
       break;
-      
+
     case RETURN:
       if (pause_menuState.resume)
         gamePaused = false;
@@ -81,29 +71,25 @@ void input_screenPause(ushort direction) {
 #ifndef NDEBUG
         fprintf(stdout, "screenGame() called. Song restarted\n");
 #endif
-      }
-      else if (pause_menuState.change_difficulty) {
+      } else if (pause_menuState.change_difficulty) {
         pause_menuState.change_difficulty = false;
         pause_menuState.resume = true;
 #ifndef NDEBUG
         fprintf(stdout, "Not implemented yet.\n");
 #endif
-      }
-      else if (pause_menuState.change_mic_volume) {
+      } else if (pause_menuState.change_mic_volume) {
         pause_menuState.change_mic_volume = false;
         pause_menuState.resume = true;
 #ifndef NDEBUG
         fprintf(stdout, "Not implemented yet.\n");
 #endif
-      }
-      else if (pause_menuState.lefty_mode) {
+      } else if (pause_menuState.lefty_mode) {
         pause_menuState.lefty_mode = false;
         pause_menuState.resume = true;
 #ifndef NDEBUG
         fprintf(stdout, "Not implemented yet.\n");
 #endif
-      }
-      else {
+      } else {
         pause_menuState.quit = false;
         pause_menuState.resume = menuQuit = graphics_loading = true;
         graphics_clear();
@@ -116,7 +102,7 @@ void input_screenPause(ushort direction) {
 #endif
         current_instrument = PREF_DEFAULT_INSTRUMENT;
       }
-    
+
     case ESC:
       gamePaused = false;
       fb_screen.game = true;
@@ -128,9 +114,8 @@ void input_screenPause(ushort direction) {
       fprintf(stdout, "Now in screenGame() function.\n");
 #endif
       break;
-      
+
     default:
       break;
   }
-  
 }

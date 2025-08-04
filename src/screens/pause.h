@@ -1,9 +1,11 @@
 #ifndef PAUSE_H
 #define PAUSE_H
 
-#define PAUSE_MENU_ITEMS_HT   0.14f
+#include <GL/gl.h>
+
+#define PAUSE_MENU_ITEMS_HT 0.14f
 #define PAUSE_MENU_ITEMS_OFFSET -0.26 /* How far away from 'PAUSED' text this starts at */
-#define PAUSE_MENU_ITEMS_DIFF 0.11 /* How close the menu items are */
+#define PAUSE_MENU_ITEMS_DIFF 0.11    /* How close the menu items are */
 
 typedef struct changeDifficulty {
   bool easy;
@@ -33,7 +35,7 @@ typedef struct pauseItem {
   bool change_difficulty;
   bool change_mic_volume;
   bool quit;
-  
+
   pause_difficultyState_s difficultyState;
   pause_restartState_s restartState;
   pause_leftyMode_s leftyModeChecked;

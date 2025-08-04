@@ -1,14 +1,15 @@
 #ifndef PREFS_H
 #define PREFS_H
 
+#include "freeband.h"
 #include "iniparser.h"
 
-#define INIERROR                    "iniparser error string"
-#define FREEBAND_PREFS_ROOT         "/Freeband"
-#define FREEBAND_PREFS_INI          "/preferences.ini"
-#define FREEBAND_PREFS_LANGS_ROOT   "/languages"
-#define FREEBAND_PREFS_SONGS_ROOT   "/songs"
-#define FREEBAND_PREFS_THEMES_ROOT  "/themes"
+#define INIERROR "iniparser error string"
+#define FREEBAND_PREFS_ROOT "/Freeband"
+#define FREEBAND_PREFS_INI "/preferences.ini"
+#define FREEBAND_PREFS_LANGS_ROOT "/languages"
+#define FREEBAND_PREFS_SONGS_ROOT "/songs"
+#define FREEBAND_PREFS_THEMES_ROOT "/themes"
 
 #define INSTRUMENT_GUITAR 0
 #define INSTRUMENT_BASS 1
@@ -34,7 +35,6 @@ typedef struct {
   char *cUser_value;
   int iValue;
 } prefs_char_s;
-
 
 typedef struct {
   char ini_item[ARRAY_BUFFER];

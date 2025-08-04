@@ -1,4 +1,4 @@
-#include "freeband.h"
-#include "audio.h"
-#include "ogg.h"
 #include "sfx.h"
+#include "audio.h"
+#include "freeband.h"
+#include "ogg.h"

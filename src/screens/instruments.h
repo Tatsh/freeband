@@ -1,6 +1,8 @@
 #ifndef INSTRUMENTS_H
 #define INSTRUMENTS_H
 
+#include "graphics/graphics.h"
+
 typedef struct {
   bool guitar;
   bool bass;

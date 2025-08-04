@@ -1,6 +1,8 @@
 #ifndef SONGS_H
 #define SONGS_H
 
+#include "freeband.h"
+
 #define SORT_TEXT_HT 0.12f
 #define offset_screenSongs_sortByTier_x -1.02f
 #define offset_screenSongs_sortAZTitle_x -1.0f

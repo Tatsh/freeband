@@ -1,6 +1,8 @@
 #ifndef KEYS_H
 #define KEYS_H
 
+#include "freeband.h"
+
 #define KEYS_NOKEY -1
 
 /* Thanks to syntropy for this method */

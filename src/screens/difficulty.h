@@ -1,6 +1,8 @@
 #ifndef DIFFICULTY_H
 #define DIFFICULTY_H
 
+#include "graphics/graphics.h"
+
 #define DIFFHT 0.12
 
 #define DIFFICULTY_EASY 0

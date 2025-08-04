@@ -1,6 +1,6 @@
+#include "themes.h"
 #include "freeband.h"
 #include "prefs.h"
-#include "themes.h"
 
 bool themes_default;
 prefs_path theme_directory[255];
@@ -15,10 +15,10 @@ bool themes_loadDefaultTheme() {
   themes_path screenGame[255];
   themes_path screenPause[255];
   themes_path screenSongs[255];
-  
+
   strcat(theme_directory, prefs_themes);
   strcat("/default", theme_directory);
-  
+
 #ifdef __WIN32__
 #else
   /* Does the directory exist? */
@@ -30,7 +30,7 @@ bool themes_loadDefaultTheme() {
   /* Verify all image files are valid to open; if not, exit and report error with specific file corrupted */
   /* If it is from the default theme, try copying the file first */
 #endif
-  
+
   return true;
 }
 
@@ -44,18 +44,18 @@ bool themes_loadTheme(char *theme) {
   themes_path screenGame[255];
   themes_path screenPause[255];
   themes_path screenSongs[255];
-  
+
   if (strncmp("default", theme, 7) == 0) {
     if (themes_loadDefaultTheme())
       return true;
     else
       fprintf(stderr, "Error loading default theme.\n");
   }
-  
+
   strcat(theme_directory, prefs_themes);
   strcat("/", theme_directory);
   strcat(theme, theme_directory);
-  
+
 #ifdef __WIN32__
   /* Here we use functions like _stat() instead of stat() etc */
 #else
@@ -68,6 +68,6 @@ bool themes_loadTheme(char *theme) {
   /* Verify all image files are valid to open; if not, exit and report error with specific file corrupted */
   /* If it is from the default theme, try copying the file first */
 #endif
-  
+
   return true;
 }
