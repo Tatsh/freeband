@@ -215,3 +215,7 @@ xstrdup
 yarnpip
 zatrzymane
 zmieŃ
+cppdbg
+defenses
+favor
+noncommercially
