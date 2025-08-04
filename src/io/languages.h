@@ -1,6 +1,7 @@
 #ifndef LANGUAGES_H
 #define LANGUAGES_H
 
+#include "freeband.h"
 #include "iniparser.h"
 
 /* Add more here, we can go up to 0xFF (255); use ISO 639-1 for 2-character language names */

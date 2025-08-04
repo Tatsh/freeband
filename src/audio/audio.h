@@ -5,6 +5,7 @@
 
 #include <portaudio.h>
 
+#include "freeband.h"
 #include "ogg.h"
 #include "sfx.h"
 #include "track.h"

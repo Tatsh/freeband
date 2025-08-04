@@ -26,8 +26,9 @@
 #include <SDL/SDL_ttf.h>
 
 #ifdef __WIN32__
-#include <shlobj.h>
 #include <windows.h>
+
+#include <shlobj.h>
 
 typedef unsigned int uint;
 #endif

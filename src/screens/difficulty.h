@@ -1,6 +1,7 @@
 #ifndef DIFFICULTY_H
 #define DIFFICULTY_H
 
+#include "freeband.h"
 #include "graphics/graphics.h"
 
 #define DIFFHT 0.12

@@ -1,6 +1,7 @@
 #ifndef INSTRUMENTS_H
 #define INSTRUMENTS_H
 
+#include "freeband.h"
 #include "graphics/graphics.h"
 
 typedef struct {

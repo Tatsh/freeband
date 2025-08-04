@@ -9,6 +9,8 @@
 #include "screens/instruments.h"
 
 #ifdef __WIN32__
+#include <direct.h>
+
 #include "unix2dos.h"
 #endif
 
@@ -96,7 +98,7 @@ bool getHomePath() {
 #ifdef __WIN32__
   /* We get the My Documents/Documents (Windows) directory here */
   /* In this case, the 5th argument can take a char instead of LPTSTR or TCHAR; these are all the same here */
-  SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, root);
+  SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, prefs_root);
 #else  /* POSIX */
   strcat(prefs_root, getenv("HOME"));
 #endif /* __WIN32__ */
@@ -125,7 +127,7 @@ bool prefs_verifyPaths_win32(prefs_path search[]) {
 bool prefs_verifyPaths() {
   if (getHomePath()) {
 #ifdef __WIN32__
-    prefs_verifyPaths_win32(search);
+    prefs_verifyPaths_win32(NULL);
 #else
     /* /languages directory */
 
@@ -157,14 +159,18 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
 
   if (stat(prefs_root, &buffer) != 0) { /* No? Create Freeband root folder */
     fprintf(stderr, "Unable to locate a Freeband root directory. Creating one now...\n");
+#ifndef _WIN32
     mkdir(prefs_root, S_IRWXU | S_IRWXG);
+#else
+    mkdir(prefs_root);
+#endif
   }
 
 #ifdef __WIN32__
   if ((ret = _stat(prefs_songs, &buffer)) != 0) { /* No? Create songs folder */
     fprintf(stderr, "Unable to locate a Freeband songs directory. Creating one now...\n");
 
-    if ((ret = _mkdir(prefs_songs)) != 0) {
+    if ((ret = mkdir(prefs_songs)) != 0) {
       fprintf(
         stderr, "Unable to create %s directory. Check if you have permission.\n", prefs_songs);
       return false; /* Error! Do we have permission? */
@@ -284,9 +290,6 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
 
 bool prefs_load() {
   FILE *inifile;
-#ifdef __WIN32__
-  CFlag_s *pFlag;
-#endif
 
   if ((prefs = iniparser_load(prefs_ini)) == NULL) {
     fprintf(stderr, "Error loading %s dictionary using iniparser.\n", prefs_ini);

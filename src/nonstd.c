@@ -1,6 +1,8 @@
 #include "nonstd.h"
 #include <string.h>
 
+#ifndef _WIN32
+
 /* From http://en.wikipedia.org/wiki/Itoa#K.26R_implementation */
 void strrev(char s[]) {
   int c, i, j;
@@ -26,3 +28,4 @@ void itoa(int n, char s[]) {
   s[i] = '\0';
   strrev(s);
 }
+#endif

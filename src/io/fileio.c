@@ -72,11 +72,11 @@ bool fileIO_unix2dos(FILE *in) {
     }
   }
 
-  if ((rename(path_temp, in) == -1) {
+  if (rename(path_temp, in) == -1) {
     fprintf(stderr, "unix2dos: Error renaming %s to original file.\n", path_temp);
     fprintf(stderr, "          Output file remains %s.\n", path_temp);
   }
-  
+
   return true;
 }
 #endif /* __WIN32__ */
