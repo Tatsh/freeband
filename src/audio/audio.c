@@ -62,7 +62,7 @@ int paCallback(const void *inputBuffer,
 bool audio_buffer() {
   const PaDeviceInfo *deviceInfo;
   PaError err;
-  ushort i;
+  int i;
   int numDevices;
 
   if ((err = Pa_Initialize()) != paNoError) {
@@ -96,7 +96,7 @@ bool audio_buffer() {
       audio_deviceInfoUnsupported[i] = audio_deviceInfoTemplate;
 
     /* Query devices for options screen
-       On this screen there should be AUDIO INPUT and AUDIO OUTPUT; we will have devices with just output in AUDIO OUTPUT and 
+       On this screen there should be AUDIO INPUT and AUDIO OUTPUT; we will have devices with just output in AUDIO OUTPUT and
        devices with just input in AUDIO INPUT; if a device has both, it will be listed in both */
     for (i = 0; i < numDevices; i++) {
       deviceInfo = Pa_GetDeviceInfo(i);
