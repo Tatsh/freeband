@@ -14,7 +14,9 @@ jobs:
         with:
           languages: '${{ matrix.language }}'
       - name: Install dependencies
-        run: sudo apt-get install -y freeglut3-dev libsndfile1-dev libsdl1.2-dev libsdl-ttf2.0-dev portaudio19-dev sdl-image1.2-dev
+        run: |
+          sudo apt-get update -y -qq
+          sudo apt-get install -y freeglut3-dev libsndfile1-dev libsdl1.2-dev libsdl-ttf2.0-dev portaudio19-dev sdl-image1.2-dev
       - name: Build
         run: |
           cmake -DCMAKE_BUILD_TYPE=Debug -B ${{github.workspace}}/build
