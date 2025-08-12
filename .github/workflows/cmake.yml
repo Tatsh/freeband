@@ -8,7 +8,7 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: install deps
         run: |
           sudo apt-get update -y -qq
@@ -26,7 +26,7 @@ jobs:
   # build-macos:
   #   runs-on: macos-latest
   #   steps:
-  #     - uses: actions/checkout@v4
+  #     - uses: actions/checkout@v5
   #     - name: install deps
   #       run: brew install freeglut libsndfile portaudio sdl12-compat sdl2_image sdl2_ttf
   #     - run: |
@@ -67,7 +67,7 @@ jobs:
   #           sdl12-compat:p
   #           toolchain:p
   #         update: true
-  #     - uses: actions/checkout@v4
+  #     - uses: actions/checkout@v5
   #       with:
   #         fetch-depth: 0
   #     - name: Configure
