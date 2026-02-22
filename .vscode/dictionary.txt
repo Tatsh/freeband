@@ -16,13 +16,13 @@ bmargin
 bpmx
 buglist
 buildsystems
-ĆgŁÓwne
 color
 colorstyle
 confusinig
 conn
 coveragerc
 cpack
+cppdbg
 crillee
 csidl
 dbuild
@@ -51,12 +51,12 @@ freesans
 getnsec
 gfdm
 gitara
-gŁoŚnoŚĆ
 gmock
-gÓrĘ
 gracz
 graczy
 granulepos
+gÓrĘ
+gŁoŚnoŚĆ
 haximus
 hguides
 hihat
@@ -80,7 +80,6 @@ keym
 keysounding
 keysym
 languges
-Łatwy
 lctrl
 leworĘczny
 libjsonnet
@@ -159,7 +158,6 @@ songlist
 specialkeys
 splayer
 srcs
-Średni
 starpower
 storei
 strcmpi
@@ -179,8 +177,8 @@ tmargin
 todolist
 translatef
 treningu
-trudności
 trudnoŚci
+trudności
 trudny
 tryb
 tsnd
@@ -191,8 +189,8 @@ undoc
 uquadric
 ustaw
 utwor
-utwÓr
 utwory
+utwÓr
 versioninfo
 vguides
 wasapi
@@ -211,3 +209,6 @@ xplorer
 xstrdup
 zatrzymane
 zmieŃ
+ĆgŁÓwne
+Łatwy
+Średni
