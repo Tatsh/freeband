@@ -2,6 +2,7 @@
   local top = self,
   // General settings
   project_type: 'c',
+  want_copilot: false,
 
   // Shared
   github_username: 'Tatsh',
