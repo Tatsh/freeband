@@ -14,11 +14,11 @@
 #define EN_CHANGE_SORT "CHANGE SORT" /* For songs screen */
 
 typedef struct {
-  bool single; /* This does NOT affect the initial position of the selector */
-  bool multiplayer;
-  bool online;
-  bool options;
-  bool quit;
+    bool single; /* This does NOT affect the initial position of the selector */
+    bool multiplayer;
+    bool online;
+    bool options;
+    bool quit;
 } mainMenu_s;
 
 extern bool nonGame;
