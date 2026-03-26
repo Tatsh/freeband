@@ -24,13 +24,13 @@
 #endif
 
 typedef struct audio_devInfo {
-  unsigned short maxInputChannels;
-  unsigned short maxOutputChannels;
-  double defaultHighOutputLatency;
-  double defaultLowOutputLatency;
-  double defaultHighInputLatency;
-  double defaultLowInputLatency;
-  double defaultSampleRate;
+    unsigned short maxInputChannels;
+    unsigned short maxOutputChannels;
+    double defaultHighOutputLatency;
+    double defaultLowOutputLatency;
+    double defaultHighInputLatency;
+    double defaultLowInputLatency;
+    double defaultSampleRate;
 } audio_deviceInfo_s;
 
 extern audio_deviceInfo_s audio_deviceInfoSupported[];

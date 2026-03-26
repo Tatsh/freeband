@@ -5,10 +5,10 @@
 #include "graphics/graphics.h"
 
 typedef struct {
-  bool guitar;
-  bool bass;
-  bool drums;
-  bool vocals;
+    bool guitar;
+    bool bass;
+    bool drums;
+    bool vocals;
 } instrument_s;
 
 extern GLcoordsX screenInstruments_selectionX[];

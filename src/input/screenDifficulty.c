@@ -7,97 +7,97 @@
 #include "screens/songs.h"
 
 void input_screenDifficulty(ushort direction) {
-  ushort i;
+    ushort i;
 
-  switch (direction) {
+    switch (direction) {
     case DOWN:
-      switch (current_difficulty) {
+        switch (current_difficulty) {
         case DIFFICULTY_EASY:
-          current_difficulty = DIFFICULTY_MEDIUM;
-          for (i = 0; i < 4; i++)
-            screenDifficulty_selectionY[i] =
-              screenDifficulty_selectionY[i] +
-              DIFFHT; /* Hope to find a better way to do this later */
-          break;
+            current_difficulty = DIFFICULTY_MEDIUM;
+            for (i = 0; i < 4; i++)
+                screenDifficulty_selectionY[i] =
+                    screenDifficulty_selectionY[i] +
+                    DIFFHT; /* Hope to find a better way to do this later */
+            break;
 
         case DIFFICULTY_MEDIUM:
-          current_difficulty = DIFFICULTY_HARD;
-          for (i = 0; i < 4; i++)
-            screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
-          break;
+            current_difficulty = DIFFICULTY_HARD;
+            for (i = 0; i < 4; i++)
+                screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
+            break;
 
         case DIFFICULTY_HARD:
-          current_difficulty = DIFFICULTY_EXPERT;
-          for (i = 0; i < 4; i++)
-            screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
-          break;
+            current_difficulty = DIFFICULTY_EXPERT;
+            for (i = 0; i < 4; i++)
+                screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
+            break;
 
         case DIFFICULTY_EXPERT:
-          current_difficulty = DIFFICULTY_EASY;
-          screenDifficulty_selectionY[0] = screenDifficulty_selectionY[3] = 0.0f;
-          screenDifficulty_selectionY[1] = screenDifficulty_selectionY[2] = DIFFHT;
-          break;
+            current_difficulty = DIFFICULTY_EASY;
+            screenDifficulty_selectionY[0] = screenDifficulty_selectionY[3] = 0.0f;
+            screenDifficulty_selectionY[1] = screenDifficulty_selectionY[2] = DIFFHT;
+            break;
 
         default:
-          break;
-      }
-      break;
+            break;
+        }
+        break;
 
     case UP:
-      switch (current_difficulty) {
+        switch (current_difficulty) {
         case DIFFICULTY_EASY:
-          current_difficulty = DIFFICULTY_EXPERT;
-          for (i = 0; i < 4; i++)
-            screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + (3.0f * DIFFHT);
-          break;
+            current_difficulty = DIFFICULTY_EXPERT;
+            for (i = 0; i < 4; i++)
+                screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + (3.0f * DIFFHT);
+            break;
 
         case DIFFICULTY_MEDIUM:
-          current_difficulty = DIFFICULTY_EASY;
-          for (i = 0; i < 4; i++)
-            screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
-          break;
+            current_difficulty = DIFFICULTY_EASY;
+            for (i = 0; i < 4; i++)
+                screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
+            break;
 
         case DIFFICULTY_HARD:
-          current_difficulty = DIFFICULTY_MEDIUM;
-          for (i = 0; i < 4; i++)
-            screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
-          break;
+            current_difficulty = DIFFICULTY_MEDIUM;
+            for (i = 0; i < 4; i++)
+                screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
+            break;
 
         case DIFFICULTY_EXPERT:
-          current_difficulty = DIFFICULTY_HARD;
-          for (i = 0; i < 4; i++)
-            screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
-          break;
+            current_difficulty = DIFFICULTY_HARD;
+            for (i = 0; i < 4; i++)
+                screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
+            break;
 
         default:
-          break;
-      }
-      break;
+            break;
+        }
+        break;
 
     case RETURN:
-      menuQuit = graphics_loading = true;
-      fb_screen.difficulty = false;
-      graphics_clear();
-      screenGame_buffer();
-      fb_screen.game = true;
-      graphics_loading = gamePaused = false;
+        menuQuit = graphics_loading = true;
+        fb_screen.difficulty = false;
+        graphics_clear();
+        screenGame_buffer();
+        fb_screen.game = true;
+        graphics_loading = gamePaused = false;
 #ifndef NDEBUG
-      fprintf(stdout, "Now in screenGame() function.\n");
+        fprintf(stdout, "Now in screenGame() function.\n");
 #endif
-      break;
+        break;
 
     case ESC:
-      menuQuit = graphics_loading = true;
-      graphics_clear();
-      screenSongs_buffer();
-      fb_screen.difficulty = graphics_loading = menuQuit = false;
-      fb_screen.songs = true;
+        menuQuit = graphics_loading = true;
+        graphics_clear();
+        screenSongs_buffer();
+        fb_screen.difficulty = graphics_loading = menuQuit = false;
+        fb_screen.songs = true;
 #ifndef NDEBUG
-      fprintf(stdout, "Switched back to screenSongs.\n");
+        fprintf(stdout, "Switched back to screenSongs.\n");
 #endif
-      break;
+        break;
 
     default:
-      break;
-  }
+        break;
+    }
 }

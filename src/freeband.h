@@ -52,14 +52,14 @@ typedef ushort stars_t;
 typedef ushort multiplier_t;
 
 typedef struct {
-  bool mainMenu;
-  bool multiPlayer;
-  bool online;
-  bool options;
-  bool instruments;
-  bool songs;
-  bool difficulty;
-  bool game;
+    bool mainMenu;
+    bool multiPlayer;
+    bool online;
+    bool options;
+    bool instruments;
+    bool songs;
+    bool difficulty;
+    bool game;
 } screen_s;
 
 extern bool menuQuit;

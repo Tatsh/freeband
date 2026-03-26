@@ -35,17 +35,17 @@
 #define NOTE_BUFFER 100
 
 typedef struct {
-  bool g;
-  bool r;
-  bool y;
-  bool b;
-  bool o;
+    bool g;
+    bool r;
+    bool y;
+    bool b;
+    bool o;
 } button_s;
 
 typedef struct {
-  ushort note;
-  ushort speed;
-  ushort hit;
+    ushort note;
+    ushort speed;
+    ushort hit;
 } timing_window_s;
 
 extern GLfloat bringDownAngle;

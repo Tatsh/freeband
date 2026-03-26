@@ -26,122 +26,122 @@ song_sort byTier_s, titleAZ_s, artistAZ_s, byBPM_s;
   Unknown characters (ones not in the font being used) will be replaced with ' ' */
 
 bool screenSongs_buffer() {
-  GLfloat width;
-  ushort i;
-  TTF_Font *crillee, *freeSans;
+    GLfloat width;
+    ushort i;
+    TTF_Font *crillee, *freeSans;
 
-  byTier_s = true; /* Set default sort */
+    byTier_s = true; /* Set default sort */
 
-  if ((bg = graphics_loadTexture(bgTexture, 0)) == -1)
-    fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
+    if ((bg = graphics_loadTexture(bgTexture, 0)) == -1)
+        fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
 
-  if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
-    text_songs = text_load(languageStrings_screenSongs.header, crillee, white);
-    width = text_scaleWidth(languageStrings_screenSongs.header, crillee, SCREENHEADTEXTHT);
-    for (i = 0; i < 2; i++)
-      text_songsX[i] = graphics_centreAtX(0.0f, width);
-    for (i = 2; i < 4; i++)
-      text_songsX[i] = text_songsX[i - 2] + width;
-  } else {
-    fprintf(stderr,
-            "instruments.c: screenInstrumentsBuffer(): Could not open font %s: %s\n",
-            path_italic_crillee,
-            TTF_GetError());
-    return false;
-  }
-  if (crillee)
-    TTF_CloseFont(crillee);
+    if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
+        text_songs = text_load(languageStrings_screenSongs.header, crillee, white);
+        width = text_scaleWidth(languageStrings_screenSongs.header, crillee, SCREENHEADTEXTHT);
+        for (i = 0; i < 2; i++)
+            text_songsX[i] = graphics_centreAtX(0.0f, width);
+        for (i = 2; i < 4; i++)
+            text_songsX[i] = text_songsX[i - 2] + width;
+    } else {
+        fprintf(stderr,
+                "instruments.c: screenInstrumentsBuffer(): Could not open font %s: %s\n",
+                path_italic_crillee,
+                TTF_GetError());
+        return false;
+    }
+    if (crillee)
+        TTF_CloseFont(crillee);
 
-  if ((freeSans = TTF_OpenFont(path_regular_freeSans, DEFAULT_TEXT_PT))) {
-    text_byTier = text_load(languageStrings_screenSongs.sort_by_tier, freeSans, white);
-    width = text_scaleWidth(languageStrings_screenSongs.sort_by_tier, freeSans, SORT_TEXT_HT);
-    for (i = 0; i < 2; i++)
-      text_byTierX[i] = graphics_centreAtX(0.0f, width);
-    for (i = 2; i < 4; i++)
-      text_byTierX[i] = text_byTierX[i - 2] + width;
+    if ((freeSans = TTF_OpenFont(path_regular_freeSans, DEFAULT_TEXT_PT))) {
+        text_byTier = text_load(languageStrings_screenSongs.sort_by_tier, freeSans, white);
+        width = text_scaleWidth(languageStrings_screenSongs.sort_by_tier, freeSans, SORT_TEXT_HT);
+        for (i = 0; i < 2; i++)
+            text_byTierX[i] = graphics_centreAtX(0.0f, width);
+        for (i = 2; i < 4; i++)
+            text_byTierX[i] = text_byTierX[i - 2] + width;
 
-    text_titleAZ = text_load(
-      languageStrings_screenSongs.sort_title_AZ, freeSans, white); /* Why won't this load?! */
-    width = text_scaleWidth(languageStrings_screenSongs.sort_title_AZ, freeSans, SORT_TEXT_HT);
-    for (i = 0; i < 2; i++)
-      text_titleAZX[i] = graphics_centreAtX(0.0f, width);
-    for (i = 2; i < 4; i++)
-      text_titleAZX[i] = text_titleAZX[i - 2] + width;
+        text_titleAZ = text_load(
+            languageStrings_screenSongs.sort_title_AZ, freeSans, white); /* Why won't this load?! */
+        width = text_scaleWidth(languageStrings_screenSongs.sort_title_AZ, freeSans, SORT_TEXT_HT);
+        for (i = 0; i < 2; i++)
+            text_titleAZX[i] = graphics_centreAtX(0.0f, width);
+        for (i = 2; i < 4; i++)
+            text_titleAZX[i] = text_titleAZX[i - 2] + width;
 
-    text_artistAZ = text_load(languageStrings_screenSongs.sort_artist_AZ, freeSans, white);
-    width = text_scaleWidth(languageStrings_screenSongs.sort_artist_AZ, freeSans, SORT_TEXT_HT);
-    for (i = 0; i < 2; i++)
-      text_artistAZX[i] = graphics_centreAtX(0.0f, width);
-    for (i = 2; i < 4; i++)
-      text_artistAZX[i] = text_artistAZX[i - 2] + width;
+        text_artistAZ = text_load(languageStrings_screenSongs.sort_artist_AZ, freeSans, white);
+        width = text_scaleWidth(languageStrings_screenSongs.sort_artist_AZ, freeSans, SORT_TEXT_HT);
+        for (i = 0; i < 2; i++)
+            text_artistAZX[i] = graphics_centreAtX(0.0f, width);
+        for (i = 2; i < 4; i++)
+            text_artistAZX[i] = text_artistAZX[i - 2] + width;
 
-    text_byBPM = text_load(languageStrings_screenSongs.sort_bpm, freeSans, white);
-    width = text_scaleWidth(languageStrings_screenSongs.sort_bpm, freeSans, SORT_TEXT_HT);
-    for (i = 0; i < 2; i++)
-      text_byBPMX[i] = graphics_centreAtX(0.0f, width);
-    for (i = 2; i < 4; i++)
-      text_byBPMX[i] = text_byBPMX[i - 2] + width;
-  } else {
-    fprintf(stderr,
-            "instruments.c: screenInstrumentsBuffer(): Could not open font %s: %s\n",
-            path_regular_freeSans,
-            TTF_GetError());
-    return false;
-  }
-  if (freeSans)
-    TTF_CloseFont(freeSans);
+        text_byBPM = text_load(languageStrings_screenSongs.sort_bpm, freeSans, white);
+        width = text_scaleWidth(languageStrings_screenSongs.sort_bpm, freeSans, SORT_TEXT_HT);
+        for (i = 0; i < 2; i++)
+            text_byBPMX[i] = graphics_centreAtX(0.0f, width);
+        for (i = 2; i < 4; i++)
+            text_byBPMX[i] = text_byBPMX[i - 2] + width;
+    } else {
+        fprintf(stderr,
+                "instruments.c: screenInstrumentsBuffer(): Could not open font %s: %s\n",
+                path_regular_freeSans,
+                TTF_GetError());
+        return false;
+    }
+    if (freeSans)
+        TTF_CloseFont(freeSans);
 
-  if (!screenMenuFooter_buffer()) {
-    fprintf(stderr, "Unable to buffer screenMenuFooter.\n");
-    return false;
-  }
+    if (!screenMenuFooter_buffer()) {
+        fprintf(stderr, "Unable to buffer screenMenuFooter.\n");
+        return false;
+    }
 
-  return true;
+    return true;
 }
 
 GLvoid screenSongs() {
-  glPushMatrix();
-  {
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glBindTexture(GL_TEXTURE_2D, bg);
-    graphics_positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
-  }
-  glPopMatrix();
-
-  glPushMatrix();
-  {
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glTranslatef(0.0f, SCREENHEADTEXTOFFSET, 0.0f);
-    glBindTexture(GL_TEXTURE_2D, text_songs); /* Top screen title */
-    graphics_positionTexture(text_songsX, text_songsY, defVertexZ);
-  }
-  glPopMatrix();
-
-  glPushMatrix();
-  {
-    if (byTier_s) {
-      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-      glBindTexture(GL_TEXTURE_2D, text_byTier);
-      glTranslatef(offset_screenSongs_sortByTier_x, SORT_TEXT_Y_OFFSET, 0.0f);
-      graphics_positionTexture(text_byTierX, text_sortY, defVertexZ);
-    } else if (titleAZ_s) {
-      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-      glBindTexture(GL_TEXTURE_2D, text_titleAZ);
-      glTranslatef(offset_screenSongs_sortAZTitle_x, SORT_TEXT_Y_OFFSET, 0.0f);
-      graphics_positionTexture(text_titleAZX, text_sortY, defVertexZ);
-    } else if (artistAZ_s) {
-      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-      glBindTexture(GL_TEXTURE_2D, text_artistAZ);
-      glTranslatef(offset_screenSongs_sortAZArtist_x, SORT_TEXT_Y_OFFSET, 0.0f);
-      graphics_positionTexture(text_artistAZX, text_sortY, defVertexZ);
-    } else {
-      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-      glBindTexture(GL_TEXTURE_2D, text_byBPM);
-      glTranslatef(offset_screenSongs_sortbyBPM_x, SORT_TEXT_Y_OFFSET, 0.0f);
-      graphics_positionTexture(text_byBPMX, text_sortY, defVertexZ);
+    glPushMatrix();
+    {
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        glBindTexture(GL_TEXTURE_2D, bg);
+        graphics_positionTexture(fillBGVertexX, fillBGVertexY, defVertexZ);
     }
-  }
-  glPopMatrix();
+    glPopMatrix();
 
-  screenMenuFooter();
+    glPushMatrix();
+    {
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        glTranslatef(0.0f, SCREENHEADTEXTOFFSET, 0.0f);
+        glBindTexture(GL_TEXTURE_2D, text_songs); /* Top screen title */
+        graphics_positionTexture(text_songsX, text_songsY, defVertexZ);
+    }
+    glPopMatrix();
+
+    glPushMatrix();
+    {
+        if (byTier_s) {
+            glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            glBindTexture(GL_TEXTURE_2D, text_byTier);
+            glTranslatef(offset_screenSongs_sortByTier_x, SORT_TEXT_Y_OFFSET, 0.0f);
+            graphics_positionTexture(text_byTierX, text_sortY, defVertexZ);
+        } else if (titleAZ_s) {
+            glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            glBindTexture(GL_TEXTURE_2D, text_titleAZ);
+            glTranslatef(offset_screenSongs_sortAZTitle_x, SORT_TEXT_Y_OFFSET, 0.0f);
+            graphics_positionTexture(text_titleAZX, text_sortY, defVertexZ);
+        } else if (artistAZ_s) {
+            glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            glBindTexture(GL_TEXTURE_2D, text_artistAZ);
+            glTranslatef(offset_screenSongs_sortAZArtist_x, SORT_TEXT_Y_OFFSET, 0.0f);
+            graphics_positionTexture(text_artistAZX, text_sortY, defVertexZ);
+        } else {
+            glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            glBindTexture(GL_TEXTURE_2D, text_byBPM);
+            glTranslatef(offset_screenSongs_sortbyBPM_x, SORT_TEXT_Y_OFFSET, 0.0f);
+            graphics_positionTexture(text_byBPMX, text_sortY, defVertexZ);
+        }
+    }
+    glPopMatrix();
+
+    screenMenuFooter();
 }
