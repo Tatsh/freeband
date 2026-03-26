@@ -1,4 +1,4 @@
-AccessModifierOffset: -2
+AccessModifierOffset: -4
 AlignAfterOpenBracket: 'Align'
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
@@ -43,8 +43,8 @@ ColumnLimit: 100
 CommentPragmas: '^ IWYU pragma:'
 CompactNamespaces: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
-ConstructorInitializerIndentWidth: 2
-ContinuationIndentWidth: 2
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
 Cpp11BracedListStyle: true
 DerivePointerAlignment: false
 DisableFormat: false
@@ -58,8 +58,8 @@ IncludeCategories:
   - Priority: 1
     Regex: '.*'
 IncludeIsMainRegex: '(Test)?$'
-IndentCaseLabels: true
-IndentWidth: 2
+IndentCaseLabels: false
+IndentWidth: 4
 IndentWrappedFunctionNames: false
 KeepEmptyLinesAtTheStartOfBlocks: true
 MacroBlockBegin: ''
@@ -89,5 +89,5 @@ SpacesInContainerLiterals: true
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 Standard: 'Auto'
-TabWidth: 2
+TabWidth: 4
 UseTab: 'Never'

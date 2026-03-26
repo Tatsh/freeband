@@ -9,14 +9,13 @@
 [![Tests](https://github.com/Tatsh/freeband/actions/workflows/tests.yml/badge.svg)](https://github.com/Tatsh/freeband/actions/workflows/tests.yml)
 [![Coverage Status](https://coveralls.io/repos/github/Tatsh/freeband/badge.svg?branch=master)](https://coveralls.io/github/Tatsh/freeband?branch=master)
 [![Dependabot](https://img.shields.io/badge/Dependabot-enabled-blue?logo=dependabot)](https://github.com/dependabot)
-[![GitHub Pages](https://github.com/Tatsh/freeband/badge/pages)](https://Tatsh.github.io/freeband/)
+[![GitHub Pages](https://github.com/Tatsh/freeband/actions/workflows/pages.yml/badge.svg)](https://tatsh.github.io/freeband/)
 [![Stargazers](https://img.shields.io/github/stars/Tatsh/freeband?logo=github&style=flat)](https://github.com/Tatsh/freeband/stargazers)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://pre-commit.com/)
 [![CMake](https://img.shields.io/badge/CMake-6E6E6E?logo=cmake)](https://cmake.org/)
 [![Prettier](https://img.shields.io/badge/Prettier-enabled-black?logo=prettier)](https://prettier.io/)
 
 [![Mastodon Follow](https://img.shields.io/mastodon/follow/109370961877277568?domain=hostux.social&style=social)](https://hostux.social/@Tatsh)
-
-![screenshot](https://raw.githubusercontent.com/Tatsh/freeband/refs/heads/master/screenshot.png)
 
 This project was started a very long time ago and never completed. It is just historical code for me
 and is not being maintained except to make it build and run as it once did but on modern machines.

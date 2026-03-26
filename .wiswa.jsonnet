@@ -1,8 +1,12 @@
-(import 'defaults.libjsonnet') + {
+(import 'defaults.libsonnet') + {
   local top = self,
   // General settings
   project_type: 'c',
+  want_claude: false,
   want_copilot: false,
+  want_cursor: false,
+  want_winget: false,
+  clang_format_args: 'src/*.c src/audio/*.c src/graphics/*.c src/input/*.c src/screens/*.c src/*.h src/audio/*.h src/graphics/*.h src/input/*.h src/screens/*.h',
 
   // Shared
   github_username: 'Tatsh',
