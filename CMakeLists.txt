@@ -26,6 +26,16 @@ pkg_check_modules(SDL_IMAGE SDL_image REQUIRED IMPORTED_TARGET GLOBAL)
 pkg_check_modules(SDL_TTF SDL_ttf REQUIRED IMPORTED_TARGET GLOBAL)
 pkg_check_modules(SNDFILE sndfile REQUIRED IMPORTED_TARGET GLOBAL)
 
+link_libraries(
+  FreeGLUT::freeglut
+  OpenGL::GL
+  OpenGL::GLU
+  PkgConfig::PORTAUDIO
+  PkgConfig::SDL12_COMPAT
+  PkgConfig::SDL_IMAGE
+  PkgConfig::SDL_TTF
+  PkgConfig::SNDFILE)
+
 add_subdirectory(src)
 
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
