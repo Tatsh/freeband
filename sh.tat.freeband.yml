@@ -70,23 +70,31 @@ modules:
         url: https://github.com/libsdl-org/sdl12-compat.git
         tag: release-1.2.68
   - name: SDL_image
-    buildsystem: autotools
-    config-opts:
-      - --disable-static
-    pre-config-commands:
+    buildsystem: simple
+    build-commands:
       - touch AUTHORS ChangeLog NEWS
       - autoreconf -fi
+      - ./configure --prefix=/app --disable-static
+      - make -j$(nproc)
+      - make install
     sources:
       - type: git
         url: https://github.com/libsdl-org/SDL_image.git
         tag: release-1.2.12
   - name: SDL_ttf
-    buildsystem: autotools
-    config-opts:
-      - --disable-static
-    pre-config-commands:
+    buildsystem: simple
+    build-commands:
       - touch AUTHORS ChangeLog NEWS
       - autoreconf -fi
+      - |
+        cat > /app/bin/freetype-config <<'SHIM'
+        #!/bin/sh
+        exec pkg-config "$@" freetype2
+        SHIM
+      - chmod +x /app/bin/freetype-config
+      - ./configure --prefix=/app --disable-static
+      - make -j$(nproc)
+      - make install
     sources:
       - type: git
         url: https://github.com/libsdl-org/SDL_ttf.git
