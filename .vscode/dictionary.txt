@@ -111,6 +111,7 @@ libportaudio
 libsdl
 libsndfile
 libsonnet
+liconv
 linuxdeploy
 lmargin
 loadoncall
