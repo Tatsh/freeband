@@ -126,7 +126,9 @@ mdfile
 menuitemsht
 mikrofonu
 mktemp
+mmnn
 modelview
+msvc
 msystem
 multitexture
 mypy
@@ -254,6 +256,7 @@ wielu
 winarm
 winget
 winpthread
+winver
 wiswa
 wiswa's
 wokal
