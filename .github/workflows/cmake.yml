@@ -1,115 +1,220 @@
-name: C/C++ CI
-on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
-permissions:
-  contents: read
 jobs:
   build-linux:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     steps:
-      - uses: actions/checkout@v6
-      - name: install deps
+      - uses: 'actions/checkout@v6'
+      - name: 'Install dependencies'
         run: |
           sudo apt-get update -y -qq
-          sudo apt-get install -y freeglut3-dev libsdl-ttf2.0-dev libsdl1.2-dev libsndfile1-dev portaudio19-dev sdl-image1.2-dev
-      - run: |
+          sudo apt-get install -y \
+            freeglut3-dev \
+            libsdl-image1.2-dev \
+            libsdl-ttf2.0-dev \
+            libsdl1.2-dev \
+            libsndfile1-dev \
+            portaudio19-dev
+      - name: 'Configure'
+        run: >-
+          cmake -S . -B build -DCMAKE_VERBOSE_MAKEFILE=ON
+          -DCMAKE_BUILD_TYPE=${{matrix.build-type}}
+          -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/build/AppDir/usr
+      - name: 'Build'
+        run: 'cmake --build ${{github.workspace}}/build --config ${{matrix.build-type}} --verbose'
+      - name: 'Install'
+        run: 'cmake --install ${{github.workspace}}/build --config ${{matrix.build-type}} --verbose'
+      - name: 'Create AppImage'
+        run: |
+          wget 'https://github.com/TheAssassin/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage'
+          chmod +x linuxdeploy-x86_64.AppImage
+          mkdir -p ${{github.workspace}}/build/AppDir/usr/share/icons/hicolor/256x256/apps
+          cp ${{github.workspace}}/src/freeband.png \
+            ${{github.workspace}}/build/AppDir/usr/share/icons/hicolor/256x256/apps/freeband.png
+          cat > ${{github.workspace}}/build/freeband.desktop <<EOF
+          [Desktop Entry]
+          Categories=Game;
+          Exec=freeband
+          Icon=freeband
+          Name=freeband
+          Type=Application
+          Version=1.5
+          EOF
+          ./linuxdeploy-x86_64.AppImage \
+            --appdir ${{github.workspace}}/build/AppDir \
+            --output appimage \
+            --desktop-file ${{github.workspace}}/build/freeband.desktop
+          mv ${{github.workspace}}/freeband-*.AppImage \
+            ${{github.workspace}}/freeband-${{matrix.build-type}}-x86_64.AppImage
+      - if: "github.ref_type == 'tag' && matrix.build-type == 'Release'"
+        name: 'Rename with tag'
+        run: >-
+          mv ${{github.workspace}}/freeband-Release-x86_64.AppImage
+          ${{github.workspace}}/freeband-${{github.ref_name}}-x86_64.AppImage
+      - name: 'Upload Artifacts'
+        uses: 'actions/upload-artifact@v7'
+        with:
+          if-no-files-found: 'error'
+          name: 'freeband-${{ matrix.build-type }}-Linux'
+          path: '${{github.workspace}}/freeband-*.AppImage'
+      - name: 'Attest'
+        uses: 'actions/attest-build-provenance@v4'
+        with:
+          subject-path: '${{github.workspace}}/freeband-*.AppImage'
+      - if: "github.ref_type == 'tag' && matrix.build-type == 'Release'"
+        name: 'Upload package'
+        uses: 'softprops/action-gh-release@v3'
+        with:
+          draft: true
+          fail_on_unmatched_files: true
+          files: '${{github.workspace}}/freeband-*.AppImage'
+    strategy:
+      fail-fast: false
+      matrix:
+        build-type: ['Debug', 'Release']
+  build-macos:
+    runs-on: '${{ matrix.os }}'
+    steps:
+      - uses: 'actions/checkout@v6'
+      - name: 'Install dependencies'
+        run: 'brew install freeglut libsndfile portaudio sdl12-compat sdl_image sdl_ttf'
+      - name: 'Configure, build, install'
+        run: |
           cmake -S . -B build -DCMAKE_VERBOSE_MAKEFILE=ON \
             -DCMAKE_BUILD_TYPE=${{matrix.build-type}} \
             -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/build/prefix
           cmake --build build --config ${{matrix.build-type}} --verbose
-          cmake --install ${{github.workspace}}/build --config ${{matrix.build-type}} --verbose
+          cmake --install build --config ${{matrix.build-type}} --verbose
+      - name: 'Package'
+        run: >-
+          cd build/prefix &&
+          zip -r ${{github.workspace}}/freeband-${{matrix.build-type}}-${{matrix.os}}.zip .
+      - name: 'Upload Artifacts'
+        uses: 'actions/upload-artifact@v7'
+        with:
+          if-no-files-found: 'error'
+          name: 'freeband-${{ matrix.build-type }}-${{ matrix.os }}'
+          path: '${{github.workspace}}/freeband-*.zip'
+      - name: 'Attest'
+        uses: 'actions/attest-build-provenance@v4'
+        with:
+          subject-path: '${{github.workspace}}/freeband-*.zip'
+      - if: "github.ref_type == 'tag' && matrix.build-type == 'Release'"
+        name: 'Upload package'
+        uses: 'softprops/action-gh-release@v3'
+        with:
+          draft: true
+          fail_on_unmatched_files: true
+          files: '${{github.workspace}}/freeband-*.zip'
     strategy:
       fail-fast: false
       matrix:
-        build-type: [Debug, Release]
-  # build-macos:
-  #   runs-on: macos-latest
-  #   steps:
-  #     - uses: actions/checkout@v6
-  #     - name: install deps
-  #       run: brew install freeglut libsndfile portaudio sdl12-compat sdl2_image sdl2_ttf
-  #     - run: |
-  #         cmake -S . -B build -DCMAKE_VERBOSE_MAKEFILE=ON \
-  #           -DCMAKE_BUILD_TYPE=${{matrix.build-type}} \
-  #           -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/build/prefix
-  #         cmake --build build --config ${{matrix.build-type}} --verbose
-  #         cmake --install ${{github.workspace}}/build --config ${{matrix.build-type}} --verbose
-  #     - name: Package
-  #       run: >-
-  #         cpack -C ${{matrix.build-type}}
-  #         --config ${{github.workspace}}/build/CPackConfig.cmake --verbose
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       build-type: [Debug, Release]
-  # build-msys:
-  #   runs-on: windows-latest
-  #   steps:
-  #     - id: fixed_workspace
-  #       name: Fix path
-  #       run: >-
-  #         echo out=$("${{github.workspace}}" -Replace "\\","/") | Out-File
-  #         -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-  #     - uses: msys2/setup-msys2@v2
-  #       with:
-  #         install: >-
-  #           make
-  #         msystem: ${{matrix.sys.name}}
-  #         pacboy: >-
-  #           SDL_image:p
-  #           SDL_ttf:p
-  #           cmake:p
-  #           freeglut:p
-  #           libsndfile:p
-  #           ninja:p
-  #           portaudio:p
-  #           sdl12-compat:p
-  #           toolchain:p
-  #         update: true
-  #     - uses: actions/checkout@v6
-  #       with:
-  #         fetch-depth: 0
-  #     - name: Configure
-  #       run: >-
-  #         cmake -G Ninja -B ${{steps.fixed_workspace.outputs.out}}/build
-  #         --install-prefix ${{steps.fixed_workspace.outputs.out}}/build/prefix
-  #         -DCMAKE_BUILD_TYPE=${{matrix.build-type}}
-  #         -DCMAKE_PREFIX_PATH=${{steps.fixed_workspace.outputs.out}}/build/prefix
-  #       shell: msys2 {0}
-  #     - name: Build
-  #       run: cmake --build ${{steps.fixed_workspace.outputs.out}}/build --verbose
-  #       shell: msys2 {0}
-  #     - name: Install
-  #       run: >-
-  #         cmake --install ${{steps.fixed_workspace.outputs.out}}/build
-  #         --config ${{matrix.build-type}} --verbose
-  #       shell: msys2 {0}
-  #     - name: Package
-  #       run: >-
-  #         cpack -C ${{matrix.build-type}}
-  #         --config ${{steps.fixed_workspace.outputs.out}}/build/CPackConfig.cmake --verbose
-  #       shell: msys2 {0}
-  #     - name: Get Latest Tag
-  #       id: latest_tag
-  #       uses: WyriHaximus/github-action-get-previous-tag@v1
-  #     - if: ${{matrix.sys.name == 'ucrt64'}}
-  #       name: Upload package
-  #       uses: softprops/action-gh-release@v2
-  #       with:
-  #         files: |
-  #           ${{github.workspace}}/freeband*.zip
-  #         tag_name: ${{ steps.latest_tag.outputs.tag }}
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       build-type: [Debug, Release]
-  #       sys:
-  #         - env: i686
-  #           name: mingw32
-  #         - env: x86_64
-  #           name: mingw64
-  #         - env: ucrt-x86_64
-  #           name: ucrt64
+        build-type: ['Debug', 'Release']
+        os: ['macos-15-intel', 'macos-latest']
+  build-msys:
+    runs-on: '${{ matrix.sys.runner }}'
+    steps:
+      - id: 'fixed_workspace'
+        name: 'Fix path'
+        run: >-
+          echo out=$("${{github.workspace}}" -Replace "\\","/") |
+          Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+      - if: "matrix.sys.name == 'clangarm64'"
+        name: 'Install NSIS via Chocolatey'
+        run: |
+          choco install nsis -y --no-progress
+          'C:\Program Files (x86)\NSIS' | Out-File -Append -Encoding utf8 -FilePath $env:GITHUB_PATH
+      - uses: 'msys2/setup-msys2@v2'
+        with:
+          install: 'make'
+          msystem: '${{ matrix.sys.name }}'
+          pacboy: >-
+            SDL_image:p SDL_ttf:p cmake:p freeglut:p libsndfile:p ninja:p
+            ${{ matrix.sys.name == 'clangarm64' && ' ' || 'nsis:p' }}
+            pkgconf:p portaudio:p sdl12-compat:p toolchain:p
+          path-type: "${{ matrix.sys.name == 'clangarm64' && 'inherit' || 'minimal' }}"
+          update: true
+      - uses: 'actions/checkout@v6'
+        with:
+          fetch-depth: 0
+      - name: 'Configure'
+        run: >-
+          cmake -G Ninja -B ${{steps.fixed_workspace.outputs.out}}/build
+          --install-prefix ${{steps.fixed_workspace.outputs.out}}/build/prefix
+          -DCMAKE_BUILD_TYPE=${{matrix.build-type}}
+          -DCMAKE_DISABLE_FIND_PACKAGE_SDL_image=ON
+          -DCMAKE_DISABLE_FIND_PACKAGE_SDL_ttf=ON
+          -DCPACK_SYSTEM_NAME=${{matrix.sys.cpack_system}}
+          ${{ matrix.sys.extra_cmake_args }}
+        shell: 'msys2 {0}'
+      - name: 'Build'
+        run: 'cmake --build ${{steps.fixed_workspace.outputs.out}}/build --verbose'
+        shell: 'msys2 {0}'
+      - name: 'Install'
+        run: >-
+          cmake --install ${{steps.fixed_workspace.outputs.out}}/build
+          --config ${{matrix.build-type}} --verbose
+        shell: 'msys2 {0}'
+      - name: 'Package'
+        run: >-
+          cpack -C ${{matrix.build-type}}
+          --config ${{steps.fixed_workspace.outputs.out}}/build/CPackConfig.cmake --verbose
+        shell: 'msys2 {0}'
+      - name: 'Upload Artifacts'
+        uses: 'actions/upload-artifact@v7'
+        with:
+          if-no-files-found: 'error'
+          name: 'freeband-${{ matrix.build-type }}-${{ matrix.sys.name }}'
+          path: |
+            ${{github.workspace}}/freeband-*.exe
+            ${{github.workspace}}/freeband-*.zip
+      - name: 'Attest'
+        uses: 'actions/attest-build-provenance@v4'
+        with:
+          subject-path: |
+            ${{github.workspace}}/freeband-*.exe
+            ${{github.workspace}}/freeband-*.zip
+      - if: "github.ref_type == 'tag' && matrix.sys.release && matrix.build-type == 'Release'"
+        name: 'Upload package'
+        uses: 'softprops/action-gh-release@v3'
+        with:
+          draft: true
+          fail_on_unmatched_files: true
+          files: |
+            ${{github.workspace}}/freeband-*.exe
+            ${{github.workspace}}/freeband-*.zip
+    strategy:
+      fail-fast: false
+      matrix:
+        build-type: ['Debug', 'Release']
+        sys:
+          - cpack_system: 'win32'
+            extra_cmake_args: '"-DCMAKE_C_FLAGS=-D_WIN32_WINNT=0x0500 -DWINVER=0x0500"'
+            name: 'mingw32'
+            release: true
+            runner: 'windows-latest'
+          - cpack_system: 'win64'
+            extra_cmake_args: ''
+            name: 'mingw64'
+            release: false
+            runner: 'windows-latest'
+          - cpack_system: 'win64'
+            extra_cmake_args: ''
+            name: 'ucrt64'
+            release: false
+            runner: 'windows-latest'
+          - cpack_system: 'winarm64'
+            extra_cmake_args: ''
+            name: 'clangarm64'
+            release: true
+            runner: 'windows-11-arm'
+name: 'Build'
+'on':
+  pull_request:
+    branches: ['master']
+  push:
+    branches: ['master']
+    tags:
+      - 'v*.*.*'
+permissions:
+  attestations: 'write'
+  contents: 'write'
+  id-token: 'write'

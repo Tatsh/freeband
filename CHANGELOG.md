@@ -9,6 +9,23 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Windows NSIS installer with per-user (`$LOCALAPPDATA\Programs`) installation, generated via CPack.
+- AppImage build for Linux x86_64.
+- Flatpak packaging (`sh.tat.freeband`) for `x86_64` and `aarch64`.
+- Snap packaging (strict-confined, `core24`) for `amd64` and `arm64`.
+- Prebuilt macOS archives for Intel and Apple Silicon.
+- 32-bit Windows build targets Windows 2000 (`_WIN32_WINNT=0x0500`); 64-bit and ARM64 builds also
+  produced.
+
+### Changed
+
+- Windows packages bundle their required runtime DLLs (SDL, freeglut, sndfile, portaudio, image
+  codecs, MinGW C runtime), so the installer is self-contained.
+- `vcpkg.json` now lists `freeglut`, `libsndfile`, `portaudio`, and `sdl12-compat` in addition to
+  `sdl1`. SDL1 image and TTF ports are not in vcpkg and remain unlisted.
+
 ## [0.0.1] - 2025-08-04
 
 It works after 16 years.
