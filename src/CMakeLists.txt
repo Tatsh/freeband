@@ -22,6 +22,16 @@ target_link_libraries(
           PkgConfig::SDL_IMAGE
           PkgConfig::SDL_TTF
           PkgConfig::SNDFILE)
+if(WIN32)
+  if(CMAKE_C_COMPILER_ID MATCHES "Clang|GNU" AND CMAKE_SIZEOF_VOID_P EQUAL 8 AND NOT TARGET_VERSION
+                                                                                MATCHES "^(0x501|0x6)")
+    message(FATAL_ERROR
+            "Invalid TARGET_VERSION for 64-bit. Must be XP (0x501) or higher. Got: ${TARGET_VERSION}"
+    )
+  endif()
+  target_compile_definitions(freeband PRIVATE _WIN32_WINNT=${TARGET_VERSION}
+                                              WINVER=${TARGET_VERSION})
+endif()
 
 install(DIRECTORY GameData/languages DESTINATION ${CMAKE_INSTALL_DATADIR}/freeband)
 install(DIRECTORY GameData/themes DESTINATION ${CMAKE_INSTALL_DATADIR}/freeband)

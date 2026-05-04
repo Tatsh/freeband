@@ -6,6 +6,18 @@ include(GNUInstallDirs)
 
 set(CMAKE_C_STANDARD 23)
 
+if(WIN32)
+  if(MSVC)
+    set(_freeband_default_target_version 0x600)
+  elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+    set(_freeband_default_target_version 0x500)
+  else()
+    set(_freeband_default_target_version 0x501)
+  endif()
+  set(TARGET_VERSION ${_freeband_default_target_version}
+      CACHE STRING "Target Windows version in 0xMMNN format.")
+endif()
+
 find_package(FreeGLUT REQUIRED)
 find_package(OpenGL REQUIRED)
 pkg_check_modules(PORTAUDIO portaudio-2.0 REQUIRED IMPORTED_TARGET GLOBAL)

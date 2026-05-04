@@ -177,7 +177,6 @@ jobs:
           -DCMAKE_DISABLE_FIND_PACKAGE_SDL_image=ON
           -DCMAKE_DISABLE_FIND_PACKAGE_SDL_ttf=ON
           -DCPACK_SYSTEM_NAME=${{matrix.sys.cpack_system}}
-          ${{ matrix.sys.extra_cmake_args }}
         shell: 'msys2 {0}'
       - name: 'Build'
         run: 'cmake --build ${{steps.fixed_workspace.outputs.out}}/build --verbose'
@@ -221,22 +220,18 @@ jobs:
         build-type: ['Debug', 'Release']
         sys:
           - cpack_system: 'win32'
-            extra_cmake_args: '"-DCMAKE_C_FLAGS=-D_WIN32_WINNT=0x0500 -DWINVER=0x0500"'
             name: 'mingw32'
             release: true
             runner: 'windows-latest'
           - cpack_system: 'win64'
-            extra_cmake_args: ''
             name: 'mingw64'
             release: false
             runner: 'windows-latest'
           - cpack_system: 'win64'
-            extra_cmake_args: ''
             name: 'ucrt64'
             release: false
             runner: 'windows-latest'
           - cpack_system: 'winarm64'
-            extra_cmake_args: ''
             name: 'clangarm64'
             release: true
             runner: 'windows-11-arm'
