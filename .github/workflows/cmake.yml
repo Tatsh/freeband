@@ -74,8 +74,33 @@ jobs:
     runs-on: '${{ matrix.os }}'
     steps:
       - uses: 'actions/checkout@v6'
-      - name: 'Install dependencies'
-        run: 'brew install freeglut libsndfile portaudio sdl12-compat sdl_image sdl_ttf'
+      - name: 'Install Homebrew dependencies'
+        run: >-
+          brew install autoconf automake freeglut libsndfile libtool
+          pkg-config portaudio sdl12-compat
+      - name: 'Build SDL_image and SDL_ttf from source'
+        run: |
+          prefix="${HOME}/sdl1-libs"
+          mkdir -p "${prefix}"
+          git clone --branch release-1.2.12 --depth 1 \
+            https://github.com/libsdl-org/SDL_image.git
+          (
+            cd SDL_image
+            autoreconf -fi
+            ./configure --prefix="${prefix}" --disable-static
+            make -j"$(sysctl -n hw.ncpu)"
+            make install
+          )
+          git clone --branch release-2.0.11 --depth 1 \
+            https://github.com/libsdl-org/SDL_ttf.git
+          (
+            cd SDL_ttf
+            autoreconf -fi
+            ./configure --prefix="${prefix}" --disable-static
+            make -j"$(sysctl -n hw.ncpu)"
+            make install
+          )
+          echo "PKG_CONFIG_PATH=${prefix}/lib/pkgconfig:${PKG_CONFIG_PATH}" >> "$GITHUB_ENV"
       - name: 'Configure, build, install'
         run: |
           cmake -S . -B build -DCMAKE_VERBOSE_MAKEFILE=ON \
