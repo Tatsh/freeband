@@ -23,6 +23,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- The binary now locates its bundled data directory relative to its own path on Linux, macOS, and
+  Windows. Running `/usr/bin/freeband` after a system install, double-clicking the macOS `.app`
+  bundle, and double-clicking `freeband.exe` from the Windows install directory all work without a
+  launcher wrapper or a specific working directory.
 - Windows packages bundle their required runtime DLLs (SDL, freeglut, sndfile, portaudio, image
   codecs, MinGW C runtime), so the installer is self-contained.
 - `vcpkg.json` now lists `freeglut`, `libsndfile`, `portaudio`, and `sdl12-compat` in addition to

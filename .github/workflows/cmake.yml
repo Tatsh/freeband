@@ -30,13 +30,6 @@ jobs:
           mkdir -p "${appdir}/usr/share/icons/hicolor/256x256/apps"
           cp ${{github.workspace}}/src/freeband.png \
             "${appdir}/usr/share/icons/hicolor/256x256/apps/freeband.png"
-          cat > ${{github.workspace}}/build/AppRun <<'EOF'
-          #!/bin/bash
-          HERE="$(dirname "$(readlink -f "$0")")"
-          cd "${HERE}/usr/share/freeband"
-          exec "${HERE}/usr/bin/freeband" "$@"
-          EOF
-          chmod +x ${{github.workspace}}/build/AppRun
           cat > ${{github.workspace}}/build/freeband.desktop <<EOF
           [Desktop Entry]
           Categories=Game;
@@ -48,7 +41,6 @@ jobs:
           EOF
           ./linuxdeploy-x86_64.AppImage \
             --appdir "${appdir}" \
-            --custom-apprun ${{github.workspace}}/build/AppRun \
             --desktop-file ${{github.workspace}}/build/freeband.desktop \
             --output appimage
           mv ${{github.workspace}}/freeband-*.AppImage \

@@ -7,6 +7,7 @@
 #include "io/keys.h"
 #include "io/languages.h"
 #include "io/prefs.h"
+#include "nonstd.h"
 #include "screens/game.h"
 #include "screens/instruments.h"
 #include "screens/main.h"
@@ -70,6 +71,8 @@ void fb_quit(GLint retnCode) {
 
 int main(int argc, char *argv[]) {
     ushort i;
+
+    fb_chdir_to_data();
 
     for (i = 0; i < MAX_IMAGES; i++)
         texture[i] = 0;

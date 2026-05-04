@@ -34,17 +34,12 @@ if(WIN32)
 endif()
 
 if(APPLE)
-  set_target_properties(freeband PROPERTIES OUTPUT_NAME "freeband-bin")
   install(TARGETS freeband
           RUNTIME DESTINATION "freeband.app/Contents/MacOS")
   configure_file("${CMAKE_SOURCE_DIR}/macos/Info.plist.in"
                  "${CMAKE_CURRENT_BINARY_DIR}/Info.plist" @ONLY)
   install(FILES "${CMAKE_CURRENT_BINARY_DIR}/Info.plist"
           DESTINATION "freeband.app/Contents")
-  configure_file("${CMAKE_SOURCE_DIR}/macos/launcher.in"
-                 "${CMAKE_CURRENT_BINARY_DIR}/freeband" @ONLY)
-  install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/freeband"
-          DESTINATION "freeband.app/Contents/MacOS")
   install(DIRECTORY GameData/languages
           DESTINATION "freeband.app/Contents/Resources")
   install(DIRECTORY GameData/themes
@@ -59,7 +54,7 @@ if(APPLE)
          "/opt/homebrew/lib"
          "/usr/local/lib")
     fixup_bundle(
-      "${CMAKE_INSTALL_PREFIX}/freeband.app/Contents/MacOS/freeband-bin"
+      "${CMAKE_INSTALL_PREFIX}/freeband.app/Contents/MacOS/freeband"
       ""
       "${_freeband_extra_dirs}")
   ]])
