@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.31)
 project(freeband VERSION 0.0.0)
 
+if(APPLE AND NOT CMAKE_OSX_DEPLOYMENT_TARGET)
+  if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0")
+  else()
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13")
+  endif()
+endif()
+
 include(FindPkgConfig)
 include(GNUInstallDirs)
 

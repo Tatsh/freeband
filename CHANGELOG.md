@@ -16,6 +16,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Flatpak packaging (`sh.tat.freeband`) for `x86_64` and `aarch64`.
 - Snap packaging (strict-confined, `core24`) for `amd64` and `arm64`.
 - macOS self-contained `.app` bundle distributed as a DMG and ZIP, for Intel and Apple Silicon.
+  Minimum deployment target is macOS 10.13 (High Sierra) for Intel and macOS 11.0 (Big Sur) for
+  Apple Silicon, matching the floors supported by Xcode 16.
 - 32-bit Windows build targets Windows 2000 (`_WIN32_WINNT=0x0500`); 64-bit and ARM64 builds also
   produced.
 

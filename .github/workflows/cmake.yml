@@ -80,6 +80,8 @@ jobs:
       matrix:
         build-type: ['Debug', 'Release']
   build-macos:
+    env:
+      MACOSX_DEPLOYMENT_TARGET: "${{ matrix.os == 'macos-15-intel' && '10.13' || '11.0' }}"
     runs-on: '${{ matrix.os }}'
     steps:
       - uses: 'actions/checkout@v6'
