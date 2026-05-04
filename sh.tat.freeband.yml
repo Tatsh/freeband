@@ -42,6 +42,15 @@ modules:
       - type: git
         url: https://github.com/PortAudio/portaudio.git
         tag: v19.7.0
+  - name: glu
+    buildsystem: meson
+    config-opts:
+      - --buildtype=release
+      - -Ddefault_library=shared
+    sources:
+      - type: git
+        url: https://gitlab.freedesktop.org/mesa/glu.git
+        tag: glu-9.0.3
   - name: freeglut
     buildsystem: cmake-ninja
     config-opts:
