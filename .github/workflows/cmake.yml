@@ -97,7 +97,7 @@ jobs:
             cd SDL_image
             touch AUTHORS ChangeLog NEWS
             autoreconf -fi
-            ./configure --prefix="${prefix}" --disable-static
+            ./configure --prefix="${prefix}" --disable-static LIBS=-liconv
             make -j"$(sysctl -n hw.ncpu)"
             make install
           )
@@ -107,7 +107,7 @@ jobs:
             cd SDL_ttf
             touch AUTHORS ChangeLog NEWS
             autoreconf -fi
-            ./configure --prefix="${prefix}" --disable-static
+            ./configure --prefix="${prefix}" --disable-static LIBS=-liconv
             make -j"$(sysctl -n hw.ncpu)"
             make install
           )
@@ -174,9 +174,10 @@ jobs:
       - name: 'Patch SDL_image and SDL_ttf pkg-config files'
         run: |
           pcdir="/${{ matrix.sys.name }}/lib/pkgconfig"
+          prefix_win=$(cygpath -m "/${{ matrix.sys.name }}")
           for pc in "${pcdir}/SDL_image.pc" "${pcdir}/SDL_ttf.pc"; do
             if [[ -f "${pc}" ]]; then
-              sed -i 's|^prefix=.*|prefix=${pcfiledir}/../..|' "${pc}"
+              sed -i "s|^prefix=.*|prefix=${prefix_win}|" "${pc}"
               echo "Patched: ${pc}"
               cat "${pc}"
             fi
