@@ -1,0 +1,82 @@
+---
+id: sh.tat.freeband
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+command: freeband
+finish-args:
+  - --device=dri
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=pulseaudio
+  - --socket=wayland
+cleanup:
+  - /include
+  - /lib/cmake
+  - /lib/pkgconfig
+  - /share/aclocal
+  - /share/doc
+  - /share/man
+  - /share/pkgconfig
+  - '*.a'
+  - '*.la'
+modules:
+  - name: libsndfile
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DBUILD_EXAMPLES=OFF
+      - -DBUILD_PROGRAMS=OFF
+      - -DBUILD_TESTING=OFF
+      - -DCMAKE_BUILD_TYPE=Release
+    sources:
+      - type: git
+        url: https://github.com/libsndfile/libsndfile.git
+        tag: 1.2.2
+  - name: portaudio
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DPA_BUILD_SHARED=ON
+      - -DPA_BUILD_STATIC=OFF
+    sources:
+      - type: git
+        url: https://github.com/PortAudio/portaudio.git
+        tag: v19.7.0
+  - name: freeglut
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DFREEGLUT_BUILD_DEMOS=OFF
+      - -DFREEGLUT_BUILD_STATIC_LIBS=OFF
+    sources:
+      - type: git
+        url: https://github.com/freeglut/freeglut.git
+        tag: v3.6.0
+  - name: sdl12-compat
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    sources:
+      - type: git
+        url: https://github.com/libsdl-org/sdl12-compat.git
+        tag: release-1.2.68
+  - name: SDL_image
+    buildsystem: autotools
+    sources:
+      - type: git
+        url: https://github.com/libsdl-org/SDL_image.git
+        tag: release-1.2.12
+  - name: SDL_ttf
+    buildsystem: autotools
+    sources:
+      - type: git
+        url: https://github.com/libsdl-org/SDL_ttf.git
+        tag: release-2.0.11
+  - name: freeband
+    builddir: true
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    sources:
+      - type: dir
+        path: .

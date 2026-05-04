@@ -1,0 +1,55 @@
+apps:
+  freeband:
+    command: 'usr/bin/freeband'
+    extensions:
+      - 'gnome'
+    plugs:
+      - 'audio-playback'
+      - 'home'
+      - 'opengl'
+      - 'pulseaudio'
+      - 'removable-media'
+      - 'wayland'
+      - 'x11'
+base: 'core24'
+confinement: 'strict'
+contact: 'https://github.com/Tatsh/freeband/issues'
+description: |
+  An attempt at a Guitar Hero / Rock Band-style game written in C with SDL
+  and OpenGL. This is an archived project preserved for historical interest.
+grade: 'stable'
+issues: 'https://github.com/Tatsh/freeband/issues'
+license: 'MIT'
+name: 'freeband'
+parts:
+  freeband:
+    build-packages:
+      - 'freeglut3-dev'
+      - 'libsdl-image1.2-dev'
+      - 'libsdl-ttf2.0-dev'
+      - 'libsdl1.2-dev'
+      - 'libsndfile1-dev'
+      - 'pkg-config'
+      - 'portaudio19-dev'
+    cmake-parameters:
+      - '-DCMAKE_BUILD_TYPE=Release'
+      - '-DCMAKE_INSTALL_PREFIX=/usr'
+    plugin: 'cmake'
+    source: '.'
+    stage-packages:
+      - 'libglut3.12'
+      - 'libportaudio2'
+      - 'libsdl-image1.2'
+      - 'libsdl-ttf2.0-0'
+      - 'libsdl1.2debian'
+      - 'libsndfile1'
+platforms:
+  amd64:
+    build-on: 'amd64'
+  arm64:
+    build-on: 'arm64'
+source-code: 'https://github.com/Tatsh/freeband'
+summary: 'Guitar Hero/Rock Band-style game in C with SDL and OpenGL'
+title: 'freeband'
+version: '0.0.0'
+website: 'https://tatsh.github.io/freeband/'
