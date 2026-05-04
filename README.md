@@ -7,7 +7,6 @@
 [![License](https://img.shields.io/github/license/Tatsh/freeband)](https://github.com/Tatsh/freeband/blob/master/LICENSE.txt)
 [![GitHub commits since latest release (by SemVer including pre-releases)](https://img.shields.io/github/commits-since/Tatsh/freeband/v0.0.0/master)](https://github.com/Tatsh/freeband/compare/v0.0.0...master)
 [![CodeQL](https://github.com/Tatsh/freeband/actions/workflows/codeql.yml/badge.svg)](https://github.com/Tatsh/freeband/actions/workflows/codeql.yml)
-[![QA](https://github.com/Tatsh/freeband/actions/workflows/qa.yml/badge.svg)](https://github.com/Tatsh/freeband/actions/workflows/qa.yml)
 [![Tests](https://github.com/Tatsh/freeband/actions/workflows/tests.yml/badge.svg)](https://github.com/Tatsh/freeband/actions/workflows/tests.yml)
 [![Coverage Status](https://coveralls.io/repos/github/Tatsh/freeband/badge.svg?branch=master)](https://coveralls.io/github/Tatsh/freeband?branch=master)
 [![Dependabot](https://img.shields.io/badge/Dependabot-enabled-blue?logo=dependabot)](https://github.com/dependabot)

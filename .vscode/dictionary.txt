@@ -39,7 +39,6 @@ dictminsz
 diffht
 discardable
 docstrings
-dorny
 doxyfile
 dtmp
 ebadlink
