@@ -71,12 +71,22 @@ modules:
         tag: release-1.2.68
   - name: SDL_image
     buildsystem: autotools
+    config-opts:
+      - --disable-static
+    pre-config-commands:
+      - touch AUTHORS ChangeLog NEWS
+      - autoreconf -fi
     sources:
       - type: git
         url: https://github.com/libsdl-org/SDL_image.git
         tag: release-1.2.12
   - name: SDL_ttf
     buildsystem: autotools
+    config-opts:
+      - --disable-static
+    pre-config-commands:
+      - touch AUTHORS ChangeLog NEWS
+      - autoreconf -fi
     sources:
       - type: git
         url: https://github.com/libsdl-org/SDL_ttf.git
