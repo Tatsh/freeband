@@ -3,6 +3,7 @@ alsa
 Ångström
 appdir
 appimage
+apprun
 artyści
 ascendingly
 asciilinesz
@@ -164,6 +165,7 @@ pyproject
 pytest
 qstringbuilder
 rctrl
+readlink
 reflow
 regen
 retn
