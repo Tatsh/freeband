@@ -167,7 +167,7 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
   }
 
 #ifdef _WIN32
-  if ((ret = _stat(prefs_songs, &buffer)) != 0) { /* No? Create songs folder */
+  if ((ret = stat(prefs_songs, &buffer)) != 0) { /* No? Create songs folder */
     fprintf(stderr, "Unable to locate a Freeband songs directory. Creating one now...\n");
 
     if ((ret = mkdir(prefs_songs)) != 0) {
@@ -182,7 +182,7 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
 #endif
 
   /* Do we have a languages folder? */
-  if ((ret = _stat(prefs_languages, &buffer)) != 0) { /* No? Create it */
+  if ((ret = stat(prefs_languages, &buffer)) != 0) { /* No? Create it */
     fprintf(stderr, "Unable to locate a Freeband languages directory. Creating one now...\n");
 
     if ((ret = _mkdir(prefs_languages)) != 0) {
@@ -197,7 +197,7 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
     languages_checkForINIs();
   }
 
-  if ((ret = _stat(prefs_themes, &buffer)) !=
+  if ((ret = stat(prefs_themes, &buffer)) !=
       0) { /* No? Create themes folder and copy default theme to it */
     fprintf(stderr, "Unable to locate a Freeband themes directory. Creating one now...\n");
 
@@ -213,7 +213,7 @@ bool prefs_verify() { /* This function only checks and fixes preferences; it doe
 #endif
 
   /* Do we already have a preferences.ini file in $HOME/Freeband? */
-  if ((ret = _stat(prefs_ini, &buffer)) != 0) { /* No? Copy a default one then */
+  if ((ret = stat(prefs_ini, &buffer)) != 0) { /* No? Copy a default one then */
     fprintf(stderr, "Unable to find %s file. Copying a default one now...\n", prefs_ini);
     fileIO_copyFile("preferences.ini", prefs_ini);
   }

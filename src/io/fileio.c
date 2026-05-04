@@ -56,7 +56,7 @@ bool fileIO_unix2dos(FILE *in) {
   path_temp[0] = '\0';
   strcpy(path_temp, "./u2dtmp");
   strcat(path_temp, "XXXXXX");
-  if (fopen(path_temp, "w+") == NULL)
+  if ((temp = fopen(path_temp, "w+")) == NULL)
     return false;
 
 #ifndef NDEBUG
@@ -64,18 +64,20 @@ bool fileIO_unix2dos(FILE *in) {
 #endif /* __DEBUG__ */
 
   while ((temp_char = getc(in)) != EOF) {
-    if ((temp_char == '\x0a') && (putc('\x0d', path_temp) == EOF) ||
+    if ((temp_char == '\x0a') && (putc('\x0d', temp) == EOF) ||
         (temp_char == '\x0d') &&
-          (((temp_char = getc(in)) == EOF) || (putc('\x0d', path_temp) == EOF)) ||
-        (putc(U2DAsciiTable[temp_char], path_temp) == EOF)) {
+          (((temp_char = getc(in)) == EOF) || (putc('\x0d', temp) == EOF)) ||
+        (putc(U2DAsciiTable[temp_char], temp) == EOF)) {
+      fclose(temp);
       return false;
     }
   }
 
-  if (rename(path_temp, in) == -1) {
-    fprintf(stderr, "unix2dos: Error renaming %s to original file.\n", path_temp);
-    fprintf(stderr, "          Output file remains %s.\n", path_temp);
-  }
+  fclose(temp);
+  /* Renaming the temp file back over the original requires the input file's
+     path, which is not available from the FILE * argument. The rename step is
+     omitted; callers that need the converted file should refactor this
+     interface to take a path. */
 
   return true;
 }
