@@ -95,6 +95,7 @@ jobs:
             https://github.com/libsdl-org/SDL_image.git
           (
             cd SDL_image
+            touch AUTHORS ChangeLog NEWS
             autoreconf -fi
             ./configure --prefix="${prefix}" --disable-static
             make -j"$(sysctl -n hw.ncpu)"
@@ -104,6 +105,7 @@ jobs:
             https://github.com/libsdl-org/SDL_ttf.git
           (
             cd SDL_ttf
+            touch AUTHORS ChangeLog NEWS
             autoreconf -fi
             ./configure --prefix="${prefix}" --disable-static
             make -j"$(sysctl -n hw.ncpu)"
