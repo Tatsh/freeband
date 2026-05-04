@@ -59,6 +59,7 @@ ekspert
 esac
 esbenp
 everytihng
+exepath
 fbkey
 fbnotes
 fileversion
