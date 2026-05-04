@@ -9,6 +9,7 @@ asciilinesz
 attlist
 audiobuf
 audioql
+autoreconf
 autosort
 autotools
 basowa
@@ -128,6 +129,7 @@ modelview
 msystem
 multitexture
 mypy
+ncpu
 ndevilla
 nonstd
 notediff
