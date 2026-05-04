@@ -184,8 +184,8 @@ jobs:
           pcdir="/${{ matrix.sys.name }}/lib/pkgconfig"
           prefix_win=$(cygpath -m "/${{ matrix.sys.name }}")
           for pc in "${pcdir}"/*.pc; do
-            if [[ -f "${pc}" ]] && grep -q "^prefix=/${{ matrix.sys.name }}\$" "${pc}"; then
-              sed -i "s|^prefix=/${{ matrix.sys.name }}\$|prefix=${prefix_win}|" "${pc}"
+            if [[ -f "${pc}" ]] && grep -q "/${{ matrix.sys.name }}/" "${pc}"; then
+              sed -i "s|/${{ matrix.sys.name }}|${prefix_win}|g" "${pc}"
               echo "Patched: ${pc}"
             fi
           done
