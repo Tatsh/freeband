@@ -3,6 +3,7 @@ alsa
 Ångström
 appdir
 appimage
+appl
 apprun
 artyści
 ascendingly
@@ -214,6 +215,7 @@ starpower
 stdc
 storei
 strcmpi
+strequal
 stringstrans
 strlwc
 structln
