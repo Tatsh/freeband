@@ -1,7 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <GL/gl.h>
+#include "platform.h"
 
 #define MENUITEMSHT 0.21f
 

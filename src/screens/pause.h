@@ -1,7 +1,7 @@
 #ifndef PAUSE_H
 #define PAUSE_H
 
-#include <GL/gl.h>
+#include "platform.h"
 
 #define PAUSE_MENU_ITEMS_HT 0.14f
 #define PAUSE_MENU_ITEMS_OFFSET -0.26 /* How far away from 'PAUSED' text this starts at */

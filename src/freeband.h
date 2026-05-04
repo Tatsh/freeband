@@ -17,13 +17,7 @@
 #include <sndfile.h>
 #include <vorbis/vorbisfile.h>
 
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
-
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
-#include <SDL/SDL_ttf.h>
+#include "platform.h"
 
 #ifdef _WIN32
 #include <windows.h>

@@ -1,9 +1,7 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <SDL/SDL.h>
+#include "platform.h"
 
 #define MAX_IMAGES 20
 
