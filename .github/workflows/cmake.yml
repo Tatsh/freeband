@@ -177,15 +177,14 @@ jobs:
       - uses: 'actions/checkout@v6'
         with:
           fetch-depth: 0
-      - name: 'Patch SDL_image and SDL_ttf pkg-config files'
+      - name: 'Patch MSYS2 pkg-config files'
         run: |
           pcdir="/${{ matrix.sys.name }}/lib/pkgconfig"
           prefix_win=$(cygpath -m "/${{ matrix.sys.name }}")
-          for pc in "${pcdir}/SDL_image.pc" "${pcdir}/SDL_ttf.pc"; do
-            if [[ -f "${pc}" ]]; then
-              sed -i "s|^prefix=.*|prefix=${prefix_win}|" "${pc}"
+          for pc in "${pcdir}"/*.pc; do
+            if [[ -f "${pc}" ]] && grep -q "^prefix=/${{ matrix.sys.name }}\$" "${pc}"; then
+              sed -i "s|^prefix=/${{ matrix.sys.name }}\$|prefix=${prefix_win}|" "${pc}"
               echo "Patched: ${pc}"
-              cat "${pc}"
             fi
           done
         shell: 'msys2 {0}'
