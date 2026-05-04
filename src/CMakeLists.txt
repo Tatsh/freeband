@@ -33,13 +33,45 @@ if(WIN32)
                                               WINVER=${TARGET_VERSION})
 endif()
 
-install(DIRECTORY GameData/languages DESTINATION ${CMAKE_INSTALL_DATADIR}/freeband)
-install(DIRECTORY GameData/themes DESTINATION ${CMAKE_INSTALL_DATADIR}/freeband)
-install(FILES GameData/preferences.ini DESTINATION ${CMAKE_INSTALL_DATADIR}/freeband)
-install(
-  TARGETS freeband
-  DESTINATION ${CMAKE_INSTALL_BINDIR}
-  RUNTIME_DEPENDENCY_SET freeband)
+if(APPLE)
+  set_target_properties(freeband PROPERTIES OUTPUT_NAME "freeband-bin")
+  install(TARGETS freeband
+          RUNTIME DESTINATION "freeband.app/Contents/MacOS")
+  configure_file("${CMAKE_SOURCE_DIR}/macos/Info.plist.in"
+                 "${CMAKE_CURRENT_BINARY_DIR}/Info.plist" @ONLY)
+  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/Info.plist"
+          DESTINATION "freeband.app/Contents")
+  configure_file("${CMAKE_SOURCE_DIR}/macos/launcher.in"
+                 "${CMAKE_CURRENT_BINARY_DIR}/freeband" @ONLY)
+  install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/freeband"
+          DESTINATION "freeband.app/Contents/MacOS")
+  install(DIRECTORY GameData/languages
+          DESTINATION "freeband.app/Contents/Resources")
+  install(DIRECTORY GameData/themes
+          DESTINATION "freeband.app/Contents/Resources")
+  install(FILES GameData/preferences.ini
+          DESTINATION "freeband.app/Contents/Resources")
+  install(CODE [[
+    include(BundleUtilities)
+    set(BU_CHMOD_BUNDLE_ITEMS TRUE)
+    file(GLOB _freeband_extra_dirs
+         "$ENV{HOME}/sdl1-libs/lib"
+         "/opt/homebrew/lib"
+         "/usr/local/lib")
+    fixup_bundle(
+      "${CMAKE_INSTALL_PREFIX}/freeband.app/Contents/MacOS/freeband-bin"
+      ""
+      "${_freeband_extra_dirs}")
+  ]])
+else()
+  install(DIRECTORY GameData/languages DESTINATION ${CMAKE_INSTALL_DATADIR}/freeband)
+  install(DIRECTORY GameData/themes DESTINATION ${CMAKE_INSTALL_DATADIR}/freeband)
+  install(FILES GameData/preferences.ini DESTINATION ${CMAKE_INSTALL_DATADIR}/freeband)
+  install(
+    TARGETS freeband
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    RUNTIME_DEPENDENCY_SET freeband)
+endif()
 if(WIN32)
   if(MINGW)
     get_filename_component(_mingw_bin_dir ${CMAKE_C_COMPILER} DIRECTORY)

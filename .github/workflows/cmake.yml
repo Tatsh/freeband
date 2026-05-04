@@ -121,25 +121,31 @@ jobs:
           cmake --install build --config ${{matrix.build-type}} --verbose
       - name: 'Package'
         run: >-
-          cd build/prefix &&
-          zip -r ${{github.workspace}}/freeband-${{matrix.build-type}}-${{matrix.os}}.zip .
+          cpack -C ${{matrix.build-type}}
+          --config ${{github.workspace}}/build/CPackConfig.cmake --verbose
       - name: 'Upload Artifacts'
         uses: 'actions/upload-artifact@v7'
         with:
           if-no-files-found: 'error'
           name: 'freeband-${{ matrix.build-type }}-${{ matrix.os }}'
-          path: '${{github.workspace}}/freeband-*.zip'
+          path: |
+            ${{github.workspace}}/freeband-*.dmg
+            ${{github.workspace}}/freeband-*.zip
       - name: 'Attest'
         uses: 'actions/attest-build-provenance@v4'
         with:
-          subject-path: '${{github.workspace}}/freeband-*.zip'
+          subject-path: |
+            ${{github.workspace}}/freeband-*.dmg
+            ${{github.workspace}}/freeband-*.zip
       - if: "github.ref_type == 'tag' && matrix.build-type == 'Release'"
         name: 'Upload package'
         uses: 'softprops/action-gh-release@v3'
         with:
           draft: true
           fail_on_unmatched_files: true
-          files: '${{github.workspace}}/freeband-*.zip'
+          files: |
+            ${{github.workspace}}/freeband-*.dmg
+            ${{github.workspace}}/freeband-*.zip
     strategy:
       fail-fast: false
       matrix:
