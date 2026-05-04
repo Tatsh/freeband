@@ -1,5 +1,5 @@
 {
-  "dependencies": ["sdl1"],
+  "dependencies": ["freeglut", "libsndfile", "portaudio", "sdl1", "sdl12-compat"],
   "description": "An attempt at making a clone of Guitar Hero/Rock Band in C with SDL and OpenGL (archived project).",
   "documentation": "https://freeband.readthedocs.org",
   "homepage": "https://tatsh.github.io/freeband/",
