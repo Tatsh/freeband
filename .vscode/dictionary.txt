@@ -26,6 +26,7 @@ bpmx
 bsky
 buglist
 buildsystems
+buildtype
 bytearray
 ĆgŁÓwne
 choco
@@ -44,6 +45,7 @@ dashcam
 dbuild
 dcmake
 dcpack
+ddefault
 devillard
 dfreeglut
 diagramdata
