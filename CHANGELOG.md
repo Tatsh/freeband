@@ -9,6 +9,15 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Windows packages now bundle their runtime DLLs via CMake's recursive runtime dependency walker,
+  which resolves indirect dependencies that the previous regex-include filter could miss. Windows
+  API set DLLs (`api-ms-`, `ext-ms-`, `kernel32.dll`) and anything under `system32/` are explicitly
+  excluded so OS-supplied DLLs are never copied into the package. The walker now applies under any
+  Windows toolchain (MinGW32, UCRT64, ClangARM64, and MSVC via vcpkg's app-local deployment),
+  rather than the MinGW-only path used before.
+
 ## [0.0.1] - 2026-05-04
 
 ### Added

@@ -68,17 +68,21 @@ else()
     RUNTIME_DEPENDENCY_SET freeband)
 endif()
 if(WIN32)
-  if(MINGW)
-    get_filename_component(_mingw_bin_dir ${CMAKE_C_COMPILER} DIRECTORY)
-  endif()
+  get_filename_component(_compiler_bin_dir ${CMAKE_C_COMPILER} DIRECTORY)
   install(
     RUNTIME_DEPENDENCY_SET
     freeband
     PRE_EXCLUDE_REGEXES
-    "."
-    PRE_INCLUDE_REGEXES
-    "SDL|sndfile|portaudio|freeglut|png|jpeg|tiff|webp|freetype|bz2|ogg|vorbis|FLAC|opus|mpg123|gcc|winpthread|stdc|iconv|zlib"
+    [=[api-ms-]=]
+    [=[ext-ms-]=]
+    [[kernel32\.dll]]
+    POST_EXCLUDE_REGEXES
+    [=[.*system32\/.*\.dll]=]
     DIRECTORIES
-    ${CMAKE_INSTALL_PREFIX}/bin
-    ${_mingw_bin_dir})
+    ${_compiler_bin_dir}
+    $<TARGET_FILE_DIR:freeband>
+    DESTINATION ${CMAKE_INSTALL_BINDIR})
+  # sdl12-compat (SDL.dll) loads SDL2.dll at runtime through SDL_LoadObject,
+  # so SDL2 is absent from the PE import graph that the walker above sees.
+  install(FILES ${_compiler_bin_dir}/SDL2.dll DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
