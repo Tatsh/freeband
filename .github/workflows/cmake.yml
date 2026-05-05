@@ -199,6 +199,13 @@ jobs:
           cmake --install ${{steps.fixed_workspace.outputs.out}}/build
           --config ${{matrix.build-type}} --verbose
         shell: 'msys2 {0}'
+      - name: 'Inspect install prefix'
+        run: |
+          echo '== install prefix tree =='
+          find "${{steps.fixed_workspace.outputs.out}}/build/prefix" -maxdepth 4 -print
+          echo '== bundled DLLs =='
+          find "${{steps.fixed_workspace.outputs.out}}/build/prefix" -iname '*.dll' -print | sort
+        shell: 'msys2 {0}'
       - name: 'Package'
         run: >-
           cpack -C ${{matrix.build-type}}
@@ -242,7 +249,7 @@ jobs:
             runner: 'windows-latest'
           - cpack_system: 'win64'
             name: 'ucrt64'
-            release: false
+            release: true
             runner: 'windows-latest'
           - cpack_system: 'winarm64'
             name: 'clangarm64'
