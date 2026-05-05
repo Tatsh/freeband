@@ -178,7 +178,6 @@ rshift
 rwbl
 rythm
 salut
-samplecount
 samplelength
 samplestart
 scalef
@@ -209,7 +208,6 @@ splayer
 srcs
 Średni
 starpower
-stdc
 storei
 strcmpi
 strequal
@@ -250,13 +248,11 @@ venv
 versioninfo
 vguides
 wasapi
-webp
 whammydown
 whammyup
 wielu
 winarm
 winget
-winpthread
 winver
 wiswa
 wiswa's
