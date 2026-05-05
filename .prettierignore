@@ -1,6 +1,7 @@
 *.1
 *.c
 *.cpp
+*.dtd
 *.h
 *.in
 *.info
@@ -11,6 +12,7 @@
 *.lock
 *.log
 *.min.js
+*.rc
 *~
 .*.swp
 .*_cache/

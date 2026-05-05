@@ -33,6 +33,7 @@ choco
 clangarm
 color
 colorstyle
+commitizen
 confusinig
 conn
 cooldown

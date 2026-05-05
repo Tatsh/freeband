@@ -47,60 +47,60 @@
 typedef char langINI_path;
 
 typedef struct {
-  char *single_player;
-  char *multiplayer;
-  char *online;
-  char *options;
-  char *quit;
+    char *single_player;
+    char *multiplayer;
+    char *online;
+    char *options;
+    char *quit;
 } languageStrings_screenMain_s;
 
 typedef struct {
-  char *select;
-  char *back;
-  char *up_down;
+    char *select;
+    char *back;
+    char *up_down;
 } languageStrings_screenFooter_s;
 
 typedef struct {
-  char *header;
-  char *header_multiplayer;
-  char *guitar;
-  char *bass;
-  char *drums;
-  char *vocals;
+    char *header;
+    char *header_multiplayer;
+    char *guitar;
+    char *bass;
+    char *drums;
+    char *vocals;
 } languageStrings_screenInstruments_s;
 
 typedef struct {
-  char *header;
-  char *sort_by_tier;
-  char *sort_title_AZ;
-  char *sort_artist_AZ;
-  char *sort_bpm;
+    char *header;
+    char *sort_by_tier;
+    char *sort_title_AZ;
+    char *sort_artist_AZ;
+    char *sort_bpm;
 } languageStrings_screenSongs_s;
 
 typedef struct {
-  char *header;
-  char *header_multiplayer;
-  char *easy;
-  char *medium;
-  char *hard;
-  char *expert;
+    char *header;
+    char *header_multiplayer;
+    char *easy;
+    char *medium;
+    char *hard;
+    char *expert;
 } languageStrings_screenDifficulty_s;
 
 typedef struct {
-  char *header;
-  char *player_1;
-  char *player_2;
-  char *player_3;
-  char *player_4;
-  char *resume;
-  char *resume_timer;
-  char *restart;
-  char *lefty_mode;
-  char *change_difficulty;
-  char *adjust_microphone_volume;
-  char *quit;
-  char *new_song;
-  char *main_menu;
+    char *header;
+    char *player_1;
+    char *player_2;
+    char *player_3;
+    char *player_4;
+    char *resume;
+    char *resume_timer;
+    char *restart;
+    char *lefty_mode;
+    char *change_difficulty;
+    char *adjust_microphone_volume;
+    char *quit;
+    char *new_song;
+    char *main_menu;
 } languageStrings_screenPause_s;
 
 extern dictionary *lang_d;

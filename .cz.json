@@ -9,6 +9,7 @@
       "CMakeLists.txt",
       "README.md",
       "package.json",
+      "snapcraft.yaml",
       "vcpkg.json"
     ],
     "version_provider": "npm",

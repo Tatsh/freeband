@@ -24,34 +24,34 @@
 typedef char prefs_path; /* Preferences directories and paths to files */
 
 typedef struct {
-  char ini_item[ARRAY_BUFFER];
-  bool bDefault_value;
-  bool bUser_value;
+    char ini_item[ARRAY_BUFFER];
+    bool bDefault_value;
+    bool bUser_value;
 } prefs_bool_s;
 
 typedef struct {
-  char ini_item[ARRAY_BUFFER];
-  char cDefault_value[ARRAY_BUFFER];
-  char *cUser_value;
-  int iValue;
+    char ini_item[ARRAY_BUFFER];
+    char cDefault_value[ARRAY_BUFFER];
+    char *cUser_value;
+    int iValue;
 } prefs_char_s;
 
 typedef struct {
-  char ini_item[ARRAY_BUFFER];
-  double dDefault_value;
-  double dUser_value;
+    char ini_item[ARRAY_BUFFER];
+    double dDefault_value;
+    double dUser_value;
 } prefs_double_s;
 
 typedef struct {
-  char ini_item[ARRAY_BUFFER];
-  int iDefault_value;
-  int iUser_value;
+    char ini_item[ARRAY_BUFFER];
+    int iDefault_value;
+    int iUser_value;
 } prefs_ints_s;
 
 typedef struct {
-  char ini_item[ARRAY_BUFFER];
-  short sDefault_value;
-  short sUser_value;
+    char ini_item[ARRAY_BUFFER];
+    short sDefault_value;
+    short sUser_value;
 } prefs_short_s;
 
 /* Commented out till we need these

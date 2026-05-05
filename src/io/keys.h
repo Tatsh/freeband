@@ -7,14 +7,14 @@
 
 /* Thanks to syntropy for this method */
 typedef struct {
-  char *key;
-  int map;
+    char *key;
+    int map;
 } keymap_s;
 
 typedef struct {
-  char *iniItem;
-  uint user_value;
-  uint default_value;
+    char *iniItem;
+    uint user_value;
+    uint default_value;
 } keyPrefs_s;
 
 extern keyPrefs_s keyPrefs[];

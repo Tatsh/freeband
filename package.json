@@ -42,7 +42,7 @@
   "description": "An attempt at making a clone of Guitar Hero/Rock Band in C with SDL and OpenGL (archived project).",
   "devDependencies": {
     "@prettier/plugin-xml": "^3.4.2",
-    "cspell": "^10.0.0",
+    "cspell": "^10.0.1",
     "markdownlint-cli2": "^0.22.1",
     "prettier": "^3.8.3",
     "prettier-plugin-ini": "^1.3.0",
@@ -115,5 +115,5 @@
     "format": "clang-format -i src/*.c src/audio/*.c src/graphics/*.c src/input/*.c src/screens/*.c src/*.h src/audio/*.h src/graphics/*.h src/input/*.h src/screens/*.h && prettier --write . && markdownlint-cli2 --config package.json --configPointer /markdownlint-cli2 --fix",
     "qa": "yarn check-spelling && yarn check-formatting"
   },
-  "version": "0.0.0"
+  "version": "0.0.1"
 }

@@ -9,6 +9,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.0.1] - 2026-05-04
+
 ### Added
 
 - Windows NSIS installer with per-user (`$LOCALAPPDATA\Programs`) installation, generated via CPack.
@@ -32,8 +34,4 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `vcpkg.json` now lists `freeglut`, `libsndfile`, `portaudio`, and `sdl12-compat` in addition to
   `sdl1`. SDL1 image and TTF ports are not in vcpkg and remain unlisted.
 
-## [0.0.1] - 2025-08-04
-
-It works after 16 years.
-
-[unreleased]: https://github.com/Tatsh/freeband/compare/v0.0.0...HEAD
+[unreleased]: https://github.com/Tatsh/freeband/compare/v0.0.1...HEAD

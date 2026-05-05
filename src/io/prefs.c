@@ -38,275 +38,281 @@ prefs_bool_s prefs_bools[] = {{"Freeband:enable_demo", true, true},
                               {"Songs:fail_to_end", true, true}};
 
 bool prefs_getBools(dictionary *prefs) {
-  ushort i;
+    ushort i;
 
-  for (i = 0; i < structln(prefs_bools); i++)
-    prefs_bools[i].bUser_value =
-      iniparser_getboolean(prefs, prefs_bools[i].ini_item, prefs_bools[i].bDefault_value);
+    for (i = 0; i < structln(prefs_bools); i++)
+        prefs_bools[i].bUser_value =
+            iniparser_getboolean(prefs, prefs_bools[i].ini_item, prefs_bools[i].bDefault_value);
 
-  return true;
+    return true;
 }
 
 prefs_char_s prefs_chars[] = {
-  {"Freeband:language", "en_GB", "en_GB", 0x00},
-  {"Freeband:theme", "default", "default", 0}, /* No numbers here */
-  {"Freeband:default_instrument", "guitar", "guitar", INSTRUMENT_GUITAR},
-  {"Freeband:default_difficulty", "easy", "easy", DIFFICULTY_EASY},
+    {"Freeband:language", "en_GB", "en_GB", 0x00},
+    {"Freeband:theme", "default", "default", 0}, /* No numbers here */
+    {"Freeband:default_instrument", "guitar", "guitar", INSTRUMENT_GUITAR},
+    {"Freeband:default_difficulty", "easy", "easy", DIFFICULTY_EASY},
 
-  {"Audio:output_device", "none", "none", 0},
-  {"Audio:mic_device", "none", "none", 0},
+    {"Audio:output_device", "none", "none", 0},
+    {"Audio:mic_device", "none", "none", 0},
 
-  {"Online:proxy_url", "none", "none", 0},
+    {"Online:proxy_url", "none", "none", 0},
 
-  {"Songs:default_sort", "by Tier", "by Tier", SORT_BY_TIER},
-  {"Songs:last_song", "", "", 0},
-  {"Songs:additional_folders", "", "", 0}};
+    {"Songs:default_sort", "by Tier", "by Tier", SORT_BY_TIER},
+    {"Songs:last_song", "", "", 0},
+    {"Songs:additional_folders", "", "", 0}};
 
 bool prefs_getChars(dictionary *prefs) {
-  ushort i;
+    ushort i;
 
-  for (i = 0; i < structln(prefs_chars); i++)
-    prefs_chars[i].cUser_value =
-      iniparser_getstring(prefs, prefs_chars[i].ini_item, prefs_chars[i].cDefault_value);
+    for (i = 0; i < structln(prefs_chars); i++)
+        prefs_chars[i].cUser_value =
+            iniparser_getstring(prefs, prefs_chars[i].ini_item, prefs_chars[i].cDefault_value);
 
-  return true;
+    return true;
 }
 
 prefs_ints_s prefs_ints[] = {{"Graphics:width", 800, 800}, {"Graphics:height", 600, 600}};
 
 prefs_short_s prefs_shorts[] = {
-  {"Freeband:difficulty_judge", 5, 5},
+    {"Freeband:difficulty_judge", 5, 5},
 
-  {"Graphics:bpp", 32, 32},
+    {"Graphics:bpp", 32, 32},
 };
 
 bool prefs_getInts(dictionary *prefs) {
-  ushort i;
+    ushort i;
 
-  for (i = 0; i < structln(prefs_ints); i++) /* Handle ints and shorts here */
-    prefs_ints[i].iUser_value =
-      iniparser_getint(prefs, prefs_ints[i].ini_item, prefs_ints[i].iDefault_value);
+    for (i = 0; i < structln(prefs_ints); i++) /* Handle ints and shorts here */
+        prefs_ints[i].iUser_value =
+            iniparser_getint(prefs, prefs_ints[i].ini_item, prefs_ints[i].iDefault_value);
 
-  for (i = 0; i < structln(prefs_shorts); i++)
-    prefs_shorts[i].sUser_value =
-      iniparser_getint(prefs, prefs_shorts[i].ini_item, prefs_ints[i].iDefault_value);
+    for (i = 0; i < structln(prefs_shorts); i++)
+        prefs_shorts[i].sUser_value =
+            iniparser_getint(prefs, prefs_shorts[i].ini_item, prefs_ints[i].iDefault_value);
 
-  return true;
+    return true;
 }
 
 bool getHomePath() {
 #ifdef _WIN32
-  /* We get the My Documents/Documents (Windows) directory here */
-  /* In this case, the 5th argument can take a char instead of LPTSTR or TCHAR; these are all the same here */
-  SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, prefs_root);
+    /* We get the My Documents/Documents (Windows) directory here */
+    /* In this case, the 5th argument can take a char instead of LPTSTR or TCHAR; these are all the same here */
+    SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, prefs_root);
 #else  /* POSIX */
-  strcat(prefs_root, getenv("HOME"));
+    strcat(prefs_root, getenv("HOME"));
 #endif /* _WIN32 */
 
-  if (prefs_root == NULL) {
-    fprintf(stderr, "Could not find home directory. Check your settings.\n");
-    return false;
-  }
+    if (prefs_root == NULL) {
+        fprintf(stderr, "Could not find home directory. Check your settings.\n");
+        return false;
+    }
 
-  return true;
+    return true;
 }
 
 #ifdef _WIN32
 bool prefs_verifyPaths_win32(prefs_path search[]) {
-  struct _stat buffer;
-  /* /languages directory */
-
-  /* /songs directory */
-
-  /* /themes directory */
-
-  return true;
-}
-#endif
-
-bool prefs_verifyPaths() {
-  if (getHomePath()) {
-#ifdef _WIN32
-    prefs_verifyPaths_win32(NULL);
-#else
+    struct _stat buffer;
     /* /languages directory */
 
     /* /songs directory */
 
     /* /themes directory */
-#endif
-  } else
-    fprintf(stderr, "Fatal error finding home path.\n");
 
-  return true;
+    return true;
+}
+#endif
+
+bool prefs_verifyPaths() {
+    if (getHomePath()) {
+#ifdef _WIN32
+        prefs_verifyPaths_win32(NULL);
+#else
+        /* /languages directory */
+
+        /* /songs directory */
+
+        /* /themes directory */
+#endif
+    } else
+        fprintf(stderr, "Fatal error finding home path.\n");
+
+    return true;
 }
 
 bool prefs_verify() { /* This function only checks and fixes preferences; it does NOT read them */
-  short ret;
-  getHomePath();
+    short ret;
+    getHomePath();
 
-  strcat(prefs_root, FREEBAND_PREFS_ROOT); /* Create paths to search for or make */
-  strcat(prefs_languages, prefs_root);
-  strcat(prefs_languages, "/languages");
-  strcat(prefs_songs, prefs_root);
-  strcat(prefs_songs, "/songs");
-  strcat(prefs_themes, prefs_root);
-  strcat(prefs_themes, "/themes");
-  strcat(prefs_ini, prefs_root);
-  strcat(prefs_ini, "/preferences.ini");
+    strcat(prefs_root, FREEBAND_PREFS_ROOT); /* Create paths to search for or make */
+    strcat(prefs_languages, prefs_root);
+    strcat(prefs_languages, "/languages");
+    strcat(prefs_songs, prefs_root);
+    strcat(prefs_songs, "/songs");
+    strcat(prefs_themes, prefs_root);
+    strcat(prefs_themes, "/themes");
+    strcat(prefs_ini, prefs_root);
+    strcat(prefs_ini, "/preferences.ini");
 
-  struct stat buffer;
+    struct stat buffer;
 
-  if (stat(prefs_root, &buffer) != 0) { /* No? Create Freeband root folder */
-    fprintf(stderr, "Unable to locate a Freeband root directory. Creating one now...\n");
+    if (stat(prefs_root, &buffer) != 0) { /* No? Create Freeband root folder */
+        fprintf(stderr, "Unable to locate a Freeband root directory. Creating one now...\n");
 #ifndef _WIN32
-    mkdir(prefs_root, S_IRWXU | S_IRWXG);
+        mkdir(prefs_root, S_IRWXU | S_IRWXG);
 #else
-    mkdir(prefs_root);
+        mkdir(prefs_root);
 #endif
-  }
+    }
 
 #ifdef _WIN32
-  if ((ret = stat(prefs_songs, &buffer)) != 0) { /* No? Create songs folder */
-    fprintf(stderr, "Unable to locate a Freeband songs directory. Creating one now...\n");
+    if ((ret = stat(prefs_songs, &buffer)) != 0) { /* No? Create songs folder */
+        fprintf(stderr, "Unable to locate a Freeband songs directory. Creating one now...\n");
 
-    if ((ret = mkdir(prefs_songs)) != 0) {
-      fprintf(
-        stderr, "Unable to create %s directory. Check if you have permission.\n", prefs_songs);
-      return false; /* Error! Do we have permission? */
+        if ((ret = mkdir(prefs_songs)) != 0) {
+            fprintf(stderr,
+                    "Unable to create %s directory. Check if you have permission.\n",
+                    prefs_songs);
+            return false; /* Error! Do we have permission? */
+        }
     }
-  }
 #ifndef NDEBUG
-  else
-    fprintf(stdout, "Found songs directory: %s.\n", prefs_songs);
+    else
+        fprintf(stdout, "Found songs directory: %s.\n", prefs_songs);
 #endif
 
-  /* Do we have a languages folder? */
-  if ((ret = stat(prefs_languages, &buffer)) != 0) { /* No? Create it */
-    fprintf(stderr, "Unable to locate a Freeband languages directory. Creating one now...\n");
+    /* Do we have a languages folder? */
+    if ((ret = stat(prefs_languages, &buffer)) != 0) { /* No? Create it */
+        fprintf(stderr, "Unable to locate a Freeband languages directory. Creating one now...\n");
 
-    if ((ret = _mkdir(prefs_languages)) != 0) {
-      fprintf(
-        stderr, "Unable to create %s directory. Check if you have permission.\n", prefs_songs);
-      return false; /* Error! Do we have permission? */
-    }
-  } else {
+        if ((ret = _mkdir(prefs_languages)) != 0) {
+            fprintf(stderr,
+                    "Unable to create %s directory. Check if you have permission.\n",
+                    prefs_songs);
+            return false; /* Error! Do we have permission? */
+        }
+    } else {
 #ifndef NDEBUG
-    fprintf(stdout, "Found languages directory: %s.\n", prefs_languages);
+        fprintf(stdout, "Found languages directory: %s.\n", prefs_languages);
 #endif
-    languages_checkForINIs();
-  }
-
-  if ((ret = stat(prefs_themes, &buffer)) !=
-      0) { /* No? Create themes folder and copy default theme to it */
-    fprintf(stderr, "Unable to locate a Freeband themes directory. Creating one now...\n");
-
-    if ((ret = _mkdir(prefs_themes)) != 0) {
-      fprintf(
-        stderr, "Unable to create %s directory. Check if you have permission.\n", prefs_themes);
-      return false; /* Error! Do we have permission? */
+        languages_checkForINIs();
     }
-  }
+
+    if ((ret = stat(prefs_themes, &buffer)) !=
+        0) { /* No? Create themes folder and copy default theme to it */
+        fprintf(stderr, "Unable to locate a Freeband themes directory. Creating one now...\n");
+
+        if ((ret = _mkdir(prefs_themes)) != 0) {
+            fprintf(stderr,
+                    "Unable to create %s directory. Check if you have permission.\n",
+                    prefs_themes);
+            return false; /* Error! Do we have permission? */
+        }
+    }
 #ifndef NDEBUG
-  else
-    fprintf(stdout, "Found themes directory: %s.\n", prefs_themes);
+    else
+        fprintf(stdout, "Found themes directory: %s.\n", prefs_themes);
 #endif
 
-  /* Do we already have a preferences.ini file in $HOME/Freeband? */
-  if ((ret = stat(prefs_ini, &buffer)) != 0) { /* No? Copy a default one then */
-    fprintf(stderr, "Unable to find %s file. Copying a default one now...\n", prefs_ini);
-    fileIO_copyFile("preferences.ini", prefs_ini);
-  }
+    /* Do we already have a preferences.ini file in $HOME/Freeband? */
+    if ((ret = stat(prefs_ini, &buffer)) != 0) { /* No? Copy a default one then */
+        fprintf(stderr, "Unable to find %s file. Copying a default one now...\n", prefs_ini);
+        fileIO_copyFile("preferences.ini", prefs_ini);
+    }
 #ifndef NDEBUG
-  else
-    fprintf(stdout, "Found preferences.ini file: %s.\nGetting preferences...\n", prefs_ini);
+    else
+        fprintf(stdout, "Found preferences.ini file: %s.\nGetting preferences...\n", prefs_ini);
 #endif
 
 #else /* POSIX */
 
-  /* Do we have a languages folder? */
-  if ((ret = stat(prefs_languages, &buffer)) != 0) { /* No? Create it */
-    fprintf(stderr, "Unable to locate a Freeband languages directory. Creating one now...\n");
+    /* Do we have a languages folder? */
+    if ((ret = stat(prefs_languages, &buffer)) != 0) { /* No? Create it */
+        fprintf(stderr, "Unable to locate a Freeband languages directory. Creating one now...\n");
 
-    if ((ret = mkdir(prefs_languages, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)) != 0) {
-      fprintf(
-        stderr, "Unable to create %s directory. Check if you have permission.\n", prefs_songs);
-      return false; /* Error! Do we have permission? */
-    }
-  } else {
+        if ((ret = mkdir(prefs_languages, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)) != 0) {
+            fprintf(stderr,
+                    "Unable to create %s directory. Check if you have permission.\n",
+                    prefs_songs);
+            return false; /* Error! Do we have permission? */
+        }
+    } else {
 #ifndef NDEBUG
-    fprintf(stdout, "Found languages directory: %s.\n", prefs_languages);
+        fprintf(stdout, "Found languages directory: %s.\n", prefs_languages);
 #endif
+        languages_checkForINIs();
+    }
+
+    /* Do we have a songs folder? */
+    if ((ret = stat(prefs_songs, &buffer)) != 0) { /* No? Create songs folder */
+        fprintf(stderr, "Unable to locate a Freeband songs directory. Creating one now...\n");
+
+        if ((ret = mkdir(prefs_songs, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)) != 0) {
+            fprintf(stderr,
+                    "Unable to create %s directory. Check if you have permission.\n",
+                    prefs_songs);
+            return false; /* Error! Do we have permission? */
+        }
+    }
+#ifndef NDEBUG
+    else
+        fprintf(stdout, "Found songs directory: %s.\n", prefs_songs);
+#endif
+
+    /* Do we have a themes folder? */
+    if ((ret = stat(prefs_themes, &buffer)) !=
+        0) { /* No? Create themes folder and copy default theme to it */
+        fprintf(stderr, "Unable to locate a Freeband themes directory. Creating one now...\n");
+
+        if ((ret = mkdir(prefs_themes, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)) != 0) {
+            fprintf(stderr,
+                    "Unable to create %s directory. Check if you have permission.\n",
+                    prefs_themes);
+            return false; /* Error! Do we have permission? */
+        }
+    }
+#ifndef NDEBUG
+    else
+        fprintf(stdout, "Found themes directory: %s.\n", prefs_themes);
+#endif
+
+    /* Do we already have a preferences.ini file in $HOME/Freeband? */
+    if ((ret = stat(prefs_ini, &buffer)) != 0) { /* No? Copy a default one then */
+        fprintf(stderr, "Unable to find %s file. Copying a default one now...\n", prefs_ini);
+        fileIO_copyFile("preferences.ini", prefs_ini);
+    }
+#ifndef NDEBUG
+    else
+        fprintf(stdout, "Found preferences.ini file: %s.\nGetting preferences...\n", prefs_ini);
+#endif
+
     languages_checkForINIs();
-  }
-
-  /* Do we have a songs folder? */
-  if ((ret = stat(prefs_songs, &buffer)) != 0) { /* No? Create songs folder */
-    fprintf(stderr, "Unable to locate a Freeband songs directory. Creating one now...\n");
-
-    if ((ret = mkdir(prefs_songs, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)) != 0) {
-      fprintf(
-        stderr, "Unable to create %s directory. Check if you have permission.\n", prefs_songs);
-      return false; /* Error! Do we have permission? */
-    }
-  }
-#ifndef NDEBUG
-  else
-    fprintf(stdout, "Found songs directory: %s.\n", prefs_songs);
-#endif
-
-  /* Do we have a themes folder? */
-  if ((ret = stat(prefs_themes, &buffer)) !=
-      0) { /* No? Create themes folder and copy default theme to it */
-    fprintf(stderr, "Unable to locate a Freeband themes directory. Creating one now...\n");
-
-    if ((ret = mkdir(prefs_themes, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)) != 0) {
-      fprintf(
-        stderr, "Unable to create %s directory. Check if you have permission.\n", prefs_themes);
-      return false; /* Error! Do we have permission? */
-    }
-  }
-#ifndef NDEBUG
-  else
-    fprintf(stdout, "Found themes directory: %s.\n", prefs_themes);
-#endif
-
-  /* Do we already have a preferences.ini file in $HOME/Freeband? */
-  if ((ret = stat(prefs_ini, &buffer)) != 0) { /* No? Copy a default one then */
-    fprintf(stderr, "Unable to find %s file. Copying a default one now...\n", prefs_ini);
-    fileIO_copyFile("preferences.ini", prefs_ini);
-  }
-#ifndef NDEBUG
-  else
-    fprintf(stdout, "Found preferences.ini file: %s.\nGetting preferences...\n", prefs_ini);
-#endif
-
-  languages_checkForINIs();
 
 #endif
 
-  return true; /* Checking for default preferences, songs and themes is handled in defaults.c */
+    return true; /* Checking for default preferences, songs and themes is handled in defaults.c */
 }
 
 bool prefs_load() {
-  FILE *inifile;
+    FILE *inifile;
 
-  if ((prefs = iniparser_load(prefs_ini)) == NULL) {
-    fprintf(stderr, "Error loading %s dictionary using iniparser.\n", prefs_ini);
-    return false;
-  }
+    if ((prefs = iniparser_load(prefs_ini)) == NULL) {
+        fprintf(stderr, "Error loading %s dictionary using iniparser.\n", prefs_ini);
+        return false;
+    }
 
-  prefs_getBools(prefs);
-  prefs_getChars(prefs);
-  prefs_getInts(prefs);
-  prefs_getKeys(prefs);
+    prefs_getBools(prefs);
+    prefs_getChars(prefs);
+    prefs_getInts(prefs);
+    prefs_getKeys(prefs);
 
-  /*  inifile = fopen(prefs_ini, "w+");
+    /*  inifile = fopen(prefs_ini, "w+");
   iniparser_dump_ini(prefs, inifile); /* Write a new INI, just in case settings are invalid and are being reset */
-  /*#ifdef _WIN32
+    /*#ifdef _WIN32
   fileIO_unix2dos(inifile); /* Convert to DOS format for Windows users */
-  /*#endif /* _WIN32 */
-  /*fclose(inifile);*/
+    /*#endif /* _WIN32 */
+    /*fclose(inifile);*/
 
-  return true;
+    return true;
 }
