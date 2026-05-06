@@ -46,7 +46,7 @@ link_libraries(
 
 add_subdirectory(src)
 
-set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
+set(CPACK_PACKAGE_NAME "Freeband")
 set(CPACK_PACKAGE_VENDOR "Tatsh")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CPACK_PACKAGE_NAME})
 set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/LICENSE.txt)
@@ -60,9 +60,9 @@ if(WIN32)
   set(CPACK_NSIS_DEFINES "RequestExecutionLevel user
 !define /date CURRENT_YEAR \\\"%Y\\\"
 VIProductVersion \\\"${PROJECT_VERSION}.0\\\"
-VIAddVersionKey \\\"ProductName\\\" \\\"${PROJECT_NAME}\\\"
+VIAddVersionKey \\\"ProductName\\\" \\\"Freeband\\\"
 VIAddVersionKey \\\"CompanyName\\\" \\\"Tatsh\\\"
-VIAddVersionKey \\\"FileDescription\\\" \\\"${PROJECT_NAME} installer.\\\"
+VIAddVersionKey \\\"FileDescription\\\" \\\"Freeband installer.\\\"
 VIAddVersionKey \\\"FileVersion\\\" \\\"${PROJECT_VERSION}\\\"
 VIAddVersionKey \\\"ProductVersion\\\" \\\"${PROJECT_VERSION}.0\\\"
 VIAddVersionKey \\\"LegalCopyright\\\" \\\"Copyright © \\\${CURRENT_YEAR} Tatsh.\\\"
@@ -72,6 +72,9 @@ VIAddVersionKey \\\"Comments\\\" \\\"https://github.com/Tatsh/freeband\\\"")
   set(CPACK_NSIS_MANIFEST_DPI_AWARE ON)
   set(CPACK_NSIS_MODIFY_PATH OFF)
   set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/Tatsh/freeband/issues")
+  set(CPACK_PACKAGE_EXECUTABLES freeband Freeband)
+  set(CPACK_CREATE_DESKTOP_LINKS freeband)
+  set(CPACK_NSIS_MUI_FINISHPAGE_RUN "freeband")
   if(NOT CPACK_SYSTEM_NAME)
     if(CMAKE_GENERATOR_PLATFORM)
       string(TOLOWER "${CMAKE_GENERATOR_PLATFORM}" __freeband_arch)

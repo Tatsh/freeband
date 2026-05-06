@@ -35,17 +35,17 @@ endif()
 
 if(APPLE)
   install(TARGETS freeband
-          RUNTIME DESTINATION "freeband.app/Contents/MacOS")
+          RUNTIME DESTINATION "Freeband.app/Contents/MacOS")
   configure_file("${CMAKE_SOURCE_DIR}/macos/Info.plist.in"
                  "${CMAKE_CURRENT_BINARY_DIR}/Info.plist" @ONLY)
   install(FILES "${CMAKE_CURRENT_BINARY_DIR}/Info.plist"
-          DESTINATION "freeband.app/Contents")
+          DESTINATION "Freeband.app/Contents")
   install(DIRECTORY GameData/languages
-          DESTINATION "freeband.app/Contents/Resources")
+          DESTINATION "Freeband.app/Contents/Resources")
   install(DIRECTORY GameData/themes
-          DESTINATION "freeband.app/Contents/Resources")
+          DESTINATION "Freeband.app/Contents/Resources")
   install(FILES GameData/preferences.ini
-          DESTINATION "freeband.app/Contents/Resources")
+          DESTINATION "Freeband.app/Contents/Resources")
   install(CODE [[
     include(BundleUtilities)
     set(BU_CHMOD_BUNDLE_ITEMS TRUE)
@@ -54,7 +54,7 @@ if(APPLE)
          "/opt/homebrew/lib"
          "/usr/local/lib")
     fixup_bundle(
-      "${CMAKE_INSTALL_PREFIX}/freeband.app/Contents/MacOS/freeband"
+      "${CMAKE_INSTALL_PREFIX}/Freeband.app/Contents/MacOS/freeband"
       ""
       "${_freeband_extra_dirs}")
   ]])

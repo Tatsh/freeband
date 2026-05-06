@@ -9,6 +9,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Windows NSIS installer creates a Start Menu shortcut for `Freeband`, offers an opt-in Desktop
+  shortcut checkbox during install, and shows a "Run Freeband" checkbox on the finish page so the
+  game can be launched directly from the installer.
+
 ### Changed
 
 - Windows packages now bundle their runtime DLLs via CMake's recursive runtime dependency walker,
@@ -17,6 +23,13 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   excluded so OS-supplied DLLs are never copied into the package. The walker now applies under any
   Windows toolchain (MinGW32, UCRT64, ClangARM64, and MSVC via vcpkg's app-local deployment),
   rather than the MinGW-only path used before.
+- User-visible references to the game now use the branded title `Freeband` (capital `F`)
+  consistently. This affects the macOS bundle (`Freeband.app`, `CFBundleName`, and
+  `CFBundleDisplayName`), the Snap Store title, the Linux AppImage `.desktop` `Name=` field, the
+  Windows installer's product name, install directory under `%LOCALAPPDATA%\Programs\Freeband`,
+  Start Menu folder, Add/Remove Programs entry, and the `ProductName`/`FileDescription` resource
+  strings in `freeband.exe`. Technical identifiers (binary filename, package IDs, URLs, bundle
+  identifier, executable command) remain lowercase.
 
 ## [0.0.1] - 2026-05-04
 

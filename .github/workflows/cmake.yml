@@ -35,7 +35,7 @@ jobs:
           Categories=Game;
           Exec=freeband
           Icon=freeband
-          Name=freeband
+          Name=Freeband
           Type=Application
           Version=1.5
           EOF
@@ -43,7 +43,7 @@ jobs:
             --appdir "${appdir}" \
             --desktop-file ${{github.workspace}}/build/freeband.desktop \
             --output appimage
-          mv ${{github.workspace}}/freeband-*.AppImage \
+          mv ${{github.workspace}}/Freeband-*.AppImage \
             ${{github.workspace}}/freeband-${{matrix.build-type}}-x86_64.AppImage
       - if: "github.ref_type == 'tag' && matrix.build-type == 'Release'"
         name: 'Rename with tag'
