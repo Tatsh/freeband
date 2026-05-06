@@ -62,6 +62,7 @@ exepath
 fbkey
 fbnotes
 fileversion
+finishpage
 fitto
 flathub
 footerbg
