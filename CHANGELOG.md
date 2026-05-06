@@ -9,11 +9,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.0.2] - 2026-05-05
+
 ### Added
 
 - Windows NSIS installer creates a Start Menu shortcut for `Freeband`, offers an opt-in Desktop
-  shortcut checkbox during install, and shows a "Run Freeband" checkbox on the finish page so the
+  shortcut checkbox during install, and shows a 'Run Freeband' checkbox on the finish page so the
   game can be launched directly from the installer.
+- Windows x86-64 build (UCRT64) is now published alongside the existing 32-bit (MinGW32) and ARM64
+  (ClangARM64) Windows artefacts. The v0.0.1 release matrix had the 64-bit rows excluded from
+  publishing, so a native Windows x64 binary is shipped here for the first time. UCRT64 supersedes
+  MinGW64 for x86-64 because it links against the universal C runtime that ships with Windows 10
+  and later.
 
 ### Changed
 
@@ -56,4 +63,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `vcpkg.json` now lists `freeglut`, `libsndfile`, `portaudio`, and `sdl12-compat` in addition to
   `sdl1`. SDL1 image and TTF ports are not in vcpkg and remain unlisted.
 
-[unreleased]: https://github.com/Tatsh/freeband/compare/v0.0.1...HEAD
+[unreleased]: https://github.com/Tatsh/freeband/compare/v0.0.2...HEAD
+[0.0.2]: https://github.com/Tatsh/freeband/compare/v0.0.1...v0.0.2

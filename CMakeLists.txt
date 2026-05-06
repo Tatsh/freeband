@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(freeband VERSION 0.0.1)
+project(freeband VERSION 0.0.2)
 
 if(APPLE AND NOT CMAKE_OSX_DEPLOYMENT_TARGET)
   if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")

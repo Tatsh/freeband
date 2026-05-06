@@ -20,7 +20,7 @@
     },
   ],
   project_name: 'freeband',
-  version: '0.0.1',
+  version: '0.0.2',
   description: 'An attempt at making a clone of Guitar Hero/Rock Band in C with SDL and OpenGL (archived project).',
   keywords: ['guitar hero', 'rock band', 'simulation'],
   social+: {

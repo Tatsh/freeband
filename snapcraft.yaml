@@ -36,7 +36,7 @@ parts:
       - '-DCMAKE_INSTALL_PREFIX=/usr'
     plugin: 'cmake'
     source: 'https://github.com/Tatsh/freeband.git'
-    source-tag: 'v0.0.1'
+    source-tag: 'v0.0.2'
     stage-packages:
       - 'libglut3.12'
       - 'libportaudio2'
@@ -52,5 +52,5 @@ platforms:
 source-code: 'https://github.com/Tatsh/freeband'
 summary: 'Guitar Hero/Rock Band-style game in C with SDL and OpenGL'
 title: 'Freeband'
-version: '0.0.1'
+version: '0.0.2'
 website: 'https://tatsh.github.io/freeband/'

@@ -9,6 +9,7 @@
       "CMakeLists.txt",
       "README.md",
       "package.json",
+      "sh.tat.freeband.yml",
       "snapcraft.yaml",
       "vcpkg.json"
     ],

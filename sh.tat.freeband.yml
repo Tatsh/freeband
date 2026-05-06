@@ -105,5 +105,6 @@ modules:
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
     sources:
-      - type: dir
-        path: .
+      - type: git
+        url: https://github.com/Tatsh/freeband.git
+        tag: v0.0.2
