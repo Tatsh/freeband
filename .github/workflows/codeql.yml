@@ -21,7 +21,7 @@ jobs:
             portaudio19-dev \
             sdl-image1.2-dev
       - name: 'Initialize CodeQL'
-        uses: 'github/codeql-action/init@v4.35.3'
+        uses: 'github/codeql-action/init@v4.35.4'
         with:
           build-mode: '${{ matrix.build-mode }}'
           languages: '${{ matrix.language }}'
@@ -31,7 +31,7 @@ jobs:
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
           cmake --build build --config Debug --verbose
       - name: 'Perform CodeQL Analysis'
-        uses: 'github/codeql-action/analyze@v4.35.3'
+        uses: 'github/codeql-action/analyze@v4.35.4'
         with:
           category: '/language:${{matrix.language}}'
     strategy:
