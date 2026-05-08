@@ -1,8 +1,8 @@
 {
   "_wiswa": {
     "commandLine": "wiswa",
-    "lastRun": "2026-05-04T21:48:10Z",
-    "version": "51b26bc-dirty"
+    "lastRun": "2026-05-08T01:27:21Z",
+    "version": "3d1ef61"
   },
   "contributors": ["Andrew Udvare <audvare@gmail.com>"],
   "cspell": {
@@ -105,7 +105,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Tatsh/freeband.git"
+    "url": "git+https://github.com/Tatsh/freeband.git"
   },
   "scripts": {
     "build": "cmake --preset=default -DBUILD_DOCS=ON && cmake --build build",

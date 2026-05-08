@@ -162,6 +162,7 @@ portaudio
 postaĆ
 powrotem
 poziom
+preapproved
 productversion
 protips
 pulseaudio

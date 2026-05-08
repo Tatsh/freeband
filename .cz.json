@@ -9,9 +9,8 @@
       "CMakeLists.txt",
       "README.md",
       "package.json",
-      "sh.tat.freeband.yml",
-      "snapcraft.yaml",
-      "vcpkg.json"
+      "vcpkg.json",
+      "snapcraft.yaml"
     ],
     "version_provider": "npm",
     "version_scheme": "semver"
