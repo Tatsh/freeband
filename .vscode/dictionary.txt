@@ -11,7 +11,6 @@ attlist
 audiobuf
 audioql
 autoreconf
-autosort
 basowa
 bencina
 bindir
@@ -36,6 +35,7 @@ confusinig
 conn
 cooldown
 coveragerc
+coverallsapp
 cpack
 crillee
 csidl
@@ -153,6 +153,7 @@ pacboy
 pagebreak
 parameteri
 pastreamio
+pavelzw
 pcdata
 pcdir
 pcmout
@@ -167,6 +168,8 @@ productversion
 protips
 pulseaudio
 pylock
+pyproject
+pytest
 qstringbuilder
 rctrl
 reflow

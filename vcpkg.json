@@ -1,10 +1,17 @@
 {
-  "dependencies": ["freeglut", "libsndfile", "portaudio", "sdl1", "sdl12-compat"],
+  "dependencies": [
+    "freeglut",
+    "libsndfile",
+    "portaudio",
+    "sdl12-compat"
+  ],
   "description": "An attempt at making a clone of Guitar Hero/Rock Band in C with SDL and OpenGL (archived project).",
   "documentation": "https://freeband.readthedocs.org",
   "homepage": "https://tatsh.github.io/freeband/",
   "license": "MIT",
-  "maintainers": ["Andrew Udvare <audvare@gmail.com>"],
+  "maintainers": [
+    "Andrew Udvare <audvare@gmail.com>"
+  ],
   "name": "freeband",
   "version": "0.0.2"
 }

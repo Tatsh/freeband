@@ -1,4 +1,5 @@
-(import 'defaults.libsonnet') + {
+{
+  uses_user_defaults: true,
   local top = self,
   // General settings
   project_type: 'c',
@@ -23,9 +24,6 @@
   version: '0.0.2',
   description: 'An attempt at making a clone of Guitar Hero/Rock Band in C with SDL and OpenGL (archived project).',
   keywords: ['guitar hero', 'rock band', 'simulation'],
-  social+: {
-    mastodon+: { id: '109370961877277568' },
-  },
 
   // GitHub
   github+: {
@@ -38,7 +36,7 @@
 
   // C only
   vcpkg+: {
-    dependencies: ['sdl1'],
+    dependencies: ['freeglut', 'libsndfile', 'portaudio', 'sdl12-compat'],
   },
 
   // Commitizen
