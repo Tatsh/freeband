@@ -9,6 +9,27 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- The game now has a launcher icon on all three platforms. The Windows `freeband.exe` embeds the
+  icon as a Win32 resource so it shows in Explorer, the Start Menu, the taskbar, and Alt-Tab. The
+  macOS `Freeband.app` bundle ships a multi-resolution `Freeband.icns` referenced from
+  `CFBundleIconFile`, so Finder, the Dock, and the App Switcher render the icon. On Linux, an XDG
+  `sh.tat.freeband.desktop` launcher and a matching `sh.tat.freeband.png` hicolor icon are now
+  installed by CMake itself, so distribution packages (Snap, Flatpak, distro), AppImage builds, and
+  manual `make install` all gain a launcher entry without per-packager scripting.
+- Windows `freeband.exe` now carries full Win32 VERSIONINFO metadata (FileVersion, ProductVersion,
+  CompanyName, FileDescription, ProductName, OriginalFilename, LegalCopyright), so the Explorer
+  Properties pane and antivirus inspectors show real values rather than the previous unset
+  defaults.
+
+### Changed
+
+- The Linux launcher entry has been renamed from `freeband.desktop` to `sh.tat.freeband.desktop`
+  and the icon basename from `freeband` to `sh.tat.freeband`. The reverse-DNS name matches the
+  Flatpak app-id and the macOS `CFBundleIdentifier`, and satisfies Flatpak's strict requirement
+  that the exported desktop file name match the app-id.
+
 ## [0.0.2] - 2026-05-05
 
 ### Added

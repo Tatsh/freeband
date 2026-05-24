@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Freeband
+Comment=@PROJECT_DESCRIPTION@
+Exec=freeband
+Icon=sh.tat.freeband
+Categories=Game;ArcadeGame;
+Terminal=false
+StartupWMClass=freeband

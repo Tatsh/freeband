@@ -18,6 +18,7 @@ description: |
   An attempt at a Guitar Hero / Rock Band-style game written in C with SDL
   and OpenGL. This is an archived project preserved for historical interest.
 grade: 'stable'
+icon: 'src/freeband.png'
 issues: 'https://github.com/Tatsh/freeband/issues'
 license: 'MIT'
 name: 'freeband'

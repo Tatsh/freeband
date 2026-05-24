@@ -8,6 +8,8 @@
     <string>freeband</string>
     <key>CFBundleDisplayName</key>
     <string>Freeband</string>
+    <key>CFBundleIconFile</key>
+    <string>Freeband</string>
     <key>CFBundleIdentifier</key>
     <string>sh.tat.freeband</string>
     <key>CFBundleInfoDictionaryVersion</key>

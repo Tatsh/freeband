@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.28)
-project(freeband VERSION 0.0.2)
+project(
+  freeband
+  VERSION 0.0.2
+  DESCRIPTION "An attempt at making a clone of Guitar Hero/Rock Band in C with SDL and OpenGL.")
 
 if(APPLE AND NOT CMAKE_OSX_DEPLOYMENT_TARGET)
   if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")

@@ -31,6 +31,12 @@ if(WIN32)
   endif()
   target_compile_definitions(freeband PRIVATE _WIN32_WINNT=${TARGET_VERSION}
                                               WINVER=${TARGET_VERSION})
+  string(TIMESTAMP FREEBAND_COPYRIGHT_YEAR "%Y")
+  configure_file("${CMAKE_SOURCE_DIR}/win32/freeband.rc.in"
+                 "${CMAKE_CURRENT_BINARY_DIR}/freeband.rc" @ONLY)
+  target_sources(freeband PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/freeband.rc")
+  set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/freeband.rc"
+                              PROPERTIES COMPILE_DEFINITIONS $<$<CONFIG:Release>:NDEBUG=1>)
 endif()
 
 if(APPLE)
@@ -46,6 +52,31 @@ if(APPLE)
           DESTINATION "Freeband.app/Contents/Resources")
   install(FILES GameData/preferences.ini
           DESTINATION "Freeband.app/Contents/Resources")
+  find_program(SIPS_EXE sips REQUIRED)
+  find_program(ICONUTIL_EXE iconutil REQUIRED)
+  set(_freeband_icon_src "${CMAKE_CURRENT_SOURCE_DIR}/freeband.png")
+  set(_freeband_iconset_dir "${CMAKE_CURRENT_BINARY_DIR}/Freeband.iconset")
+  set(_freeband_icns "${CMAKE_CURRENT_BINARY_DIR}/Freeband.icns")
+  add_custom_command(
+    OUTPUT "${_freeband_icns}"
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${_freeband_iconset_dir}"
+    COMMAND ${SIPS_EXE} -z 16 16 "${_freeband_icon_src}" --out
+            "${_freeband_iconset_dir}/icon_16x16.png"
+    COMMAND ${SIPS_EXE} -z 32 32 "${_freeband_icon_src}" --out
+            "${_freeband_iconset_dir}/icon_16x16@2x.png"
+    COMMAND ${SIPS_EXE} -z 32 32 "${_freeband_icon_src}" --out
+            "${_freeband_iconset_dir}/icon_32x32.png"
+    COMMAND ${SIPS_EXE} -z 64 64 "${_freeband_icon_src}" --out
+            "${_freeband_iconset_dir}/icon_32x32@2x.png"
+    COMMAND ${SIPS_EXE} -z 128 128 "${_freeband_icon_src}" --out
+            "${_freeband_iconset_dir}/icon_128x128.png"
+    COMMAND ${ICONUTIL_EXE} --convert icns --output "${_freeband_icns}"
+            "${_freeband_iconset_dir}"
+    DEPENDS "${_freeband_icon_src}"
+    VERBATIM)
+  add_custom_target(freeband_icns ALL DEPENDS "${_freeband_icns}")
+  add_dependencies(freeband freeband_icns)
+  install(FILES "${_freeband_icns}" DESTINATION "Freeband.app/Contents/Resources")
   install(CODE [[
     include(BundleUtilities)
     set(BU_CHMOD_BUNDLE_ITEMS TRUE)
@@ -66,6 +97,15 @@ else()
     TARGETS freeband
     DESTINATION ${CMAKE_INSTALL_BINDIR}
     RUNTIME_DEPENDENCY_SET freeband)
+  if(NOT WIN32)
+    configure_file("${CMAKE_SOURCE_DIR}/linux/sh.tat.freeband.desktop.in"
+                   "${CMAKE_CURRENT_BINARY_DIR}/sh.tat.freeband.desktop" @ONLY)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/sh.tat.freeband.desktop"
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/freeband.png"
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/128x128/apps
+            RENAME sh.tat.freeband.png)
+  endif()
 endif()
 if(WIN32)
   get_filename_component(_compiler_bin_dir ${CMAKE_C_COMPILER} DIRECTORY)
