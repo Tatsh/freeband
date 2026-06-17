@@ -159,17 +159,6 @@ jobs:
       - uses: 'actions/checkout@v6'
         with:
           fetch-depth: 0
-      - name: 'Patch MSYS2 pkg-config files'
-        run: |
-          pcdir="/${{ matrix.sys.name }}/lib/pkgconfig"
-          prefix_win=$(cygpath -m "/${{ matrix.sys.name }}")
-          for pc in "${pcdir}"/*.pc; do
-            if [[ -f "${pc}" ]] && grep -q "/${{ matrix.sys.name }}/" "${pc}"; then
-              sed -i "s|/${{ matrix.sys.name }}|${prefix_win}|g" "${pc}"
-              echo "Patched: ${pc}"
-            fi
-          done
-        shell: 'msys2 {0}'
       - name: 'Configure'
         run: >-
           cmake -G Ninja -B ${{steps.fixed_workspace.outputs.out}}/build
