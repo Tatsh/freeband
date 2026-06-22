@@ -2,7 +2,7 @@ jobs:
   clang-format:
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: 'actions/checkout@v6.0.2'
+      - uses: 'actions/checkout@v7'
       - name: 'Check formatting (clang-format)'
         run: 'clang-format --dry-run src/*.c src/audio/*.c src/graphics/*.c src/input/*.c src/screens/*.c src/*.h src/audio/*.h src/graphics/*.h src/input/*.h src/screens/*.h'
 name: 'clang-format'
