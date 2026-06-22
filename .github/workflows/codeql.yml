@@ -8,7 +8,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - name: 'Checkout repository'
-        uses: 'actions/checkout@v6.0.2'
+        uses: 'actions/checkout@v7'
       - if: "matrix.language == 'c-cpp'"
         name: 'Install build dependencies'
         run: |

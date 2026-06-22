@@ -2,7 +2,7 @@ jobs:
   build-linux:
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: 'actions/checkout@v6'
+      - uses: 'actions/checkout@v7'
       - name: 'Install dependencies'
         run: |
           sudo apt-get update -y -qq
@@ -50,7 +50,7 @@ jobs:
           subject-path: '${{github.workspace}}/freeband-*.AppImage'
       - if: "github.ref_type == 'tag' && matrix.build-type == 'Release'"
         name: 'Upload package'
-        uses: 'softprops/action-gh-release@v3'
+        uses: 'softprops/action-gh-release@v3.0.1'
         with:
           draft: true
           fail_on_unmatched_files: true
@@ -64,7 +64,7 @@ jobs:
       MACOSX_DEPLOYMENT_TARGET: "${{ matrix.os == 'macos-15-intel' && '10.13' || '11.0' }}"
     runs-on: '${{ matrix.os }}'
     steps:
-      - uses: 'actions/checkout@v6'
+      - uses: 'actions/checkout@v7'
       - name: 'Install Homebrew dependencies'
         run: >-
           brew install autoconf automake freeglut libsndfile libtool
@@ -121,7 +121,7 @@ jobs:
             ${{github.workspace}}/freeband-*.zip
       - if: "github.ref_type == 'tag' && matrix.build-type == 'Release'"
         name: 'Upload package'
-        uses: 'softprops/action-gh-release@v3'
+        uses: 'softprops/action-gh-release@v3.0.1'
         with:
           draft: true
           fail_on_unmatched_files: true
@@ -156,7 +156,7 @@ jobs:
             pkgconf:p portaudio:p sdl12-compat:p toolchain:p
           path-type: "${{ matrix.sys.name == 'clangarm64' && 'inherit' || 'minimal' }}"
           update: true
-      - uses: 'actions/checkout@v6'
+      - uses: 'actions/checkout@v7'
         with:
           fetch-depth: 0
       - name: 'Configure'
@@ -204,7 +204,7 @@ jobs:
             ${{github.workspace}}/freeband-*.zip
       - if: "github.ref_type == 'tag' && matrix.sys.release && matrix.build-type == 'Release'"
         name: 'Upload package'
-        uses: 'softprops/action-gh-release@v3'
+        uses: 'softprops/action-gh-release@v3.0.1'
         with:
           draft: true
           fail_on_unmatched_files: true
