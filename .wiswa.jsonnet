@@ -4,6 +4,7 @@
   // General settings
   project_type: 'c',
   want_claude: false,
+  want_codeql: false,
   want_copilot: false,
   want_cursor: false,
   // Keeps `snapcraft.yaml` and the hand-written `.github/workflows/snap.yml` from being deleted
@@ -36,18 +37,6 @@
       ko_fi: 'tatsh2',
       liberapay: 'tatsh2',
       patreon: 'tatsh2',
-    },
-    workflows+: {
-      codeql+: {
-        apt_packages: [
-          'freeglut3-dev',
-          'libsdl-image1.2-dev',
-          'libsdl-ttf2.0-dev',
-          'libsdl1.2-dev',
-          'libsndfile1-dev',
-          'portaudio19-dev',
-        ],
-      },
     },
   },
 
