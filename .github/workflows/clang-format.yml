@@ -2,9 +2,11 @@ jobs:
   clang-format:
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: 'actions/checkout@v7'
+      - uses: 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
+        with:
+          persist-credentials: false
       - name: 'Check formatting (clang-format)'
-        run: 'clang-format --dry-run src/*.c src/audio/*.c src/graphics/*.c src/input/*.c src/screens/*.c src/*.h src/audio/*.h src/graphics/*.h src/input/*.h src/screens/*.h'
+        run: 'clang-format --dry-run --Werror src/*.c src/audio/*.c src/graphics/*.c src/input/*.c src/io/*.c src/screens/*.c test/portoggio/*.c src/*.h src/audio/*.h src/graphics/*.h src/input/*.h src/io/*.h src/screens/*.h'
 name: 'clang-format'
 'on':
   pull_request:

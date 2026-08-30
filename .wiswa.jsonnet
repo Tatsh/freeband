@@ -6,8 +6,13 @@
   want_claude: false,
   want_copilot: false,
   want_cursor: false,
+  // Keeps `snapcraft.yaml` and the hand-written `.github/workflows/snap.yml` from being deleted
+  // as disabled packaging output.
+  want_snap: true,
+  // There is no Python test suite here, and the generated `tests.yml` targets pytest.
+  want_tests: false,
   want_winget: false,
-  clang_format_args: 'src/*.c src/audio/*.c src/graphics/*.c src/input/*.c src/screens/*.c src/*.h src/audio/*.h src/graphics/*.h src/input/*.h src/screens/*.h',
+  clang_format_args: 'src/*.c src/audio/*.c src/graphics/*.c src/input/*.c src/io/*.c src/screens/*.c test/portoggio/*.c src/*.h src/audio/*.h src/graphics/*.h src/input/*.h src/io/*.h src/screens/*.h',
 
   // Shared
   github_username: 'Tatsh',
@@ -32,18 +37,23 @@
       liberapay: 'tatsh2',
       patreon: 'tatsh2',
     },
+    workflows+: {
+      codeql+: {
+        apt_packages: [
+          'freeglut3-dev',
+          'libsdl-image1.2-dev',
+          'libsdl-ttf2.0-dev',
+          'libsdl1.2-dev',
+          'libsndfile1-dev',
+          'portaudio19-dev',
+        ],
+      },
+    },
   },
 
   // C only
   vcpkg+: {
     dependencies: ['freeglut', 'libsndfile', 'portaudio', 'sdl12-compat'],
-  },
-
-  // Commitizen
-  cz+: {
-    commitizen+: {
-      version_files+: ['snapcraft.yaml'],
-    },
   },
 
   // Prettier
