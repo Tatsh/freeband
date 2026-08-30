@@ -72,10 +72,11 @@ int main(int argc, char *argv[]) {
 
     vi = ov_info(&vf, -1);
 
-    if (*(char *)&testvar) /* Hack taken from Audacity source code */
-        endian = 0;        /* little endian, most common */
-    else
+    if (*(char *)&testvar) { /* Hack taken from Audacity source code */
+        endian = 0;          /* little endian, most common */
+    } else {
         endian = 1;
+    }
 
     fprintf(stdout, "File information: \n");
     fprintf(stdout, "  File name: %s\n", argv[1]);
@@ -87,14 +88,16 @@ int main(int argc, char *argv[]) {
 
     if (ov_pcm_seek(&vf, 0) != 0) { /* This is because some files do not do this automatically */
         fprintf(stderr, "Error seeking file to position 0.\n");
-    } else
+    } else {
         fprintf(stdout, "Seeked file to position 0.\n");
+    }
 
     if ((err = Pa_Initialize()) != paNoError) {
         fprintf(stderr, "Error initialising PortAudio: %s\n", Pa_GetErrorText(err));
         exit(EXIT_FAILURE);
-    } else
+    } else {
         fprintf(stdout, "Successfully initialised PortAudio.\n");
+    }
 
     outputParameters.device = Pa_GetDefaultOutputDevice();
     outputParameters.channelCount = vi->channels;
@@ -122,14 +125,16 @@ int main(int argc, char *argv[]) {
     if (err != paNoError) {
         fprintf(stderr, "Error opening stream: %s\n", Pa_GetErrorText(err));
         exit(EXIT_FAILURE);
-    } else
+    } else {
         fprintf(stdout, "Successfully opened stream.\n");
+    }
 
     if ((err = Pa_StartStream(stream)) != paNoError) {
         fprintf(stderr, "Error starting stream: %s\n", Pa_GetErrorText(err));
         exit(EXIT_FAILURE);
-    } else
+    } else {
         fprintf(stdout, "Successfully started stream.\n");
+    }
 
     /* wait till end of file is reached */
     while (!end_of_file) {
@@ -139,20 +144,23 @@ int main(int argc, char *argv[]) {
     if ((err = Pa_StopStream(stream)) != paNoError) {
         fprintf(stderr, "Error stopping stream: %s\n", Pa_GetErrorText(err));
         exit(EXIT_FAILURE);
-    } else
+    } else {
         fprintf(stdout, "Successfully stopped stream.\n");
+    }
 
     if ((err = Pa_CloseStream(stream)) != paNoError) {
         fprintf(stderr, "Error closing stream: %s\n", Pa_GetErrorText(err));
         exit(EXIT_FAILURE);
-    } else
+    } else {
         fprintf(stdout, "Successfully closed stream.\n");
+    }
 
     if ((err = Pa_Terminate()) != paNoError) {
         fprintf(stderr, "Error terminating PortAudio: %s\n", Pa_GetErrorText(err));
         exit(EXIT_FAILURE);
-    } else
+    } else {
         fprintf(stdout, "Successfully terminated PortAudio.\n");
+    }
 
     ov_clear(&vf);
 

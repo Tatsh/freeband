@@ -43,66 +43,73 @@ void input_menuKeys(SDL_keysym *keysym, SDL_Surface *surface) {
     online = options = false;
 
     if (keysym->sym == FBKEY_PICKDOWN || keysym->sym == FBKEY_DOWN) {
-        if (fb_screen.mainMenu)
+        if (fb_screen.mainMenu) {
             input_screenMain(DOWN);
-        else if (fb_screen.instruments)
+        } else if (fb_screen.instruments) {
             input_screenInstruments(DOWN);
-        else if (fb_screen.difficulty)
+        } else if (fb_screen.difficulty) {
             input_screenDifficulty(DOWN);
-        else if (fb_screen.game && gamePaused)
+        } else if (fb_screen.game && gamePaused) {
             input_screenPause(DOWN);
+        }
     }
 
     if (keysym->sym == FBKEY_PICKUP || keysym->sym == FBKEY_UP) {
-        if (fb_screen.mainMenu)
+        if (fb_screen.mainMenu) {
             input_screenMain(UP);
-        else if (fb_screen.instruments)
+        } else if (fb_screen.instruments) {
             input_screenInstruments(UP);
-        else if (fb_screen.difficulty)
+        } else if (fb_screen.difficulty) {
             input_screenDifficulty(UP);
-        else if (fb_screen.game && gamePaused)
+        } else if (fb_screen.game && gamePaused) {
             input_screenPause(UP);
+        }
     }
 
     if (keysym->sym == FBKEY_GREEN || keysym->sym == FBKEY_START) {
         if (keysym->mod &
-            KMOD_ALT) /* Switch to full screen only if Alt+Enter is pressed, hard-coded */
+            KMOD_ALT) { /* Switch to full screen only if Alt+Enter is pressed, hard-coded */
             SDL_WM_ToggleFullScreen(surface);
-        else {
-            if (fb_screen.mainMenu)
+        } else {
+            if (fb_screen.mainMenu) {
                 input_screenMain(RETURN);
-            else if (fb_screen.instruments)
+            } else if (fb_screen.instruments) {
                 input_screenInstruments(RETURN);
-            else if (fb_screen.songs)
+            } else if (fb_screen.songs) {
                 input_screenSongs(RETURN);
-            else if (fb_screen.difficulty)
+            } else if (fb_screen.difficulty) {
                 input_screenDifficulty(RETURN);
-            else if (fb_screen.game && gamePaused)
+            } else if (fb_screen.game && gamePaused) {
                 input_screenPause(RETURN);
+            }
         }
     }
 
     if (keysym->sym == SDLK_ESCAPE) {
-        if (fb_screen.game && !gamePaused)
+        if (fb_screen.game && !gamePaused) {
             input_screenGamePause();
-        else if (fb_screen.game && gamePaused)
+        } else if (fb_screen.game && gamePaused) {
             input_screenPause(ESC);
+        }
     }
 
     if (keysym->sym == FBKEY_RED || keysym->sym == SDLK_ESCAPE) { /* Hard-coded Escape for back */
-        if (fb_screen.mainMenu)
+        if (fb_screen.mainMenu) {
             fb_quit(EXIT_SUCCESS);
-        else if (fb_screen.instruments)
+        } else if (fb_screen.instruments) {
             input_screenInstruments(ESC);
-        else if (fb_screen.songs)
+        } else if (fb_screen.songs) {
             input_screenSongs(ESC);
-        else if (fb_screen.difficulty)
+        } else if (fb_screen.difficulty) {
             input_screenDifficulty(ESC);
+        }
     }
 
-    if (keysym->sym == FBKEY_YELLOW) /* Change sort of song screen */
-        if (fb_screen.songs)
+    if (keysym->sym == FBKEY_YELLOW) { /* Change sort of song screen */
+        if (fb_screen.songs) {
             input_screenSongs(SONG_SORT);
+        }
+    }
 
     /*  if (prefs_Input_Keyboard[1].enabled && keysym->sym == prefs_Input_Keyboard[1].button_start) {
     if (fb_screen.mainMenu || fb_screen.instruments || fb_screen.songs) {

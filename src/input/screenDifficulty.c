@@ -14,22 +14,25 @@ void input_screenDifficulty(ushort direction) {
         switch (current_difficulty) {
         case DIFFICULTY_EASY:
             current_difficulty = DIFFICULTY_MEDIUM;
-            for (i = 0; i < 4; i++)
+            for (i = 0; i < 4; i++) {
                 screenDifficulty_selectionY[i] =
                     screenDifficulty_selectionY[i] +
                     DIFFHT; /* Hope to find a better way to do this later */
+            }
             break;
 
         case DIFFICULTY_MEDIUM:
             current_difficulty = DIFFICULTY_HARD;
-            for (i = 0; i < 4; i++)
+            for (i = 0; i < 4; i++) {
                 screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
+            }
             break;
 
         case DIFFICULTY_HARD:
             current_difficulty = DIFFICULTY_EXPERT;
-            for (i = 0; i < 4; i++)
+            for (i = 0; i < 4; i++) {
                 screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
+            }
             break;
 
         case DIFFICULTY_EXPERT:
@@ -47,26 +50,30 @@ void input_screenDifficulty(ushort direction) {
         switch (current_difficulty) {
         case DIFFICULTY_EASY:
             current_difficulty = DIFFICULTY_EXPERT;
-            for (i = 0; i < 4; i++)
+            for (i = 0; i < 4; i++) {
                 screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + (3.0f * DIFFHT);
+            }
             break;
 
         case DIFFICULTY_MEDIUM:
             current_difficulty = DIFFICULTY_EASY;
-            for (i = 0; i < 4; i++)
+            for (i = 0; i < 4; i++) {
                 screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
+            }
             break;
 
         case DIFFICULTY_HARD:
             current_difficulty = DIFFICULTY_MEDIUM;
-            for (i = 0; i < 4; i++)
+            for (i = 0; i < 4; i++) {
                 screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
+            }
             break;
 
         case DIFFICULTY_EXPERT:
             current_difficulty = DIFFICULTY_HARD;
-            for (i = 0; i < 4; i++)
+            for (i = 0; i < 4; i++) {
                 screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] - DIFFHT;
+            }
             break;
 
         default:

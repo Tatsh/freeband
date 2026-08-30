@@ -39,24 +39,29 @@ void fb_chdir_to_data(void) {
 
 #if defined(__APPLE__)
     uint32_t size = (uint32_t)sizeof(exepath);
-    if (_NSGetExecutablePath(exepath, &size) != 0)
+    if (_NSGetExecutablePath(exepath, &size) != 0) {
         return;
+    }
 #elif defined(_WIN32)
     DWORD n = GetModuleFileNameA(NULL, exepath, (DWORD)sizeof(exepath));
-    if (n == 0 || n >= sizeof(exepath))
+    if (n == 0 || n >= sizeof(exepath)) {
         return;
+    }
 #else
     ssize_t n = readlink("/proc/self/exe", exepath, sizeof(exepath) - 1);
-    if (n < 0)
+    if (n < 0) {
         return;
+    }
     exepath[n] = '\0';
 #endif
 
     size_t len = strlen(exepath);
-    while (len > 0 && exepath[len - 1] != '/' && exepath[len - 1] != '\\')
+    while (len > 0 && exepath[len - 1] != '/' && exepath[len - 1] != '\\') {
         len--;
-    if (len == 0)
+    }
+    if (len == 0) {
         return;
+    }
     exepath[len - 1] = '\0';
 
     static const char *candidates[] = {"/../Resources", "/../share/freeband", NULL};
@@ -86,14 +91,16 @@ void strrev(char s[]) {
 void itoa(int n, char s[]) {
     int i, sign;
 
-    if ((sign = n) < 0) /* record sign */
-        n = -n;         /* make n positive */
+    if ((sign = n) < 0) { /* record sign */
+        n = -n;           /* make n positive */
+    }
     i = 0;
     do {                       /* generate digits in reverse order */
         s[i++] = n % 10 + '0'; /* get next digit */
     } while ((n /= 10) > 0); /* delete it */
-    if (sign < 0)
+    if (sign < 0) {
         s[i++] = '-';
+    }
     s[i] = '\0';
     strrev(s);
 }

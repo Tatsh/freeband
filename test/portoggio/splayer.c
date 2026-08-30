@@ -124,8 +124,9 @@ void RingBuffer_Flush(RingBuffer *rbuf) {
  * numBytes must be power of 2, returns -1 if not.
  */
 long RingBuffer_Init(RingBuffer *rbuf, long numBytes, void *dataPtr) {
-    if (((numBytes - 1) & numBytes) != 0)
+    if (((numBytes - 1) & numBytes) != 0) {
         return -1; /* Not Power of two. */
+    }
     rbuf->bufferSize = numBytes;
     rbuf->buffer = (char *)dataPtr;
     RingBuffer_Flush(rbuf);
@@ -158,8 +159,9 @@ long RingBuffer_GetWriteRegions(RingBuffer *rbuf,
                                 long *sizePtr2) {
     long index;
     long available = RingBuffer_GetWriteAvailable(rbuf);
-    if (numBytes > available)
+    if (numBytes > available) {
         numBytes = available;
+    }
     /* Check to see if write is not contiguous. */
     index = rbuf->writeIndex & rbuf->smallMask;
     if ((index + numBytes) > rbuf->bufferSize) {
@@ -198,8 +200,9 @@ long RingBuffer_GetReadRegions(RingBuffer *rbuf,
                                long *sizePtr2) {
     long index;
     long available = RingBuffer_GetReadAvailable(rbuf);
-    if (numBytes > available)
+    if (numBytes > available) {
         numBytes = available;
+    }
     /* Check to see if read is not contiguous. */
     index = rbuf->readIndex & rbuf->smallMask;
     if ((index + numBytes) > rbuf->bufferSize) {
@@ -291,16 +294,18 @@ static int audioIOCallback(void *inputBuffer,
 static PaError PASTREAMIO_InitFIFO(RingBuffer *rbuf, long numFrames, long bytesPerFrame) {
     long numBytes = numFrames * bytesPerFrame;
     char *buffer = (char *)malloc(numBytes);
-    if (buffer == NULL)
+    if (buffer == NULL) {
         return paInsufficientMemory;
+    }
     memset(buffer, 0, numBytes);
     return (PaError)RingBuffer_Init(rbuf, numBytes, buffer);
 }
 
 /* Free buffer. */
 static PaError PASTREAMIO_TermFIFO(RingBuffer *rbuf) {
-    if (rbuf->buffer)
+    if (rbuf->buffer) {
         free(rbuf->buffer);
+    }
     rbuf->buffer = NULL;
     return paNoError;
 }
@@ -317,8 +322,9 @@ long WriteAudioStream(PASTREAMIO_Stream *aStream, void *data, long numFrames) {
         bytesWritten = RingBuffer_Write(&aStream->outFIFO, p, numBytes);
         numBytes -= bytesWritten;
         p += bytesWritten;
-        if (numBytes > 0)
+        if (numBytes > 0) {
             Pa_Sleep(10);
+        }
     }
     return numFrames;
 }
@@ -335,8 +341,9 @@ long GetAudioStreamWriteable(PASTREAMIO_Stream *aStream) {
 /************************************************************/
 unsigned long RoundUpToNextPowerOf2(unsigned long n) {
     long numBits = 0;
-    if (((n - 1) & n) == 0)
+    if (((n - 1) & n) == 0) {
         return n; /* Already Power of two. */
+    }
     while (n > 0) {
         n = n >> 1;
         numBits++;
@@ -366,8 +373,9 @@ OpenAudioStream(PASTREAMIO_Stream **rwblPtr, double sampleRate, PaSampleFormat f
 
     /* Allocate PASTREAMIO_Stream structure for caller. */
     aStream = (PASTREAMIO_Stream *)malloc(sizeof(PASTREAMIO_Stream));
-    if (aStream == NULL)
+    if (aStream == NULL) {
         return paInsufficientMemory;
+    }
     memset(aStream, 0, sizeof(PASTREAMIO_Stream));
 
     /* Determine size of a sample. */
@@ -381,8 +389,9 @@ OpenAudioStream(PASTREAMIO_Stream **rwblPtr, double sampleRate, PaSampleFormat f
 
     /* Initialize PortAudio  */
     err = Pa_Initialize();
-    if (err != paNoError)
+    if (err != paNoError) {
         goto error;
+    }
 
     /* Warning: numFrames must be larger than amount of data processed per interrupt
      *    inside PA to prevent glitches. Just to be safe, adjust size upwards.
@@ -396,8 +405,9 @@ OpenAudioStream(PASTREAMIO_Stream **rwblPtr, double sampleRate, PaSampleFormat f
 
     if (doWrite) {
         err = PASTREAMIO_InitFIFO(&aStream->outFIFO, numFrames, aStream->bytesPerFrame);
-        if (err != paNoError)
+        if (err != paNoError) {
             goto error;
+        }
         /* Make Write FIFO appear full initially.
         numBytes = RingBuffer_GetWriteAvailable( &aStream->outFIFO );
         RingBuffer_AdvanceWriteIndex( &aStream->outFIFO, numBytes );*/
@@ -421,8 +431,9 @@ OpenAudioStream(PASTREAMIO_Stream **rwblPtr, double sampleRate, PaSampleFormat f
         paClipOff, /* we won't output out of range samples so don't bother clipping them */
         audioIOCallback,
         aStream);
-    if (err != paNoError)
+    if (err != paNoError) {
         goto error;
+    }
 
     *rwblPtr = aStream;
     return paNoError;
@@ -436,8 +447,9 @@ error:
 PaError StartAudioStream(PASTREAMIO_Stream *aStream) {
     PaError err;
     err = Pa_StartStream(aStream->stream);
-    if (err != paNoError)
+    if (err != paNoError) {
         goto error;
+    }
 
     return paNoError;
 error:
@@ -461,11 +473,13 @@ PaError CloseAudioStream(PASTREAMIO_Stream *aStream) {
     }
 
     err = Pa_StopStream(aStream->stream);
-    if (err != paNoError)
+    if (err != paNoError) {
         goto error;
+    }
     err = Pa_CloseStream(aStream->stream);
-    if (err != paNoError)
+    if (err != paNoError) {
         goto error;
+    }
     Pa_Terminate();
 
 error:
@@ -550,8 +564,9 @@ static int open_audio() {
 
     err = OpenAudioStream(
         &aOutStream, vi.rate, PA_SAMPLE_TYPE, (PASTREAMIO_WRITE | PASTREAMIO_STEREO));
-    if (err != paNoError)
+    if (err != paNoError) {
         goto error;
+    }
     return err;
 error:
     CloseAudioStream(aOutStream);
@@ -563,8 +578,9 @@ error:
 
 static int start_audio() {
     err = StartAudioStream(aOutStream);
-    if (err != paNoError)
+    if (err != paNoError) {
         goto error;
+    }
 
     return err;
 error:
@@ -577,8 +593,9 @@ error:
 
 static int audio_close(void) {
     err = CloseAudioStream(aOutStream);
-    if (err != paNoError)
+    if (err != paNoError) {
         goto error;
+    }
 
     free(samples);
     return err;
@@ -598,12 +615,14 @@ double get_time() {
          at this stage. Needs to be reworked to account for blank audio
          data written to the stream... */
         curtime = (double)(GetAudioStreamTime(aOutStream) / vi.rate) - latency_sec;
-        if (curtime < 0.0)
+        if (curtime < 0.0) {
             curtime = 0.0;
+        }
     } else {
         /* initialize timer variable if not set yet */
-        if (startticks == 0)
+        if (startticks == 0) {
             startticks = SDL_GetTicks();
+        }
         curtime = 1.0e-3 * (double)(SDL_GetTicks() - startticks);
     }
     return curtime;
@@ -648,21 +667,24 @@ static void video_write(void) {
 
     /* Lock SDL_yuv_overlay */
     if (SDL_MUSTLOCK(screen)) {
-        if (SDL_LockSurface(screen) < 0)
+        if (SDL_LockSurface(screen) < 0) {
             return;
+        }
     }
-    if (SDL_LockYUVOverlay(yuv_overlay) < 0)
+    if (SDL_LockYUVOverlay(yuv_overlay) < 0) {
         return;
+    }
 
     /* let's draw the data (*yuv[3]) on a SDL screen (*screen) */
     /* deal with border stride */
     /* reverse u and v for SDL */
     /* and crop input properly, respecting the encoded frame rect */
     crop_offset = ti.offset_x + yuv.y_stride * ti.offset_y;
-    for (i = 0; i < yuv_overlay->h; i++)
+    for (i = 0; i < yuv_overlay->h; i++) {
         memcpy(yuv_overlay->pixels[0] + yuv_overlay->pitches[0] * i,
                yuv.y + crop_offset + yuv.y_stride * i,
                yuv_overlay->w);
+    }
     crop_offset = (ti.offset_x / 2) + (yuv.uv_stride) * (ti.offset_y / 2);
     for (i = 0; i < yuv_overlay->h / 2; i++) {
         memcpy(yuv_overlay->pixels[1] + yuv_overlay->pitches[1] * i,
@@ -752,10 +774,12 @@ int buffer_data(ogg_sync_state *oy) {
 /* this can be done blindly; a stream won't accept a page
                 that doesn't belong to it */
 static int queue_page(ogg_page *page) {
-    if (theora_p)
+    if (theora_p) {
         ogg_stream_pagein(&to, page);
-    if (vorbis_p)
+    }
+    if (vorbis_p) {
         ogg_stream_pagein(&vo, page);
+    }
     return 0;
 }
 
@@ -766,8 +790,9 @@ void parseHeaders() {
     /* Only interested in Vorbis/Theora streams */
     while (!stateflag) {
         int ret = buffer_data(&oy);
-        if (ret == 0)
+        if (ret == 0) {
             break;
+        }
         while (ogg_sync_pageout(&oy, &og) > 0) {
             ogg_stream_state test;
 
@@ -814,8 +839,9 @@ void parseHeaders() {
                 exit(1);
             }
             theora_p++;
-            if (theora_p == 3)
+            if (theora_p == 3) {
                 break;
+            }
         }
 
         /* look for more vorbis header packets */
@@ -829,8 +855,9 @@ void parseHeaders() {
                 exit(1);
             }
             vorbis_p++;
-            if (vorbis_p == 3)
+            if (vorbis_p == 3) {
                 break;
+            }
         }
 
         /* The header pages/packets will arrive before anything else we
@@ -920,19 +947,22 @@ int main(int argc, char *argv[]) {
         vorbis_comment_clear(&vc);
     }
     /* open audio */
-    if (vorbis_p)
+    if (vorbis_p) {
         open_audio();
+    }
     /* open video */
-    if (theora_p)
+    if (theora_p) {
         open_video();
+    }
 
     /* our main loop */
     while (!playbackdone) {
 
         /* break out on SDL quit event */
         if (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT)
+            if (event.type == SDL_QUIT) {
                 break;
+            }
         }
 
         /* get some audio data */
@@ -954,16 +984,19 @@ int main(int argc, char *argv[]) {
             /* if there's pending, decoded audio, grab it */
             if ((ret > 0) && (maxBytesToWrite > 0)) {
 
-                for (i = 0; i < ret && i < (maxBytesToWrite / vi.channels); i++)
+                for (i = 0; i < ret && i < (maxBytesToWrite / vi.channels); i++) {
                     for (j = 0; j < vi.channels; j++) {
                         int val = (int)(pcm[j][i] * 32767.f);
-                        if (val > 32767)
+                        if (val > 32767) {
                             val = 32767;
-                        if (val < -32768)
+                        }
+                        if (val < -32768) {
                             val = -32768;
+                        }
                         samples[count] = val;
                         count++;
                     }
+                }
                 if (WriteAudioStream(aOutStream, samples, i)) {
                     if (count == maxBytesToWrite) {
                         audiobuf_ready = 1;
@@ -971,19 +1004,22 @@ int main(int argc, char *argv[]) {
                 }
                 vorbis_synthesis_read(&vd, i);
 
-                if (vd.granulepos >= 0)
+                if (vd.granulepos >= 0) {
                     audiobuf_granulepos = vd.granulepos - ret + i;
-                else
+                } else {
                     audiobuf_granulepos += i;
+                }
 
             } else {
 
                 /* no pending audio; is there a pending packet to decode? */
                 if (ogg_stream_packetout(&vo, &op) > 0) {
-                    if (vorbis_synthesis(&vb, &op) == 0) /* test for success! */
+                    if (vorbis_synthesis(&vb, &op) == 0) { /* test for success! */
                         vorbis_synthesis_blockin(&vd, &vb);
-                } else /* we need more data; break out to suck in another page */
+                    }
+                } else { /* we need more data; break out to suck in another page */
                     break;
+                }
             }
         } /* end audio cycle */
 
@@ -1027,8 +1063,9 @@ int main(int argc, char *argv[]) {
         /* if we're set for the next frame, sleep */
         if ((!theora_p || videobuf_ready) && (!vorbis_p || audiobuf_ready)) {
             int ticks = 1.0e3 * (videobuf_time - get_time());
-            if (ticks > 0)
+            if (ticks > 0) {
                 SDL_Delay(ticks);
+            }
         }
 
         if (videobuf_ready) {
@@ -1064,8 +1101,9 @@ int main(int argc, char *argv[]) {
     /* show number of video frames decoded */
     printf("\n");
     printf("Frames decoded: %d", frameNum);
-    if (skipNum)
+    if (skipNum) {
         printf(" (only %d shown)", frameNum - skipNum);
+    }
     printf("\n");
 
     /* tear it all down */

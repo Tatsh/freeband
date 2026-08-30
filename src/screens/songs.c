@@ -32,16 +32,19 @@ bool screenSongs_buffer() {
 
     byTier_s = true; /* Set default sort */
 
-    if ((bg = graphics_loadTexture(bgTexture, 0)) == -1)
+    if ((bg = graphics_loadTexture(bgTexture, 0)) == -1) {
         fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
+    }
 
     if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
         text_songs = text_load(languageStrings_screenSongs.header, crillee, white);
         width = text_scaleWidth(languageStrings_screenSongs.header, crillee, SCREENHEADTEXTHT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_songsX[i] = graphics_centreAtX(0.0f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_songsX[i] = text_songsX[i - 2] + width;
+        }
     } else {
         fprintf(stderr,
                 "instruments.c: screenInstrumentsBuffer(): Could not open font %s: %s\n",
@@ -49,38 +52,47 @@ bool screenSongs_buffer() {
                 TTF_GetError());
         return false;
     }
-    if (crillee)
+    if (crillee) {
         TTF_CloseFont(crillee);
+    }
 
     if ((freeSans = TTF_OpenFont(path_regular_freeSans, DEFAULT_TEXT_PT))) {
         text_byTier = text_load(languageStrings_screenSongs.sort_by_tier, freeSans, white);
         width = text_scaleWidth(languageStrings_screenSongs.sort_by_tier, freeSans, SORT_TEXT_HT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_byTierX[i] = graphics_centreAtX(0.0f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_byTierX[i] = text_byTierX[i - 2] + width;
+        }
 
         text_titleAZ = text_load(
             languageStrings_screenSongs.sort_title_AZ, freeSans, white); /* Why won't this load?! */
         width = text_scaleWidth(languageStrings_screenSongs.sort_title_AZ, freeSans, SORT_TEXT_HT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_titleAZX[i] = graphics_centreAtX(0.0f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_titleAZX[i] = text_titleAZX[i - 2] + width;
+        }
 
         text_artistAZ = text_load(languageStrings_screenSongs.sort_artist_AZ, freeSans, white);
         width = text_scaleWidth(languageStrings_screenSongs.sort_artist_AZ, freeSans, SORT_TEXT_HT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_artistAZX[i] = graphics_centreAtX(0.0f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_artistAZX[i] = text_artistAZX[i - 2] + width;
+        }
 
         text_byBPM = text_load(languageStrings_screenSongs.sort_bpm, freeSans, white);
         width = text_scaleWidth(languageStrings_screenSongs.sort_bpm, freeSans, SORT_TEXT_HT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_byBPMX[i] = graphics_centreAtX(0.0f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_byBPMX[i] = text_byBPMX[i - 2] + width;
+        }
     } else {
         fprintf(stderr,
                 "instruments.c: screenInstrumentsBuffer(): Could not open font %s: %s\n",
@@ -88,8 +100,9 @@ bool screenSongs_buffer() {
                 TTF_GetError());
         return false;
     }
-    if (freeSans)
+    if (freeSans) {
         TTF_CloseFont(freeSans);
+    }
 
     if (!screenMenuFooter_buffer()) {
         fprintf(stderr, "Unable to buffer screenMenuFooter.\n");

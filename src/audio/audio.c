@@ -90,10 +90,12 @@ bool audio_buffer() {
         audio_deviceInfoTemplate.defaultHighInputLatency = 0.0f;
         audio_deviceInfoTemplate.defaultLowInputLatency = 0.0f;
         audio_deviceInfoTemplate.defaultSampleRate = 0.0f;
-        for (i = 0; i < MAX_AUDIO_DEVICES; i++)
+        for (i = 0; i < MAX_AUDIO_DEVICES; i++) {
             audio_deviceInfoSupported[i] = audio_deviceInfoTemplate;
-        for (i = 0; i < MAX_AUDIO_DEVICES; i++)
+        }
+        for (i = 0; i < MAX_AUDIO_DEVICES; i++) {
             audio_deviceInfoUnsupported[i] = audio_deviceInfoTemplate;
+        }
 
         /* Query devices for options screen
        On this screen there should be AUDIO INPUT and AUDIO OUTPUT; we will have devices with just output in AUDIO OUTPUT and
@@ -198,12 +200,14 @@ bool audio_findSupportedDevices() {
     ushort i, supported = 0;
 
     for (i = 0; i < MAX_AUDIO_DEVICES; i++) { /* Must support at least 1 output channel */
-        if (audio_deviceInfoSupported[i].maxOutputChannels != 0)
+        if (audio_deviceInfoSupported[i].maxOutputChannels != 0) {
             supported++;
+        }
     }
 
-    if (supported == 0)
+    if (supported == 0) {
         return false;
+    }
 
     return true;
 }

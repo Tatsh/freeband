@@ -67,8 +67,9 @@ bool graphics_initGL() {
 bool graphics_resizeWindow(GLuint width, GLuint height) {
     GLfloat ratio; /* Height/width ratio */
 
-    if (height == 0) /* Protect against a divide by zero */
+    if (height == 0) { /* Protect against a divide by zero */
         height = 1;
+    }
 
     ratio = (GLfloat)width / (GLfloat)height;
     glViewport(0, 0, (GLsizei)width, (GLsizei)height); /* Setup our viewport. */
@@ -87,10 +88,11 @@ GLfloat graphics_centreAtX(GLfloat x, GLfloat width) {
 
     offset = (width / 2.0f) - x;
 
-    if ((offset < 0.0f && x > 0.0f) || (width >= (x * 2)))
+    if ((offset < 0.0f && x > 0.0f) || (width >= (x * 2))) {
         return -offset;
-    else
+    } else {
         return offset;
+    }
 }
 
 GLint graphics_getTextureHeight(const char filename[]) {
@@ -99,11 +101,13 @@ GLint graphics_getTextureHeight(const char filename[]) {
 
     if ((temp = IMG_Load(filename))) {
         height = temp->h;
-    } else
+    } else {
         return -1.0f;
+    }
 
-    if (temp)
+    if (temp) {
         SDL_FreeSurface(temp);
+    }
 
     return height;
 }
@@ -114,11 +118,13 @@ GLint graphics_getTextureWidth(const char filename[]) {
 
     if ((temp = IMG_Load(filename))) {
         width = temp->w;
-    } else
+    } else {
         return -1.0f;
+    }
 
-    if (temp)
+    if (temp) {
         SDL_FreeSurface(temp);
+    }
 
     return width;
 }
@@ -156,7 +162,7 @@ GLint graphics_loadTexture(const char filename[], GLuint i) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR);
         SDL_PixelFormat *format = surface->format;
 
-        if (format->Amask) /* Check for alpha channel */
+        if (format->Amask) { /* Check for alpha channel */
             gluBuild2DMipmaps(GL_TEXTURE_2D,
                               4,
                               surface->w,
@@ -164,7 +170,7 @@ GLint graphics_loadTexture(const char filename[], GLuint i) {
                               GL_RGBA,
                               GL_UNSIGNED_BYTE,
                               surface->pixels);
-        else
+        } else {
             gluBuild2DMipmaps(GL_TEXTURE_2D,
                               3,
                               surface->w,
@@ -172,16 +178,18 @@ GLint graphics_loadTexture(const char filename[], GLuint i) {
                               GL_RGB,
                               GL_UNSIGNED_BYTE,
                               surface->pixels);
+        }
     } else {
         fprintf(stderr, "SDL could not load %s.\n%s\n", filename, SDL_GetError());
         fb_quit(1);
     }
 
     /* Free the SDL_Surface only if it was successfully created */
-    if (surface)
+    if (surface) {
         SDL_FreeSurface(surface);
-    else
+    } else {
         return -1;
+    }
 
     return texture[i];
 }
@@ -228,16 +236,17 @@ GLvoid graphics_draw() {
 
     if (graphics_loading)
         ; /* Do nothing and wait till loading = false */
-    else if (fb_screen.mainMenu && !menuQuit)
+    else if (fb_screen.mainMenu && !menuQuit) {
         screenMain();
-    else if (fb_screen.instruments && !menuQuit)
+    } else if (fb_screen.instruments && !menuQuit) {
         screenInstruments();
-    else if (fb_screen.songs && !menuQuit)
+    } else if (fb_screen.songs && !menuQuit) {
         screenSongs();
-    else if (fb_screen.difficulty && !menuQuit)
+    } else if (fb_screen.difficulty && !menuQuit) {
         screenDifficulty();
-    else if (fb_screen.game)
+    } else if (fb_screen.game) {
         screenGame();
+    }
 
     SDL_GL_SwapBuffers();
 

@@ -30,8 +30,9 @@ bool fileIO_copyFile(char originalPath[], char destinationPath[]) {
             success = false;
             break;
         } else {
-            if (!feof(src))
+            if (!feof(src)) {
                 putc(ch, dest);
+            }
             if (ferror(dest)) {
                 fprintf(stderr, "Error writing %s", destinationPath);
                 success = false;
@@ -56,8 +57,9 @@ bool fileIO_unix2dos(FILE *in) {
     path_temp[0] = '\0';
     strcpy(path_temp, "./u2dtmp");
     strcat(path_temp, "XXXXXX");
-    if ((temp = fopen(path_temp, "w+")) == NULL)
+    if ((temp = fopen(path_temp, "w+")) == NULL) {
         return false;
+    }
 
 #ifndef NDEBUG
     fprintf(stderr, "fileIO_unix2dos(): using %s as temporary file...\n", path_temp);

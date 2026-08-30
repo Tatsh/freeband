@@ -77,47 +77,59 @@ bool screenInstruments_buffer() {
 
     if (fb_nPlayers == 1) {
         /* Generate Y coordinates for text */
-        for (i = 0; i < 4; i++)
+        for (i = 0; i < 4; i++) {
             text_BassY[i] = text_GuitarY[i] + 0.2;
-        for (i = 0; i < 4; i++)
+        }
+        for (i = 0; i < 4; i++) {
             text_DrumsY[i] = text_BassY[i] + 0.2;
-        for (i = 0; i < 4; i++)
+        }
+        for (i = 0; i < 4; i++) {
             text_VocalsY[i] = text_DrumsY[i] + 0.2;
+        }
 
-        if ((bg = graphics_loadTexture(bgTexture, 0)) == -1)
+        if ((bg = graphics_loadTexture(bgTexture, 0)) == -1) {
             fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
+        }
 
         if ((freeSans = TTF_OpenFont(path_bold_freeSans, DEFAULT_TEXT_PT))) {
             text_guitar = text_load(languageStrings_screenInstruments.guitar, freeSans, white);
             /* GLint text_scaleWidth(const char text[], TTF_Font *font, GLuint ptsize, GLfloat textureHeight); */
             width =
                 text_scaleWidth(languageStrings_screenInstruments.guitar, freeSans, MENUITEMSHT);
-            for (i = 0; i < 2; i++)
+            for (i = 0; i < 2; i++) {
                 text_GuitarX[i] = graphics_centreAtX(0.6f, width);
-            for (i = 2; i < 4; i++)
+            }
+            for (i = 2; i < 4; i++) {
                 text_GuitarX[i] = text_GuitarX[i - 2] + width;
+            }
 
             text_bass = text_load(languageStrings_screenInstruments.bass, freeSans, white);
             width = text_scaleWidth(languageStrings_screenInstruments.bass, freeSans, MENUITEMSHT);
-            for (i = 0; i < 2; i++)
+            for (i = 0; i < 2; i++) {
                 text_BassX[i] = graphics_centreAtX(0.6f, width);
-            for (i = 2; i < 4; i++)
+            }
+            for (i = 2; i < 4; i++) {
                 text_BassX[i] = text_BassX[i - 2] + width;
+            }
 
             text_drums = text_load(languageStrings_screenInstruments.drums, freeSans, white);
             width = text_scaleWidth(languageStrings_screenInstruments.drums, freeSans, MENUITEMSHT);
-            for (i = 0; i < 2; i++)
+            for (i = 0; i < 2; i++) {
                 text_DrumsX[i] = graphics_centreAtX(0.6f, width);
-            for (i = 2; i < 4; i++)
+            }
+            for (i = 2; i < 4; i++) {
                 text_DrumsX[i] = text_DrumsX[i - 2] + width;
+            }
 
             text_vocals = text_load(languageStrings_screenInstruments.vocals, freeSans, white);
             width =
                 text_scaleWidth(languageStrings_screenInstruments.vocals, freeSans, MENUITEMSHT);
-            for (i = 0; i < 2; i++)
+            for (i = 0; i < 2; i++) {
                 text_VocalsX[i] = graphics_centreAtX(0.6f, width);
-            for (i = 2; i < 4; i++)
+            }
+            for (i = 2; i < 4; i++) {
                 text_VocalsX[i] = text_VocalsX[i - 2] + width;
+            }
         } else {
             fprintf(stderr,
                     "instruments.c: screenInstrumentsBuffer(): Could not open font %s: %s\n",
@@ -125,17 +137,20 @@ bool screenInstruments_buffer() {
                     TTF_GetError());
             return false;
         }
-        if (freeSans)
+        if (freeSans) {
             TTF_CloseFont(freeSans);
+        }
 
         if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
             text_selectInstrument =
                 text_load(languageStrings_screenInstruments.header, crillee, white);
             width = text_scaleWidth(languageStrings_screenInstruments.header, crillee, MENUITEMSHT);
-            for (i = 0; i < 2; i++)
+            for (i = 0; i < 2; i++) {
                 text_SelectInstrumentX[i] = graphics_centreAtX(0.0f, width);
-            for (i = 2; i < 4; i++)
+            }
+            for (i = 2; i < 4; i++) {
                 text_SelectInstrumentX[i] = text_SelectInstrumentX[i - 2] + width;
+            }
         } else {
             fprintf(stderr,
                     "instruments.c: screenInstrumentsBuffer(): Could not open font %s: %s\n",
@@ -143,10 +158,12 @@ bool screenInstruments_buffer() {
                     TTF_GetError());
             return false;
         }
-        if (crillee)
+        if (crillee) {
             TTF_CloseFont(crillee);
-    } else
+        }
+    } else {
         fprintf(stdout, "Multiplayer not implemented yet.\n");
+    }
 
     if (!screenMenuFooter_buffer()) {
         fprintf(stderr, "Unable to buffer screenMenuFooter.\n");
@@ -169,43 +186,47 @@ GLvoid screenInstruments() {
     glPushMatrix();
     {
         glTranslatef(0.0f, -0.35f, 0.0f);
-        if (current_instrument != INSTRUMENT_GUITAR)
+        if (current_instrument != INSTRUMENT_GUITAR) {
             glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        else
+        } else {
             glColor4f(colour_yellow_F0FF07[0],
                       colour_yellow_F0FF07[1],
                       colour_yellow_F0FF07[2],
                       colour_yellow_F0FF07[3]);
+        }
         glBindTexture(GL_TEXTURE_2D, text_guitar);
         graphics_positionTexture(text_GuitarX, text_GuitarY, defVertexZ);
 
-        if (current_instrument != INSTRUMENT_BASS)
+        if (current_instrument != INSTRUMENT_BASS) {
             glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        else
+        } else {
             glColor4f(colour_yellow_F0FF07[0],
                       colour_yellow_F0FF07[1],
                       colour_yellow_F0FF07[2],
                       colour_yellow_F0FF07[3]);
+        }
         glBindTexture(GL_TEXTURE_2D, text_bass);
         graphics_positionTexture(text_BassX, text_BassY, defVertexZ);
 
-        if (current_instrument != INSTRUMENT_DRUMS)
+        if (current_instrument != INSTRUMENT_DRUMS) {
             glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        else
+        } else {
             glColor4f(colour_yellow_F0FF07[0],
                       colour_yellow_F0FF07[1],
                       colour_yellow_F0FF07[2],
                       colour_yellow_F0FF07[3]);
+        }
         glBindTexture(GL_TEXTURE_2D, text_drums);
         graphics_positionTexture(text_DrumsX, text_DrumsY, defVertexZ);
 
-        if (current_instrument != INSTRUMENT_VOCALS)
+        if (current_instrument != INSTRUMENT_VOCALS) {
             glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        else
+        } else {
             glColor4f(colour_yellow_F0FF07[0],
                       colour_yellow_F0FF07[1],
                       colour_yellow_F0FF07[2],
                       colour_yellow_F0FF07[3]);
+        }
         glBindTexture(GL_TEXTURE_2D, text_vocals);
         graphics_positionTexture(text_VocalsX, text_VocalsY, defVertexZ);
     }
@@ -271,10 +292,11 @@ GLvoid screenInstruments() {
             break;
         }
 
-        if (degree == 360.0f)
+        if (degree == 360.0f) {
             degree = 0.0f;
-        else
+        } else {
             degree += 0.5f;
+        }
     }
     glPopMatrix();
 

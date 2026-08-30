@@ -11,19 +11,21 @@ void input_screenInstruments(ushort direction) {
     switch (direction) {
     case DOWN:
         if (fb_nPlayers < 2) {
-            if (current_instrument > INSTRUMENT_DRUMS)
+            if (current_instrument > INSTRUMENT_DRUMS) {
                 current_instrument = INSTRUMENT_GUITAR;
-            else
+            } else {
                 current_instrument++;
+            }
         }
         break;
 
     case UP:
         if (fb_nPlayers < 2) {
-            if (current_instrument < INSTRUMENT_BASS)
+            if (current_instrument < INSTRUMENT_BASS) {
                 current_instrument = INSTRUMENT_VOCALS;
-            else
+            } else {
                 current_instrument--;
+            }
         }
         break;
 

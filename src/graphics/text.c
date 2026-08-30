@@ -19,13 +19,15 @@ GLint text_getHeight(const char text[], TTF_Font *font) {
     SDL_Surface *temp;
     GLint height;
 
-    if ((temp = TTF_RenderUTF8_Blended(font, text, white)))
+    if ((temp = TTF_RenderUTF8_Blended(font, text, white))) {
         height = temp->h;
-    else
+    } else {
         return -1;
+    }
 
-    if (temp)
+    if (temp) {
         SDL_FreeSurface(temp);
+    }
 
     return height;
 }
@@ -34,13 +36,15 @@ GLint text_getWidth(const char text[], TTF_Font *font) {
     SDL_Surface *temp;
     GLint width;
 
-    if ((temp = TTF_RenderUTF8_Blended(font, text, white)))
+    if ((temp = TTF_RenderUTF8_Blended(font, text, white))) {
         width = temp->w;
-    else
+    } else {
         return -1;
+    }
 
-    if (temp)
+    if (temp) {
         SDL_FreeSurface(temp);
+    }
 
     return width;
 }
@@ -79,10 +83,11 @@ GLint text_load(const char *input, TTF_Font *font, SDL_Color color) {
         fb_quit(1);
     }
 
-    if (textTexture) /* Clean up */
+    if (textTexture) { /* Clean up */
         SDL_FreeSurface(textTexture);
-    else
+    } else {
         return -1;
+    }
 
     return text[i];
 }

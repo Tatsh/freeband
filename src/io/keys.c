@@ -55,28 +55,28 @@ static keymap_s specialkeys[] = {{"ESCAPE", SDLK_ESCAPE}, /* No shift keys are a
                                  {"NP_=", SDLK_KP_EQUALS},
                                  {"NP_ENTER", SDLK_KP_ENTER}};
 
-keyPrefs_s keyPrefs[] =
-    {/* To the right are the default values to use in case of a botched preferences file */
-     {"operator", SDLK_F12, SDLK_F12}, /* Keyboard 1 only */
-     {"enabled", false, false},        /* Keyboards 2 and 3 only */
-     {"disable_pick", true, true},
-     {"button_green", SDLK_F1, SDLK_F1},
-     {"button_red", SDLK_F2, SDLK_F2},
-     {"button_yellow", SDLK_F3, SDLK_F3},
-     {"button_blue", SDLK_F4, SDLK_F4},
-     {"button_orange", SDLK_F5, SDLK_F5},
-     {"button_pick_up", SDLK_UP, SDLK_UP},
-     {"button_pick_down", SDLK_DOWN, SDLK_DOWN},
-     {"button_start", SDLK_RETURN, SDLK_RETURN},
-     {"button_select", SDLK_BACKQUOTE, SDLK_BACKQUOTE},
-     {"button_direction_left", SDLK_LEFT, SDLK_LEFT},
-     {"button_direction_right", SDLK_RIGHT, SDLK_RIGHT},
-     {"button_direction_up", SDLK_UP, SDLK_UP},
-     {"button_direction_down", SDLK_DOWN, SDLK_DOWN},
-     {"whammy_down", SDLK_2, SDLK_2},
-     {"whammy_up", SDLK_3, SDLK_3},
-     {"star_power", SDLK_5, SDLK_5},
-     {"screenshot", SDLK_PRINT, SDLK_PRINT}};
+keyPrefs_s keyPrefs[] = {
+    /* To the right are the default values to use in case of a botched preferences file */
+    {"operator", SDLK_F12, SDLK_F12}, /* Keyboard 1 only */
+    {"enabled", false, false},        /* Keyboards 2 and 3 only */
+    {"disable_pick", true, true},
+    {"button_green", SDLK_F1, SDLK_F1},
+    {"button_red", SDLK_F2, SDLK_F2},
+    {"button_yellow", SDLK_F3, SDLK_F3},
+    {"button_blue", SDLK_F4, SDLK_F4},
+    {"button_orange", SDLK_F5, SDLK_F5},
+    {"button_pick_up", SDLK_UP, SDLK_UP},
+    {"button_pick_down", SDLK_DOWN, SDLK_DOWN},
+    {"button_start", SDLK_RETURN, SDLK_RETURN},
+    {"button_select", SDLK_BACKQUOTE, SDLK_BACKQUOTE},
+    {"button_direction_left", SDLK_LEFT, SDLK_LEFT},
+    {"button_direction_right", SDLK_RIGHT, SDLK_RIGHT},
+    {"button_direction_up", SDLK_UP, SDLK_UP},
+    {"button_direction_down", SDLK_DOWN, SDLK_DOWN},
+    {"whammy_down", SDLK_2, SDLK_2},
+    {"whammy_up", SDLK_3, SDLK_3},
+    {"star_power", SDLK_5, SDLK_5},
+    {"screenshot", SDLK_PRINT, SDLK_PRINT}};
 
 /* Map string keys in the INI file to SDL equivalents */
 int keys_mapKeystringToSDL(char *key) {
@@ -281,14 +281,15 @@ int keys_mapKeystringToSDL(char *key) {
     }
 
 #ifndef NDEBUG
-    if (retkey != KEYS_NOKEY)
+    if (retkey != KEYS_NOKEY) {
         fprintf(stdout,
                 "keys_mapKeystringToSDL(): Mapped key string \"%s\" to SDL key %d (%#x).\n",
                 key,
                 retkey,
                 retkey);
-    else
+    } else {
         fprintf(stdout, "keys_mapKeystringToSDL(): Mapped key string \"%s\" to no key.", key);
+    }
 #endif
 
     return retkey;

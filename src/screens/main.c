@@ -210,74 +210,89 @@ bool screenMenuFooter_buffer() {
     GLfloat width;
     TTF_Font *freeSans;
 
-    if ((button_bg = graphics_loadTexture(button_bg_p, 0)) == -1)
+    if ((button_bg = graphics_loadTexture(button_bg_p, 0)) == -1) {
         fprintf(stderr, "Error loading %s texture.\n", button_bg_p);
-    for (i = 0; i < 2; i++)
+    }
+    for (i = 0; i < 2; i++) {
         button_bg_X[i] =
             graphics_centreAtX(0.0f,
                                graphics_scaleTextureWidth(graphics_getTextureWidth(button_bg_p),
                                                           graphics_getTextureHeight(button_bg_p),
                                                           FOOTERBG_HT));
-    for (i = 2; i < 4; i++)
+    }
+    for (i = 2; i < 4; i++) {
         button_bg_X[i] =
             button_bg_X[i - 2] + graphics_scaleTextureWidth(graphics_getTextureWidth(button_bg_p),
                                                             graphics_getTextureHeight(button_bg_p),
                                                             FOOTERBG_HT);
-    for (i = 0; i < 2; i++)
+    }
+    for (i = 0; i < 2; i++) {
         button_bg_X_upDown[i] =
             graphics_centreAtX(0.0f,
                                graphics_scaleTextureWidth(graphics_getTextureWidth(button_bg_p),
                                                           graphics_getTextureHeight(button_bg_p),
                                                           FOOTERBG_HT + 0.03));
-    for (i = 2; i < 4; i++)
+    }
+    for (i = 2; i < 4; i++) {
         button_bg_X_upDown[i] = button_bg_X_upDown[i - 2] +
                                 graphics_scaleTextureWidth(graphics_getTextureWidth(button_bg_p),
                                                            graphics_getTextureHeight(button_bg_p),
                                                            FOOTERBG_HT + 0.03);
+    }
 
-    if ((button_green = graphics_loadTexture(button_green_p, 0)) == -1)
+    if ((button_green = graphics_loadTexture(button_green_p, 0)) == -1) {
         fprintf(stderr, "Error loading %s texture.\n", button_green_p);
-    for (i = 0; i < 2; i++)
+    }
+    for (i = 0; i < 2; i++) {
         button_green_X[i] =
             graphics_centreAtX(0.0f,
                                graphics_scaleTextureWidth(graphics_getTextureWidth(button_green_p),
                                                           graphics_getTextureHeight(button_green_p),
                                                           BOTTOM_TEXT_HT));
-    for (i = 2; i < 4; i++)
+    }
+    for (i = 2; i < 4; i++) {
         button_green_X[i] = button_green_X[i - 2] +
                             graphics_scaleTextureWidth(graphics_getTextureWidth(button_green_p),
                                                        graphics_getTextureHeight(button_green_p),
                                                        BOTTOM_TEXT_HT);
+    }
 
-    if ((button_red = graphics_loadTexture(button_red_p, 1)) == -1)
+    if ((button_red = graphics_loadTexture(button_red_p, 1)) == -1) {
         fprintf(stderr, "Error loading %s texture.\n", button_red_p);
-    for (i = 0; i < 2; i++)
+    }
+    for (i = 0; i < 2; i++) {
         button_red_X[i] =
             graphics_centreAtX(0.0f,
                                graphics_scaleTextureWidth(graphics_getTextureWidth(button_red_p),
                                                           graphics_getTextureHeight(button_red_p),
                                                           BOTTOM_TEXT_HT));
-    for (i = 2; i < 4; i++)
+    }
+    for (i = 2; i < 4; i++) {
         button_red_X[i] = button_red_X[i - 2] +
                           graphics_scaleTextureWidth(graphics_getTextureWidth(button_red_p),
                                                      graphics_getTextureHeight(button_red_p),
                                                      BOTTOM_TEXT_HT);
-    for (i = 0; i < 4; i++)
+    }
+    for (i = 0; i < 4; i++) {
         button_red_Y[i] = button_green_Y[i];
+    }
 
-    if ((strummer = graphics_loadTexture(strummer_p, 2)) == -1)
+    if ((strummer = graphics_loadTexture(strummer_p, 2)) == -1) {
         fprintf(stderr, "Error loading %s texture.\n", strummer_p);
-    for (i = 0; i < 2; i++)
+    }
+    for (i = 0; i < 2; i++) {
         strummer_X[i] =
             graphics_centreAtX(0.0f,
                                graphics_scaleTextureWidth(graphics_getTextureWidth(strummer_p),
                                                           graphics_getTextureHeight(strummer_p),
                                                           0.05f));
-    for (i = 2; i < 4; i++)
+    }
+    for (i = 2; i < 4; i++) {
         strummer_X[i] =
             strummer_X[i - 2] + graphics_scaleTextureWidth(graphics_getTextureWidth(strummer_p),
                                                            graphics_getTextureHeight(strummer_p),
                                                            0.05f);
+    }
 
     /* Text */
     if ((freeSans = TTF_OpenFont(path_bold_freeSans, DEFAULT_TEXT_PT))) {
@@ -285,28 +300,36 @@ bool screenMenuFooter_buffer() {
                              freeSans,
                              white); /* Force the scale of English to fit the text */
         width = text_scaleWidth(EN_SELECT, freeSans, BOTTOM_TEXT_HT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_select_GX[i] = graphics_centreAtX(0.0f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_select_GX[i] = text_select_GX[i - 2] + width;
+        }
 
         back_R = text_load(languageStrings_screenFooter.back, freeSans, white);
         width = text_scaleWidth(EN_BACK, freeSans, BOTTOM_TEXT_HT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_back_RX[i] = graphics_centreAtX(0.0f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_back_RX[i] = text_back_RX[i - 2] + width;
-        for (i = 0; i < 4; i++)
+        }
+        for (i = 0; i < 4; i++) {
             text_back_RY[i] = text_select_GY[i];
+        }
 
         upDown_strum = text_load(languageStrings_screenFooter.up_down, freeSans, white);
         width = text_scaleWidth(EN_UPDOWN, freeSans, BOTTOM_TEXT_HT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_upDown_strumX[i] = graphics_centreAtX(0.0f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_upDown_strumX[i] = text_back_RX[i - 2] + width;
-        for (i = 0; i < 4; i++)
+        }
+        for (i = 0; i < 4; i++) {
             text_upDown_strumY[i] = text_select_GY[i];
+        }
     } else {
 #ifdef _WIN32
 #else
@@ -318,8 +341,9 @@ bool screenMenuFooter_buffer() {
         return false;
     }
 
-    if (freeSans)
+    if (freeSans) {
         TTF_CloseFont(freeSans);
+    }
 
     return true;
 }
@@ -352,18 +376,20 @@ bool screenMain_buffer() {
         fprintf(stderr, "Unable to load texture: %s.\n", mainSelector);
         return false;
     }
-    for (i = 0; i < 2; i++)
+    for (i = 0; i < 2; i++) {
         screenMain_selectionX[i] =
             graphics_centreAtX(0.6f,
                                graphics_scaleTextureWidth(graphics_getTextureWidth(mainSelector),
                                                           graphics_getTextureHeight(mainSelector),
                                                           0.18f));
-    for (i = 2; i < 4; i++)
+    }
+    for (i = 2; i < 4; i++) {
         screenMain_selectionX[i] =
             screenMain_selectionX[i - 2] +
             graphics_scaleTextureWidth(graphics_getTextureWidth(mainSelector),
                                        graphics_getTextureHeight(mainSelector),
                                        0.18f);
+    }
 
     /* Text */
     if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
@@ -372,38 +398,48 @@ bool screenMain_buffer() {
                            white); /* Always load text as white; change using glColor4f */
         printf("Loaded single player text: %s\n", languageStrings_screenMain.single_player);
         width = text_scaleWidth(languageStrings_screenMain.single_player, crillee, MENUITEMSHT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_SinglePlayerX[i] = graphics_centreAtX(0.6f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_SinglePlayerX[i] = text_SinglePlayerX[i - 2] + width;
+        }
 
         multiplayer = text_load(languageStrings_screenMain.multiplayer, crillee, white);
         width = text_scaleWidth(languageStrings_screenMain.multiplayer, crillee, MENUITEMSHT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_MultiplayerX[i] = graphics_centreAtX(0.6f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_MultiplayerX[i] = text_MultiplayerX[i - 2] + width;
+        }
 
         onlineM = text_load(languageStrings_screenMain.online, crillee, white);
         width = text_scaleWidth(languageStrings_screenMain.online, crillee, MENUITEMSHT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_OnlineX[i] = graphics_centreAtX(0.6f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_OnlineX[i] = text_OnlineX[i - 2] + width;
+        }
 
         optionsM = text_load(languageStrings_screenMain.options, crillee, white);
         width = text_scaleWidth(languageStrings_screenMain.options, crillee, MENUITEMSHT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_OptionsX[i] = graphics_centreAtX(0.6f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_OptionsX[i] = text_OptionsX[i - 2] + width;
+        }
 
         quit = text_load(languageStrings_screenMain.quit, crillee, white);
         width = text_scaleWidth(languageStrings_screenMain.quit, crillee, MENUITEMSHT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_QuitX[i] = graphics_centreAtX(0.6f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_QuitX[i] = text_QuitX[i - 2] + width;
+        }
     } else {
 #ifdef _WIN32
 #else
@@ -415,8 +451,9 @@ bool screenMain_buffer() {
         return false;
     }
 
-    if (crillee)
+    if (crillee) {
         TTF_CloseFont(crillee);
+    }
 
     return true;
 }

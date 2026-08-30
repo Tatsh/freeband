@@ -33,25 +33,31 @@ bool screenDifficulty_buffer() {
     ushort i;
     TTF_Font *freeSans, *crillee;
 
-    if ((bg = graphics_loadTexture(bgTexture, 0)) < 0)
+    if ((bg = graphics_loadTexture(bgTexture, 0)) < 0) {
         fprintf(stderr, "Unable to load texture: %s.\n", bgTexture);
+    }
 
-    if ((selection = graphics_loadTexture(pSelection, 1)) == -1)
+    if ((selection = graphics_loadTexture(pSelection, 1)) == -1) {
         fprintf(stderr, "Unable to load texture: %s.\n", pSelection);
+    }
     width = graphics_scaleTextureWidth(
         graphics_getTextureWidth(pSelection), graphics_getTextureHeight(pSelection), 0.1);
-    for (i = 0; i < 2; i++)
+    for (i = 0; i < 2; i++) {
         screenDifficulty_selectionX[i] = graphics_centreAtX(0.0f, width);
-    for (i = 2; i < 4; i++)
+    }
+    for (i = 2; i < 4; i++) {
         screenDifficulty_selectionX[i] = screenDifficulty_selectionX[i - 2] + width;
+    }
 
     if ((crillee = TTF_OpenFont(path_italic_crillee, DEFAULT_TEXT_PT))) {
         text_selectDifficulty = text_load(languageStrings_screenDifficulty.header, crillee, white);
         width = text_scaleWidth(languageStrings_screenDifficulty.header, crillee, MENUITEMSHT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_selectDifficultyX[i] = graphics_centreAtX(0.0f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_selectDifficultyX[i] = text_selectDifficultyX[i - 2] + width;
+        }
     } else {
         fprintf(stderr,
                 "instruments.c: screenInstrumentsBuffer(): Could not open font %s: %s\n",
@@ -59,43 +65,55 @@ bool screenDifficulty_buffer() {
                 TTF_GetError());
         return false;
     }
-    if (crillee)
+    if (crillee) {
         TTF_CloseFont(crillee);
+    }
 
     if ((freeSans = TTF_OpenFont(path_bold_freeSans, DEFAULT_TEXT_PT))) {
         text_easy = text_load(languageStrings_screenDifficulty.easy, freeSans, white);
         width = text_scaleWidth(languageStrings_screenDifficulty.easy, freeSans, DIFFHT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_easyX[i] = graphics_centreAtX(0.0f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_easyX[i] = text_easyX[i - 2] + width;
+        }
 
         text_medium = text_load(languageStrings_screenDifficulty.medium, freeSans, white);
         width = text_scaleWidth(languageStrings_screenDifficulty.medium, freeSans, DIFFHT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_mediumX[i] = graphics_centreAtX(0.0f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_mediumX[i] = text_mediumX[i - 2] + width;
-        for (i = 0; i < 4; i++)
+        }
+        for (i = 0; i < 4; i++) {
             text_mediumY[i] = text_easyY[i] + DIFFHT;
+        }
 
         text_hard = text_load(languageStrings_screenDifficulty.hard, freeSans, white);
         width = text_scaleWidth(languageStrings_screenDifficulty.hard, freeSans, DIFFHT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_hardX[i] = graphics_centreAtX(0.0f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_hardX[i] = text_hardX[i - 2] + width;
-        for (i = 0; i < 4; i++)
+        }
+        for (i = 0; i < 4; i++) {
             text_hardY[i] = text_mediumY[i] + DIFFHT;
+        }
 
         text_expert = text_load(languageStrings_screenDifficulty.expert, freeSans, white);
         width = text_scaleWidth(languageStrings_screenDifficulty.expert, freeSans, DIFFHT);
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < 2; i++) {
             text_expertX[i] = graphics_centreAtX(0.0f, width);
-        for (i = 2; i < 4; i++)
+        }
+        for (i = 2; i < 4; i++) {
             text_expertX[i] = text_expertX[i - 2] + width;
-        for (i = 0; i < 4; i++)
+        }
+        for (i = 0; i < 4; i++) {
             text_expertY[i] = text_hardY[i] + DIFFHT;
+        }
     } else {
         fprintf(stderr,
                 "difficulty.c: screenDifficulty_buffer(): Could not open font %s: %s\n",
@@ -103,23 +121,27 @@ bool screenDifficulty_buffer() {
                 TTF_GetError());
         return false;
     }
-    if (freeSans)
+    if (freeSans) {
         TTF_CloseFont(freeSans);
+    }
 
     switch (current_difficulty) {
     case DIFFICULTY_MEDIUM:
-        for (i = 0; i < 4; i++)
+        for (i = 0; i < 4; i++) {
             screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + DIFFHT;
+        }
         break;
 
     case DIFFICULTY_HARD:
-        for (i = 0; i < 4; i++)
+        for (i = 0; i < 4; i++) {
             screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + (2.0f * DIFFHT);
+        }
         break;
 
     case DIFFICULTY_EXPERT:
-        for (i = 0; i < 4; i++)
+        for (i = 0; i < 4; i++) {
             screenDifficulty_selectionY[i] = screenDifficulty_selectionY[i] + (3.0f * DIFFHT);
+        }
         break;
 
     default:

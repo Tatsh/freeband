@@ -35,11 +35,13 @@ void fb_quit(GLint retnCode) {
     PaError err;
 
     err = Pa_Terminate();
-    if (err != paNoError)
+    if (err != paNoError) {
         fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText(err));
+    }
 #ifndef NDEBUG
-    else
+    else {
         fprintf(stdout, "PortAudio terminated successfully.\n");
+    }
 #endif
 
     glDeleteTextures(MAX_IMAGES, &texture[0]);
@@ -50,8 +52,9 @@ void fb_quit(GLint retnCode) {
     gluDeleteQuadric(quadratic);
 
     for (i = 0; i < 3; i++) {
-        if (SDL_JoystickOpened(i))
+        if (SDL_JoystickOpened(i)) {
             SDL_JoystickClose(joy);
+        }
     }
 
     iniparser_freedict(lang_d);
@@ -74,18 +77,22 @@ int main(int argc, char *argv[]) {
 
     fb_chdir_to_data();
 
-    for (i = 0; i < MAX_IMAGES; i++)
+    for (i = 0; i < MAX_IMAGES; i++) {
         texture[i] = 0;
-    for (i = 0; i < MAX_TEXT; i++)
+    }
+    for (i = 0; i < MAX_TEXT; i++) {
         text[i] = 0;
+    }
 
     glutInit(&argc, argv); /* Initialise GLUT */
 
-    if (!prefs_verify()) /* Verify preferences existence or create if does not exist (first launch) */
+    if (!prefs_verify()) { /* Verify preferences existence or create if does not exist (first launch) */
         fb_quit(ERROR_VERIFYING_PREFS);
+    }
 
-    if (!prefs_load())
+    if (!prefs_load()) {
         fb_quit(ERROR_READING_PREFS);
+    }
 
     int videoFlags;       /* Flags to send to SDL */
     bool hasQuit = false; /* Main game loop variable */
@@ -109,8 +116,9 @@ int main(int argc, char *argv[]) {
             fprintf(stdout, "# of Axes: %d\n", SDL_JoystickNumAxes(joy));
             fprintf(stdout, "# of Buttons: %d\n", SDL_JoystickNumButtons(joy));
             fprintf(stdout, "# of Balls: %d\n", SDL_JoystickNumBalls(joy));
-        } else
+        } else {
             printf("There is no joystick at port %d\n", 0);
+        }
     }
 
     /* Initialise SDL_ttf */
@@ -130,16 +138,19 @@ int main(int argc, char *argv[]) {
     videoFlags |= SDL_HWPALETTE;       /* Enable storing palettes in hardware */
     videoFlags |= SDL_RESIZABLE;       /* Enable window resizing */
 
-    if (videoInfo->hw_available) /* Check if surfaces can be stored in video memory */
+    if (videoInfo->hw_available) { /* Check if surfaces can be stored in video memory */
         videoFlags |= SDL_HWSURFACE;
-    else
+    } else {
         videoFlags |= SDL_SWSURFACE;
+    }
 
-    if (videoInfo->blit_hw) /* Check if hardware blits can be done */
+    if (videoInfo->blit_hw) { /* Check if hardware blits can be done */
         videoFlags |= SDL_HWACCEL;
+    }
 
-    if (PREF_FULLSCREEN)
+    if (PREF_FULLSCREEN) {
         videoFlags |= SDL_FULLSCREEN;
+    }
 
     languages_loadLanguage(en_GB);
 
@@ -185,14 +196,18 @@ int main(int argc, char *argv[]) {
     }
 
     /* Generate arrays of Y coordinates for each text, based upon initial position of Single Player */
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < 4; i++) {
         text_MultiplayerY[i] = text_SinglePlayerY[i] + 0.2;
-    for (i = 0; i < 4; i++)
+    }
+    for (i = 0; i < 4; i++) {
         text_OnlineY[i] = text_MultiplayerY[i] + 0.2;
-    for (i = 0; i < 4; i++)
+    }
+    for (i = 0; i < 4; i++) {
         text_OptionsY[i] = text_OnlineY[i] + 0.2;
-    for (i = 0; i < 4; i++)
+    }
+    for (i = 0; i < 4; i++) {
         text_QuitY[i] = text_OptionsY[i] + 0.21;
+    }
 
     SDL_EnableKeyRepeat(0, 0);
 
@@ -216,17 +231,18 @@ int main(int argc, char *argv[]) {
                 break;
 
             case SDL_KEYDOWN: /* Handle key down event */
-                if (!fb_screen.game)
+                if (!fb_screen.game) {
                     input_menuKeys(&freeband.key.keysym, fbSurface);
-                else {
+                } else {
                     input_menuKeys(&freeband.key.keysym, fbSurface);
                     input_screenGame();
                 }
                 break;
 
             case SDL_KEYUP:
-                if (fb_screen.game)
+                if (fb_screen.game) {
                     input_screenGame();
+                }
                 break;
 
 #ifdef __XBOX360XPLORER__
@@ -258,9 +274,9 @@ int main(int argc, char *argv[]) {
 #endif
 
             case SDL_QUIT: /* Only allow to exit via ^C or close button if at main menu */
-                if (fb_screen.mainMenu)
+                if (fb_screen.mainMenu) {
                     hasQuit = true;
-                else if (fb_screen.instruments) {
+                } else if (fb_screen.instruments) {
                     menuQuit = graphics_loading = true;
                     graphics_clear();
                     screenMain_buffer();

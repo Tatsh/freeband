@@ -40,9 +40,10 @@ prefs_bool_s prefs_bools[] = {{"Freeband:enable_demo", true, true},
 bool prefs_getBools(dictionary *prefs) {
     ushort i;
 
-    for (i = 0; i < structln(prefs_bools); i++)
+    for (i = 0; i < structln(prefs_bools); i++) {
         prefs_bools[i].bUser_value =
             iniparser_getboolean(prefs, prefs_bools[i].ini_item, prefs_bools[i].bDefault_value);
+    }
 
     return true;
 }
@@ -65,9 +66,10 @@ prefs_char_s prefs_chars[] = {
 bool prefs_getChars(dictionary *prefs) {
     ushort i;
 
-    for (i = 0; i < structln(prefs_chars); i++)
+    for (i = 0; i < structln(prefs_chars); i++) {
         prefs_chars[i].cUser_value =
             iniparser_getstring(prefs, prefs_chars[i].ini_item, prefs_chars[i].cDefault_value);
+    }
 
     return true;
 }
@@ -83,13 +85,15 @@ prefs_short_s prefs_shorts[] = {
 bool prefs_getInts(dictionary *prefs) {
     ushort i;
 
-    for (i = 0; i < structln(prefs_ints); i++) /* Handle ints and shorts here */
+    for (i = 0; i < structln(prefs_ints); i++) { /* Handle ints and shorts here */
         prefs_ints[i].iUser_value =
             iniparser_getint(prefs, prefs_ints[i].ini_item, prefs_ints[i].iDefault_value);
+    }
 
-    for (i = 0; i < structln(prefs_shorts); i++)
+    for (i = 0; i < structln(prefs_shorts); i++) {
         prefs_shorts[i].sUser_value =
             iniparser_getint(prefs, prefs_shorts[i].ini_item, prefs_ints[i].iDefault_value);
+    }
 
     return true;
 }
@@ -135,8 +139,9 @@ bool prefs_verifyPaths() {
 
         /* /themes directory */
 #endif
-    } else
+    } else {
         fprintf(stderr, "Fatal error finding home path.\n");
+    }
 
     return true;
 }

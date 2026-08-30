@@ -19,28 +19,33 @@ void input_screenGamePause() {
 void input_screenGame() {
     Uint8 *keystates = SDL_GetKeyState(NULL);
 
-    if (keystates[SDLK_F1])
+    if (keystates[SDLK_F1]) {
         screenGame_button.g = true;
-    else
+    } else {
         screenGame_button.g = false;
+    }
 
-    if (keystates[SDLK_F2])
+    if (keystates[SDLK_F2]) {
         screenGame_button.r = true;
-    else
+    } else {
         screenGame_button.r = false;
+    }
 
-    if (keystates[SDLK_F3])
+    if (keystates[SDLK_F3]) {
         screenGame_button.y = true;
-    else
+    } else {
         screenGame_button.y = false;
+    }
 
-    if (keystates[SDLK_F4])
+    if (keystates[SDLK_F4]) {
         screenGame_button.b = true;
-    else
+    } else {
         screenGame_button.b = false;
+    }
 
-    if (keystates[SDLK_F5])
+    if (keystates[SDLK_F5]) {
         screenGame_button.o = true;
-    else
+    } else {
         screenGame_button.o = false;
+    }
 }

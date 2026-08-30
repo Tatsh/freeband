@@ -46,10 +46,11 @@ bool themes_loadTheme(char *theme) {
     themes_path screenSongs[255];
 
     if (strncmp("default", theme, 7) == 0) {
-        if (themes_loadDefaultTheme())
+        if (themes_loadDefaultTheme()) {
             return true;
-        else
+        } else {
             fprintf(stderr, "Error loading default theme.\n");
+        }
     }
 
     strcat(theme_directory, prefs_themes);

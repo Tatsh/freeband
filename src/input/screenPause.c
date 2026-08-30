@@ -59,9 +59,9 @@ void input_screenPause(ushort direction) {
         break;
 
     case RETURN:
-        if (pause_menuState.resume)
+        if (pause_menuState.resume) {
             gamePaused = false;
-        else if (pause_menuState.restart) {
+        } else if (pause_menuState.restart) {
             pause_menuState.restart = fb_screen.game = false;
             graphics_loading = true;
             graphics_clear();

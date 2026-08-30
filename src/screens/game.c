@@ -63,22 +63,26 @@ GLvoid screenGame_buffer() {
 
     SDL_EnableKeyRepeat(0, 0); /* Disable key repeat */
 
-    if ((trackloop_a_T = graphics_loadTexture(trackloop_a, 0)) == -1)
+    if ((trackloop_a_T = graphics_loadTexture(trackloop_a, 0)) == -1) {
         fprintf(stderr, "Unable to load texture: %s.\n", trackloop_a);
+    }
 
-    if ((button_T = graphics_loadTexture(buttonT, 1)) == -1)
+    if ((button_T = graphics_loadTexture(buttonT, 1)) == -1) {
         fprintf(stderr, "Unable to load texture: %s.\n", buttonT);
+    }
 
-    if ((stringEndG_t = graphics_loadTexture(stringEndG, 2)) == -1)
+    if ((stringEndG_t = graphics_loadTexture(stringEndG, 2)) == -1) {
         fprintf(stderr, "Unable to load texture: %s.\n", stringEndG);
+    }
     /*u_width = graphics_getTextureWidth(stringEndG);
   u_height = graphics_getTextureHeight(stringEndG);
   f_width = graphics_scaleTextureWidth(u_width, u_height, 0.2f);
   for ( i = 0; i < 2; i++ ) stringEndG_X[i] = graphics_centreAtX(0.2, f_width);
   for ( i = 2; i < 4; i++ ) stringEndG_X[i] = stringEndG_X[i-2] + f_width;*/
 
-    if ((string_T = graphics_loadTexture(string, 3)) == -1)
+    if ((string_T = graphics_loadTexture(string, 3)) == -1) {
         fprintf(stderr, "Unable to load texture: %s.\n", string);
+    }
 
     /* Combo numbers */
     TTF_Font *bitstreamMonoBold;
@@ -93,8 +97,9 @@ GLvoid screenGame_buffer() {
     combo7 = text_load("7", bitstreamMonoBold, white);
     combo8 = text_load("8", bitstreamMonoBold, white);
     combo9 = text_load("9", bitstreamMonoBold, white);
-    if (bitstreamMonoBold)
+    if (bitstreamMonoBold) {
         TTF_CloseFont(bitstreamMonoBold);
+    }
 
     /* Prepare score numbers */
     TTF_Font *freeSansBold;
@@ -109,8 +114,9 @@ GLvoid screenGame_buffer() {
     score7 = text_load("7", freeSansBold, white);
     score8 = text_load("8", freeSansBold, white);
     score9 = text_load("9", freeSansBold, white);
-    if (freeSansBold)
+    if (freeSansBold) {
         TTF_CloseFont(freeSansBold);
+    }
 }
 
 ushort screenGame_pollKey(ushort note) {
@@ -135,25 +141,28 @@ void screenGame_loop() {
             switch (timing_window[0].hit) {
             case NOTE_HIT:
                 ++combo;
-                if (!songFailed)
+                if (!songFailed) {
                     score += SCORE_ADD; /* This value may be dynamic based upon song difficulty */
-                else
+                } else {
                     score += SCORE_ADD_FAILED;
+                }
                 life += LIFE_ADD;
                 break;
 
             case NOTE_HIT_WITH_EXTRA:
                 combo = 0; /* Reset the combo */
-                if (!songFailed)
+                if (!songFailed) {
                     life -= LIFE_ADD; /* Minus life value to increase chances of failure */
+                }
                 /* audio_lowerTrackVolume();
           audio_sfxMissed(instrument); */
                 break;
 
             case ALL_NOTES_HIT:
                 combo = 0;
-                if (!songFailed)
+                if (!songFailed) {
                     life -= (LIFE_ADD * 5.0f); /* We give a greater penalty here */
+                }
                 /* audio_lowerTrackVolume();
           audio_sfxMissed(instrument);
           audio_sfxAudienceBoo(); */
@@ -161,17 +170,19 @@ void screenGame_loop() {
 
             case COMPLETE_MISS:
                 combo = 0;
-                if (!songFailed)
+                if (!songFailed) {
                     life -= LIFE_ADD;
+                }
                 /* audio_lowerTrackVolume(); */
                 break;
 
             case FREEZE_BARELY_OFF:
                 ++combo; /* Yes, we do keep counting the combo */
-                if (!songFailed)
+                if (!songFailed) {
                     score += SCORE_ADD / 2.0f;
-                else
+                } else {
                     score += SCORE_ADD_FAILED / 2.0f;
+                }
                 /* screenGame_greyFreeze(timing_window.note);
           audio_lowerTrackVolume(); */
                 break;
@@ -186,13 +197,15 @@ void screenGame_loop() {
             }
         }
 
-        if (life < 0.5f /* && !prefs_Songs.fail_to_end */) /* Song failed */
+        if (life < 0.5f /* && !prefs_Songs.fail_to_end */) { /* Song failed */
             break;
-        else
+        } else {
             songFailed = true;
+        }
 
-        for (i = 0; i < NOTE_BUFFER; i++)
+        for (i = 0; i < NOTE_BUFFER; i++) {
             timing_window[i].note = timing_window[i + 1].note; /* Shift all notes up 1 */
+        }
         /* timing_window[NOTE_BUFFER-1].note = screenGame_getNextNote();
    screenGame_alignNotes();*/
     }
@@ -213,8 +226,9 @@ GLvoid screenGame() {
         {
             glTranslatef(0.0f, 0.0f, -2.0f);
             glRotatef(90.0f, 0.0f, 0.5f, 0.0f);
-            if (bringDownAngle > 0.0f)
+            if (bringDownAngle > 0.0f) {
                 glRotatef(bringDownAngle, 0.0, 0.0f, -1.0f);
+            }
             glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
             glBindTexture(GL_TEXTURE_2D, trackloop_a_T);
             glBegin(GL_QUADS);
@@ -239,8 +253,9 @@ GLvoid screenGame() {
 
         glPushMatrix();
         { /* Left bumper */
-            if (bringDownAngle > 0.0f)
+            if (bringDownAngle > 0.0f) {
                 glRotatef(bringDownAngle, -1.0, 0.0f, 0.0f);
+            }
             glTranslatef(-TRACKWIDTH - 0.012f, 0.5f, -4.0f);
             glColor4f(0.5f, 0.5f, 0.5f, 1.0f);
             glBindTexture(GL_TEXTURE_2D, 0);
@@ -249,8 +264,9 @@ GLvoid screenGame() {
         glPopMatrix();
 
         glPushMatrix(); /* Right bumper */
-        if (bringDownAngle > 0.0f)
+        if (bringDownAngle > 0.0f) {
             glRotatef(bringDownAngle, -1.0, 0.0f, 0.0f);
+        }
         glTranslatef(TRACKWIDTH + 0.012f, 0.5f, -4.0f);
         glColor4f(0.5f, 0.5f, 0.5f, 1.0f);
         gluCylinder(quadratic, 0.01f, 0.01f, 6.0f, 32, 32);
@@ -258,8 +274,9 @@ GLvoid screenGame() {
 
         /* Strings */
         glPushMatrix(); /* 1 */
-        if (bringDownAngle > 0.0f)
+        if (bringDownAngle > 0.0f) {
             glRotatef(bringDownAngle, -1.0, 0.0f, 0.0f);
+        }
         glBindTexture(GL_TEXTURE_2D, string_T);
         glTranslatef(0.0f, 0.0f, STRINGSTRANS);
         glBegin(GL_QUADS);
@@ -284,8 +301,9 @@ GLvoid screenGame() {
         glPopMatrix();
 
         glPushMatrix(); /* 2 */
-        if (bringDownAngle > 0.0f)
+        if (bringDownAngle > 0.0f) {
             glRotatef(bringDownAngle, -1.0, 0.0f, 0.0f);
+        }
         glTranslatef(0.0f, 0.0f, STRINGSTRANS);
         glBegin(GL_QUADS);
         {
@@ -309,8 +327,9 @@ GLvoid screenGame() {
         glPopMatrix();
 
         glPushMatrix(); /* 3 */
-        if (bringDownAngle > 0.0f)
+        if (bringDownAngle > 0.0f) {
             glRotatef(bringDownAngle, -1.0, 0.0f, 0.0f);
+        }
         glTranslatef(0.0f, 0.0f, STRINGSTRANS);
         glBegin(GL_QUADS);
         {
@@ -335,8 +354,9 @@ GLvoid screenGame() {
         glPopMatrix();
 
         glPushMatrix(); /* 4 */
-        if (bringDownAngle > 0.0f)
+        if (bringDownAngle > 0.0f) {
             glRotatef(bringDownAngle, -1.0, 0.0f, 0.0f);
+        }
         glTranslatef(0.0f, 0.0f, STRINGSTRANS);
         glBegin(GL_QUADS);
         {
@@ -360,8 +380,9 @@ GLvoid screenGame() {
         glPopMatrix();
 
         glPushMatrix(); /* 5 */
-        if (bringDownAngle > 0.0f)
+        if (bringDownAngle > 0.0f) {
             glRotatef(bringDownAngle, -1.0, 0.0f, 0.0f);
+        }
         glTranslatef(0.0f, 0.0f, STRINGSTRANS);
         glBegin(GL_QUADS);
         {
@@ -390,13 +411,14 @@ GLvoid screenGame() {
             glPushMatrix(); /* Green */
             glTranslatef(GREENNOTE, 0.35f, 1.64f);
             glRotatef(90.0f, button_rotationX, 0.0f, 0.0); /* Flatten against track */
-            if (screenGame_button.g)
+            if (screenGame_button.g) {
                 glColor4f(0.373f, 1.0f, 0.35f, 1.0f);
-            else
+            } else {
                 glColor4f(buttonColour_green[0],
                           buttonColour_green[1],
                           buttonColour_green[2],
                           buttonColour_green[3]);
+            }
             glBindTexture(GL_TEXTURE_2D, texture[1]);
             graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
             glPopMatrix();
@@ -404,52 +426,56 @@ GLvoid screenGame() {
             glPushMatrix(); /* Red */
             glTranslatef(GREENNOTE + NOTEDIFF, 0.35f, 1.64f);
             glRotatef(90.0f, button_rotationX, 0.0f, 0.0); /* Flatten against track */
-            if (screenGame_button.r)
+            if (screenGame_button.r) {
                 glColor4f(1.0f, 0.541f, 0.541f, 1.0f);
-            else
+            } else {
                 glColor4f(buttonColour_red[0],
                           buttonColour_red[1],
                           buttonColour_red[2],
                           buttonColour_red[3]);
+            }
             graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
             glPopMatrix();
 
             glPushMatrix(); /* Yellow */
             glTranslatef(GREENNOTE + (2.0f * NOTEDIFF), 0.35f, 1.64f);
             glRotatef(90.0f, button_rotationX, 0.0f, 0.0); /* Flatten against track */
-            if (screenGame_button.y)
+            if (screenGame_button.y) {
                 glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-            else
+            } else {
                 glColor4f(buttonColour_yellow[0],
                           buttonColour_yellow[1],
                           buttonColour_yellow[2],
                           buttonColour_yellow[3]);
+            }
             graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
             glPopMatrix();
 
             glPushMatrix(); /* Blue */
             glTranslatef(GREENNOTE + (3.0f * NOTEDIFF), 0.35f, 1.64f);
             glRotatef(90.0f, button_rotationX, 0.0f, 0.0); /* Flatten against track */
-            if (screenGame_button.b)
+            if (screenGame_button.b) {
                 glColor4f(0.282f, 0.918, 1.0f, 1.0f);
-            else
+            } else {
                 glColor4f(buttonColour_blue[0],
                           buttonColour_blue[1],
                           buttonColour_blue[2],
                           buttonColour_blue[3]);
+            }
             graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
             glPopMatrix();
 
             glPushMatrix(); /* Orange */
             glTranslatef(GREENNOTE + (4.0f * NOTEDIFF), 0.35f, 1.64f);
             glRotatef(90.0f, button_rotationX, 0.0f, 0.0); /* Flatten against track */
-            if (screenGame_button.o)
+            if (screenGame_button.o) {
                 glColor4f(1.0f, 0.867f, 0.506f, 1.0f);
-            else
+            } else {
                 glColor4f(buttonColour_orange[0],
                           buttonColour_orange[1],
                           buttonColour_orange[2],
                           buttonColour_orange[3]);
+            }
             graphics_positionTexture(button_sizeX, button_sizeY, defVertexZ);
             glPopMatrix();
 
@@ -465,8 +491,10 @@ GLvoid screenGame() {
             NE_coord_pos -= 0.005f;
         }
 
-        if (bringDownAngle > 0.0f)
+        if (bringDownAngle > 0.0f) {
             bringDownAngle -= 0.2f;
-    } else
+        }
+    } else {
         screenPause();
+    }
 }

@@ -13,10 +13,11 @@ void input_screenMain(ushort direction) {
         screenMain_nSelection++;
         screenMain_highlighted(screenMain_nSelection);
 
-        if (screenMain_nSelection < 5)
-            for (i = 0; i < 4; i++)
+        if (screenMain_nSelection < 5) {
+            for (i = 0; i < 4; i++) {
                 screenMain_selectionY[i] = screenMain_selectionY[i] + 0.2;
-        else {
+            }
+        } else {
             screenMain_nSelection = 0;
             screenMain_highlighted(screenMain_nSelection);
             screenMain_selectionY[0] = 0.18f;
@@ -30,25 +31,29 @@ void input_screenMain(ushort direction) {
         if (screenMain_nSelection > 0) {
             screenMain_nSelection--;
             screenMain_highlighted(screenMain_nSelection);
-            for (i = 0; i < 4; i++)
+            for (i = 0; i < 4; i++) {
                 screenMain_selectionY[i] = screenMain_selectionY[i] - 0.2;
+            }
         } else if (screenMain_nSelection < 1) {
             screenMain_nSelection = 4;
             screenMain_highlighted(screenMain_nSelection);
-            for (i = 0; i < 4; i++)
+            for (i = 0; i < 4; i++) {
                 screenMain_selectionY[i] = screenMain_selectionY[i] + 0.8;
+            }
         }
         break;
 
     case RETURN:
         screenMain_accept();
         if (!nonGame) {
-            if (!(screenInstruments_buffer())) /* Note: 1 player screen is significantly different from multiplayer */
+            if (!(screenInstruments_buffer())) { /* Note: 1 player screen is significantly different from multiplayer */
                 fprintf(stderr, "Failed to buffer screenInstruments.\n");
-            else
+            } else {
                 fprintf(stdout, "Buffering screenInstruments.\n");
-        } else
+            }
+        } else {
             fprintf(stdout, "Not implemented yet.\n");
+        }
         break;
 
         /* Escape key is handled in input.c */
