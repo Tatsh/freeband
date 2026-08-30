@@ -200,7 +200,7 @@ jobs:
         run: |
           choco install nsis -y --no-progress
           'C:\Program Files (x86)\NSIS' | Out-File -Append -Encoding utf8 -FilePath $env:GITHUB_PATH
-      - uses: 'msys2/setup-msys2@40677d36a502eb2cf0fb808cc9dec31bf6152638'
+      - uses: 'msys2/setup-msys2@66cd2cce69caa17b53920067426061ca1de3a884'
         with:
           install: 'make'
           msystem: '${{ matrix.sys.name }}'
