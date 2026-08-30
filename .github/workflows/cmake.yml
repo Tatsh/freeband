@@ -1,8 +1,14 @@
 jobs:
   build-linux:
+    permissions:
+      attestations: 'write'
+      contents: 'write'
+      id-token: 'write'
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: 'actions/checkout@v7'
+      - uses: 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
+        with:
+          persist-credentials: false
       - name: 'Install dependencies'
         run: |
           sudo apt-get update -y -qq
@@ -13,48 +19,71 @@ jobs:
             libsdl1.2-dev \
             libsndfile1-dev \
             portaudio19-dev
-      - name: 'Configure'
+      - env:
+          BUILD_TYPE: '${{ matrix.build-type }}'
+        name: 'Configure'
         run: >-
           cmake -S . -B build -DCMAKE_VERBOSE_MAKEFILE=ON
-          -DCMAKE_BUILD_TYPE=${{matrix.build-type}}
-          -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/build/AppDir/usr
-      - name: 'Build'
-        run: 'cmake --build ${{github.workspace}}/build --config ${{matrix.build-type}} --verbose'
-      - name: 'Install'
-        run: 'cmake --install ${{github.workspace}}/build --config ${{matrix.build-type}} --verbose'
-      - name: 'Create AppImage'
+          -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
+          -DCMAKE_INSTALL_PREFIX="$PWD/build/AppDir/usr"
+      - env:
+          BUILD_TYPE: '${{ matrix.build-type }}'
+        name: 'Build'
+        run: 'cmake --build build --config "$BUILD_TYPE" --verbose'
+      - env:
+          BUILD_TYPE: '${{ matrix.build-type }}'
+        name: 'Install'
+        run: 'cmake --install build --config "$BUILD_TYPE" --verbose'
+      - env:
+          BUILD_TYPE: '${{ matrix.build-type }}'
+        name: 'Create AppImage'
         run: |
           wget 'https://github.com/TheAssassin/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage'
           chmod +x linuxdeploy-x86_64.AppImage
-          appdir="${{github.workspace}}/build/AppDir"
+          appdir="$PWD/build/AppDir"
           ./linuxdeploy-x86_64.AppImage \
             --appdir "${appdir}" \
             --desktop-file "${appdir}/usr/share/applications/sh.tat.freeband.desktop" \
             --output appimage
-          mv ${{github.workspace}}/Freeband-*.AppImage \
-            ${{github.workspace}}/freeband-${{matrix.build-type}}-x86_64.AppImage
-      - if: "github.ref_type == 'tag' && matrix.build-type == 'Release'"
+          mv Freeband-*.AppImage "freeband-${BUILD_TYPE}-x86_64.AppImage"
+      - env:
+          TAG: '${{ github.ref_name }}'
+        if: "github.ref_type == 'tag' && matrix.build-type == 'Release'"
         name: 'Rename with tag'
-        run: >-
-          mv ${{github.workspace}}/freeband-Release-x86_64.AppImage
-          ${{github.workspace}}/freeband-${{github.ref_name}}-x86_64.AppImage
+        run: 'mv freeband-Release-x86_64.AppImage "freeband-${TAG}-x86_64.AppImage"'
       - name: 'Upload Artifacts'
-        uses: 'actions/upload-artifact@v7'
+        uses: 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
         with:
           if-no-files-found: 'error'
           name: 'freeband-${{ matrix.build-type }}-Linux'
-          path: '${{github.workspace}}/freeband-*.AppImage'
+          path: 'freeband-*.AppImage'
       - name: 'Attest'
-        uses: 'actions/attest-build-provenance@v4'
+        uses: 'actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8'
         with:
-          subject-path: '${{github.workspace}}/freeband-*.AppImage'
-      - if: "github.ref_type == 'tag' && matrix.build-type == 'Release'"
+          subject-path: 'freeband-*.AppImage'
+      - env:
+          GH_TOKEN: '${{ github.token }}'
+          TAG: '${{ github.ref_name }}'
+        if: "github.ref_type == 'tag' && matrix.build-type == 'Release'"
         name: 'Upload package'
-        uses: 'softprops/action-gh-release@v3.0.2'
-        with:
-          draft: true
-          fail_on_unmatched_files: true
-          files: '${{github.workspace}}/freeband-*.AppImage'
+        run: |
+          set -euo pipefail
+          mapfile -t files < <(compgen -G 'freeband-*.AppImage' || true)
+          if [[ ${#files[@]} -eq 0 ]]; then
+            echo '::error::No AppImage was produced; refusing to attach a partial release.'
+            exit 1
+          fi
+          for attempt in 1 2 3; do
+            if gh release view "$TAG" > /dev/null 2>&1; then
+              break
+            fi
+            if gh release create "$TAG" --draft --title "$TAG" --notes 'Pending release notes.'; then
+              break
+            fi
+            sleep "$((attempt * 5))"
+          done
+          gh release view "$TAG" > /dev/null
+          gh release upload "$TAG" "${files[@]}" --clobber
     strategy:
       fail-fast: false
       matrix:
@@ -62,9 +91,15 @@ jobs:
   build-macos:
     env:
       MACOSX_DEPLOYMENT_TARGET: "${{ matrix.os == 'macos-15-intel' && '10.13' || '11.0' }}"
+    permissions:
+      attestations: 'write'
+      contents: 'write'
+      id-token: 'write'
     runs-on: '${{ matrix.os }}'
     steps:
-      - uses: 'actions/checkout@v7'
+      - uses: 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
+        with:
+          persist-credentials: false
       - name: 'Install Homebrew dependencies'
         run: >-
           brew install autoconf automake freeglut libsndfile libtool
@@ -76,7 +111,7 @@ jobs:
           git clone --branch release-1.2.12 --depth 1 \
             https://github.com/libsdl-org/SDL_image.git
           (
-            cd SDL_image
+            cd SDL_image || exit
             touch AUTHORS ChangeLog NEWS
             autoreconf -fi
             ./configure --prefix="${prefix}" --disable-static LIBS=-liconv
@@ -86,7 +121,7 @@ jobs:
           git clone --branch release-2.0.11 --depth 1 \
             https://github.com/libsdl-org/SDL_ttf.git
           (
-            cd SDL_ttf
+            cd SDL_ttf || exit
             touch AUTHORS ChangeLog NEWS
             autoreconf -fi
             ./configure --prefix="${prefix}" --disable-static LIBS=-liconv
@@ -94,59 +129,78 @@ jobs:
             make install
           )
           echo "PKG_CONFIG_PATH=${prefix}/lib/pkgconfig:${PKG_CONFIG_PATH}" >> "$GITHUB_ENV"
-      - name: 'Configure, build, install'
+      - env:
+          BUILD_TYPE: '${{ matrix.build-type }}'
+        name: 'Configure, build, install'
         run: |
           cmake -S . -B build -DCMAKE_VERBOSE_MAKEFILE=ON \
-            -DCMAKE_BUILD_TYPE=${{matrix.build-type}} \
-            -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/build/prefix
-          cmake --build build --config ${{matrix.build-type}} --verbose
-          cmake --install build --config ${{matrix.build-type}} --verbose
-      - name: 'Package'
-        run: >-
-          cpack -C ${{matrix.build-type}}
-          --config ${{github.workspace}}/build/CPackConfig.cmake --verbose
+            -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
+            -DCMAKE_INSTALL_PREFIX="$PWD/build/prefix"
+          cmake --build build --config "$BUILD_TYPE" --verbose
+          cmake --install build --config "$BUILD_TYPE" --verbose
+      - env:
+          BUILD_TYPE: '${{ matrix.build-type }}'
+        name: 'Package'
+        run: 'cpack -C "$BUILD_TYPE" --config "$PWD/build/CPackConfig.cmake" --verbose'
       - name: 'Upload Artifacts'
-        uses: 'actions/upload-artifact@v7'
+        uses: 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
         with:
           if-no-files-found: 'error'
           name: 'freeband-${{ matrix.build-type }}-${{ matrix.os }}'
           path: |
-            ${{github.workspace}}/freeband-*.dmg
-            ${{github.workspace}}/freeband-*.zip
+            freeband-*.dmg
+            freeband-*.zip
       - name: 'Attest'
-        uses: 'actions/attest-build-provenance@v4'
+        uses: 'actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8'
         with:
           subject-path: |
-            ${{github.workspace}}/freeband-*.dmg
-            ${{github.workspace}}/freeband-*.zip
-      - if: "github.ref_type == 'tag' && matrix.build-type == 'Release'"
+            freeband-*.dmg
+            freeband-*.zip
+      - env:
+          GH_TOKEN: '${{ github.token }}'
+          TAG: '${{ github.ref_name }}'
+        if: "github.ref_type == 'tag' && matrix.build-type == 'Release'"
         name: 'Upload package'
-        uses: 'softprops/action-gh-release@v3.0.2'
-        with:
-          draft: true
-          fail_on_unmatched_files: true
-          files: |
-            ${{github.workspace}}/freeband-*.dmg
-            ${{github.workspace}}/freeband-*.zip
+        run: |
+          set -euo pipefail
+          files=()
+          for pattern in 'freeband-*.dmg' 'freeband-*.zip'; do
+            mapfile -t matches < <(compgen -G "$pattern" || true)
+            if [[ ${#matches[@]} -eq 0 ]]; then
+              echo "::error::No file matched '${pattern}'; refusing to attach a partial release."
+              exit 1
+            fi
+            files+=("${matches[@]}")
+          done
+          for attempt in 1 2 3; do
+            if gh release view "$TAG" > /dev/null 2>&1; then
+              break
+            fi
+            if gh release create "$TAG" --draft --title "$TAG" --notes 'Pending release notes.'; then
+              break
+            fi
+            sleep "$((attempt * 5))"
+          done
+          gh release view "$TAG" > /dev/null
+          gh release upload "$TAG" "${files[@]}" --clobber
     strategy:
       fail-fast: false
       matrix:
         build-type: ['Debug', 'Release']
         os: ['macos-15-intel', 'macos-latest']
   build-msys:
+    permissions:
+      attestations: 'write'
+      contents: 'write'
+      id-token: 'write'
     runs-on: '${{ matrix.sys.runner }}'
     steps:
-      - id: 'fixed_workspace'
-        name: 'Fix path'
-        run: >-
-          echo out=$("${{github.workspace}}" -Replace "\\","/") |
-          Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
       - if: "matrix.sys.name == 'clangarm64'"
         name: 'Install NSIS via Chocolatey'
         run: |
           choco install nsis -y --no-progress
           'C:\Program Files (x86)\NSIS' | Out-File -Append -Encoding utf8 -FilePath $env:GITHUB_PATH
-      - uses: 'msys2/setup-msys2@v2'
+      - uses: 'msys2/setup-msys2@40677d36a502eb2cf0fb808cc9dec31bf6152638'
         with:
           install: 'make'
           msystem: '${{ matrix.sys.name }}'
@@ -156,61 +210,83 @@ jobs:
             pkgconf:p portaudio:p sdl12-compat:p toolchain:p
           path-type: "${{ matrix.sys.name == 'clangarm64' && 'inherit' || 'minimal' }}"
           update: true
-      - uses: 'actions/checkout@v7'
+      - uses: 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         with:
           fetch-depth: 0
-      - name: 'Configure'
-        run: >-
-          cmake -G Ninja -B ${{steps.fixed_workspace.outputs.out}}/build
-          --install-prefix ${{steps.fixed_workspace.outputs.out}}/build/prefix
-          -DCMAKE_BUILD_TYPE=${{matrix.build-type}}
-          -DCMAKE_DISABLE_FIND_PACKAGE_SDL_image=ON
-          -DCMAKE_DISABLE_FIND_PACKAGE_SDL_ttf=ON
-          -DCPACK_SYSTEM_NAME=${{matrix.sys.cpack_system}}
+          persist-credentials: false
+      - env:
+          BUILD_TYPE: '${{ matrix.build-type }}'
+          CPACK_SYSTEM: '${{ matrix.sys.cpack_system }}'
+        name: 'Configure'
+        run: |
+          cmake -G Ninja -B build --install-prefix "$(pwd)/build/prefix" \
+            -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
+            -DCMAKE_DISABLE_FIND_PACKAGE_SDL_image=ON \
+            -DCMAKE_DISABLE_FIND_PACKAGE_SDL_ttf=ON \
+            -DCPACK_SYSTEM_NAME="$CPACK_SYSTEM"
         shell: 'msys2 {0}'
       - name: 'Build'
-        run: 'cmake --build ${{steps.fixed_workspace.outputs.out}}/build --verbose'
+        run: 'cmake --build build --verbose'
         shell: 'msys2 {0}'
-      - name: 'Install'
-        run: >-
-          cmake --install ${{steps.fixed_workspace.outputs.out}}/build
-          --config ${{matrix.build-type}} --verbose
+      - env:
+          BUILD_TYPE: '${{ matrix.build-type }}'
+        name: 'Install'
+        run: 'cmake --install build --config "$BUILD_TYPE" --verbose'
         shell: 'msys2 {0}'
       - name: 'Inspect install prefix'
         run: |
           echo '== install prefix tree =='
-          find "${{steps.fixed_workspace.outputs.out}}/build/prefix" -maxdepth 4 -print
+          find build/prefix -maxdepth 4 -print
           echo '== bundled DLLs =='
-          find "${{steps.fixed_workspace.outputs.out}}/build/prefix" -iname '*.dll' -print | sort
+          find build/prefix -iname '*.dll' -print | sort
         shell: 'msys2 {0}'
-      - name: 'Package'
-        run: >-
-          cpack -C ${{matrix.build-type}}
-          --config ${{steps.fixed_workspace.outputs.out}}/build/CPackConfig.cmake --verbose
+      - env:
+          BUILD_TYPE: '${{ matrix.build-type }}'
+        name: 'Package'
+        run: 'cpack -C "$BUILD_TYPE" --config "$(pwd)/build/CPackConfig.cmake" --verbose'
         shell: 'msys2 {0}'
       - name: 'Upload Artifacts'
-        uses: 'actions/upload-artifact@v7'
+        uses: 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
         with:
           if-no-files-found: 'error'
           name: 'freeband-${{ matrix.build-type }}-${{ matrix.sys.name }}'
           path: |
-            ${{github.workspace}}/freeband-*.exe
-            ${{github.workspace}}/freeband-*.zip
+            freeband-*.exe
+            freeband-*.zip
       - name: 'Attest'
-        uses: 'actions/attest-build-provenance@v4'
+        uses: 'actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8'
         with:
           subject-path: |
-            ${{github.workspace}}/freeband-*.exe
-            ${{github.workspace}}/freeband-*.zip
-      - if: "github.ref_type == 'tag' && matrix.sys.release && matrix.build-type == 'Release'"
+            freeband-*.exe
+            freeband-*.zip
+      - env:
+          GH_TOKEN: '${{ github.token }}'
+          TAG: '${{ github.ref_name }}'
+        if: "github.ref_type == 'tag' && matrix.sys.release && matrix.build-type == 'Release'"
         name: 'Upload package'
-        uses: 'softprops/action-gh-release@v3.0.2'
-        with:
-          draft: true
-          fail_on_unmatched_files: true
-          files: |
-            ${{github.workspace}}/freeband-*.exe
-            ${{github.workspace}}/freeband-*.zip
+        run: |
+          set -euo pipefail
+          files=()
+          for pattern in 'freeband-*.exe' 'freeband-*.zip'; do
+            mapfile -t matches < <(compgen -G "$pattern" || true)
+            if [[ ${#matches[@]} -eq 0 ]]; then
+              echo "::error::No file matched '${pattern}'; refusing to attach a partial release."
+              exit 1
+            fi
+            files+=("${matches[@]}")
+          done
+          for attempt in 1 2 3; do
+            if gh release view "$TAG" > /dev/null 2>&1; then
+              break
+            fi
+            if gh release create "$TAG" --draft --title "$TAG" --notes 'Pending release notes.'; then
+              break
+            fi
+            sleep "$((attempt * 5))"
+          done
+          gh release view "$TAG" > /dev/null
+          gh release upload "$TAG" "${files[@]}" --clobber
+        shell: 'bash'
     strategy:
       fail-fast: false
       matrix:
@@ -237,6 +313,4 @@ name: 'Build'
     tags:
       - 'v*.*.*'
 permissions:
-  attestations: 'write'
-  contents: 'write'
-  id-token: 'write'
+  contents: 'read'
