@@ -11,12 +11,19 @@ jobs:
         uses: 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         with:
           persist-credentials: false
-      - name: 'Install dependencies'
+      - if: "matrix.language == 'c-cpp'"
+        name: 'Install dependencies'
         run: 'sudo apt-get update && sudo apt-get install -y freeglut3-dev libsdl-image1.2-dev libsdl-ttf2.0-dev libsdl1.2-dev libsndfile1-dev portaudio19-dev'
       - name: 'Initialize CodeQL'
         uses: 'github/codeql-action/init@cdf488f595d80d6e07e03d4674febd5ab45fa938'
         with:
+          build-mode: '${{ matrix.build-mode }}'
           languages: '${{ matrix.language }}'
+      - if: "matrix.build-mode == 'manual'"
+        name: 'Build project'
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build --config Debug --verbose
       - name: 'Perform CodeQL Analysis'
         uses: 'github/codeql-action/analyze@cdf488f595d80d6e07e03d4674febd5ab45fa938'
         with:
@@ -24,9 +31,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language:
-          - 'c-cpp'
-          - 'actions'
+        include:
+          - build-mode: 'manual'
+            language: 'c-cpp'
+          - build-mode: 'none'
+            language: 'actions'
 name: 'CodeQL'
 'on':
   pull_request:
@@ -39,6 +48,8 @@ name: 'CodeQL'
       - '.github/workflows/*.yaml'
       - '**/action.yml'
       - '**/action.yaml'
+      - 'CMakeLists.txt'
+      - '**/CMakeLists.txt'
   push:
     branches:
       - 'master'
@@ -49,5 +60,7 @@ name: 'CodeQL'
       - '.github/workflows/*.yaml'
       - '**/action.yml'
       - '**/action.yaml'
+      - 'CMakeLists.txt'
+      - '**/CMakeLists.txt'
   schedule:
     - cron: '15 4 * * 3'
