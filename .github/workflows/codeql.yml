@@ -15,7 +15,7 @@ jobs:
         name: 'Install dependencies'
         run: 'sudo apt-get update && sudo apt-get install -y freeglut3-dev libsdl-image1.2-dev libsdl-ttf2.0-dev libsdl1.2-dev libsndfile1-dev portaudio19-dev'
       - name: 'Initialize CodeQL'
-        uses: 'github/codeql-action/init@b96794f015dfd88f77b49b1c93e0fa7110f94c63'
+        uses: 'github/codeql-action/init@1c5b675653bb5c22dbe9b12b556ec555138e09fd'
         with:
           build-mode: '${{ matrix.build-mode }}'
           languages: '${{ matrix.language }}'
@@ -25,7 +25,7 @@ jobs:
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
           cmake --build build --config Debug --verbose
       - name: 'Perform CodeQL Analysis'
-        uses: 'github/codeql-action/analyze@b96794f015dfd88f77b49b1c93e0fa7110f94c63'
+        uses: 'github/codeql-action/analyze@1c5b675653bb5c22dbe9b12b556ec555138e09fd'
         with:
           category: '/language:${{matrix.language}}'
     strategy:
