@@ -1,6 +1,5 @@
 aclocal
 alsa
-Ångström
 appdir
 appimage
 appl
@@ -25,7 +24,6 @@ buglist
 buildsystems
 buildtype
 bytearray
-ĆgŁÓwne
 choco
 clangarm
 color
@@ -76,12 +74,12 @@ freetype
 getnsec
 gfdm
 gitara
-gŁoŚnoŚĆ
 gmock
-gÓrĘ
 gracz
 graczy
 granulepos
+gÓrĘ
+gŁoŚnoŚĆ
 handoff
 hguides
 hihat
@@ -109,7 +107,6 @@ keym
 keysounding
 keysym
 languges
-Łatwy
 lctrl
 leworĘczny
 libera
@@ -144,11 +141,13 @@ ncpu
 ndebug
 ndevilla
 nonstd
+noone
 notediff
 nowa
 nowy
 nsis
 numcp
+numpydoc
 nynnorsk
 occured
 oneline
@@ -216,7 +215,6 @@ songlist
 specialkeys
 splayer
 srcs
-Średni
 starpower
 statusline
 storei
@@ -240,8 +238,8 @@ tolower
 tostring
 translatef
 treningu
-trudności
 trudnoŚci
+trudności
 trudny
 tryb
 tsnd
@@ -254,8 +252,8 @@ undrafted
 uquadric
 ustaw
 utwor
-utwÓr
 utwory
+utwÓr
 vendored
 venv
 versioninfo
@@ -271,7 +269,6 @@ winver
 wiswa
 wiswa's
 wokal
-worktree
 wybierz
 wyjŚcie
 wznow
@@ -283,3 +280,7 @@ yarnrc
 zatrzymane
 zizmor
 zmieŃ
+Ångström
+ĆgŁÓwne
+Łatwy
+Średni

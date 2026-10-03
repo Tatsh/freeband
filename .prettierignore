@@ -16,6 +16,7 @@
 *.log
 *.min.js
 *.rc
+*.tsbuildinfo
 *~
 .*.swp
 .*_cache/

@@ -50,6 +50,13 @@
 
   // Snap
   snapcraft+: {
+    description: |||
+      An attempt at a Guitar Hero / Rock Band-style game written in C with SDL
+      and OpenGL. This is an archived project preserved for historical interest.
+    |||,
+    icon: 'src/freeband.png',
+    summary: 'Guitar Hero/Rock Band-style game in C with SDL and OpenGL',
+    title: 'Freeband',
     apps+: {
       [top.project_name]+: {
         command: 'usr/bin/%s' % top.project_name,

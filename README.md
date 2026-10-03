@@ -6,7 +6,6 @@
 [![GitHub tag (with filter)](https://img.shields.io/github/v/tag/Tatsh/freeband)](https://github.com/Tatsh/freeband/tags)
 [![License](https://img.shields.io/github/license/Tatsh/freeband)](https://github.com/Tatsh/freeband/blob/master/LICENSE.txt)
 [![GitHub commits since latest release (by SemVer including pre-releases)](https://img.shields.io/github/commits-since/Tatsh/freeband/v0.0.2/master)](https://github.com/Tatsh/freeband/compare/v0.0.2...master)
-[![CodeQL](https://github.com/Tatsh/freeband/actions/workflows/codeql.yml/badge.svg)](https://github.com/Tatsh/freeband/actions/workflows/codeql.yml)
 [![Dependabot](https://img.shields.io/badge/Dependabot-enabled-blue?logo=dependabot)](https://github.com/dependabot)
 [![pages-build-deployment](https://github.com/Tatsh/freeband/actions/workflows/pages/pages-build-deployment/badge.svg)](https://tatsh.github.io/freeband/)
 [![Stargazers](https://img.shields.io/github/stars/Tatsh/freeband?logo=github&style=flat)](https://github.com/Tatsh/freeband/stargazers)
