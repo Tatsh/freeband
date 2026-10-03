@@ -29,6 +29,7 @@ clangarm
 color
 colorstyle
 compgen
+concrt
 confusinig
 conn
 coveragerc
@@ -134,6 +135,9 @@ mktemp
 mmnn
 modelview
 msvc
+msvcp
+msvcprtd
+msvcrtd
 msystem
 multitexture
 mypy
@@ -245,6 +249,7 @@ tryb
 tsnd
 tytuły
 ucrt
+ucrtbased
 udvare
 undoc
 undraft
@@ -254,6 +259,9 @@ ustaw
 utwor
 utwory
 utwÓr
+vccorlib
+vcomp
+vcruntime
 vendored
 venv
 versioninfo
