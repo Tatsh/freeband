@@ -166,6 +166,7 @@ pcmout
 perkusja
 piacentini
 pipefail
+pipx
 portaudio
 portoggio
 postaĆ
