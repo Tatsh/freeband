@@ -195,6 +195,7 @@ rythm
 salut
 samplelength
 samplestart
+sbclaude
 scalef
 schemafile
 screenbottom
