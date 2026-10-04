@@ -1,5 +1,10 @@
+concurrency:
+  cancel-in-progress: false
+  group: '${{ github.workflow }}-${{ github.ref }}'
+  queue: 'max'
 jobs:
   build-linux:
+    name: 'Build (Linux)'
     permissions:
       attestations: 'write'
       contents: 'write'
@@ -91,6 +96,7 @@ jobs:
   build-macos:
     env:
       MACOSX_DEPLOYMENT_TARGET: "${{ matrix.os == 'macos-15-intel' && '10.13' || '11.0' }}"
+    name: 'Build (macOS)'
     permissions:
       attestations: 'write'
       contents: 'write'
@@ -189,6 +195,7 @@ jobs:
         build-type: ['Debug', 'Release']
         os: ['macos-15-intel', 'macos-latest']
   build-msys:
+    name: 'Build (MSYS2)'
     permissions:
       attestations: 'write'
       contents: 'write'
@@ -200,6 +207,7 @@ jobs:
         run: |
           choco install nsis -y --no-progress
           'C:\Program Files (x86)\NSIS' | Out-File -Append -Encoding utf8 -FilePath $env:GITHUB_PATH
+        shell: 'pwsh'
       - uses: 'msys2/setup-msys2@66cd2cce69caa17b53920067426061ca1de3a884'
         with:
           install: 'make'

@@ -1,8 +1,16 @@
+concurrency:
+  cancel-in-progress: false
+  group: '${{ github.workflow }}-${{ github.event.workflow_run.head_sha }}'
+  queue: 'max'
 env:
   GH_TOKEN: '${{ github.token }}'
   GH_REPO: '${{ github.repository }}'
 jobs:
   publish-release:
+    name: 'Publish release'
+    permissions:
+      actions: 'write'
+      contents: 'write'
     runs-on: 'ubuntu-latest'
     steps:
       - env:
@@ -190,6 +198,4 @@ name: 'Release'
       - 'Spelling'
       - 'clang-format'
       - 'markdownlint'
-permissions:
-  actions: 'write'
-  contents: 'write'
+permissions: {}

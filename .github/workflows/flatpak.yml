@@ -1,8 +1,13 @@
+concurrency:
+  cancel-in-progress: false
+  group: '${{ github.workflow }}-${{ github.ref }}'
+  queue: 'max'
 jobs:
   build:
     container:
-      image: 'ghcr.io/flathub-infra/flatpak-github-actions:freedesktop-24.08'
+      image: 'ghcr.io/flathub-infra/flatpak-github-actions:freedesktop-24.08@sha256:66eb59fd5d923833e8e4142f60e542156aad4b8b1d5db38149d814c659e274bc'
       options: '--privileged'
+    name: 'Build'
     permissions:
       attestations: 'write'
       contents: 'read'
@@ -45,6 +50,7 @@ jobs:
             image: 'ubuntu-24.04-arm'
   publish:
     if: "github.ref_type == 'tag'"
+    name: 'Upload release assets'
     needs: ['build']
     permissions:
       contents: 'write'
