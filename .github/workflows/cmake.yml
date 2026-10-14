@@ -57,7 +57,7 @@ jobs:
         name: 'Rename with tag'
         run: 'mv freeband-Release-x86_64.AppImage "freeband-${TAG}-x86_64.AppImage"'
       - name: 'Upload Artifacts'
-        uses: 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
+        uses: 'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9'
         with:
           if-no-files-found: 'error'
           name: 'freeband-${{ matrix.build-type }}-Linux'
@@ -149,7 +149,7 @@ jobs:
         name: 'Package'
         run: 'cpack -C "$BUILD_TYPE" --config "$PWD/build/CPackConfig.cmake" --verbose'
       - name: 'Upload Artifacts'
-        uses: 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
+        uses: 'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9'
         with:
           if-no-files-found: 'error'
           name: 'freeband-${{ matrix.build-type }}-${{ matrix.os }}'
@@ -291,7 +291,7 @@ jobs:
         run: 'cpack -C "$BUILD_TYPE" --config "$(pwd)/build/CPackConfig.cmake" --verbose'
         shell: 'msys2 {0}'
       - name: 'Upload Artifacts'
-        uses: 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
+        uses: 'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9'
         with:
           if-no-files-found: 'error'
           name: 'freeband-${{ matrix.build-type }}-${{ matrix.sys.name }}'
