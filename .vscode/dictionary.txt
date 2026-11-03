@@ -1,5 +1,6 @@
 aclocal
 alsa
+analyzer
 appdir
 appimage
 appl
@@ -51,6 +52,7 @@ doxyfile
 dtmp
 ebadlink
 ekspert
+elif
 esac
 esbenp
 everytihng
@@ -94,6 +96,7 @@ iidx
 inierror
 ininame
 iniparser
+iterdir
 iwyu
 jaxis
 jeden
@@ -144,6 +147,7 @@ mypy
 ncpu
 ndebug
 ndevilla
+nojekyll
 nonstd
 noone
 notediff
@@ -161,6 +165,7 @@ pacboy
 pagebreak
 parameteri
 pastreamio
+pathlib
 pcdata
 pcmout
 perkusja
