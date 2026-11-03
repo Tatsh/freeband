@@ -33,6 +33,7 @@ compgen
 concrt
 confusinig
 conn
+copytree
 coveragerc
 cpack
 crillee
@@ -96,7 +97,6 @@ iidx
 inierror
 ininame
 iniparser
-iterdir
 iwyu
 jaxis
 jeden
@@ -192,6 +192,7 @@ regen
 retn
 ripgreprc
 rmargin
+rmtree
 rotatef
 rozpocznij
 rshift
@@ -218,6 +219,7 @@ selectdst
 sfth
 shellcheck
 shellformat
+shutil
 simulatenously
 snapcore
 snapcraft
