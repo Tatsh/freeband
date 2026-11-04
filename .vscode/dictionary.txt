@@ -187,6 +187,7 @@ pyproject
 pytest
 qstringbuilder
 rctrl
+rdparty
 reflow
 regen
 retn
@@ -201,6 +202,7 @@ rythm
 salut
 samplelength
 samplestart
+sarif
 sbclaude
 scalef
 schemafile

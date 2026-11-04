@@ -133,3 +133,4 @@
     },
   } },
 }
++ { static_analysis_paths: ['src', 'test'] }
