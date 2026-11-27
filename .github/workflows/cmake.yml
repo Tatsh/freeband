@@ -338,10 +338,6 @@ jobs:
         build-type: ['Debug', 'Release']
         sys:
           - cpack_system: 'win64'
-            name: 'mingw64'
-            release: false
-            runner: 'windows-latest'
-          - cpack_system: 'win64'
             name: 'ucrt64'
             release: true
             runner: 'windows-latest'
