@@ -1,6 +1,5 @@
 aclocal
 alsa
-analyzer
 appdir
 appimage
 appl
@@ -33,7 +32,6 @@ compgen
 concrt
 confusinig
 conn
-copytree
 coveragerc
 cpack
 crillee
@@ -53,7 +51,6 @@ doxyfile
 dtmp
 ebadlink
 ekspert
-elif
 esac
 esbenp
 everytihng
@@ -165,7 +162,6 @@ pacboy
 pagebreak
 parameteri
 pastreamio
-pathlib
 pcdata
 pcmout
 perkusja
@@ -193,7 +189,6 @@ regen
 retn
 ripgreprc
 rmargin
-rmtree
 rotatef
 rozpocznij
 rshift
@@ -221,7 +216,6 @@ selectdst
 sfth
 shellcheck
 shellformat
-shutil
 simulatenously
 snapcore
 snapcraft
